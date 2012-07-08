@@ -1,0 +1,522 @@
+/*
+ * #W  wrap around the whole content
+ *
+ * #H  header
+ * #B  blue bar at the top “below” the content
+ * #s  search form
+ *
+ * #w  wrap around #S, #M and #J
+ * #J  jump links
+ * #M  main content
+ *
+ * #C  comments
+ * #F  add comment form
+ * #k  add comment anchor
+ *
+ * #m  read more anchor
+ *
+ * #sm scroller message
+ * #sc scroller content
+ * #sl, #sL scroller previous link
+ * #sn, #sN scroller next link
+ *
+ * #S  sidebar
+ * #E  contact addresses
+ * #K  list of categories in sidebar
+ * #A  archive links in sidebar
+ * .G  single group in sidebar
+ *
+ * .C  “content”
+ * .T  text of the entry
+ *
+ * .a  access key
+ * .n  TR with “Nick” entry in add comment form
+ * .m  meta entry information
+ * .k  comment under the entry
+ * .kp comment preview
+ *
+ * .t  tty only
+ * .np no print
+ *
+ * .l  load more link
+ * .p  pager table
+ */
+
+
+body {
+	background: #EEE;
+	text-justify: distribute;
+}
+
+div, #H ul, #H li, #S ul, #S li, .m ul, .m li, h1, h2, h3, h4, body, .m, #E p, #E ul, #E li {
+	margin: 0;
+	padding: 0;
+}
+
+small, .l, #sm, #J, .m, #E li:before {
+	font-size: 0.8em;
+}
+
+input[type="text"], textarea {
+	color: #000;
+	background: #FFF;
+	border: 1px solid #000;
+}
+
+h1, h2, h3, h4 {
+	page-break-after: avoid;
+}
+
+#sm {
+	text-align: center;
+	margin: 0 10%;
+}
+
+.l {
+	margin-left: 1em;
+}
+.C .l:before {
+	content: '(';
+}
+.l:after {
+	content: ')';
+}
+
+img {
+	border: 0 none #000;
+}
+
+img.NewsImage {
+	width: 100%;
+}
+
+
+@media screen, projection, tv, handheld {
+	a, a:link, #J a:visited {
+		text-decoration: none;
+		color: #00F;
+	}
+
+	#w a {
+		background: rgba(255, 255, 255, 0);
+		-o-transition: all 1s;
+		-ms-transition: all 1s;
+		-moz-transition: all 1s;
+		-webkit-transition: all 1s;
+	}
+
+	a:visited {
+		color: #33F;
+	}
+
+	#w a:hover, #w a:focus, #w a:active {
+		color: #000;
+		background: #CFC;
+		border-radius: 0.25em;
+	}
+
+	h1 a, h1 a:link, h1 a:hover, h1 a:active, h1 a:focus, h1 a:visited,
+	h2 a, h2 a:link, h2 a:hover, h2 a:active, h2 a:focus, h2 a:visited,
+	h3 a, h3 a:link, h3 a:hover, h3 a:active, h3 a:focus, h3 a:visited,
+	h4 a, h4 a:link, h4 a:hover, h4 a:active, h4 a:focus, h4 a:visited {
+		color: inherit;
+		background: none;
+	}
+
+	.a {
+		text-decoration: underline;
+	}
+
+	#W {
+		margin: 1em auto;
+		padding: 1em;
+		background: #FFF;
+		width: 62em;
+	}
+
+	#W, #J, .C {
+		border-radius: 1em;
+	}
+
+	#B {
+		position: absolute;
+		top: 2em;
+		left: 0;
+		right: 0;
+		width: 100%;
+		height: 14em;
+		background: #33F;
+		z-index: -1;
+	}
+
+	#H, #H img {
+		width: 62em;
+		height: 14em;
+	}
+
+	#H {
+		position: relative;
+		background: #66F url(/files/top-img.jpg) no-repeat;
+		background-size: 100% 100%;
+		-o-background-size: 100% 100%;
+		-moz-background-size: 100% 100%;
+		-webkit-background-size: 100% 100%;
+	}
+
+	#H > * {
+		position: absolute;
+		white-space: nowrap;
+		z-index: 2;
+	}
+
+	#H h1, #J {
+		color: #000;
+	}
+
+	#H h1 {
+		top: 20%;
+		left: 2%;
+		width: 8em;
+		font-size: 2em;
+		text-align: center;
+	}
+
+	#H h1 span {
+		color: #00F;
+	}
+
+	#H ul {
+		bottom: 20%;
+		left: 2%;
+		text-align: right;
+	}
+
+	#H li {
+		display: inline;
+	}
+
+	#H ul a, #H ul a:link, #H ul a:visited {
+		padding: 0.5em 1em;
+		color: #333;
+		font-weight: bold;
+		white-space: nowrap;
+		background: #FFF;
+		background: rgba(255, 255, 255, 0.25);
+		text-decoration: none;
+		border-radius: 0.3em;
+	}
+
+	#H ul a:hover, #H ul a:active, #H ul a:focus, #H input:active, #H input:focus, #H input:hover {
+		color: #00F;
+		background: rgba(255, 255, 255, 0.75);
+		background: -o-linear-gradient(bottom, #CFF, rgba(255, 255, 255, 0.25));
+		background: -ms-linear-gradient(bottom, #CFF, rgba(255, 255, 255, 0.25));
+		background: -moz-linear-gradient(bottom, #CFF, rgba(255, 255, 255, 0.25));
+		background: -webkit-linear-gradient(bottom, #CFF, rgba(255, 255, 255, 0.25));
+		text-shadow: #000 0.5em 0.5em 1em;
+	}
+
+	#H #s {
+		top: 1em;
+		right: 1em;
+	}
+
+	#H input {
+		background: #FFF;
+		background: rgba(255, 255, 255, 0.25);
+		border: 1px solid #000;
+	}
+
+	#J {
+		position: fixed;
+		top: 1em;
+		right: 1em;
+		z-index: 10;
+		width: 10em;
+
+		background: #CDF;
+		opacity: 0.75;
+	}
+
+	#J:hover {
+		opacity: 1;
+	}
+
+	.t, #J ul {
+		display: none;
+	}
+
+	#J p, #J ul {
+		margin: 0;
+		padding: 0.5em;
+	}
+
+	#J ul {
+		list-style: none;
+		padding-top: 0;
+	}
+
+	#J:hover ul, #J:active ul, #J:focus ul, #H > * {
+		display: block;
+	}
+
+	#J li:before {
+		content: '…';
+	}
+
+	#M {
+		float: left;
+		width: 45em;
+	}
+
+	.C, #J, #W {
+		box-shadow: 0.2em 0.2em 0.5em #000;
+		-moz-box-shadow: 0.2em 0.2em 0.5em #000;
+		-webkit-box-shadow: 0.2em 0.2em 0.5em #000;
+	}
+
+	.C a:before { content: "☞ "; }
+
+	.C pre {
+		background: #CCC;
+		background: -o-linear-gradient(bottom, #CCC, #EEE 2em);
+		background: -ms-linear-gradient(bottom, #CCC, #EEE 2em);
+		background: -moz-linear-gradient(bottom, #CCC, #EEE 2em);
+		background: -webkit-linear-gradient(bottom, #CCC, #EEE 2em);
+	}
+}
+
+.p {
+	table-layout: fixed;
+	width: 100%;
+}
+
+#H h1 span {
+	font-variant: small-caps;
+}
+
+#M {
+	padding: 1em 0;
+}
+
+#M h2 {
+	font-size: 1.5em;
+	font-weight: bold;
+	margin: 0 0 0.66em 0;
+	text-align: center;
+}
+
+.T, .k {
+	margin-bottom: 2em;
+}
+
+.T, .k, .m {
+	page-break-inside: avoid;
+}
+
+.m ul, .m li, .m {
+	display: block;
+	list-style: none;
+}
+.m li {
+	display: inline;
+}
+
+
+.m li:before {
+	content: '»';
+}
+.m li:after {
+	content: '«';
+}
+
+
+/* Text */
+
+.T h3 {
+	font-size: 1.25em;
+	margin: 0.8em 0;
+}
+
+.T h4 {
+	font-size: 1em;
+	margin: 1em 0;
+	padding: 0 1em;
+}
+
+.T .m {
+	text-align: right;
+	padding: 1em;
+}
+
+
+/* Comment */
+
+.k img:first-child {
+	float: left;
+	width: 2em;
+	height: 2em;
+	margin: 0 1em;
+}
+
+.k h3 {
+	font-size: 1em;
+	text-align: left;
+	padding: 0 1em;
+}
+
+.k .m {
+	font-weight: normal;
+	margin-left: 1em;
+}
+
+/* Add Comment */
+.kp {
+	background: #FCC;
+}
+#F table, #F tr, #F td, #F th {
+	vertical-align: top;
+	border: 0 none #000;
+}
+
+#F tr.n input, #F textarea {
+	width: 100%;
+}
+
+#F input#code {
+	width: 5em;
+}
+
+
+
+.C {
+	margin: 0.5em;
+	padding: 0.5em;
+}
+
+.C q:before, .C q:after {
+	content: '';
+}
+
+.C p {
+	padding: 0 1em;
+	margin: 1em 0;
+}
+
+.C p, .C dd, .C dt, .C li {
+	text-align: justify;
+}
+
+.C blockquote {
+	padding: 0 2em;
+	margin: 1em 0;
+	font-style: italic;
+}
+
+@media screen, projection, tv  {
+	.C p, .C dd, .C dt, li {
+		line-spacing: 1.2em;
+	}
+}
+
+.C pre {
+	margin: 1em;
+	padding: 1em;
+	overflow: auto;
+}
+
+/* Flags */
+
+p.plFlag, p.enFlag {
+	background-repeat: no-repeat;
+	background-position: 1em top;
+	text-indent: 22px;
+}
+p.plFlag *, p.enFlag * {
+	text-indent: 0;
+}
+
+#S {
+	float: right;
+	width: 14em;
+	overflow: auto;
+}
+
+.G {
+	padding: 0.5em 0.5em;
+	margin: 1em 0;
+}
+
+.G:last-child {
+	margin-bottom: 0;
+}
+
+#S h2 {
+	display: none;
+}
+
+#S h3 {
+	font-size: 1.25em;
+	text-align: center;
+	margin-bottom: 1em;
+}
+
+#S ul, #S li {
+	list-style: none;
+}
+
+#S li:before {
+	content: '» ';
+}
+
+#E li {
+	margin-left: 1em;
+}
+#E li:before {
+	content: '@ ';
+}
+
+#K li:before {
+	content: '';
+}
+
+#K a + a, #A a:first-child {
+	display: inline-block;
+	width: 8em;
+}
+
+#K small, #A small {
+	display: inline-block;
+	width: 2em;
+	text-align: right;
+}
+
+#K img {
+	width: 1em;
+	height: 1em;
+}
+
+#S form {
+	text-align: center;
+	margin-top: 1em;
+}
+
+#S form input.f {
+	width: 95%;
+	margin: 0.25em;
+}
+
+
+@media print {
+	a, a:link, a:visited, a:hover, a:focus, a:active {
+		text-decoration: none;
+		color: inherit;
+	}
+
+	body {
+		background: #FFF;
+	}
+	#k, #F, #B, #H img, #H ul, #S, .t, .np, .p, form {
+		display: none !important;
+	}
+}
