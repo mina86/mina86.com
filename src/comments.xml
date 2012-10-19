@@ -91,6 +91,7 @@
                   <li><span class="t">Added at</span>&COMMENT_DATE;, &COMMENT_HOUR;</li>
                   <COMMENT_EDIT_EXIST><li><a href="&COMMENT_EDIT_HREF;">edit</a></li></COMMENT_EDIT_EXIST>
                   <ADMIN_BLOCK>
+                    <li><a href="&ADMIN_COMMENT_EDIT_HREF;">edit</a></li>
                     <li><a href="&ADMIN_COMMENT_REMOVE_HREF;">delete</a></li>
                     <li><a href="&ADMIN_COMMENT_BLOCKIP_HREF;">block IP</a></li>
                   </ADMIN_BLOCK>
