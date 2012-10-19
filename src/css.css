@@ -5,7 +5,7 @@
  * #B  blue bar at the top “below” the content
  * #s  search form
  *
- * #w  wrap around #S, #M and #J
+ * #W  wrap around #S, #M and #J
  * #J  jump links
  * #M  main content
  *
@@ -86,10 +86,14 @@ img {
 	border: 0 none #000;
 }
 
-img.NewsImage {
+img.NewsImage, #w {
 	width: 100%;
 }
 
+
+#w, #S, pre {
+	overflow: auto;
+}
 
 @media screen, projection, tv, handheld {
 	a, a:link, #J a:visited {
@@ -277,7 +281,7 @@ img.NewsImage {
 
 	.C a:before { content: "☞ "; }
 
-	.C pre {
+	pre {
 		background: #CCC;
 		background: -o-linear-gradient(bottom, #CCC, #EEE 2em);
 		background: -ms-linear-gradient(bottom, #CCC, #EEE 2em);
@@ -419,10 +423,9 @@ img.NewsImage {
 	}
 }
 
-.C pre {
+pre {
 	margin: 1em;
 	padding: 1em;
-	overflow: auto;
 }
 
 /* Flags */
@@ -439,7 +442,6 @@ p.plFlag *, p.enFlag * {
 #S {
 	float: right;
 	width: 14em;
-	overflow: auto;
 }
 
 .G {
@@ -496,16 +498,6 @@ p.plFlag *, p.enFlag * {
 	height: 1em;
 }
 
-#S form {
-	text-align: center;
-	margin-top: 1em;
-}
-
-#S form input.f {
-	width: 95%;
-	margin: 0.25em;
-}
-
 
 @media print {
 	a, a:link, a:visited, a:hover, a:focus, a:active {
@@ -516,7 +508,7 @@ p.plFlag *, p.enFlag * {
 	body {
 		background: #FFF;
 	}
-	#k, #F, #B, #H img, #H ul, #S, .t, .np, .p, form {
+	#k, #B, #H img, #H ul, #S, .t, .np, .p, form, #J {
 		display: none !important;
 	}
 }
