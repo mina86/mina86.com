@@ -151,8 +151,10 @@
                   </tr>
                 </table>
 
-                <p>Single Return translates to line break. More then that creates a paragraph. Text preceded by four spaces is treated as a block of code, and finally there is the following markup available:</p>
                 <ul>
+                  <li>Single Return produces a line break.</li>
+                  <li>More then that creates a paragraph.</li>
+                  <li>Text preceded by four spaces means a block of code.</li>
                   <li>*<em>emphasis</em>*, _<em>emphasis</em>_,</li>
                   <li>**<strong>strong emphasis</strong>**, __<strong>strong emphasis</strong>__,</li>
                   <li>`<code>inline code</code>`, ``<code>code ` more inline code</code>``,</li>
