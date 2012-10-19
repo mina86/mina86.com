@@ -119,30 +119,24 @@
                 <table>
                   <col width="10%"/>
                   <col width="40%"/>
-                  <COMMENT_FORM_NOUSER_BLOCK>
-                    <col width="10%"/>
-                    <col width="40%"/>
-                  </COMMENT_FORM_NOUSER_BLOCK>
                   <tr>
-                    <td colspan="4"><textarea name="commbody" id="commbody" cols="70" rows="6"><COMMENT_FORM_BODY/></textarea></td>
+                    <td colspan="2"><textarea name="commbody" id="commbody" cols="70" rows="6"><COMMENT_FORM_BODY/></textarea></td>
                   </tr>
                   <tr class="n">
                     <th><label for="commnickid">Nick</label></th>
                     <td><input type="text" name="commnickid" id="commnickid" value="&COMMENT_FORM_NICKID;"/></td>
-                    <COMMENT_FORM_NOUSER_BLOCK>
-                      <th><label for="commnickurl">URL</label></th>
-                      <td><input type="text" name="commnickurl" id="commnickurl" value="&COMMENT_FORM_NICKURL;"/></td>
-                    </COMMENT_FORM_NOUSER_BLOCK>
                   </tr>
-                  <tr>
-                    <COMMENT_FORM_NOUSER_BLOCK>
+                  <COMMENT_FORM_NOUSER_BLOCK>
+                    <tr>
                       <th><label for="code">Code:</label></th>
                       <td>
                         <img src="&COMMENT_FORM_CODE;" alt="If you cannot see the image, you will not be able to comment…"/>
                         <br/>
                         <input type="text" name="code" id="code"/>
                       </td>
-                    </COMMENT_FORM_NOUSER_BLOCK>
+                    </tr>
+                  </COMMENT_FORM_NOUSER_BLOCK>
+                  <tr>
                     <th></th>
                     <td>
                       <input type="submit" name="preview" value="Preview"/>
