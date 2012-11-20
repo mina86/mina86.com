@@ -407,8 +407,28 @@ img.NewsImage, #w {
 	margin: 1em 0;
 }
 
-.C p, .C dd, .C dt, .C li {
+.C p, .C dd, .C li {
 	text-align: justify;
+}
+
+.C ul, .C ol, .C dl {
+	padding: 0;
+	list-style-position: inside;
+	margin: 1em 0;
+}
+.C dt, .C li, .C dd {
+	padding: 0;
+	margin: 0 1em 0 2em;
+}
+.C dt, .C dd {
+	margin-top: 0.25em;
+	margin-bottom: 0.25em;
+}
+.C dd {
+	margin-left: 4em;
+}
+.C dd+dt {
+	margin-top: 1em;
 }
 
 .C blockquote {
@@ -418,8 +438,8 @@ img.NewsImage, #w {
 }
 
 @media screen, projection, tv  {
-	.C p, .C dd, .C dt, li {
-		line-spacing: 1.2em;
+	.C p, .C dd, .C dt, .C li {
+		line-height: 1.3em;
 	}
 }
 
