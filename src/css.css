@@ -136,6 +136,8 @@ img.NewsImage, #w {
 		padding: 1em;
 		background: #FFF;
 		width: 62em;
+		position: relative;
+		z-index: 2;
 	}
 
 	#W, #J, .C {
@@ -150,7 +152,7 @@ img.NewsImage, #w {
 		width: 100%;
 		height: 14em;
 		background: #33F;
-		z-index: -1;
+		z-index: 1;
 	}
 
 	#H, #H img {
@@ -170,7 +172,6 @@ img.NewsImage, #w {
 	#H > * {
 		position: absolute;
 		white-space: nowrap;
-		z-index: 2;
 	}
 
 	#H h1, #J {
