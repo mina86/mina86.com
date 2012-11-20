@@ -43,12 +43,12 @@
  */
 
 
-body {
+html, body {
 	background: #EEE;
 	text-justify: distribute;
 }
 
-div, #H ul, #H li, #S ul, #S li, .m ul, .m li, h1, h2, h3, h4, body, .m, #E p, #E ul, #E li {
+div, #H ul, #H li, #S ul, #S li, .m ul, .m li, h1, h2, h3, h4, html, body, .m, #E p, #E ul, #E li {
 	margin: 0;
 	padding: 0;
 }
