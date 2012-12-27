@@ -275,9 +275,9 @@ img.NewsImage, #w {
 	}
 
 	.C, #J, #W {
-		box-shadow: 0.2em 0.2em 0.5em #000;
-		-moz-box-shadow: 0.2em 0.2em 0.5em #000;
-		-webkit-box-shadow: 0.2em 0.2em 0.5em #000;
+		box-shadow: 0.2em 0.2em 0.5em #999;
+		-moz-box-shadow: 0.2em 0.2em 0.5em #999;
+		-webkit-box-shadow: 0.2em 0.2em 0.5em #999;
 	}
 
 	.C a:before { content: "☞ "; }
