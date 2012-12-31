@@ -58,13 +58,6 @@
                   <ul>
                     <ENTRY_CATEGORY_BLOCK><li><a href="&ENTRY_CATEGORY_HREF;">&ENTRY_CATEGORY_HREF_DESCR;</a></li></ENTRY_CATEGORY_BLOCK>
                   </ul>
-
-                  <ENTRY_TAG_BLOCK_EXIST>
-                    <p class="t">Keywords:</p>
-                    <ul>
-                      <ENTRY_TAG_BLOCK><li><a href="http://technorati.com/tags/&ENTRY_TAG_DESCR;" rel="tag nofollow">&ENTRY_TAG_DESCR;</a></li></ENTRY_TAG_BLOCK>
-                    </ul>
-                  </ENTRY_TAG_BLOCK_EXIST>
                 </div>  <!-- end meta information -->
 
               </div>  <!-- end entry text -->
