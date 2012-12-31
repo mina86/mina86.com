@@ -44,7 +44,7 @@
 
 
 html, body {
-	background: #EEE;
+	background: #EEF;
 	text-justify: distribute;
 }
 
@@ -112,8 +112,8 @@ img.NewsImage, #w {
 	.m a, .m a:link { color: #33C; }
 	.m a:visited    { color: #339; }
 
-	#S a, #S a:link, #S a:visited { color: #00C; }
-	#S a:hover, #S a:focus, #S a:active { color: #06C; }
+	#S a, #S a:link, #S a:visited { color: #009; }
+	#S a:hover, #S a:focus, #S a:active { color: #069; }
 
 	h1 a, h1 a:link, h1 a:hover, h1 a:active, h1 a:focus, h1 a:visited,
 	h2 a, h2 a:link, h2 a:hover, h2 a:active, h2 a:focus, h2 a:visited,
@@ -285,19 +285,6 @@ img.NewsImage, #w {
 		background: -moz-linear-gradient(bottom, #CCC, #EEE 2em);
 		background: -webkit-linear-gradient(bottom, #CCC, #EEE 2em);
 	}
-}
-
-@media screen {
-	.m                          { color: #999; }
-	.m a, .m a:link             { color: #99A; }
-	.m a:visited                { color: #99A; }
-	.m:hover                    { color: #333; }
-	.m:hover a, .m:hover a:link { color: #33C; }
-	.m:hover a:visited          { color: #339; }
-
-	#S, #S a, #S a:link, #S a:visited { color: #333; }
-	#S:hover { color: #000; }
-	#S:hover a, #S:hover a:link, #S:hover a:visited { color: #00C; }
 }
 
 .p {
