@@ -1,6 +1,9 @@
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-240278-1']);
 _gaq.push(['_trackPageview']);
+if (window.mina86_user_type) {
+  _gaq.push(['_setCustomVar', 1, 'user_type', window.mina86_user_type]);
+}
 
 (function(D, W) {
   D.addEventListener('DOMContentLoaded', W.onload = function() {
