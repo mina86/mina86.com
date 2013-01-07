@@ -9,6 +9,9 @@ all: $(ALL)
 touch:
 	touch src/*
 
+clean:
+	-rm -r out
+
 
 out/%.js: src/%.js $(YUICOMPRESSOR)
 	@exec mkdir -p $(dir $@)
@@ -35,5 +38,6 @@ bin/yuicompressor-$(YUICOMPRESSOR_VERSION).zip:
 	wget -O $@ https://github.com/downloads/yui/yuicompressor/$(notdir $@)
 
 
-.PHONY: touch
+.PHONY: touch clean
+.DELETE_ON_ERROR:
 .INTERMEDIATE: bin/yuicompressor-$(YUICOMPRESSOR_VERSION).zip
