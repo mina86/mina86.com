@@ -3,7 +3,7 @@ ALL	= $(addprefix out/,$(notdir $(wildcard src/*.*)))
 all: $(ALL)
 
 touch:
-	cd .. && touch $(ALL)
+	touch src/*
 
 
 out/%.js: src/%.js
