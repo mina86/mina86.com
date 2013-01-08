@@ -483,10 +483,6 @@ p.plFlag *, p.enFlag * {
 	list-style: none;
 }
 
-#S li:before {
-	content: '» ';
-}
-
 #E li {
 	margin-left: 1em;
 }
@@ -494,26 +490,22 @@ p.plFlag *, p.enFlag * {
 	content: '@ ';
 }
 
-#K li:before {
-	content: '';
+#K ul, #A ul {
+	display: table;
+	width: 100%;
 }
-
-#K a + a, #A a:first-child {
-	display: inline-block;
-	width: 8em;
+#A li, #K li {
+	display: table-row;
 }
-
+#K a, #A a {
+	display: table-cell;
+}
 #K small, #A small {
-	display: inline-block;
-	width: 2em;
+	display: table-cell;
 	text-align: right;
+	padding: 0 0.2em;
+	color: #999;
 }
-
-#K img {
-	width: 1em;
-	height: 1em;
-}
-
 
 @media print {
 	a, a:link, a:visited, a:hover, a:focus, a:active {
