@@ -34,6 +34,7 @@
  * .m  meta entry information
  * .k  comment under the entry
  * .kp comment preview
+ * .i  notes at the start of an article
  *
  * .t  tty only
  * .np no print
@@ -44,8 +45,8 @@
 
 
 html, body {
+	font-family: Verdana, Helvetica;
 	background: #EEF;
-	text-justify: distribute;
 }
 
 div, #H ul, #H li, #S ul, #S li, .m ul, .m li, h1, h2, h3, h4, html, body, .m, #E p, #E ul, #E li {
@@ -271,19 +272,19 @@ img.NewsImage, #w {
 	}
 
 	.C, #J, #W {
-		box-shadow: 0.2em 0.2em 0.5em #999;
-		-moz-box-shadow: 0.2em 0.2em 0.5em #999;
-		-webkit-box-shadow: 0.2em 0.2em 0.5em #999;
+		box-shadow: 0.2em 0.2em 0.5em #CCC;
+		-moz-box-shadow: 0.2em 0.2em 0.5em #CCC;
+		-webkit-box-shadow: 0.2em 0.2em 0.5em #CCC;
 	}
 
 	.C a:before { content: "☞ "; }
 
 	pre {
-		background: #CCC;
-		background: -o-linear-gradient(bottom, #CCC, #EEE 2em);
-		background: -ms-linear-gradient(bottom, #CCC, #EEE 2em);
-		background: -moz-linear-gradient(bottom, #CCC, #EEE 2em);
-		background: -webkit-linear-gradient(bottom, #CCC, #EEE 2em);
+		background: #EEE;
+		background: -o-linear-gradient(bottom, #999, #EEE 2em);
+		background: -ms-linear-gradient(bottom, #999, #EEE 2em);
+		background: -moz-linear-gradient(bottom, #999, #EEE 2em);
+		background: -webkit-linear-gradient(bottom, #999, #EEE 2em);
 	}
 }
 
@@ -294,6 +295,12 @@ img.NewsImage, #w {
 
 #H h1 span {
 	font-variant: small-caps;
+	font-variant-numeric: oldstyle-nums;
+	font-feature-settings: "onum";
+	-o-font-feature-settings: "onum";
+	-ms-font-feature-settings: "onum";
+	-moz-font-feature-settings: "onum=1";
+	-webkit-font-feature-settings: "onum";
 }
 
 #M {
@@ -301,9 +308,10 @@ img.NewsImage, #w {
 }
 
 #M h2 {
-	font-size: 1.5em;
-	font-weight: bold;
-	margin: 0 0 0.66em 0;
+	font-family: Georgia;
+	font-size: 1.8em;
+	font-weight: normal;
+	margin: 1em 0 0.5em 0;
 	text-align: center;
 }
 
@@ -335,13 +343,11 @@ img.NewsImage, #w {
 
 .T h3 {
 	font-size: 1.25em;
-	margin: 0.8em 0;
+	margin: 1.4em 0 1em;
 }
 
 .T h4 {
 	font-size: 1em;
-	margin: 1em 0;
-	padding: 0 1em;
 }
 
 .T .m {
@@ -391,7 +397,7 @@ img.NewsImage, #w {
 
 .C {
 	margin: 0.5em;
-	padding: 0.5em;
+	padding: 1em 2em;
 }
 
 .C q:before, .C q:after {
@@ -399,12 +405,18 @@ img.NewsImage, #w {
 }
 
 .C p {
-	padding: 0 1em;
 	margin: 1em 0;
+}
+.C p.i {
+	text-align: left;
+	font-style: italic;
 }
 
 .C p, .C dd, .C li {
 	text-align: justify;
+	text-justify: distribute;
+	text-justify: newspaper;
+	hanging-punctuation: first allow-end last;
 }
 
 .C ul, .C ol, .C dl {
@@ -433,15 +445,22 @@ img.NewsImage, #w {
 	font-style: italic;
 }
 
+tt {
+	font: inherit;
+	color: #363;
+}
+
 @media screen, projection, tv  {
-	.C p, .C dd, .C dt, .C li {
-		line-height: 1.3em;
+	.C {
+		line-height: 1.5em;
 	}
 }
 
 pre {
-	margin: 1em;
+	color: #030;
+	margin: 1em 0;
 	padding: 1em;
+	font-variant-numeric: slashed-zero;
 }
 
 /* Flags */
