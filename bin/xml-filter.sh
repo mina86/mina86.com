@@ -16,12 +16,17 @@
 
 set -e
 
+add_note=
+if [ x"$1" = x--add-note ]; then
+	shift
+	add_note='s~^~<!-- Template sources can be found at https://github.com/mina86/mina86.com -->~'
+fi
+
 tmp="$2~$$~filter~"
 trap 'rm -f -- "$tmp"' 0
 
 block='\(body\|br\|col\|div\|form\|h[1-6]\|head\|html\|link\|meta\|p\|script\|table\|t[dhr]\|textarea\|title\|[ou]l\|[A-Z_][A-Z_]*\)'
-
-sed -n -e "
+sed <$1 >$tmp -n -e "
 	H
 	$ {
 		x
@@ -31,8 +36,9 @@ sed -n -e "
 		s~ \\(</\\?$block\\)~\\1~g
 		s~\\(<$block\\( [^>]*\\)\\?>\\) ~\\1~g
 		s~ \\?<li~ <li~g
+		$add_note
 		p
 	}
-" <$1 >$tmp
+"
 
 mv -f -- "$tmp" "$2"

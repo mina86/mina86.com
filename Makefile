@@ -13,11 +13,18 @@ clean:
 	-rm -r out
 
 
-out/%.js: src/%.js $(YUICOMPRESSOR)
+
+out/%: out/%.with-message
+	mv -- $< $@
+
+out/%.with-message: out/%.compiled
+	echo -n '/* Sources can be found at https://github.com/mina86/mina86.com */' | cat - $< >$@
+
+out/%.js.compiled: src/%.js $(YUICOMPRESSOR)
 	@exec mkdir -p $(dir $@)
 	exec java -jar $(YUICOMPRESSOR) -v --type js -o $@ $<
 
-out/%.css: src/%.css $(YUICOMPRESSOR)
+out/%.css.compiled: src/%.css $(YUICOMPRESSOR)
 	@exec mkdir -p $(dir $@)
 	exec java -jar $(YUICOMPRESSOR) -v --type css -o $@ $<
 
@@ -27,7 +34,7 @@ out/%.html: src/%.html
 
 out/%.xml: src/%.xml
 	@exec mkdir -p $(dir $@)
-	exec sh bin/xml-filter.sh $< $@
+	exec sh bin/xml-filter.sh --add-note $< $@
 
 
 bin/yuicompressor-$(YUICOMPRESSOR_VERSION).jar: bin/yuicompressor-$(YUICOMPRESSOR_VERSION).zip
