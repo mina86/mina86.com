@@ -185,7 +185,7 @@ if (window.mina86_user_type) {
         commentTextarea = byId('commbody'),
 
         scrollerLink    = byId(str_scroller_link),
-        scrollerLink2   = byId('sL'),
+        scrollerLink2   = byId('sp'),
         scrollerMessage = byId('sm'),
         scrollerContent = byId(str_scroller_content),
 

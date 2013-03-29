@@ -1,33 +1,30 @@
 /*
- * #W  wrap around the whole content
+ * #v  wrap around the whole content
  *
- * #H  header
- * #B  blue bar at the top “below” the content
+ * #h  header
+ * #b  blue bar at the top “below” the content
  * #s  search form
  *
- * #W  wrap around #S, #M and #J
- * #J  jump links
- * #M  main content
+ * #w  wrap around #r, #z and #j
+ * #j  jump links
+ * #z  main content
  *
- * #C  comments
- * #F  add comment form
+ * #c  comments
+ * #f  add comment form
  * #k  add comment anchor
  *
  * #m  read more anchor
  *
  * #sm scroller message
  * #sc scroller content
- * #sl, #sL scroller previous link
- * #sn, #sN scroller next link
+ * #sl, #sp scroller previous link
  *
- * #S  sidebar
- * #E  contact addresses
- * #K  list of categories in sidebar
- * #A  archive links in sidebar
- * .G  single group in sidebar
+ * #r  sidebar
+ * #e  contact addresses
+ * #l  list of categories in sidebar
+ * #a  archive links in sidebar
  *
- * .C  “content”
- * .T  text of the entry
+ * .c  “content”
  *
  * .a  access key
  * .n  TR with “Nick” entry in add comment form
@@ -37,10 +34,12 @@
  * .i  notes at the start of an article
  *
  * .t  tty only
- * .P  no print
+ * .np no print
  *
  * .l  load more link
  * .p  pager table
+ *
+ * .r  feed icon
  */
 
 header, aside, section, article, nav, footer {
@@ -51,21 +50,21 @@ header, aside, section, article, nav, footer {
 
 html, body {
 	font-family: Verdana, Helvetica;
-	background: #EEF;
+	background: #eef;
 }
 
-div, #H ul, #H li, #S ul, #S li, .m ul, .m li, h1, h2, h3, h4, html, body, .m, #E p, #E ul, #E li {
+div, #h ul, #h li, #r ul, #r li, .m ul, .m li, h1, h2, h3, h4, html, body, .m, #e p, #e ul, #e li {
 	margin: 0;
 	padding: 0;
 }
 
-small, .l, #sm, #J, .m, #E li:before {
+small, .l, #sm, #j, .m, #e li:before {
 	font-size: 0.8em;
 }
 
 input[type="text"], textarea {
 	color: #000;
-	background: #FFF;
+	background: #fff;
 	border: 1px solid #000;
 }
 
@@ -81,7 +80,7 @@ h1, h2, h3, h4 {
 .l {
 	margin-left: 1em;
 }
-.C .l:before {
+.c .l:before {
 	content: '(';
 }
 .l:after {
@@ -97,29 +96,29 @@ img.NewsImage, #w {
 }
 
 
-#w, #S, pre {
+#w, #r, pre {
 	overflow: auto;
 }
 
 @media screen, projection, tv, handheld {
-	a, a:link, #J a:visited {
+	a, a:link, #j a:visited {
 		text-decoration: none;
-		color: #00F;
+		color: #00f;
 	}
 	a:visited {
-		color: #63C;
+		color: #63c;
 	}
 	a:hover, a:focus, a:active {
-		color: #09F;
+		color: #09f;
 		text-decoration: underline;
 	}
 
 	.m              { color: #333; }
-	.m a, .m a:link { color: #33C; }
+	.m a, .m a:link { color: #33c; }
 	.m a:visited    { color: #339; }
 
-	#S a, #S a:link, #S a:visited { color: #009; }
-	#S a:hover, #S a:focus, #S a:active { color: #069; }
+	#r a, #r a:link, #r a:visited { color: #009; }
+	#r a:hover, #r a:focus, #r a:active { color: #069; }
 
 	h1 a, h1 a:link, h1 a:hover, h1 a:active, h1 a:focus, h1 a:visited,
 	h2 a, h2 a:link, h2 a:hover, h2 a:active, h2 a:focus, h2 a:visited,
@@ -133,54 +132,54 @@ img.NewsImage, #w {
 		text-decoration: underline;
 	}
 
-	#W {
+	#v {
 		margin: 1em auto;
 		padding: 1em;
-		background: #FFF;
+		background: #fff;
 		width: 62em;
 		position: relative;
 		z-index: 2;
 	}
 
-	#W, #J, .C {
+	#v, #j, .c {
 		border-radius: 1em;
 	}
 
-	#B {
+	#b {
 		position: absolute;
 		top: 2em;
 		left: 0;
 		right: 0;
 		width: 100%;
 		height: 14em;
-		background: #33F;
+		background: #33f;
 		z-index: 1;
 	}
 
-	#H, #H img {
+	#h, #h img {
 		width: 62em;
 		height: 14em;
 	}
 
-	#H {
+	#h {
 		position: relative;
-		background: #66F url(/files/top-img.jpg) no-repeat;
+		background: #66f url(/files/top-img.jpg) no-repeat;
 		background-size: 100% 100%;
 		-o-background-size: 100% 100%;
 		-moz-background-size: 100% 100%;
 		-webkit-background-size: 100% 100%;
 	}
 
-	#H > * {
+	#h > * {
 		position: absolute;
 		white-space: nowrap;
 	}
 
-	#H h1, #J {
+	#h h1, #j {
 		color: #000;
 	}
 
-	#H h1 {
+	#h h1 {
 		top: 20%;
 		left: 2%;
 		width: 8em;
@@ -188,108 +187,108 @@ img.NewsImage, #w {
 		text-align: center;
 	}
 
-	#H h1 span {
-		color: #00F;
+	#h h1 span {
+		color: #00f;
 	}
 
-	#H nav {
+	#h nav {
 		bottom: 20%;
 		left: 2%;
 		text-align: right;
 	}
 
-	#H li {
+	#h li {
 		display: inline;
 	}
 
-	#H ul a, #H ul a:link, #H ul a:visited {
+	#h ul a, #h ul a:link, #h ul a:visited {
 		padding: 0.5em 1em;
 		color: #333;
 		font-weight: bold;
 		white-space: nowrap;
-		background: #FFF;
+		background: #fff;
 		background: rgba(255, 255, 255, 0.25);
 		text-decoration: none;
 		border-radius: 0.3em;
 	}
 
-	#H ul a:hover, #H ul a:active, #H ul a:focus, #H input:active, #H input:focus, #H input:hover {
-		color: #00F;
+	#h ul a:hover, #h ul a:active, #h ul a:focus, #h input:active, #h input:focus, #h input:hover {
+		color: #00f;
 		background: rgba(255, 255, 255, 0.75);
-		background: -o-linear-gradient(bottom, #CFF, rgba(255, 255, 255, 0.25));
-		background: -ms-linear-gradient(bottom, #CFF, rgba(255, 255, 255, 0.25));
-		background: -moz-linear-gradient(bottom, #CFF, rgba(255, 255, 255, 0.25));
-		background: -webkit-linear-gradient(bottom, #CFF, rgba(255, 255, 255, 0.25));
+		background: -o-linear-gradient(bottom, #cff, rgba(255, 255, 255, 0.25));
+		background: -ms-linear-gradient(bottom, #cff, rgba(255, 255, 255, 0.25));
+		background: -moz-linear-gradient(bottom, #cff, rgba(255, 255, 255, 0.25));
+		background: -webkit-linear-gradient(bottom, #cff, rgba(255, 255, 255, 0.25));
 		text-shadow: #000 0.5em 0.5em 1em;
 	}
 
-	#H #s {
+	#h #s {
 		top: 1em;
 		right: 1em;
 	}
 
-	#H input {
-		background: #FFF;
+	#h input {
+		background: #fff;
 		background: rgba(255, 255, 255, 0.25);
 		border: 1px solid #000;
 	}
 
-	#J {
+	#j {
 		position: fixed;
 		top: 1em;
 		right: 1em;
 		z-index: 10;
 		width: 10em;
 
-		background: #CDF;
+		background: #cdf;
 		opacity: 0.75;
 	}
 
-	#J:hover {
+	#j:hover {
 		opacity: 1;
 	}
 
-	.t, #J ul {
+	.t, #j ul {
 		display: none;
 	}
 
-	#J p, #J ul {
+	#j p, #j ul {
 		margin: 0;
 		padding: 0.5em;
 	}
 
-	#J ul {
+	#j ul {
 		list-style: none;
 		padding-top: 0;
 	}
 
-	#J:hover ul, #J:active ul, #J:focus ul, #H > * {
+	#j:hover ul, #j:active ul, #j:focus ul, #h > * {
 		display: block;
 	}
 
-	#J li:before {
+	#j li:before {
 		content: '…';
 	}
 
-	#M {
+	#z {
 		float: left;
 		width: 45em;
 	}
 
-	.C, #J, #W {
-		box-shadow: 0.2em 0.2em 0.5em #CCC;
-		-moz-box-shadow: 0.2em 0.2em 0.5em #CCC;
-		-webkit-box-shadow: 0.2em 0.2em 0.5em #CCC;
+	.c, #j, #v {
+		box-shadow: 0.2em 0.2em 0.5em #ccc;
+		-moz-box-shadow: 0.2em 0.2em 0.5em #ccc;
+		-webkit-box-shadow: 0.2em 0.2em 0.5em #ccc;
 	}
 
-	.C a:before { content: "☞ "; }
+	.c a:before { content: "☞ "; }
 
 	pre {
-		background: #EEE;
-		background: -o-linear-gradient(bottom, #999, #EEE 2em);
-		background: -ms-linear-gradient(bottom, #999, #EEE 2em);
-		background: -moz-linear-gradient(bottom, #999, #EEE 2em);
-		background: -webkit-linear-gradient(bottom, #999, #EEE 2em);
+		background: #eee;
+		background: -o-linear-gradient(bottom, #999, #eee 2em);
+		background: -ms-linear-gradient(bottom, #999, #eee 2em);
+		background: -moz-linear-gradient(bottom, #999, #eee 2em);
+		background: -webkit-linear-gradient(bottom, #999, #eee 2em);
 	}
 }
 
@@ -308,7 +307,7 @@ img.NewsImage, #w {
 	text-align: right;
 }
 
-#H h1 span {
+#h h1 span {
 	font-variant: small-caps;
 	font-variant-numeric: oldstyle-nums;
 	font-feature-settings: "onum";
@@ -318,11 +317,11 @@ img.NewsImage, #w {
 	-webkit-font-feature-settings: "onum";
 }
 
-#M {
+#z {
 	padding: 1em 0;
 }
 
-#M h2 {
+#z h2 {
 	font-family: Georgia;
 	font-size: 1.8em;
 	font-weight: normal;
@@ -330,11 +329,11 @@ img.NewsImage, #w {
 	text-align: center;
 }
 
-.T, .k {
+article, .k {
 	margin-bottom: 2em;
 }
 
-.T, .k, .m {
+article, .k, .m {
 	page-break-inside: avoid;
 }
 
@@ -356,16 +355,16 @@ img.NewsImage, #w {
 
 /* Text */
 
-.T h3 {
+article h3 {
 	font-size: 1.25em;
 	margin: 1.4em 0 1em;
 }
 
-.T h4 {
+article h4 {
 	font-size: 1em;
 }
 
-.T .m {
+article .m {
 	text-align: right;
 	padding: 1em;
 }
@@ -393,68 +392,68 @@ img.NewsImage, #w {
 
 /* Add Comment */
 .kp {
-	background: #FCC;
+	background: #fcc;
 }
-#F table, #F tr, #F td, #F th {
+#f table, #f tr, #f td, #f th {
 	vertical-align: top;
 	border: 0 none #000;
 }
 
-#F tr.n input, #F textarea {
+#f tr.n input, #f textarea {
 	width: 100%;
 }
 
-#F input#code {
+#f input#code {
 	width: 5em;
 }
 
 
 
-.C {
+.c {
 	margin: 0.5em;
 	padding: 1em 2em;
 }
 
-.C q:before, .C q:after {
+.c q:before, .c q:after {
 	content: '';
 }
 
-.C p {
+.c p {
 	margin: 1em 0;
 }
-.C p.i {
+.c p.i {
 	text-align: left;
 	font-style: italic;
 }
 
-.C p, .C dd, .C li {
+.c p, .c dd, .c li {
 	text-align: justify;
 	text-justify: distribute;
 	text-justify: newspaper;
 	hanging-punctuation: first allow-end last;
 }
 
-.C ul, .C ol, .C dl {
+.c ul, .c ol, .c dl {
 	padding: 0;
 	list-style-position: inside;
 	margin: 1em 0;
 }
-.C dt, .C li, .C dd {
+.c dt, .c li, .c dd {
 	padding: 0;
 	margin: 0 1em 0 2em;
 }
-.C dt, .C dd {
+.c dt, .c dd {
 	margin-top: 0.25em;
 	margin-bottom: 0.25em;
 }
-.C dd {
+.c dd {
 	margin-left: 4em;
 }
-.C dd+dt {
+.c dd+dt {
 	margin-top: 1em;
 }
 
-.C blockquote {
+.c blockquote {
 	padding: 0 2em;
 	margin: 1em 0;
 	font-style: italic;
@@ -466,7 +465,7 @@ tt {
 }
 
 @media screen, projection, tv  {
-	.C {
+	.c {
 		line-height: 1.5em;
 	}
 }
@@ -489,52 +488,52 @@ p.plFlag *, p.enFlag * {
 	text-indent: 0;
 }
 
-#S {
+#r {
 	float: right;
 	width: 14em;
 }
 
-.G {
+#r > * {
 	padding: 0.5em 0.5em;
 	margin: 1em 0;
 }
-
-.G:last-child {
+#r footer {
+	font-size: 0.8em;
 	margin-bottom: 0;
 }
 
-#S h2 {
+#r h2 {
 	display: none;
 }
 
-#S h3 {
+#r h3 {
 	font-size: 1.25em;
 	text-align: center;
 	margin-bottom: 1em;
 }
 
-#S ul, #S li {
+#r ul, #r li {
 	list-style: none;
 }
 
-#E li {
+#e li {
 	margin-left: 1em;
 }
-#E li:before {
+#e li:before {
 	content: '@ ';
 }
 
-#K ul, #A ul {
+#l ul, #a ul {
 	display: table;
 	width: 100%;
 }
-#A li, #K li {
+#a li, #l li {
 	display: table-row;
 }
-#K a, #A a {
+#l a, #a a {
 	display: table-cell;
 }
-#K small, #A small {
+#l small, #a small {
 	display: table-cell;
 	text-align: right;
 	padding: 0 0.2em;
@@ -548,9 +547,9 @@ p.plFlag *, p.enFlag * {
 	}
 
 	body {
-		background: #FFF;
+		background: #fff;
 	}
-	#k, #B, #H img, #H nav, #H ul, #S, .t, .P, .p, form, #J {
+	#k, #b, #h img, #h nav, #h ul, #r, .t, .np, .p, form, #j {
 		display: none !important;
 	}
 }

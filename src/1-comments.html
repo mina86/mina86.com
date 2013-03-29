@@ -5,11 +5,11 @@
 <ENTRY_NEXT_EXIST><link rel="Next" href="&ENTRY_NEXT_HREF;" title="&ENTRY_NEXT_SUBJECT;"></ENTRY_NEXT_EXIST>
 <link rel="start" href="&ALL_ENTRIES_HREF;" title="Up">
 <link rel="alternate" type="application/atom+xml" href="&ENTRY_COMMENT_HREF;atom/" title="Comments">
-<div id="W">  <!-- global wrap -->
+<div id="v">  <!-- global wrap -->
   <INCLUDE>header.html</INCLUDE>
   <div id="w">  <!-- content wrap -->
 
-    <nav id="J">  <!-- jump to -->
+    <nav id="j">  <!-- jump to -->
       <p>Jump to…
       <ul>
         <li><a href="#M">the article</a>
@@ -20,7 +20,7 @@
       </ul>
     </nav>
 
-    <div id="M">  <!-- main content of the site -->
+    <div id="z">  <!-- main content of the site -->
 
       <nav class="p">
         <ul>
@@ -29,12 +29,12 @@
         </ul>
       </nav>
 
-      <article class="T">  <!-- entry text -->
+      <article>  <!-- entry text -->
         <header><h2><a href="&ENTRY_COMMENT_HREF;" title="Permanent link to the entry.">&ENTRY_SUBJECT;</a></h2></header>
 
         <p class="t"><a href="#J">Get back to “Jump to”</a>
 
-        <div class="C">
+        <div class="c">
           &ENTRY_CONTENT_SHORT;
           <ENTRY_CONTENT_SHORT_EXIST><div id="m">&ENTRY_CONTENT_LONG;</div></ENTRY_CONTENT_SHORT_EXIST>
         </div>
@@ -71,7 +71,7 @@
 
       <COMMENT_BLOCK_EXIST>
         <section>
-          <header><h2 id="C">Comments</h2></header>
+          <header><h2 id="c">Comments</h2></header>
           <p class="t"><a href="#J">Get back to “Jump to”</a>
           <COMMENT_BLOCK>
             <article class="k" id="comm&COMMENT_ID;">  <!-- comment -->
@@ -91,7 +91,7 @@
                 </ul>
               </footer>
 
-              <div class="C">&COMMENT_CONTENT;</div>
+              <div class="c">&COMMENT_CONTENT;</div>
             </article>  <!-- end comment -->
           </COMMENT_BLOCK>
         </section>
@@ -101,7 +101,7 @@
         <COMMENT_PREVIEW_EXIST>
           <article class="k">
             <header><h3>Preview</h3></header>
-            <div class="C kp">
+            <div class="c kp">
               &COMMENT_PREVIEW_BODY;
               <p><strong>This is only a preview!</strong> Do not forget to submit.
             </div>
@@ -111,7 +111,7 @@
         <section>
           <header><h2 id="k">Add a comment</h2></header>
           <COMMENT_FORM_BLOCK>
-            <form action="&COMMENT_FORM_ACTION;" method="post" id="F">
+            <form action="&COMMENT_FORM_ACTION;" method="post" id="f">
               <table>
                 <col width="10%">
                 <col width="40%">
