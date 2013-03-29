@@ -1,84 +1,81 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <title>&JOG_TITLE;</title>
-    <INCLUDE>meta.html</INCLUDE>
-    <PAGE_NEXT_EXIST><link rel="Next" href="&PAGE_NEXT_HREF;" title="Next entries" /></PAGE_NEXT_EXIST>
-    <PAGE_PREV_EXIST><link rel="Prev" href="&PAGE_PREV_HREF;" title="Previous entries" /></PAGE_PREV_EXIST>
-    <MAIN_PAGE_BLOCK><meta name="verify-v1" content="nLj/+NPzLACdj2UPcIrq5HIEATAaIxGJ+9QubjMy7pI=" /></MAIN_PAGE_BLOCK>
-  </head>
-  <body>
-    <div id="W">  <!-- global wrap -->
-      <INCLUDE>header.html</INCLUDE>
-      <div id="w">  <!-- content wrap -->
+<!DOCTYPE html>
+<title>&JOG_TITLE;</title>
+<INCLUDE>meta.html</INCLUDE>
+<PAGE_NEXT_EXIST><link rel="Next" href="&PAGE_NEXT_HREF;" title="Next entries"></PAGE_NEXT_EXIST>
+<PAGE_PREV_EXIST><link rel="Prev" href="&PAGE_PREV_HREF;" title="Previous entries"></PAGE_PREV_EXIST>
+<MAIN_PAGE_BLOCK><meta name="verify-v1" content="nLj/+NPzLACdj2UPcIrq5HIEATAaIxGJ+9QubjMy7pI="></MAIN_PAGE_BLOCK>
+<div id="W">  <!-- global wrap -->
+  <INCLUDE>header.html</INCLUDE>
+  <div id="w">  <!-- content wrap -->
 
-        <div id="J">  <!-- jump to -->
-          <p>Jump to…</p>
-          <ul>
-            <li><a href="#M">entries</a></li>
-            <INCLUDE>jump-rest.html</INCLUDE>
-          </ul>
-        </div>
+    <nav id="J">  <!-- jump to -->
+      <p>Jump to…
+      <ul>
+        <li><a href="#M">entries</a>
+        <INCLUDE>jump-rest.html</INCLUDE>
+      </ul>
+    </nav>
 
-        <div id="M">  <!-- main content of the site -->
+    <div id="M">  <!-- main content of the site -->
 
-          <PAGE_BLOCK_EXIST>
-            <table class="p">  <!-- pager -->
-              <tr>
-                <PAGE_PREV_EXIST><td align="left"><a href="&PAGE_PREV_HREF;" id="sL" accesskey="P" title="Previous entries">« <span class="a">p</span>revious entries</a></td></PAGE_PREV_EXIST>
-                <PAGE_NEXT_EXIST><td align="right"><a href="&PAGE_NEXT_HREF;" id="sN" accesskey="N" title="Next entries"><span class="a">n</span>ext entries »</a></td></PAGE_NEXT_EXIST>
-              </tr>
-            </table>
-          </PAGE_BLOCK_EXIST>
+      <PAGE_BLOCK_EXIST>
+        <nav>
+          <table class="p">  <!-- pager -->
+            <tr>
+              <PAGE_PREV_EXIST><td align="left"><a href="&PAGE_PREV_HREF;" id="sL" accesskey="P" title="Previous entries">« <span class="a">p</span>revious entries</a></PAGE_PREV_EXIST>
+              <PAGE_NEXT_EXIST><td align="right"><a href="&PAGE_NEXT_HREF;" id="sN" accesskey="N" title="Next entries"><span class="a">n</span>ext entries »</a></PAGE_NEXT_EXIST>
 
-          <div id="sc">  <!-- scroller content -->
-            <ENTRY_BLOCK>
-              <div class="T" id="&ENTRY_ID;">  <!-- entry text -->
+          </table>
+        </nav>
+      </PAGE_BLOCK_EXIST>
 
-                <h2><a href="&ENTRY_COMMENT_HREF;" title="Permanent link to the entry.">&ENTRY_SUBJECT;</a></h2>
-                <p class="t"><a href="#J">Get back to “Jump to”</a></p>
+      <div id="sc">  <!-- scroller content -->
+        <ENTRY_BLOCK>
+          <article class="T" id="&ENTRY_ID;">  <!-- entry text -->
 
-                <div class="C">
-                  &ENTRY_CONTENT_SHORT;
-                  <ENTRY_CONTENT_SHORT_EXIST><p><a href="&ENTRY_COMMENT_HREF;#m">Read more…</a></p></ENTRY_CONTENT_SHORT_EXIST>
-                  <ENTRY_CONTENT_SHORT_NOT_EXIST><p><a href="&ENTRY_COMMENT_HREF;">Comment…</a></p></ENTRY_CONTENT_SHORT_NOT_EXIST>
-                </div>
+            <header><h2><a href="&ENTRY_COMMENT_HREF;" title="Permanent link to the entry.">&ENTRY_SUBJECT;</a></h2></header>
+            <p class="t"><a href="#J">Get back to “Jump to”</a>
 
-                <div class="m">  <!-- meta information -->
-                  <ul>
-                    <li><span class="t">Added at </span>&ENTRY_DATE;, &ENTRY_HOUR;</li>
-                    <li class="np"><a href="&ENTRY_COMMENT_HREF;" title="Permanent link to the entry.">permlink</a></li>
-                    <li class="np"><a href="&ENTRY_TRACKBACK_HREF;" title="Link for trakcbacking the entry." rel="nofollow">trackback</a></li>
-                    <ADMIN_BLOCK>
-                      <li class="np"><a href="&ADMIN_ENTRY_EDIT_HREF;">edit</a></li>
-                    </ADMIN_BLOCK>
-                  </ul>
+            <div class="C">
+              &ENTRY_CONTENT_SHORT;
+              <ENTRY_CONTENT_SHORT_EXIST><p><a href="&ENTRY_COMMENT_HREF;#m">Read more…</a></ENTRY_CONTENT_SHORT_EXIST>
+              <ENTRY_CONTENT_SHORT_NOT_EXIST><p><a href="&ENTRY_COMMENT_HREF;">Comment…</a></ENTRY_CONTENT_SHORT_NOT_EXIST>
+            </div>
 
-                  <p class="t">In categories:</p>
-                  <ul>
-                    <ENTRY_CATEGORY_BLOCK><li><a href="&ENTRY_CATEGORY_HREF;">&ENTRY_CATEGORY_HREF_DESCR;</a></li></ENTRY_CATEGORY_BLOCK>
-                  </ul>
-                </div>  <!-- end meta information -->
+            <footer class="m">  <!-- meta information -->
+              <ul>
+                <li><span class="t">Added at </span>&ENTRY_DATE;, &ENTRY_HOUR;
+                <li class="np"><a href="&ENTRY_COMMENT_HREF;" title="Permanent link to the entry.">permlink</a>
+                <li class="np"><a href="&ENTRY_TRACKBACK_HREF;" title="Link for trakcbacking the entry." rel="nofollow">trackback</a>
+                <ADMIN_BLOCK>
+                  <li class="np"><a href="&ADMIN_ENTRY_EDIT_HREF;">edit</a>
+                </ADMIN_BLOCK>
+              </ul>
 
-              </div>  <!-- end entry text -->
-            </ENTRY_BLOCK>
-          </div>  <!-- end scroller content -->
+              <p class="t">In categories:
+              <ul>
+                <ENTRY_CATEGORY_BLOCK><li><a href="&ENTRY_CATEGORY_HREF;">&ENTRY_CATEGORY_HREF_DESCR;</a></ENTRY_CATEGORY_BLOCK>
+              </ul>
+            </footer>  <!-- end meta information -->
 
-          <PAGE_BLOCK_EXIST>
-            <div id="sm"><!-- scroller message --></div>
-            <table class="p">
-              <tr>
-                <PAGE_PREV_EXIST><td align="left"><a href="&PAGE_PREV_HREF;" id="sl">« <span class="a">p</span>revious entries</a></td></PAGE_PREV_EXIST>
-                <PAGE_NEXT_EXIST><td align="right"><a href="&PAGE_NEXT_HREF;" id="sn"><span class="a">n</span>ext entries »</a></td></PAGE_NEXT_EXIST>
-              </tr>
-            </table>
-          </PAGE_BLOCK_EXIST>
+          </article>  <!-- end entry text -->
+        </ENTRY_BLOCK>
+      </div>  <!-- end scroller content -->
 
-        </div>  <!-- end main content of the site -->
+      <PAGE_BLOCK_EXIST>
+        <div id="sm"><!-- scroller message --></div>
+        <nav>
+          <table class="p">
+            <tr>
+              <PAGE_PREV_EXIST><td align="left"><a href="&PAGE_PREV_HREF;" id="sl">« <span class="a">p</span>revious entries</a></PAGE_PREV_EXIST>
+              <PAGE_NEXT_EXIST><td align="right"><a href="&PAGE_NEXT_HREF;" id="sn"><span class="a">n</span>ext entries »</a></PAGE_NEXT_EXIST>
+          </table>
+        </nav>
+      </PAGE_BLOCK_EXIST>
 
-        <INCLUDE>sidebar.html</INCLUDE>
-      </div>  <!-- end content wrap -->
-    </div>  <!-- end global wrap -->
-    <INCLUDE>footer.html</INCLUDE>
-  </body>
-</html>
+    </div>  <!-- end main content of the site -->
+
+    <INCLUDE>sidebar.html</INCLUDE>
+  </div>  <!-- end content wrap -->
+</div>  <!-- end global wrap -->
+<INCLUDE>footer.html</INCLUDE>

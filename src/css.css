@@ -43,6 +43,11 @@
  * .p  pager table
  */
 
+header, aside, section, article, nav, footer {
+	display: block;
+	margin: 0;
+	padding: 0;
+}
 
 html, body {
 	font-family: Verdana, Helvetica;
@@ -187,7 +192,7 @@ img.NewsImage, #w {
 		color: #00F;
 	}
 
-	#H ul {
+	#H nav {
 		bottom: 20%;
 		left: 2%;
 		text-align: right;
@@ -535,7 +540,7 @@ p.plFlag *, p.enFlag * {
 	body {
 		background: #FFF;
 	}
-	#k, #B, #H img, #H ul, #S, .t, .np, .p, form, #J {
+	#k, #B, #H img, #H nav, #H ul, #S, .t, .np, .p, form, #J {
 		display: none !important;
 	}
 }

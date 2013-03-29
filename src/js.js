@@ -44,8 +44,8 @@ if (window.mina86_user_type) {
           if (request) {
             request.onreadystatechange = callback;
             request.open('GET', url, TRUE);
-            request.overrideMimeType('text/xml');
-            request.send(NULL);
+            request.responseType = 'document';
+            request.send();
           }
           return request;
         },

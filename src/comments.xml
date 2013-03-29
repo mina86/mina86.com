@@ -1,168 +1,162 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <title>&ENTRY_TITLE; - &JOG_TITLE;</title>
-    <INCLUDE>meta.html</INCLUDE>
-    <ENTRY_PREV_EXIST><link rel="Prev" href="&ENTRY_PREV_HREF;" title="&ENTRY_PREV_SUBJECT;" /></ENTRY_PREV_EXIST>
-    <ENTRY_NEXT_EXIST><link rel="Next" href="&ENTRY_NEXT_HREF;" title="&ENTRY_NEXT_SUBJECT;" /></ENTRY_NEXT_EXIST>
-    <link rel="Up" href="&ALL_ENTRIES_HREF;" title="Wróć" />
-    <ENTRY_TAG_BLOCK_EXIST>
-      <meta name="keywords" content="<ENTRY_TAG_BLOCK> &ENTRY_TAG_DESCR;</ENTRY_TAG_BLOCK>" />
-    </ENTRY_TAG_BLOCK_EXIST>
-    <link rel="alternate" type="application/atom+xml" href="&ENTRY_COMMENT_HREF;atom/" title="Comments" />
-  </head>
-  <body>
-    <div id="W">  <!-- global wrap -->
-      <INCLUDE>header.html</INCLUDE>
-      <div id="w">  <!-- content wrap -->
+<!DOCTYPE html>
+<title>&ENTRY_TITLE; - &JOG_TITLE;</title>
+<INCLUDE>meta.html</INCLUDE>
+<ENTRY_PREV_EXIST><link rel="Prev" href="&ENTRY_PREV_HREF;" title="&ENTRY_PREV_SUBJECT;"></ENTRY_PREV_EXIST>
+<ENTRY_NEXT_EXIST><link rel="Next" href="&ENTRY_NEXT_HREF;" title="&ENTRY_NEXT_SUBJECT;"></ENTRY_NEXT_EXIST>
+<link rel="Up" href="&ALL_ENTRIES_HREF;" title="Up">
+<link rel="alternate" type="application/atom+xml" href="&ENTRY_COMMENT_HREF;atom/" title="Comments">
+<div id="W">  <!-- global wrap -->
+  <INCLUDE>header.html</INCLUDE>
+  <div id="w">  <!-- content wrap -->
 
-        <div id="J">  <!-- jump to -->
-          <p>Jump to…</p>
-          <ul>
-            <li><a href="#M">the article</a></li>
-            <COMMENT_BLOCK_EXIST><li><a href="#Comments">comments</a></li></COMMENT_BLOCK_EXIST>
-            <COMMENT_PREVIEW_EXIST><li><a href="#comm_preview">comment preview</a></li></COMMENT_PREVIEW_EXIST>
-            <COMMENT_ALLOWED_BLOCK><li><a href="#k">adding comment</a></li></COMMENT_ALLOWED_BLOCK>
-            <INCLUDE>jump-rest.html</INCLUDE>
-          </ul>
+    <nav id="J">  <!-- jump to -->
+      <p>Jump to…
+      <ul>
+        <li><a href="#M">the article</a>
+        <COMMENT_BLOCK_EXIST><li><a href="#Comments">comments</a></COMMENT_BLOCK_EXIST>
+        <COMMENT_PREVIEW_EXIST><li><a href="#comm_preview">comment preview</a></COMMENT_PREVIEW_EXIST>
+        <COMMENT_ALLOWED_BLOCK><li><a href="#k">adding comment</a></COMMENT_ALLOWED_BLOCK>
+        <INCLUDE>jump-rest.html</INCLUDE>
+      </ul>
+    </nav>
+
+    <div id="M">  <!-- main content of the site -->
+
+      <nav>
+        <table class="p">
+          <tr>
+            <ENTRY_PREV_EXIST><td align="left"><a accesskey="P" href="&ENTRY_PREV_HREF;" title="&ENTRY_PREV_SUBJECT;">« <span class="a">p</span>revious entry</a></ENTRY_PREV_EXIST>
+            <ENTRY_NEXT_EXIST><td align="right"><a accesskey="N" href="&ENTRY_NEXT_HREF;" title="&ENTRY_NEXT_SUBJECT;"><span class="a">n</span>ext entry »</a></ENTRY_NEXT_EXIST>
+        </table>
+      </nav>
+
+      <article class="T">  <!-- entry text -->
+        <header><h2><a href="&ENTRY_COMMENT_HREF;" title="Permanent link to the entry.">&ENTRY_SUBJECT;</a></h2></header>
+
+        <p class="t"><a href="#J">Get back to “Jump to”</a>
+
+        <div class="C">
+          &ENTRY_CONTENT_SHORT;
+          <ENTRY_CONTENT_SHORT_EXIST><div id="m">&ENTRY_CONTENT_LONG;</div></ENTRY_CONTENT_SHORT_EXIST>
         </div>
 
-        <div id="M">  <!-- main content of the site -->
+        <footer class="m">  <!-- meta information -->
+          <ul>
+            <li><span class="t">Added at </span>&ENTRY_DATE;, &ENTRY_HOUR;
+            <li class="np"><a href="&ENTRY_COMMENT_HREF;" title="Permanent link to the entry.">permlink</a>
+            <li class="np"><a href="&ENTRY_TRACKBACK_HREF;" title="Link for trakcbacking the entry." rel="nofollow">trackback</a>
+            <ADMIN_BLOCK>
+              <li class="np"><a href="&ADMIN_ENTRY_EDIT_HREF;">edit</a>
+            </ADMIN_BLOCK>
+          </ul>
+          <p class="t">In categories:
+          <ul>
+            <ENTRY_CATEGORY_BLOCK><li><a href="&ENTRY_CATEGORY_HREF;">&ENTRY_CATEGORY_HREF_DESCR;</a></ENTRY_CATEGORY_BLOCK>
+          </ul>
 
-          <table class="p">
-            <tr>
-              <ENTRY_PREV_EXIST><td align="left"><a accesskey="P" href="&ENTRY_PREV_HREF;" title="&ENTRY_PREV_SUBJECT;">« <span class="a">p</span>revious entry</a></td></ENTRY_PREV_EXIST>
-              <ENTRY_NEXT_EXIST><td align="right"><a accesskey="N" href="&ENTRY_NEXT_HREF;" title="&ENTRY_NEXT_SUBJECT;"><span class="a">n</span>ext entry »</a></td></ENTRY_NEXT_EXIST>
-            </tr>
-          </table>
+          <ENTRY_TAG_BLOCK_EXIST>
+            <p class="t">Keywords:
+            <ul>
+              <ENTRY_TAG_BLOCK><li><a href="http://technorati.com/tags/&ENTRY_TAG_DESCR;" rel="tag nofollow">&ENTRY_TAG_DESCR;</a></ENTRY_TAG_BLOCK>
+            </ul>
+          </ENTRY_TAG_BLOCK_EXIST>
+        </footer>  <!-- end meta information -->
+      </article>  <!-- end entry text -->
 
-          <div class="T">  <!-- entry text -->
-            <h2><a href="&ENTRY_COMMENT_HREF;" title="Permanent link to the entry.">&ENTRY_SUBJECT;</a></h2>
+      <nav>
+        <table class="p">
+          <tr>
+            <ENTRY_PREV_EXIST><td align="left"><a accesskey="P" href="&ENTRY_PREV_HREF;" title="&ENTRY_PREV_SUBJECT;">« <span class="a">p</span>revious entry</a></ENTRY_PREV_EXIST>
+            <ENTRY_NEXT_EXIST><td align="right"><a accesskey="N" href="&ENTRY_NEXT_HREF;" title="&ENTRY_NEXT_SUBJECT;"><span class="a">n</span>ext entry »</a></ENTRY_NEXT_EXIST>
+        </table>
+      </nav>
 
-            <p class="t"><a href="#J">Get back to “Jump to”</a></p>
+      <COMMENT_BLOCK_EXIST>
+        <section>
+          <header><h2 id="C">Comments</h2></header>
+          <p class="t"><a href="#J">Get back to “Jump to”</a>
+          <COMMENT_BLOCK>
+            <article class="k" id="comm&COMMENT_ID;">  <!-- comment -->
+              <COMMENT_FAVICON_EXIST>&COMMENT_FAVICON;</COMMENT_FAVICON_EXIST>
+              <COMMENT_FAVICON_NOT_EXIST><img src="/files/no-fav.png" alt=""></COMMENT_FAVICON_NOT_EXIST>
+              <header><h3><a href="#comm&COMMENT_ID;" title="Permanent link to the comment.">»»</a> &COMMENT_NICK;</h3></header>
 
-            <div class="C">
-              &ENTRY_CONTENT_SHORT;
-              <ENTRY_CONTENT_SHORT_EXIST><div id="m">&ENTRY_CONTENT_LONG;</div></ENTRY_CONTENT_SHORT_EXIST>
-            </div>
-
-            <div class="m">  <!-- meta information -->
-              <ul>
-                <li><span class="t">Added at </span>&ENTRY_DATE;, &ENTRY_HOUR;</li>
-                <li class="np"><a href="&ENTRY_COMMENT_HREF;" title="Permanent link to the entry.">permlink</a></li>
-                <li class="np"><a href="&ENTRY_TRACKBACK_HREF;" title="Link for trakcbacking the entry." rel="nofollow">trackback</a></li>
-                <ADMIN_BLOCK>
-                  <li class="np"><a href="&ADMIN_ENTRY_EDIT_HREF;">edit</a></li>
-                </ADMIN_BLOCK>
-              </ul>
-              <p class="t">In categories:</p>
-              <ul>
-                <ENTRY_CATEGORY_BLOCK><li><a href="&ENTRY_CATEGORY_HREF;">&ENTRY_CATEGORY_HREF_DESCR;</a></li></ENTRY_CATEGORY_BLOCK>
-              </ul>
-
-              <ENTRY_TAG_BLOCK_EXIST>
-                <p class="t">Keywords:</p>
-                <ul>
-                  <ENTRY_TAG_BLOCK><li><a href="http://technorati.com/tags/&ENTRY_TAG_DESCR;" rel="tag nofollow">&ENTRY_TAG_DESCR;</a></li></ENTRY_TAG_BLOCK>
-                </ul>
-              </ENTRY_TAG_BLOCK_EXIST>
-            </div>  <!-- end meta information -->
-
-          </div>  <!-- end entry text -->
-
-          <table class="p">
-            <tr>
-              <ENTRY_PREV_EXIST><td align="left"><a accesskey="P" href="&ENTRY_PREV_HREF;" title="&ENTRY_PREV_SUBJECT;">« <span class="a">p</span>revious entry</a></td></ENTRY_PREV_EXIST>
-              <ENTRY_NEXT_EXIST><td align="right"><a accesskey="N" href="&ENTRY_NEXT_HREF;" title="&ENTRY_NEXT_SUBJECT;"><span class="a">n</span>ext entry »</a></td></ENTRY_NEXT_EXIST>
-            </tr>
-          </table>
-
-          <COMMENT_BLOCK_EXIST>
-            <h2 id="C">Comments</h2>
-            <p class="t"><a href="#J">Get back to “Jump to”</a></p>
-            <COMMENT_BLOCK>
-              <div class="k" id="comm&COMMENT_ID;">  <!-- comment -->
-                <COMMENT_FAVICON_EXIST>&COMMENT_FAVICON;</COMMENT_FAVICON_EXIST>
-                <COMMENT_FAVICON_NOT_EXIST><img src="/files/no-fav.png" alt="" /></COMMENT_FAVICON_NOT_EXIST>
-                <h3><a href="#comm&COMMENT_ID;" title="Permanent link to the comment.">»»</a> &COMMENT_NICK;</h3>
-
+              <footer>
                 <ul class="m">
-                  <li><span class="t">Added at</span>&COMMENT_DATE;, &COMMENT_HOUR;</li>
-                  <COMMENT_EDIT_EXIST><li><a href="&COMMENT_EDIT_HREF;">edit</a></li></COMMENT_EDIT_EXIST>
+                  <li><span class="t">Added at</span>&COMMENT_DATE;, &COMMENT_HOUR;
+                  <COMMENT_EDIT_EXIST><li><a href="&COMMENT_EDIT_HREF;">edit</a></COMMENT_EDIT_EXIST>
                   <ADMIN_BLOCK>
-                    <li><a href="&ADMIN_COMMENT_EDIT_HREF;">edit</a></li>
-                    <li><a href="&ADMIN_COMMENT_REMOVE_HREF;">delete</a></li>
-                    <li><a href="&ADMIN_COMMENT_BLOCKIP_HREF;">block IP</a></li>
+                    <li><a href="&ADMIN_COMMENT_EDIT_HREF;">edit</a>
+                    <li><a href="&ADMIN_COMMENT_REMOVE_HREF;">delete</a>
+                    <li><a href="&ADMIN_COMMENT_BLOCKIP_HREF;">block IP</a>
                   </ADMIN_BLOCK>
                 </ul>
+              </footer>
 
-                <div class="C">&COMMENT_CONTENT;</div>
-              </div>  <!-- end comment -->
-            </COMMENT_BLOCK>
-          </COMMENT_BLOCK_EXIST>
+              <div class="C">&COMMENT_CONTENT;</div>
+            </article>  <!-- end comment -->
+          </COMMENT_BLOCK>
+        </section>
+      </COMMENT_BLOCK_EXIST>
 
-          <COMMENT_ALLOWED_BLOCK>
-            <COMMENT_PREVIEW_EXIST>
-              <div class="k">
-                <h3>Preview</h3>
-                <div class="C kp">
-                  &COMMENT_PREVIEW_BODY;
-                  <p><strong>This is only a preview!</strong> Do not forget to submit.</p>
-                </div>
-              </div>
-            </COMMENT_PREVIEW_EXIST>
+      <COMMENT_ALLOWED_BLOCK>
+        <COMMENT_PREVIEW_EXIST>
+          <article class="k">
+            <header><h3>Preview</h3></header>
+            <div class="C kp">
+              &COMMENT_PREVIEW_BODY;
+              <p><strong>This is only a preview!</strong> Do not forget to submit.
+            </div>
+          </article>
+        </COMMENT_PREVIEW_EXIST>
 
-            <h2 id="k">Add a comment</h2>
-            <COMMENT_FORM_BLOCK>
-              <form action="&COMMENT_FORM_ACTION;" method="post" id="F">
-                <table>
-                  <col width="10%" />
-                  <col width="40%" />
+        <section>
+          <header><h2 id="k">Add a comment</h2></header>
+          <COMMENT_FORM_BLOCK>
+            <form action="&COMMENT_FORM_ACTION;" method="post" id="F">
+              <table>
+                <col width="10%">
+                <col width="40%">
+                <tr>
+                  <td colspan="2"><textarea name="commbody" id="commbody" cols="70" rows="6"><COMMENT_FORM_BODY></textarea>
+
+                <tr class="n">
+                  <th><label for="commnickid">Nick</label>
+                  <td><input type="text" name="commnickid" id="commnickid" value="&COMMENT_FORM_NICKID;">
+
+                <COMMENT_FORM_NOUSER_BLOCK>
                   <tr>
-                    <td colspan="2"><textarea name="commbody" id="commbody" cols="70" rows="6"><COMMENT_FORM_BODY /></textarea></td>
-                  </tr>
-                  <tr class="n">
-                    <th><label for="commnickid">Nick</label></th>
-                    <td><input type="text" name="commnickid" id="commnickid" value="&COMMENT_FORM_NICKID;" /></td>
-                  </tr>
-                  <COMMENT_FORM_NOUSER_BLOCK>
-                    <tr>
-                      <th><label for="code">Code:</label></th>
-                      <td>
-                        <img src="&COMMENT_FORM_CODE;" alt="If you cannot see the image, you will not be able to comment…" />
-                        <br />
-                        <input type="text" name="code" id="code" />
-                      </td>
-                    </tr>
-                  </COMMENT_FORM_NOUSER_BLOCK>
-                  <tr>
-                    <th></th>
+                    <th><label for="code">Code:</label>
                     <td>
-                      <input type="submit" name="preview" value="Preview" />
-                      <input type="submit" name="submit" id="submitcomm" value="Submit" />
-                    </td>
-                  </tr>
-                </table>
+                      <img src="&COMMENT_FORM_CODE;" alt="If you cannot see the image, you will not be able to comment…">
+                      <br>
+                      <input type="text" name="code" id="code">
+                </COMMENT_FORM_NOUSER_BLOCK>
+                <tr>
+                  <th>
+                  <td>
+                    <input type="submit" name="preview" value="Preview">
+                    <input type="submit" name="submit" id="submitcomm" value="Submit">
+              </table>
 
-                <ul>
-                  <li>Single Return produces a line break.</li>
-                  <li>More then that creates a paragraph.</li>
-                  <li>Text preceded by four spaces means a block of code.</li>
-                  <li>*<em>emphasis</em>*, _<em>emphasis</em>_,</li>
-                  <li>**<strong>strong emphasis</strong>**, __<strong>strong emphasis</strong>__,</li>
-                  <li>`<code>inline code</code>`, ``<code>code ` more inline code</code>``,</li>
-                  <li>[<a href="http://example.com/">Link</a>](http://example.com/),</li>
-                  <li>[<a href="http://example.com/" title="Title">Link</a>](http://example.com/ "Title") and</li>
-                  <li>&lt;<a href="http://example.com">http://example.com/</a>&gt;.</li>
-                </ul>
-              </form>
-            </COMMENT_FORM_BLOCK>
-          </COMMENT_ALLOWED_BLOCK>
+              <ul>
+                <li>Single Return produces a line break.
+                <li>More then that creates a paragraph.
+                <li>Text preceded by four spaces means a block of code.
+                <li>*<em>emphasis</em>*, _<em>emphasis</em>_,
+                <li>**<strong>strong emphasis</strong>**, __<strong>strong emphasis</strong>__,
+                <li>`<code>inline code</code>`, ``<code>code ` more inline code</code>``,
+                <li>[<a href="http://example.com/">Link</a>](http://example.com/),
+                <li>[<a href="http://example.com/" title="Title">Link</a>](http://example.com/ "Title") and
+                <li>&lt;<a href="http://example.com">http://example.com/</a>&gt;.
+              </ul>
+            </form>
+          </COMMENT_FORM_BLOCK>
+        </section>
+      </COMMENT_ALLOWED_BLOCK>
 
-        </div>  <!-- end main content of the site -->
-        <INCLUDE>sidebar.html</INCLUDE>
-      </div>  <!-- end content wrap -->
-    </div>  <!-- end global wrap -->
-    <INCLUDE>footer.html</INCLUDE>
-  </body>
-</html>
+    </div>  <!-- end main content of the site -->
+    <INCLUDE>sidebar.html</INCLUDE>
+  </div>  <!-- end content wrap -->
+</div>  <!-- end global wrap -->
+<INCLUDE>footer.html</INCLUDE>

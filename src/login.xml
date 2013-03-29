@@ -4,7 +4,7 @@
   <head>
     <title>Logowanie - &JOG_TITLE;</title>
     <INCLUDE>meta.html</INCLUDE>
-    <meta name="robots" content="noindex,follow" />
+    <meta name="robots" content="noindex,follow">
   </head>
   <INCLUDE>header.html</INCLUDE>
 
@@ -17,25 +17,25 @@
         <form action="&USER_LOG_IN_ACTION;" method="post">
           <table class="CommentForm">
             <tr>
-              <th><label for="user">Nick</label>:</th>
-              <td><input type="text" name="user" id="user" size="20" /></td>
-            </tr>
+              <th><label for="user">Nick</label>:
+              <td><input type="text" name="user" id="user" size="20">
+
             <tr>
-              <th><label for="pass">Hasło</label>:</th>
+              <th><label for="pass">Hasło</label>:
               <td><input type="password" name="pass" id="pass"
-                         size="20" /></td>
-            </tr>
+                         size="20">
+
             <tr>
-              <th></th>
-              <td><input type="submit" value="Zaloguj" /></td>
-            </tr>
+              <th>
+              <td><input type="submit" value="Zaloguj">
+
           </table>
         </form>
       </div>
     </div>
   </NOUSER_BLOCK>
   <LOGGED_USER_BLOCK>
-    <p><a href="&LOGGED_USER_LOG_OUT_HREF;">Wyloguj mnie!</a></p>
+    <p><a href="&LOGGED_USER_LOG_OUT_HREF;">Wyloguj mnie!</a>
   </LOGGED_USER_BLOCK>
 </div>
 

@@ -19,7 +19,7 @@ set -e
 add_note=
 if [ x"$1" = x--add-note ]; then
 	shift
-	add_note='s~^~<!-- Template sources can be found at https://github.com/mina86/mina86.com -->~'
+	add_note='s~^<!DOCTYPE[^>]*>~&<!-- Template sources can be found at https://github.com/mina86/mina86.com -->~'
 fi
 
 tmp="$2~$$~filter~"
@@ -30,7 +30,7 @@ sed <$1 >$tmp -n -e "
 	H
 	$ {
 		x
-		s/<!--[^-]*-->//g
+		s/<!--[^-[]*-->//g
 		s/[[:space:]][[:space:]]*/ /g
 		s/^ \\| $//g
 		s~ \\(</\\?$block\\)~\\1~g
