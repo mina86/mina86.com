@@ -22,8 +22,8 @@
         <nav>
           <table class="p">  <!-- pager -->
             <tr>
-              <PAGE_PREV_EXIST><td align="left"><a href="&PAGE_PREV_HREF;" id="sL" accesskey="P" title="Previous entries">« <span class="a">p</span>revious entries</a></PAGE_PREV_EXIST>
-              <PAGE_NEXT_EXIST><td align="right"><a href="&PAGE_NEXT_HREF;" id="sN" accesskey="N" title="Next entries"><span class="a">n</span>ext entries »</a></PAGE_NEXT_EXIST>
+              <PAGE_PREV_EXIST><td align="left"><a href="&PAGE_PREV_HREF;" id="sL" accesskey="P" title="Previous entries" rel="prev">« <span class="a">p</span>revious entries</a></PAGE_PREV_EXIST>
+              <PAGE_NEXT_EXIST><td align="right"><a href="&PAGE_NEXT_HREF;" id="sN" accesskey="N" title="Next entries" rel="next"><span class="a">n</span>ext entries »</a></PAGE_NEXT_EXIST>
 
           </table>
         </nav>
@@ -67,8 +67,8 @@
         <nav>
           <table class="p">
             <tr>
-              <PAGE_PREV_EXIST><td align="left"><a href="&PAGE_PREV_HREF;" id="sl">« <span class="a">p</span>revious entries</a></PAGE_PREV_EXIST>
-              <PAGE_NEXT_EXIST><td align="right"><a href="&PAGE_NEXT_HREF;" id="sn"><span class="a">n</span>ext entries »</a></PAGE_NEXT_EXIST>
+              <PAGE_PREV_EXIST><td align="left"><a href="&PAGE_PREV_HREF;" id="sl" rel="prev">« <span class="a">p</span>revious entries</a></PAGE_PREV_EXIST>
+              <PAGE_NEXT_EXIST><td align="right"><a href="&PAGE_NEXT_HREF;" id="sn" rel="next"><span class="a">n</span>ext entries »</a></PAGE_NEXT_EXIST>
           </table>
         </nav>
       </PAGE_BLOCK_EXIST>
