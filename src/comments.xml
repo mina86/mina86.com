@@ -116,12 +116,10 @@
                 <col width="10%">
                 <col width="40%">
                 <tr>
-                  <td colspan="2"><textarea name="commbody" id="commbody" cols="70" rows="6"><COMMENT_FORM_BODY></textarea>
-
+                  <td colspan="2"><textarea name="commbody" id="commbody" cols="70" rows="6">&COMMENT_FORM_BODY;</textarea>
                 <tr class="n">
                   <th><label for="commnickid">Nick</label>
                   <td><input type="text" name="commnickid" id="commnickid" value="&COMMENT_FORM_NICKID;">
-
                 <COMMENT_FORM_NOUSER_BLOCK>
                   <tr>
                     <th><label for="code">Code:</label>
