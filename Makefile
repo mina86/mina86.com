@@ -18,7 +18,7 @@ out/%: out/%.with-message
 	mv -- $< $@
 
 out/%.with-message: out/%.compiled
-	echo -n '/* Sources can be found at https://github.com/mina86/mina86.com */' | cat - $< >$@
+	echo -n '/* See https://github.com/mina86/mina86.com */' | cat - $< >$@
 
 out/%.js.compiled: src/%.js $(YUICOMPRESSOR)
 	@exec mkdir -p $(dir $@)
