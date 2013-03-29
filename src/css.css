@@ -279,6 +279,7 @@ img.NewsImage, #w {
 		box-shadow: 0.2em 0.2em 0.5em #ccc;
 		-moz-box-shadow: 0.2em 0.2em 0.5em #ccc;
 		-webkit-box-shadow: 0.2em 0.2em 0.5em #ccc;
+		border: 1px solid #ccc;
 	}
 
 	.c a:before { content: "☞ "; }
