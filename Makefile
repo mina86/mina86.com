@@ -3,6 +3,9 @@ ALL	= $(addprefix out/,$(notdir $(wildcard src/*.*)))
 YUICOMPRESSOR_VERSION = 2.4.7
 YUICOMPRESSOR = bin/yuicompressor-$(YUICOMPRESSOR_VERSION).jar
 
+HTMLCOMPRESSOR_VERSION = 1.5.3
+HTMLCOMPRESSOR = bin/htmlcompressor-1.5.3.jar
+
 
 all: $(ALL)
 
@@ -18,7 +21,7 @@ out/%: out/%.with-message
 	mv -- $< $@
 
 out/%.with-message: out/%.compiled
-	echo -n '/* See https://github.com/mina86/mina86.com */' | cat - $< >$@
+	echo -n '/*See github.com/mina86/mina86.com*/' | cat - $< >$@
 
 out/%.js.compiled: src/%.js $(YUICOMPRESSOR)
 	@exec mkdir -p $(dir $@)
@@ -28,10 +31,9 @@ out/%.css.compiled: src/%.css $(YUICOMPRESSOR)
 	@exec mkdir -p $(dir $@)
 	exec java -jar $(YUICOMPRESSOR) -v --type css -o $@ $<
 
-out/%.html: src/%.html
-	@exec mkdir -p $(dir $@)
-	case "$<" in */[0-9]-*) exec sh bin/xml-filter.sh --add-note $< $@; esac; \
-	exec sh bin/xml-filter.sh $< $@
+out/%.html: src/%.html $(HTMLCOMPRESSOR)
+	case "$<" in */[0-9]-*) exec sh bin/xml-filter.sh --add-note $< $@ $(HTMLCOMPRESSOR); esac; \
+	exec sh bin/xml-filter.sh $< $@ $(HTMLCOMPRESSOR)
 
 
 bin/yuicompressor-$(YUICOMPRESSOR_VERSION).jar: bin/yuicompressor-$(YUICOMPRESSOR_VERSION).zip
@@ -40,6 +42,10 @@ bin/yuicompressor-$(YUICOMPRESSOR_VERSION).jar: bin/yuicompressor-$(YUICOMPRESSO
 
 bin/yuicompressor-$(YUICOMPRESSOR_VERSION).zip:
 	wget -O $@ https://github.com/downloads/yui/yuicompressor/$(notdir $@)
+
+
+$(HTMLCOMPRESSOR):
+	wget -O $@ http://htmlcompressor.googlecode.com/files/$(notdir $@)
 
 
 .PHONY: touch clean

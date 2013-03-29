@@ -19,23 +19,43 @@ set -e
 add_note=
 if [ x"$1" = x--add-note ]; then
 	shift
-	add_note='s~^<!DOCTYPE[^>]*>~&<!-- Template at https://github.com/mina86/mina86.com -->~'
 fi
+
+if [ -n "$3" ]; then
+	htmlcompressor_jar=$3
+	htmlcompressor() {
+		java -jar "$htmlcompressor_jar" -t html \
+			--remove-quotes \
+			--simple-doctype \
+			--remove-style-attr \
+			--remove-link-attr \
+			--remove-script-attr \
+			--remove-form-attr \
+			--remove-input-attr \
+			--simple-bool-attr \
+			"$1"
+	}
+else
+	htmlcompressor() {
+		cat "$1"
+	}
+fi
+
 
 tmp="$2~$$~filter~"
 trap 'rm -f -- "$tmp"' 0
 
-block='\(body\|br\|col\|div\|form\|h[1-6]\|head\|html\|link\|meta\|p\|script\|table\|t[dhr]\|textarea\|title\|[ou]l\|[A-Z_][A-Z_]*\)'
-sed <$1 >$tmp -n -e "
+block='\(body\|br\|col\|div\|form\|h[1-6]\|head\|html\|link\|meta\|p\|script\|table\|t[dhr]\|textarea\|title\|[ou]l\|[A-Z_][A-Z_]*\|section\|header\|aside\|article\|nav\|footer\)'
+htmlcompressor "$1" | sed >$tmp -n -e "
 	H
-	$ {
+	\$ {
 		x
-		s/<!--[^-[]*-->//g
 		s/[[:space:]][[:space:]]*/ /g
-		s/^ \\| $//g
+		s/^ \\| \$//g
 		s~ \\(</\\?$block\\)~\\1~g
 		s~\\(<$block\\( [^>]*\\)\\?>\\) ~\\1~g
 		s~ \\?<li~ <li~g
+		s~ <link~<link~g
 		$add_note
 		p
 	}
