@@ -51,7 +51,10 @@ if (window.mina86_user_type) {
         },
 
         getDocumentElement = function(x) { return x.documentElement; },
-        getResponseDocumentElement = function(request) { return getDocumentElement(request.responseXML); },
+        getResponseDocumentElement = function(request) {
+          return request.responseXML ?
+            getDocumentElement(request.responseXML) : null;
+        },
 
         /* Load contents of article when “more” link is clicked. */
         prepareMoreLinks = function(links) {
