@@ -30,11 +30,8 @@ out/%.css.compiled: src/%.css $(YUICOMPRESSOR)
 
 out/%.html: src/%.html
 	@exec mkdir -p $(dir $@)
+	case "$<" in */[0-9]-*) exec sh bin/xml-filter.sh --add-note $< $@; esac; \
 	exec sh bin/xml-filter.sh $< $@
-
-out/%.xml: src/%.xml
-	@exec mkdir -p $(dir $@)
-	exec sh bin/xml-filter.sh --add-note $< $@
 
 
 bin/yuicompressor-$(YUICOMPRESSOR_VERSION).jar: bin/yuicompressor-$(YUICOMPRESSOR_VERSION).zip
