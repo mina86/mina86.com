@@ -22,12 +22,11 @@
 
     <div id="M">  <!-- main content of the site -->
 
-      <nav>
-        <table class="p">
-          <tr>
-            <ENTRY_PREV_EXIST><td align="left"><a accesskey="P" href="&ENTRY_PREV_HREF;" title="&ENTRY_PREV_SUBJECT;" rel="prev">« <span class="a">p</span>revious entry</a></ENTRY_PREV_EXIST>
-            <ENTRY_NEXT_EXIST><td align="right"><a accesskey="N" href="&ENTRY_NEXT_HREF;" title="&ENTRY_NEXT_SUBJECT;" rel="next"><span class="a">n</span>ext entry »</a></ENTRY_NEXT_EXIST>
-        </table>
+      <nav class="p">
+        <ul>
+          <ENTRY_PREV_EXIST><li><a accesskey="P" href="&ENTRY_PREV_HREF;" title="&ENTRY_PREV_SUBJECT;" rel="prev">« <span class="a">p</span>revious entry</a></ENTRY_PREV_EXIST>
+          <ENTRY_NEXT_EXIST><li class="pn"><a accesskey="N" href="&ENTRY_NEXT_HREF;" title="&ENTRY_NEXT_SUBJECT;" rel="next"><span class="a">n</span>ext entry »</a></ENTRY_NEXT_EXIST>
+        </ul>
       </nav>
 
       <article class="T">  <!-- entry text -->
@@ -63,12 +62,11 @@
         </footer>  <!-- end meta information -->
       </article>  <!-- end entry text -->
 
-      <nav>
-        <table class="p">
-          <tr>
-            <ENTRY_PREV_EXIST><td align="left"><a accesskey="P" href="&ENTRY_PREV_HREF;" title="&ENTRY_PREV_SUBJECT;" rel="prev">« <span class="a">p</span>revious entry</a></ENTRY_PREV_EXIST>
-            <ENTRY_NEXT_EXIST><td align="right"><a accesskey="N" href="&ENTRY_NEXT_HREF;" title="&ENTRY_NEXT_SUBJECT;" rel="next"><span class="a">n</span>ext entry »</a></ENTRY_NEXT_EXIST>
-        </table>
+      <nav class="p">
+        <ul>
+          <ENTRY_PREV_EXIST><li><a accesskey="P" href="&ENTRY_PREV_HREF;" title="&ENTRY_PREV_SUBJECT;" rel="prev">« <span class="a">p</span>revious entry</a></ENTRY_PREV_EXIST>
+          <ENTRY_NEXT_EXIST><li class="pn"><a accesskey="N" href="&ENTRY_NEXT_HREF;" title="&ENTRY_NEXT_SUBJECT;" rel="next"><span class="a">n</span>ext entry »</a></ENTRY_NEXT_EXIST>
+        </ul>
       </nav>
 
       <COMMENT_BLOCK_EXIST>

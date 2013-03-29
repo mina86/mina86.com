@@ -19,13 +19,11 @@
     <div id="M">  <!-- main content of the site -->
 
       <PAGE_BLOCK_EXIST>
-        <nav>
-          <table class="p">  <!-- pager -->
-            <tr>
-              <PAGE_PREV_EXIST><td align="left"><a href="&PAGE_PREV_HREF;" id="sL" accesskey="P" title="Previous entries" rel="prev">« <span class="a">p</span>revious entries</a></PAGE_PREV_EXIST>
-              <PAGE_NEXT_EXIST><td align="right"><a href="&PAGE_NEXT_HREF;" id="sN" accesskey="N" title="Next entries" rel="next"><span class="a">n</span>ext entries »</a></PAGE_NEXT_EXIST>
-
-          </table>
+        <nav class="p">  <!-- pager -->
+          <ul>
+            <PAGE_PREV_EXIST><li><a href="&PAGE_PREV_HREF;" id="sL" accesskey="P" title="Previous entries" rel="prev">« <span class="a">p</span>revious entries</a></PAGE_PREV_EXIST>
+            <PAGE_NEXT_EXIST><li class="pn"><a href="&PAGE_NEXT_HREF;" id="sN" accesskey="N" title="Next entries" rel="next" class="pn"><span class="a">n</span>ext entries »</a></PAGE_NEXT_EXIST>
+          </ul>
         </nav>
       </PAGE_BLOCK_EXIST>
 
@@ -64,12 +62,11 @@
 
       <PAGE_BLOCK_EXIST>
         <div id="sm"><!-- scroller message --></div>
-        <nav>
-          <table class="p">
-            <tr>
-              <PAGE_PREV_EXIST><td align="left"><a href="&PAGE_PREV_HREF;" id="sl" rel="prev">« <span class="a">p</span>revious entries</a></PAGE_PREV_EXIST>
-              <PAGE_NEXT_EXIST><td align="right"><a href="&PAGE_NEXT_HREF;" id="sn" rel="next"><span class="a">n</span>ext entries »</a></PAGE_NEXT_EXIST>
-          </table>
+        <nav class="p">
+          <ul>
+            <PAGE_PREV_EXIST><li><a href="&PAGE_PREV_HREF;" id="sl" rel="prev">« <span class="a">p</span>revious entries</a></PAGE_PREV_EXIST>
+            <PAGE_NEXT_EXIST><li class="pn"><a href="&PAGE_NEXT_HREF;" id="sn" rel="next"><span class="a">n</span>ext entries »</a></PAGE_NEXT_EXIST>
+          </ul>
         </nav>
       </PAGE_BLOCK_EXIST>
 

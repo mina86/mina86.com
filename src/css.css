@@ -294,8 +294,18 @@ img.NewsImage, #w {
 }
 
 .p {
+	display: table;
 	table-layout: fixed;
 	width: 100%;
+}
+.p ul {
+	display: table-row;
+}
+.p li {
+	display: table-cell;
+}
+.pn {
+	text-align: right;
 }
 
 #H h1 span {
