@@ -5,6 +5,7 @@
 <ENTRY_NEXT_EXIST><link rel="Next" href="&ENTRY_NEXT_HREF;" title="&ENTRY_NEXT_SUBJECT;"></ENTRY_NEXT_EXIST>
 <link rel="start" href="&ALL_ENTRIES_HREF;" title="Up">
 <link rel="alternate" type="application/atom+xml" href="&ENTRY_COMMENT_HREF;atom/" title="Comments">
+<script>var RecaptchaOptions={lang:'fr',theme:'white'};</script>
 <div id="v">  <!-- global wrap -->
   <INCLUDE>header.html</INCLUDE>
   <div id="w">  <!-- content wrap -->
@@ -74,7 +75,7 @@
           <header><h2 id="c">Comments</h2></header>
           <p class="t"><a href="#J">Get back to “Jump to”</a>
           <COMMENT_BLOCK>
-            <article class="k" id="comm&COMMENT_ID;">  <!-- comment -->
+            <article class="k &COMMENT_NICK_CLASS;" id="comm&COMMENT_ID;">  <!-- comment -->
               <COMMENT_FAVICON_EXIST>&COMMENT_FAVICON;</COMMENT_FAVICON_EXIST>
               <COMMENT_FAVICON_NOT_EXIST><img src="/files/no-fav.png" alt=""></COMMENT_FAVICON_NOT_EXIST>
               <header><h3><a href="#comm&COMMENT_ID;" title="Permanent link to the comment.">»»</a> &COMMENT_NICK;</h3></header>
@@ -108,33 +109,29 @@
           </article>
         </COMMENT_PREVIEW_EXIST>
 
-        <section>
-          <header><h2 id="k">Add a comment</h2></header>
+        <section id="k">
+          <header><h2>Add a comment</h2></header>
           <COMMENT_FORM_BLOCK>
-            <form action="&COMMENT_FORM_ACTION;" method="post" id="f">
-              <table>
-                <col width="10%">
-                <col width="40%">
-                <tr>
-                  <td colspan="2"><textarea name="commbody" id="commbody" cols="70" rows="6">&COMMENT_FORM_BODY;</textarea>
-                <tr class="n">
-                  <th><label for="commnickid">Nick</label>
-                  <td><input type="text" name="commnickid" id="commnickid" value="&COMMENT_FORM_NICKID;">
-                <COMMENT_FORM_NOUSER_BLOCK>
-                  <tr>
-                    <th><label for="code">Code:</label>
-                    <td>
-                      <img src="&COMMENT_FORM_CODE;" alt="If you cannot see the image, you will not be able to comment…">
-                      <br>
-                      <input type="text" name="code" id="code">
-                </COMMENT_FORM_NOUSER_BLOCK>
-                <tr>
-                  <th>
-                  <td>
-                    <input type="submit" name="preview" value="Preview">
-                    <input type="submit" name="submit" id="submitcomm" value="Submit">
-              </table>
+            <form action="&COMMENT_FORM_ACTION;" method="post">
+              <textarea name="commbody" id="commbody" cols="70"
+                        rows="6">&COMMENT_FORM_BODY;</textarea>
 
+              <COMMENT_FORM_NOUSER_BLOCK>
+                <div style="overflow: auto">
+                  <div style="float: right">&COMMENT_FORM_RECAPTCHA;</div>
+              </COMMENT_FORM_NOUSER_BLOCK>
+              <div>
+                <label for="commnickid">Nick:</label>
+                <input type="text" name="commnickid" id="commnickid"
+                       value="&COMMENT_FORM_NICKID;">
+              </div>
+              <input type="submit" name="preview" class="b"
+                     value="Preview">
+              <input type="submit" name="submit" class="b"
+                     value="Submit">
+              <COMMENT_FORM_NOUSER_BLOCK>
+                </div>
+              </COMMENT_FORM_NOUSER_BLOCK>
               <ul>
                 <li>Single Return produces a line break.
                 <li>More then that creates a paragraph.
