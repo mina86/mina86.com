@@ -84,7 +84,7 @@ img {
 	border: none;
 }
 
-img.NewsImage, #w {
+img.NewsImage, #w, textarea, .p {
 	width: 100%;
 }
 
@@ -289,7 +289,6 @@ img.NewsImage, #w {
 .p {
 	display: table;
 	table-layout: fixed;
-	width: 100%;
 }
 .p ul {
 	display: table-row;
@@ -392,7 +391,6 @@ article h4 {
 	font-weight: 700;
 }
 textarea {
-	width: 100%;
 	margin: 0.5em 0;
 }
 #commnickid, textarea {
