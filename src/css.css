@@ -346,7 +346,7 @@ article, .k, .m {
 	content: '»';
 }
 .m li:after {
-	content: '«';
+	content: ' ';
 }
 
 
@@ -361,7 +361,7 @@ article h4 {
 	font-size: 1em;
 }
 
-article .m {
+.m {
 	text-align: right;
 	padding: 1em;
 }
@@ -380,11 +380,13 @@ article .m {
 	font-size: 1em;
 	text-align: left;
 	padding: 0 1em;
+	margin: 0;
 }
-
 .k .m {
+	text-align: left;
 	font-weight: 400;
 	margin-left: 1em;
+	padding: 0 1em;
 }
 
 /* Add Comment */
