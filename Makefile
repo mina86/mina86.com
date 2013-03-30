@@ -35,6 +35,8 @@ out/%.html: src/%.html $(HTMLCOMPRESSOR)
 	case "$<" in */[0-9]-*) exec sh bin/xml-filter.sh --add-note $< $@ $(HTMLCOMPRESSOR); esac; \
 	exec sh bin/xml-filter.sh $< $@ $(HTMLCOMPRESSOR)
 
+out/html5.js: src/html5.js
+	exec cp -- $< $@
 
 bin/yuicompressor-$(YUICOMPRESSOR_VERSION).jar: bin/yuicompressor-$(YUICOMPRESSOR_VERSION).zip
 	unzip -j $< -d $(dir $@) yuicompressor-$(YUICOMPRESSOR_VERSION)/build/yuicompressor-$(YUICOMPRESSOR_VERSION).jar
