@@ -44,8 +44,6 @@
 
 header, aside, section, article, nav, footer {
 	display: block;
-	margin: 0;
-	padding: 0;
 }
 
 html, body {
@@ -53,7 +51,7 @@ html, body {
 	background: #eef;
 }
 
-div, #h ul, #h li, #r ul, #r li, .m ul, .m li, h1, h2, h3, h4, html, body, .m, #e p, #e ul, #e li {
+* {
 	margin: 0;
 	padding: 0;
 }
@@ -88,7 +86,7 @@ h1, h2, h3, h4 {
 }
 
 img {
-	border: 0 none #000;
+	border: none;
 }
 
 img.NewsImage, #w {
@@ -204,7 +202,7 @@ img.NewsImage, #w {
 	#h ul a, #h ul a:link, #h ul a:visited {
 		padding: 0.5em 1em;
 		color: #333;
-		font-weight: bold;
+		font-weight: 700;
 		white-space: nowrap;
 		background: #fff;
 		background: rgba(255, 255, 255, 0.25);
@@ -323,9 +321,7 @@ img.NewsImage, #w {
 }
 
 #z h2 {
-	font-family: Georgia;
-	font-size: 1.8em;
-	font-weight: normal;
+	font: 400 1.8em Georgia;
 	margin: 1em 0 0.5em 0;
 	text-align: center;
 }
@@ -387,7 +383,7 @@ article .m {
 }
 
 .k .m {
-	font-weight: normal;
+	font-weight: 400;
 	margin-left: 1em;
 }
 
@@ -424,7 +420,7 @@ article .m {
 }
 .c p.i {
 	text-align: left;
-	font-style: italic;
+	font-sstyle: italic;
 }
 
 .c p, .c dd, .c li {
@@ -436,7 +432,7 @@ article .m {
 
 .c ul, .c ol, .c dl {
 	padding: 0;
-	list-style-position: inside;
+	list-style: inside;
 	margin: 1em 0;
 }
 .c dt, .c li, .c dd {
