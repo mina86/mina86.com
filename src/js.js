@@ -10,19 +10,22 @@ var _gaq = [
 
     var NULL = null,
         TRUE = !0,
-        FALSE = !1,
 
         T, xml, nodes,
 
         byId = function(id) { return D.getElementById(id); },
         getParent = function(node) { return node.parentNode; },
-        getElementsByTag = function(element, tag) { return element.getElementsByTagName(tag) },
+        getElementsByTag = function(element, tag) {
+          return element.getElementsByTagName(tag)
+        },
         getLength = function(obj) { return obj.length; },
         removeId = function(element) {
           element.id = '';
           element.removeAttribute('id');
         },
-        removeElement = function(child) { getParent(child).removeChild(child); },
+        removeElement = function(child) {
+          getParent(child).removeChild(child);
+        },
 
         makeRequest = function(url, callback, request) {
           try {
@@ -71,7 +74,8 @@ var _gaq = [
                 if (makeRequest(url, function() {
                   T = this;
                   if (T.readyState == 4) {
-                    if (T.status == 200 && (node = getResponseDocumentElement(T))) {
+                    if (T.status == 200 &&
+                        (node = getResponseDocumentElement(T))) {
                       for (nodes = getElementsByTag(node, str_div), i = getLength(nodes); i--; ) {
                         node = nodes[i];
                         if (node.id == 'm') {
@@ -91,7 +95,7 @@ var _gaq = [
                   infoNode.innerHTML = 'loading…';
                   T = this;
                   getParent(T).replaceChild(infoNode, T);
-                  return FALSE;
+                  return !1;
                 }
                 return TRUE;
               };
@@ -109,7 +113,8 @@ var _gaq = [
 
           if (self.innerHeight) {
             i -= self.innerHeight;
-          } else if (getDocumentElement(D) && getDocumentElement(D).clientHeight) {
+          } else if (getDocumentElement(D) &&
+                     getDocumentElement(D).clientHeight) {
             i -= getDocumentElement(D).clientHeight;
           } else if (node.clientHeight) {
             i -= node.clientHeight;
@@ -119,7 +124,8 @@ var _gaq = [
 
           if (self.pageYOffset != str_undefined) {
             i -= self.pageYOffset;
-          } else if (getDocumentElement(D) && getDocumentElement(D).scrollTop != str_undefined) {
+          } else if (getDocumentElement(D) &&
+                     getDocumentElement(D).scrollTop != str_undefined) {
             i -= getDocumentElement(D).scrollTop;
           } else if (node.scrollTop != str_undefined) {
             i -= node.scrollTop;
@@ -134,7 +140,8 @@ var _gaq = [
               T = this;
               switch (T.readyState) {
               case 2:
-                scrollerMessage.innerHTML = 'Loading entries, please stay tuned…';
+                scrollerMessage.innerHTML =
+                  'Loading entries, please stay tuned…';
                 break;
               case 4:
                 if (T.status == 200) {
@@ -201,7 +208,10 @@ var _gaq = [
       node = D.createElement('script');
       node.type = 'text/javascript';
       node.async = TRUE;
-      node.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      node.src =
+        'http' +
+        ('https:' == document.location.protocol ? 's://ssl' : '://www') +
+        '.google-analytics.com/ga.js';
       i.appendChild(node);
     }
 
