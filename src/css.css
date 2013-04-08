@@ -14,7 +14,6 @@
  *
  * #m  read more anchor
  *
- * #sm scroller message
  * #sc scroller content
  * #sl, #sp scroller previous link
  *
@@ -57,17 +56,12 @@ html, body {
 	padding: 0;
 }
 
-small, .l, #sm, #j, .m, #e li:before {
+small, .l, #j, .m, #e li:before {
 	font-size: 0.8em;
 }
 
 h1, h2, h3, h4 {
 	page-break-after: avoid;
-}
-
-#sm {
-	text-align: center;
-	margin: 0 10%;
 }
 
 .l {

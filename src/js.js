@@ -138,44 +138,32 @@ var _gaq = [
           } else {
             makeRequest(scrollerLink.href, function() {
               T = this;
-              switch (T.readyState) {
-              case 2:
-                scrollerMessage.innerHTML =
-                  'Loading entries, please stay tuned…';
-                break;
-              case 4:
-                if (T.status == 200) {
-                  scrollerMessage.innerHTML = '';
-                  if (xml = getResponseDocumentElement(T)) {
-                    for (nodes = getElementsByTag(xml, str_div), i = getLength(nodes); i--; ){
+              if (T.readyState == 4 && T.status == 200 &&
+                  (xml = getResponseDocumentElement(T))) {
+                for (nodes = getElementsByTag(xml, str_div), i = getLength(nodes); i--; ){
+                  node = nodes[i];
+                  if (node.id == str_scroller_content) {
+                    prepareMoreLinks(getElementsByTag(node, str_a));
+
+                    while ((i = node.firstChild)) {
+                      removeElement(i);
+                      scrollerContent.appendChild(i);
+                    }
+
+                    nodes = getElementsByTag(xml, str_a);
+                    for (i = getLength(nodes); i--; ) {
                       node = nodes[i];
-                      if (node.id == str_scroller_content) {
-                        prepareMoreLinks(getElementsByTag(node, str_a));
-
-                        while ((i = node.firstChild)) {
-                          removeElement(i);
-                          scrollerContent.appendChild(i);
-                        }
-
-                        nodes = getElementsByTag(xml, str_a);
-                        for (i = getLength(nodes); i--; ) {
-                          node = nodes[i];
-                          if (node.id == str_scroller_link) {
-                            scrollerLink.href = scrollerLink2.href = node.href;
-                            W.setTimeout(scrollerUpdate, 500);
-                            return;
-                          }
-                        }
-                        removeElement(scrollerLink);
-                        removeElement(scrollerLink2);
-                        removeElement(scrollerMessage);
-                        scrollerLink = scrollerMessage = NULL;
+                      if (node.id == str_scroller_link) {
+                        scrollerLink.href = scrollerLink2.href = node.href;
+                        W.setTimeout(scrollerUpdate, 500);
                         return;
                       }
                     }
+                    removeElement(scrollerLink);
+                    removeElement(scrollerLink2);
+                    scrollerLink = NULL;
                   }
                 }
-                scrollerMessage.innerHTML = 'Error encountered while loading entries.  Please click the “previous entries” link to see more.';
               }
             });
           }
@@ -192,7 +180,6 @@ var _gaq = [
 
         scrollerLink    = byId(str_scroller_link),
         scrollerLink2   = byId('sp'),
-        scrollerMessage = byId('sm'),
         scrollerContent = byId(str_scroller_content),
 
         node = D.createElement('link'),
@@ -216,7 +203,7 @@ var _gaq = [
     }
 
     prepareMoreLinks(D.links);
-    scrollerLink && scrollerMessage && scrollerContent && scrollerUpdate();
+    scrollerLink && scrollerContent && scrollerUpdate();
 
     /* Comment's body textarea resize */
     if (commentTextarea) {
