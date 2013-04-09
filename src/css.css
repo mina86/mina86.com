@@ -21,6 +21,7 @@
  * #e  contact addresses
  * #l  list of categories in sidebar
  * #a  archive links in sidebar
+ * #f  buttons
  *
  * .c  “content”
  *
@@ -40,6 +41,8 @@
  * .r  feed icon
  *
  * .b  input button
+ *
+ * .b? buttons within #f
  */
 
 header, aside, section, article, nav, footer {
@@ -354,6 +357,19 @@ article h4 {
 	padding: 1em;
 }
 
+blockquote, .r span, #f a, .plFlag, .enFlag {
+	background: url('/files/s.png') no-repeat;
+}
+
+blockquote {
+	background-position: -75px -25px;
+	min-height: 20px;
+}
+blockquote blockquote {
+	background: none;
+	min-height: 0;
+}
+
 
 /* Comment */
 
@@ -491,13 +507,16 @@ pre {
 
 /* Flags */
 
-p.plFlag, p.enFlag {
-	background-repeat: no-repeat;
-	background-position: 1em top;
+.plFlag, .enFlag {
 	text-indent: 22px;
 }
-p.plFlag *, p.enFlag * {
-	text-indent: 0;
+
+.plFlag {
+	background-position: -50px -50px;
+}
+
+.enFlag {
+	background-position: -25px -75px;
 }
 
 #r {
@@ -528,6 +547,10 @@ p.plFlag *, p.enFlag * {
 	list-style: none;
 }
 
+#e ul {
+	background: url('/files/head.png') 100% 100% no-repeat;
+}
+
 #e li {
 	margin-left: 1em;
 }
@@ -550,6 +573,45 @@ p.plFlag *, p.enFlag * {
 	text-align: right;
 	padding: 0 0.2em;
 	color: #999;
+}
+a.r {
+	width: 16px;
+}
+.r span {
+	display: block;
+	background-position: -75px 0;
+	width: 16px;
+	height: 16px;
+}
+
+#f ul, #f li {
+	display: block;
+	margin: 0 auto;
+	text-align: center;
+}
+#f li {
+	display: inline-block;
+	margin: 0 2px;
+}
+#f a {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+}
+#f .bg a       { background-position:    0   -75px; }
+/*#f .bf a       { background-position:    0     0; }*/
+#f .bf a:hover { background-position:  -25px   0; }
+#f .be a       { background-position:  -25px   -25px; }
+#f .be a:hover { background-position:    0   -25px; }
+#f .bc a       { background-position:  -25px -50px; }
+#f .bc a:hover { background-position:    0   -50px; }
+#f .bs a       { background-position:  -50px -25px; }
+#f .bs a:hover { background-position:  -50px   0; }
+
+#f a, .r {
+	text-indent: 100%;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 @media print {
