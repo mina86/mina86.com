@@ -47,7 +47,7 @@ header, aside, section, article, nav, footer {
 }
 
 html, body {
-	font-family: Verdana, Helvetica;
+	font: Verdana, Helvetica;
 	background: #eef;
 }
 
@@ -309,7 +309,7 @@ img.NewsImage, #w, textarea, .p {
 }
 
 #z h2 {
-	font: 400 1.8em Georgia;
+	font: 1.8em Georgia;
 	margin: 1em 0 0.5em 0;
 	text-align: center;
 }
