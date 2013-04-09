@@ -463,7 +463,6 @@ textarea {
 
 .c ul, .c ol, .c dl {
 	padding: 0;
-	list-style: inside;
 	margin: 1em 0;
 }
 .c dt, .c li, .c dd {
