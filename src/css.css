@@ -377,6 +377,23 @@ article h4 {
 	padding: 0 1em;
 }
 
+.owner .c {
+	background: #EFE;
+}
+
+.trackback .c {
+	background: #EEE;
+}
+
+.k h3 span:before {
+	content: ' ';
+}
+
+.k.guest h3 span:before {
+	color: #999;
+	content: '~';
+}
+
 /* Add Comment */
 .kp {
 	background: #fcc;
