@@ -146,12 +146,9 @@ img.NewsImage, #w, textarea, .p {
 		z-index: 1;
 	}
 
-	#h, #h img {
+	#h {
 		width: 62em;
 		height: 14em;
-	}
-
-	#h {
 		position: relative;
 		background: #66f url(/files/top-img.jpg) no-repeat;
 		background-size: 100% 100%;

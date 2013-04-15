@@ -182,15 +182,10 @@ var _gaq = [
         scrollerLink2   = byId('sp'),
         scrollerContent = byId(str_scroller_content),
 
-        node = D.createElement('link'),
+        node,
         i = D.head;
 
-    node.rel = 'stylesheet';
-    node.href = '/files/css-img.css';
-    node.type = 'text/css';
-    node.media = 'screen, projection, tv, handheld';
-    i.appendChild(node);
-
+    /* Google Analytics */
     if (!window.mina86_skip_ga) {
       node = D.createElement('script');
       node.type = 'text/javascript';
@@ -202,6 +197,7 @@ var _gaq = [
       i.appendChild(node);
     }
 
+    /* AJAX */
     prepareMoreLinks(D.links);
     scrollerLink && scrollerContent && scrollerUpdate();
 
