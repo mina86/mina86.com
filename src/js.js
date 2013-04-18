@@ -147,7 +147,6 @@ var _gaq = [
                     prepareMoreLinks(getElementsByTag(node, str_a));
 
                     while ((i = node.firstChild)) {
-                      removeElement(i);
                       scrollerContent.appendChild(i);
                     }
 
