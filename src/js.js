@@ -62,7 +62,8 @@ var _gaq = [
         prepareMoreLinks = function(links) {
           for (i = getLength(links); i--; ) {
             var node = links[i], url  = node.href, new_link;
-            if (url.substring(getLength(url) - 2) == '#m') {
+            if (node.getAttribute('href') != '#m' &&
+                url.substring(getLength(url) - 2) == '#m') {
               new_link = D.createElement(str_a);
               new_link.href = url;
               new_link.className = str_load_more;
