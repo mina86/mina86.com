@@ -199,8 +199,10 @@ var _gaq = [
     }
 
     /* AJAX */
-    prepareMoreLinks(D.links);
-    scrollerLink && scrollerContent && scrollerUpdate();
+    if (!W.opera) {
+      prepareMoreLinks(D.links);
+      scrollerLink && scrollerContent && scrollerUpdate();
+    }
 
     /* Comment's body textarea resize */
     if (commentTextarea) {
