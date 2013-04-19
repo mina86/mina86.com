@@ -333,7 +333,7 @@ article, .k, .m {
 }
 
 .m li:before {
-	content: '»';
+	content: '» ';
 }
 .m li:after {
 	content: ' ';
