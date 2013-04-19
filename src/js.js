@@ -1,25 +1,28 @@
-var _gaq = [
-  ['_setAccount', 'UA-240278-1'],
-  ['_trackPageview'],
-  ['_setCustomVar', 1, 'user_type', window.mina86_user_type || 'guest']
-];
-
 (function(D, W) {
-  W.___gcfg = {lang: 'en-GB'};
+  W._gaq = [
+    ['_setAccount', 'UA-240278-1'],
+    ['_trackPageview'],
+    ['_setCustomVar', 1, 'user_type', W.mina86_user_type || 'guest']
+  ];
+
+  W.___gcfg = { lang: 'en-GB' };
 
   D.addEventListener('DOMContentLoaded', W.onload = function() {
-    W.onload = function(){};
+    delete W.onload;
 
     var NULL = null,
         TRUE = !0,
+        UNDEF,
 
         T, xml, nodes,
 
-        byId = function(id) { return D.getElementById(id); },
-        getParent = function(node) { return node.parentNode; },
-        getElementsByTag = function(element, tag) {
-          return element.getElementsByTagName(tag)
+        byId = function(id) {
+          return D.getElementById(id);
         },
+        byTag = function(element, tag) {
+          return element.getElementsByTagName(tag || 'div');
+        },
+        getParent = function(node) { return node.parentNode; },
         getLength = function(obj) { return obj.length; },
         removeId = function(element) {
           element.id = '';
@@ -27,6 +30,10 @@ var _gaq = [
         },
         removeElement = function(child) {
           getParent(child).removeChild(child);
+        },
+
+        createElement = function(tag) {
+          return D.createElement(tag);
         },
 
         makeRequest = function(url, callback, request) {
@@ -38,71 +45,64 @@ var _gaq = [
               request = new ActiveXObject("Msxml2.XMLHTTP");
             }
             catch (e) {
-              try {
-                request = new ActiveXObject("Microsoft.XMLHTTP");
-              }
-              catch (e) {
-              }
+              return TRUE;
             }
           }
-          if (request) {
-            request.onreadystatechange = callback;
-            request.open('GET', url, TRUE);
-            request.responseType = 'document';
-            request.send();
-          }
-          return request;
+          request.onreadystatechange = callback;
+          request.open('GET', url, TRUE);
+          request.responseType = 'document';
+          request.send();
         },
 
         getDocumentElement = function(x) { return x.documentElement; },
         getResponseDocumentElement = function(request) {
-          return request.responseXML ?
-            getDocumentElement(request.responseXML) : null;
+          try { return getDocumentElement(request.responseXML); }
+          catch (e) { }
         },
 
         /* Load contents of article when “more” link is clicked. */
         prepareMoreLinks = function(links) {
           for (i = getLength(links); i--; ) {
-            var node = links[i], url  = node.href, new_link;
+            var node = links[i], url = node.href, node2;
             if (node.getAttribute('href') != '#m' &&
                 url.substring(getLength(url) - 2) == '#m') {
-              new_link = D.createElement(str_a);
-              new_link.href = url;
-              new_link.className = str_load_more;
-              new_link.innerHTML = 'load content';
-              new_link.onclick = function(infoNode) {
+              node2 = createElement(str_a);
+              node2.href = url;
+              node2.className = str_load_more;
+              node2.innerHTML = 'load content';
+              node2.onclick = function() {
                 T = this;
-                infoNode = D.createElement('span');
-                url = T.href.substring(0, getLength(T.href) - 2);
-                if (makeRequest(url, function() {
+                i = T.href;
+                node2 = createElement('span');
+                return makeRequest(url = i.substring(0, getLength(i) - 2),
+                                   function() {
                   T = this;
-                  if (T.readyState == 4) {
-                    if (T.status == 200 &&
-                        (node = getResponseDocumentElement(T))) {
-                      for (nodes = getElementsByTag(node, str_div), i = getLength(nodes); i--; ) {
-                        node = nodes[i];
-                        if (node.id == 'm') {
-                          infoNode.previousSibling.innerHTML = 'Add comment';
-                          url = getParent(infoNode);
-                          removeElement(infoNode);
-                          removeId(node);
-                          getParent(url).insertBefore(node, url);
-                          return;
-                        }
+                  if (T.readyState | T.status === 204) {
+                    try {
+                      for (nodes = byTag(getResponseDocumentElement(T)), i = 0;
+                           (node = nodes[i++]).id != 'm';
+                           /* nop */) {
+                        /* nop */
                       }
+                      removeId(node);
+                      node2.previousSibling.innerHTML = 'Comment…';
+                      url = getParent(node2);
+                      removeElement(node2);
+                      getParent(url).insertBefore(node, url);
                     }
-                    W.location = url;
+                    catch (e) {
+                      W.location = url;
+                    }
                   }
-                })) {
-                  infoNode.className = str_load_more;
-                  infoNode.innerHTML = 'loading…';
-                  T = this;
-                  getParent(T).replaceChild(infoNode, T);
-                  return !1;
-                }
-                return TRUE;
+                }) || (
+                  (node2.className = str_load_more),
+                  (node2.innerHTML = 'loading…'),
+                  (T = this),
+                  (getParent(T).replaceChild(node2, T)),
+                  !1
+                );
               };
-              getParent(node).insertBefore(new_link, node.nextSibling);
+              getParent(node).insertBefore(node2, node.nextSibling);
             }
           }
         },
@@ -116,46 +116,41 @@ var _gaq = [
 
           if (self.innerHeight) {
             i -= self.innerHeight;
-          } else if (getDocumentElement(D) &&
-                     getDocumentElement(D).clientHeight) {
-            i -= getDocumentElement(D).clientHeight;
+          } else if (documentElement && documentElement.clientHeight) {
+            i -= documentElement.clientHeight;
           } else if (node.clientHeight) {
             i -= node.clientHeight;
           } else {
             return;
           }
 
-          if (self.pageYOffset != str_undefined) {
+          if (self.pageYOffset !== UNDEF) {
             i -= self.pageYOffset;
-          } else if (getDocumentElement(D) &&
-                     getDocumentElement(D).scrollTop != str_undefined) {
-            i -= getDocumentElement(D).scrollTop;
-          } else if (node.scrollTop != str_undefined) {
+          } else if (documentElement && documentElement.scrollTop !== UNDEF) {
+            i -= documentElement.scrollTop;
+          } else if (node.scrollTop !== UNDEF) {
             i -= node.scrollTop;
           } else {
             return;
           }
 
-          if (i >= 750) {
-            W.setTimeout(scrollerUpdate, i > 1500 ? 1000 : 500);
-          } else {
-            makeRequest(scrollerLink.href, function() {
+          i > 750
+            ? W.setTimeout(scrollerUpdate, i > 1500 ? 1000 : 500)
+            : makeRequest(scrollerLink.href, function() {
               T = this;
-              if (T.readyState == 4 && T.status == 200 &&
+              if (T.readyState | T.status === 204 &&
                   (xml = getResponseDocumentElement(T))) {
-                for (nodes = getElementsByTag(xml, str_div), i = getLength(nodes); i--; ){
-                  node = nodes[i];
+                for (nodes = byTag(xml), i = 0; node = nodes[i++]; ) {
                   if (node.id == str_scroller_content) {
-                    prepareMoreLinks(getElementsByTag(node, str_a));
+                    prepareMoreLinks(byTag(node, str_a));
 
                     while ((i = node.firstChild)) {
                       scrollerContent.appendChild(i);
                       try { gapi.plusone.go(i); } catch (e) {}
                     }
 
-                    nodes = getElementsByTag(xml, str_a);
-                    for (i = getLength(nodes); i--; ) {
-                      node = nodes[i];
+                    nodes = byTag(xml, str_a);
+                    for (i = 0; node = nodes[i++]; ) {
                       if (node.id == str_scroller_link) {
                         scrollerLink.href = scrollerLink2.href = node.href;
                         W.setTimeout(scrollerUpdate, 500);
@@ -169,11 +164,10 @@ var _gaq = [
                 }
               }
             });
-          }
         },
 
         addScript = function(src) {
-          node = D.createElement('script');
+          node = createElement('script');
           node.type = 'text/javascript';
           node.async = TRUE;
           node.src = src;
@@ -181,13 +175,13 @@ var _gaq = [
         },
 
         str_a = 'a',
-        str_div = 'div',
-        str_undefined = 'undefined',
         str_scroller_content = 'sc',
         str_scroller_link = 'sl',
         str_load_more = 'l',
 
-        commentTextarea = byId('commbody'),
+        documentElement = getDocumentElement(D),
+
+        commentTextarea = byId('commbody') || {},
 
         scrollerLink    = byId(str_scroller_link),
         scrollerLink2   = byId('sp'),
@@ -197,7 +191,7 @@ var _gaq = [
         i = D.head;
 
     /* Google Analytics */
-    window.mina86_skip_ga || addScript('http' +
+    W.mina86_skip_ga || addScript('http' +
         ('https:' == document.location.protocol ? 's://ssl' : '://www') +
         '.google-analytics.com/ga.js');
 
@@ -205,22 +199,20 @@ var _gaq = [
     addScript('https://apis.google.com/js/plusone.js');
 
     /* AJAX */
-    if (!W.opera) {
-      prepareMoreLinks(D.links);
-      scrollerLink && scrollerContent && scrollerUpdate();
-    }
+    W.opera || (
+      prepareMoreLinks(D.links),
+      scrollerLink && scrollerContent && scrollerUpdate()
+    );
 
     /* Comment's body textarea resize */
-    if (commentTextarea) {
-      commentTextarea.onkeydown = function(e) {
-        for (xml = commentTextarea.cols, nodes = commentTextarea.value.split('\n'), i = getLength(nodes), node = 1; i--;) {
-          node += Math.floor(getLength(nodes[i]) / xml + 1);
-        }
+    commentTextarea.onkeydown = function() {
+      for (xml = commentTextarea.cols, nodes = commentTextarea.value.split('\n'), i = getLength(nodes), node = 1; i--;) {
+        node += Math.floor(getLength(nodes[i]) / xml + 1);
+      }
 
-        node < 6 && (node = 6);
-        commentTextarea.rows = node > 60 ? 60 : node;
-        return TRUE;
-      };
+      node < 6 && (node = 6);
+      commentTextarea.rows = node > 60 ? 60 : node;
+      return TRUE;
     }
   }, !1); /* window.onload */
 })(document, window);
