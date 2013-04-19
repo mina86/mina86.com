@@ -5,6 +5,8 @@ var _gaq = [
 ];
 
 (function(D, W) {
+  W.___gcfg = {lang: 'en-GB'};
+
   D.addEventListener('DOMContentLoaded', W.onload = function() {
     W.onload = function(){};
 
@@ -148,6 +150,7 @@ var _gaq = [
 
                     while ((i = node.firstChild)) {
                       scrollerContent.appendChild(i);
+                      try { gapi.plusone.go(i); } catch (e) {}
                     }
 
                     nodes = getElementsByTag(xml, str_a);
@@ -169,6 +172,14 @@ var _gaq = [
           }
         },
 
+        addScript = function(src) {
+          node = D.createElement('script');
+          node.type = 'text/javascript';
+          node.async = TRUE;
+          node.src = src;
+          i.appendChild(node);
+        },
+
         str_a = 'a',
         str_div = 'div',
         str_undefined = 'undefined',
@@ -186,16 +197,12 @@ var _gaq = [
         i = D.head;
 
     /* Google Analytics */
-    if (!window.mina86_skip_ga) {
-      node = D.createElement('script');
-      node.type = 'text/javascript';
-      node.async = TRUE;
-      node.src =
-        'http' +
+    window.mina86_skip_ga || addScript('http' +
         ('https:' == document.location.protocol ? 's://ssl' : '://www') +
-        '.google-analytics.com/ga.js';
-      i.appendChild(node);
-    }
+        '.google-analytics.com/ga.js');
+
+    /* Google+ */
+    addScript('https://apis.google.com/js/plusone.js');
 
     /* AJAX */
     if (!W.opera) {

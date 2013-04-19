@@ -43,6 +43,8 @@
  * .b  input button
  *
  * .b? buttons within #f
+ *
+ * .g  wrapper around g+ button
  */
 
 header, aside, section, article, nav, footer {
@@ -354,6 +356,10 @@ article h4 {
 	padding: 1em;
 }
 
+.g {
+	float: right;
+}
+
 blockquote, .r span, #f a, .plFlag, .enFlag {
 	background: url('/files/s.png') no-repeat;
 }
@@ -437,6 +443,7 @@ textarea {
 .c {
 	margin: 0.5em;
 	padding: 1em 2em;
+	overflow: auto;
 }
 
 .c q:before, .c q:after {
