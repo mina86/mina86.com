@@ -164,11 +164,11 @@ img.NewsImage, #w, textarea, .p {
 		white-space: nowrap;
 	}
 
-	#h h1, #j {
+	h1, #j {
 		color: #000;
 	}
 
-	#h h1 {
+	h1 {
 		top: 20%;
 		left: 2%;
 		width: 8em;
@@ -176,7 +176,7 @@ img.NewsImage, #w, textarea, .p {
 		text-align: center;
 	}
 
-	#h h1 span {
+	h1 span {
 		color: #00f;
 	}
 
@@ -211,7 +211,7 @@ img.NewsImage, #w, textarea, .p {
 		text-shadow: #000 0.5em 0.5em 1em;
 	}
 
-	#h #s {
+	#s {
 		top: 1em;
 		right: 1em;
 	}
@@ -220,6 +220,11 @@ img.NewsImage, #w, textarea, .p {
 		background: #fff;
 		background: rgba(255, 255, 255, 0.25);
 		border: 1px solid #000;
+		padding: 0 0.2em;
+	}
+
+	#h input.s {
+		padding: 0 1em;
 	}
 
 	#j {
@@ -296,7 +301,7 @@ img.NewsImage, #w, textarea, .p {
 	text-align: right;
 }
 
-#h h1 span {
+h1 span {
 	font-variant: small-caps;
 	font-variant-numeric: oldstyle-nums;
 	font-feature-settings: "onum";
@@ -347,7 +352,7 @@ article h3 {
 	margin: 1.4em 0 1em;
 }
 
-article h4 {
+h4 {
 	font-size: 1em;
 }
 
@@ -417,7 +422,7 @@ blockquote blockquote {
 .kp {
 	background: #fcc;
 }
-#k label {
+label {
 	font-weight: 700;
 }
 textarea {
@@ -439,14 +444,13 @@ textarea {
 }
 
 
-
 .c {
 	margin: 0.5em;
 	padding: 1em 2em;
 	overflow: auto;
 }
 
-.c q:before, .c q:after {
+q:before, q:after {
 	content: '';
 }
 
@@ -474,8 +478,7 @@ textarea {
 	margin: 0 1em 0 2em;
 }
 .c dt, .c dd {
-	margin-top: 0.25em;
-	margin-bottom: 0.25em;
+	margin: 0.25em 1em 0.25em 2em;
 }
 .c dd {
 	margin-left: 4em;
@@ -528,7 +531,7 @@ pre {
 }
 
 #r > * {
-	padding: 0.5em 0.5em;
+	padding: 0.5em;
 	margin: 1em 0;
 }
 #r footer {
@@ -550,7 +553,7 @@ pre {
 	list-style: none;
 }
 
-#e ul {
+#e {
 	background: url('/files/head.png') 100% 100% no-repeat;
 }
 
@@ -577,7 +580,7 @@ pre {
 	padding: 0 0.2em;
 	color: #999;
 }
-a.r {
+.r {
 	width: 16px;
 }
 .r span {
