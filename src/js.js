@@ -135,6 +135,7 @@
                        /* nop */) {
                     scrollerContent.appendChild(i);
                     try { gapi.plusone.go(i); } catch (e) {}
+                    try { twttr.widgets.load(); } catch (e) {}
                   }
 
                   nodes = byTag(xml, str_a);
@@ -180,12 +181,11 @@
       i = D.head;
 
   /* Google Analytics */
-  W['mina86_skip_ga'] || addScript(
-      (getLength(W.location.protocol) == 6 ? 's://ssl' : '://www') +
-      '.google-analytics.com/ga.js');
+  W['mina86_skip_ga'] || addScript('://www.google-analytics.com/ga.js');
 
-  /* Google+ */
+  /* Social */
   addScript('s://apis.google.com/js/plusone.js');
+  addScript('://platform.twitter.com/widgets.js');
 
   /* AJAX */
   W.opera || (
