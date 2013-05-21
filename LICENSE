@@ -27,6 +27,26 @@ implied.  See the  Apache License for the  specific language governing
 permissions and limitations under the License.
 
 
+Contents of the <data> directory:
+* favicon.ico, favicon.png, head.png: © AppleGeeks.com, used with
+          permission as avatar and favicon.
+* news-001.jpg: © Matthew Bowden aka thesaint, for license conditions
+          see <http://www.sxc.hu/photo/230445>.
+* news-003.jpg: © Kiril Havezov aka walker_M, for license conditions
+          see <http://www.sxc.hu/photo/1192392>.
+* news-004.jpg: © Colin Adamson, for license conditions see
+          <http://www.sxc.hu/photo/656298>.
+* news-005.jpg: © ItsMe1985, for license condiciotns see
+          <http://www.sxc.hu/photo/1230252>
+* no-fav.png: Released to public domain.
+* html5-sprite-expl.xcf.xz, news-000.jpg news-002.jpg, news-006.jpg,
+  top-img.jpg: Unknown copyright holders and exact license conditions
+          but all images taken from <http://www.sxc.hu/>.
+* s.xcf.xz: Various.  Logos used to refer to organisations, products
+          and programs they represent thus believed to be covered by
+          fair use.  Feed icon taken from <http://www.feedicons.com/>.
+
+
 [1] http://creativecommons.org/licenses/by-sa/3.0/legalcode
 [2] http://creativecommons.org/licenses/by-sa/3.0
 [3] https://github.com/aFarkas/html5shiv/
