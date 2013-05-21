@@ -52,7 +52,7 @@ header, aside, section, article, nav, footer {
 }
 
 html, body {
-	font: Verdana, Helvetica;
+	font: 1em Verdana, Helvetica;
 	background: #eef;
 }
 
