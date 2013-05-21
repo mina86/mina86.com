@@ -589,6 +589,9 @@ pre {
 	width: 16px;
 	height: 16px;
 }
+h2 .r span {
+	display: inline-block;
+}
 
 #f ul, #f li {
 	display: block;
@@ -613,7 +616,7 @@ pre {
 #f .bs a       { background-position:  -50px   0px; }
 #f .bs a:hover { background-position:  -50px -25px; }
 
-#f a, .r {
+#f a, .r span {
 	text-indent: 100%;
 	white-space: nowrap;
 	overflow: hidden;
