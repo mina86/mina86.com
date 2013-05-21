@@ -78,7 +78,7 @@
             node2.onclick = function() {
               T = this;
               i = T.href;
-              node2 = createElement('span');
+              node2 = createElement(str_span);
               return makeRequest(url = i.substring(0, getLength(i) - 2),
                                  function() {
                 try {
@@ -168,6 +168,7 @@
       str_scroller_content = 'sc',
       str_scroller_link = 'sl',
       str_load_more = 'l',
+      str_span = 'span',
 
       documentElement = getDocumentElement(D) || {},
 
@@ -203,4 +204,25 @@
     commentTextarea.rows = ++node > 5 ? node > 60 ? 60 : node : 6;
     return TRUE;
   });
+
+  /* Alter archive */
+  nodes = byTag(byTag(byId(str_a), 'ul')[i = 0], str_a);
+  while (node = nodes[i++]) {
+    T = (node.innerText || node.textContent).replace(/^\s+|\s*$/g, '')
+                                            .split(/\s+/);
+    if (getLength(T) === 2) {
+      getter = T[1];
+      while (node.firstChild) {
+        node.removeChild(node.firstChild);
+      }
+      xml = createElement(str_span);
+      xml.appendChild(document.createTextNode(getter));
+      if (addScript === getter) {
+        xml.style.color = '#FFF';
+      }
+      node.appendChild(xml);
+      node.appendChild(D.createTextNode(' ' + T[0]));
+      addScript = getter;
+    }
+  }
 })(document, window);
