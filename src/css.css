@@ -279,11 +279,10 @@ img.NewsImage, #w, textarea, .p {
 	.c a:before { content: "☞ "; }
 
 	pre {
-		background: #eee;
-		background: -o-linear-gradient(bottom, #999, #eee 2em);
-		background: -ms-linear-gradient(bottom, #999, #eee 2em);
-		background: -moz-linear-gradient(bottom, #999, #eee 2em);
-		background: -webkit-linear-gradient(bottom, #999, #eee 2em);
+		background: #eef;
+		border: 1px solid #ddf;
+		border-bottom-color: #fff;
+		border-right-color: #fff;
 	}
 }
 
@@ -507,7 +506,7 @@ tt {
 pre {
 	color: #030;
 	margin: 1em 0;
-	padding: 1em;
+	padding: 0.5em;
 	font-variant-numeric: slashed-zero;
 }
 
