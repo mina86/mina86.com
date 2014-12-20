@@ -33,11 +33,11 @@ mkdir -p "${out%/*}"
 
 case $1 in
 *.js)
-	echo -n '/*See github.com/mina86/mina86.com */' >$tmp
+	echo '// github.com/mina86/mina86.com' >$tmp
 	run java -jar "$jar" -v --type js "$in" >>$tmp
 	;;
 *.css)
-	echo -n '/*See github.com/mina86/mina86.com */' >$tmp
+	echo -n '/* github.com/mina86/mina86.com */' >$tmp
 	run java -jar "$jar" -v --type css "$in" >>$tmp
 	;;
 *.html)
@@ -63,7 +63,7 @@ case $1 in
 			s~\\(<$block\\( [^>]*\\)\\?>\\) ~\\1~g
 			s~ \\?<li~ <li~g
 			s~ <link~<link~g
-			s~^<!DOCTYPE[^>]*>~&<!--See github.com/mina86/mina86.com -->~
+			s~^<!DOCTYPE[^>]*>~&<!-- github.com/mina86/mina86.com -->~
 			p
 		}
 	" -i "$tmp"
