@@ -1,6 +1,6 @@
 ALL	= $(addprefix out/,$(notdir $(wildcard src/*.*)))
 
-YUICOMPRESSOR_VERSION = 2.4.7
+YUICOMPRESSOR_VERSION = 2.4.8
 YUICOMPRESSOR = bin/yuicompressor-$(YUICOMPRESSOR_VERSION).jar
 
 HTMLCOMPRESSOR_VERSION = 1.5.3
@@ -29,12 +29,8 @@ out/html5.js: src/html5.js
 	exec cp -- $< $@
 
 
-bin/yuicompressor-$(YUICOMPRESSOR_VERSION).jar: bin/yuicompressor-$(YUICOMPRESSOR_VERSION).zip
-	unzip -j $< -d $(dir $@) yuicompressor-$(YUICOMPRESSOR_VERSION)/build/yuicompressor-$(YUICOMPRESSOR_VERSION).jar
-	touch $@
-
-bin/yuicompressor-$(YUICOMPRESSOR_VERSION).zip:
-	wget -O $@ https://github.com/downloads/yui/yuicompressor/$(notdir $@)
+$(YUICOMPRESSOR):
+	wget -O $@ https://github.com/yui/yuicompressor/releases/download/v$(YUICOMPRESSOR_VERSION)/$(notdir $@)
 
 $(HTMLCOMPRESSOR):
 	wget -O $@ http://htmlcompressor.googlecode.com/files/$(notdir $@)
@@ -42,4 +38,3 @@ $(HTMLCOMPRESSOR):
 
 .PHONY: touch clean
 .DELETE_ON_ERROR:
-.INTERMEDIATE: bin/yuicompressor-$(YUICOMPRESSOR_VERSION).zip
