@@ -135,6 +135,10 @@ img.NewsImage, #w, textarea, .p {
 
 	#v, #j, .c {
 		border-radius: 1em;
+		/* box-shadow: 0.2em 0.2em 0.5em #ccc; */
+		/* -moz-box-shadow: 0.2em 0.2em 0.5em #ccc; */
+		/* -webkit-box-shadow: 0.2em 0.2em 0.5em #ccc; */
+		border: 1px solid #ddd;
 	}
 
 	#b {
@@ -267,13 +271,6 @@ img.NewsImage, #w, textarea, .p {
 	#z {
 		float: left;
 		width: 45em;
-	}
-
-	.c, #j, #v {
-		box-shadow: 0.2em 0.2em 0.5em #ccc;
-		-moz-box-shadow: 0.2em 0.2em 0.5em #ccc;
-		-webkit-box-shadow: 0.2em 0.2em 0.5em #ccc;
-		border: 1px solid #ccc;
 	}
 
 	.c a:before { content: "☞ "; }
