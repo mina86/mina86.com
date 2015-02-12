@@ -3,13 +3,10 @@
 
 
 Contents of the  <src> directory except for <src/html5.js>  file are ©
-2012-2013 by Michał Nazarewicz  <mina86@mina86.com> and licensed under
+2012-2015 by Michał Nazarewicz  <mina86@mina86.com> and licensed under
 the terms  of the Creative Commons  Attribution-ShareAlike 4.0 license
 (CC BY-SA  4.0) which can be  found at [1] (and  (non-binding) summary
 (the so called “license deed”) at [2]).
-
-The <src/css-img.css>  file contains  images (encoded  as a  data URL)
-which may by © by other people and distributed under different terms.
 
 
 <src/html5.js> is a compressed version of HTML5 Shiv[3] version 3.6.2
