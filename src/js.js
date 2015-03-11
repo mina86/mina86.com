@@ -188,11 +188,11 @@
   addScript('s://apis.google.com/js/plusone.js');
   addScript('://platform.twitter.com/widgets.js');
 
-  /* AJAX */
-  W.opera || (
-    prepareMoreLinks(D.links),
-    scrollerLink && scrollerContent && scrollerUpdate()
-  );
+  // /* AJAX */
+  // W.opera || (
+  //   prepareMoreLinks(D.links),
+  //   scrollerLink && scrollerContent && scrollerUpdate()
+  // );
 
   /* Comment's body textarea resize */
   commentTextarea && (commentTextarea.onkeydown = W.onload = function() {

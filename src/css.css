@@ -44,6 +44,8 @@
  *
  * .b? buttons within #f
  *
+ * .d  links which should be visible in narrow view only
+ *
  * .g  wrapper around g+ button
  */
 
@@ -85,6 +87,7 @@ img {
 
 img.NewsImage, #w, textarea, .p {
 	width: 100%;
+	box-sizing: border-box;
 }
 
 
@@ -153,19 +156,15 @@ img.NewsImage, #w, textarea, .p {
 	}
 
 	#h {
-		width: 62em;
+		width: 100%;
 		height: 14em;
 		position: relative;
 		background: #69f url(/files/top-img.jpg) no-repeat;
-		background-size: 100% 100%;
-		-o-background-size: 100% 100%;
-		-moz-background-size: 100% 100%;
-		-webkit-background-size: 100% 100%;
+		background-size: cover;
 	}
 
 	#h > * {
 		position: absolute;
-		white-space: nowrap;
 	}
 
 	h1, #j {
@@ -187,14 +186,15 @@ img.NewsImage, #w, textarea, .p {
 	#h nav {
 		bottom: 20%;
 		left: 2%;
-		text-align: right;
 	}
 
 	#h li {
-		display: inline;
+		display: inline-block;
+		margin: 0.2em;
 	}
 
 	#h ul a, #h ul a:link, #h ul a:visited {
+		display: inline-block;
 		padding: 0.5em 1em;
 		color: #333;
 		font-weight: 700;
@@ -280,6 +280,62 @@ img.NewsImage, #w, textarea, .p {
 		border: 1px solid #ddf;
 		border-bottom-color: #fff;
 		border-right-color: #fff;
+	}
+
+	#r {
+		float: right;
+		width: 14em;
+	}
+
+	@media (min-width:63em) {
+		#h li.d {
+			display: none;
+		}
+	}
+
+	@media (max-width:63em) {
+		#v {
+			max-width: 45em;
+			width: auto;
+		}
+
+		#j {
+			display: none;
+		}
+
+		#r, #z {
+			float: none;
+			width: auto;
+		}
+
+		#r {
+			border-top: 1px solid #ddf;
+		}
+	}
+
+	@media (max-width:47em) {
+		#v {
+			margin: 0;
+			padding: 0;
+			border: 0 none #fff;
+			border-radius: 0;
+		}
+		#b {
+			display: none;
+		}
+		#r {
+			border-top: 0px none #eef;
+			background: #eef;
+		}
+	}
+
+	@media (max-width:40em) {
+		.c {
+			margin: 0;
+			padding: 0.5em;
+			border: 0 none #fff;
+			border-radius: 0;
+		}
 	}
 }
 
@@ -521,11 +577,6 @@ pre {
 	background-position: -100px -25px;
 }
 
-#r {
-	float: right;
-	width: 14em;
-}
-
 #r > * {
 	padding: 0.5em;
 	margin: 1em 0;
@@ -629,7 +680,7 @@ h2 .r span {
 	body {
 		background: #fff;
 	}
-	#k, #b, #h img, #h nav, #h ul, #r, .t, .np, .p, form, #j {
+	#k, #b, #h img, #h nav, #h ul, #r, .t, .np, .p, form, #j, .c footer {
 		display: none !important;
 	}
 }
