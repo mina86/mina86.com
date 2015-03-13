@@ -8,7 +8,6 @@
   W['___gcfg'] = { lang: 'en-GB' };
 
   var TRUE = !0,
-      UNDEF,
 
       T, xml, nodes,
 
@@ -17,8 +16,6 @@
       },
       getParent = getter('parentNode'),
       getLength = getter('length'),
-      getClientHeight = getter('clientHeight'),
-      getScrollTop = getter('scrollTop'),
 
       setHTMLAndClass = function(element, html, cls) {
         element.innerHTML = html;
@@ -107,55 +104,6 @@
         }
       },
 
-      /* Auto download new pages when scrolling down */
-      scrollerUpdate = function() {
-        node = D.body;
-        T = node.scrollHeight;
-        i = node.offsetHeight,
-        i =
-          (i > T ? i : T)
-          - (W.innerHeight ||
-             getClientHeight(documentElement) ||
-             getClientHeight(node) ||
-             0)
-          - (W.pageYOffset === UNDEF
-             ? getScrollTop(documentElement) === UNDEF
-               ? getScrollTop(node) || 0
-               : getScrollTop(documentElement)
-            : W.pageYOffset);
-
-        i > 750
-          ? W.setTimeout(scrollerUpdate, i > 1500 ? 1000 : 500)
-          : makeRequest(scrollerLink.href, function() {
-            if (xml = getResponseDocumentElement(T)) {
-              for (nodes = byTag(xml), i = 0; node = nodes[i++]; ) {
-                if (node.id == str_scroller_content) {
-                  for (prepareMoreLinks(byTag(node, str_a));
-                       (i = node.firstChild);
-                       /* nop */) {
-                    scrollerContent.appendChild(i);
-                    try { gapi.plusone.go(i); } catch (e) {}
-                    try { twttr.widgets.load(); } catch (e) {}
-                  }
-
-                  nodes = byTag(xml, str_a);
-                  for (i = 0; node = nodes[i++]; ) {
-                    if (node.id == str_scroller_link) {
-                      scrollerLink.href = scrollerLink2.href = node.href;
-                      W.setTimeout(scrollerUpdate, 500);
-                      return;
-                    }
-                  }
-
-                  removeElement(scrollerLink);
-                  removeElement(scrollerLink2);
-                  scrollerLink = UNDEF;
-                }
-              }
-            }
-          });
-      },
-
       addScript = function(src) {
         node = createElement('script');
         node.type = 'text/javascript';
@@ -165,18 +113,10 @@
       },
 
       str_a = 'a',
-      str_scroller_content = 'sc',
-      str_scroller_link = 'sl',
       str_load_more = 'l',
       str_span = 'span',
 
-      documentElement = getDocumentElement(D) || {},
-
       commentTextarea = byId('commbody'),
-
-      scrollerLink    = byId(str_scroller_link),
-      scrollerLink2   = byId('sp'),
-      scrollerContent = byId(str_scroller_content),
 
       node,
       i = D.head;
@@ -188,11 +128,8 @@
   addScript('s://apis.google.com/js/plusone.js');
   addScript('://platform.twitter.com/widgets.js');
 
-  // /* AJAX */
-  // W.opera || (
-  //   prepareMoreLinks(D.links),
-  //   scrollerLink && scrollerContent && scrollerUpdate()
-  // );
+  /* AJAX */
+  W.opera || prepareMoreLinks(D.links);
 
   /* Comment's body textarea resize */
   commentTextarea && (commentTextarea.onkeydown = W.onload = function() {
