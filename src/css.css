@@ -52,9 +52,21 @@ header, aside, section, article, nav, footer {
 	display: block;
 }
 
+html {
+	height: 100%;
+}
 html, body {
 	font: 1em Verdana, Helvetica;
-	background: #eef;
+	/* Going from colour of the Universe (a.k.a. Cosmic Latte, see
+	 * <http://www.pha.jhu.edu/~kgb/cosspec/>) to colour of the Milky Way
+	 * (see >http://www.news.pitt.edu/milkywaycolor>). */
+	background: #fff8e7;
+	background: -moz-linear-gradient(top, #fff8e7 0%, #f9f1ff 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff8e7), color-stop(100%,#f9f1ff));
+	background: -webkit-linear-gradient(top, #fff8e7 0%,#f9f1ff 100%);
+	background: -o-linear-gradient(top, #fff8e7 0%,#f9f1ff 100%);
+	background: -ms-linear-gradient(top, #fff8e7 0%,#f9f1ff 100%);
+	background: linear-gradient(to bottom, #fff8e7 0%,#f9f1ff 100%);
 }
 
 * {
