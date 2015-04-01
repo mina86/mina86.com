@@ -387,12 +387,6 @@ body > footer {
 
 h1 span {
 	font-variant: small-caps;
-	font-variant-numeric: oldstyle-nums;
-	font-feature-settings: "onum";
-	-o-font-feature-settings: "onum";
-	-ms-font-feature-settings: "onum";
-	-moz-font-feature-settings: "onum=1";
-	-webkit-font-feature-settings: "onum";
 }
 
 main {
