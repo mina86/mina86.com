@@ -1,19 +1,20 @@
-<header id="h">
+<header id="h" role=banner>
   <h1><a href="/"><span>mina86</span>.com</a></h1>
 
   <nav>
     <ul>
       <li><a accesskey="H" href="/"><span class="a">H</span>ome</a>
-      <li><a accesskey="C" href="https://github.com/mina86/"><span class="a">C</span>ode</a>
-      <li><a accesskey="D" href="/kategoria/downloads/"><span class="a">D</span>ownloads</a>
-      <li class=d><a accesskey="K" href=#l>Categories</a>
+      <li><a accesskey="D" href="https://github.com/mina86/">Co<span class="a">d</span>e</a>
+      <li><a accesskey="F" href="/kategoria/downloads/"><span class="a">F</span>iles</a>
+      <li class=d><a accesskey="C" href=#l><span class="a">C</span>ategories</a>
       <li class=d><a accesskey="A" href=#l><span class="a">A</span>rchive</a>
     </ul>
   </nav>
 
-  <form action="/szukaj/" method="post" id="s">
+  <form action="/szukaj/" method="post" id="s" role=search>
     <div>
-      <input class="f" type="text"   name="search">
+      <label for=sf>Search term:</label>
+      <input class="f" type="text" name="search" id=sf>
       <input class="s" type="submit" value="Search">
     </div>
   </form>

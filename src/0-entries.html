@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang=en>
 <title>&JOG_TITLE;</title>
 <INCLUDE>meta.html</INCLUDE>
 <PAGE_NEXT_EXIST><link rel=next href="&PAGE_NEXT_HREF;" title="Next entries"></PAGE_NEXT_EXIST>
@@ -16,7 +17,7 @@
       </ul>
     </nav>
 
-    <div id="z">  <!-- main content of the site -->
+    <main>  <!-- main content of the site -->
 
       <PAGE_BLOCK_EXIST>
         <nav class="p">  <!-- pager -->
@@ -31,7 +32,7 @@
         <ENTRY_BLOCK>
           <article id="&ENTRY_ID;">  <!-- entry text -->
 
-            <header><h2><a href="&ENTRY_COMMENT_HREF;" title="Permanent link to the entry.">&ENTRY_SUBJECT;</a></h2></header>
+            <h2><a href="&ENTRY_COMMENT_HREF;" title="Permanent link to the entry.">&ENTRY_SUBJECT;</a></h2>
             <p class="t"><a href="#j">Get back to “Jump to”</a>
 
             <div class="c">
@@ -45,7 +46,7 @@
                      data-url="&ENTRY_COMMENT_HREF;"
                      data-text="&ENTRY_SUBJECT;">Tweet</a>
                 </div>
-                <ENTRY_CONTENT_SHORT_EXIST><a href="&ENTRY_COMMENT_HREF;#m">Read more…</a></ENTRY_CONTENT_SHORT_EXIST>
+                <ENTRY_CONTENT_SHORT_EXIST><a href="&ENTRY_COMMENT_HREF;">Read more…</a></ENTRY_CONTENT_SHORT_EXIST>
                 <ENTRY_CONTENT_SHORT_NOT_EXIST><a href="&ENTRY_COMMENT_HREF;#k">Comment…</a></ENTRY_CONTENT_SHORT_NOT_EXIST>
               </footer>
             </div>
@@ -79,7 +80,7 @@
         </nav>
       </PAGE_BLOCK_EXIST>
 
-    </div>  <!-- end main content of the site -->
+    </main>  <!-- end main content of the site -->
 
     <INCLUDE>sidebar.html</INCLUDE>
   </div>  <!-- end content wrap -->

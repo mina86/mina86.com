@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang=en>
 <title>&ENTRY_TITLE; - &JOG_TITLE;</title>
 <INCLUDE>meta.html</INCLUDE>
 <ENTRY_PREV_EXIST><link rel="Prev" href="&ENTRY_PREV_HREF;" title="&ENTRY_PREV_SUBJECT;"></ENTRY_PREV_EXIST>
@@ -22,7 +23,7 @@
       </ul>
     </nav>
 
-    <div id="z">  <!-- main content of the site -->
+    <main>  <!-- main content of the site -->
 
       <nav class="p">
         <ul>
@@ -32,7 +33,7 @@
       </nav>
 
       <article>  <!-- entry text -->
-        <header><h2><a href="&ENTRY_COMMENT_HREF;" title="Permanent link to the entry.">&ENTRY_SUBJECT;</a></h2></header>
+        <h2><a href="&ENTRY_COMMENT_HREF;" title="Permanent link to the entry.">&ENTRY_SUBJECT;</a></h2>
 
         <p class="t"><a href="#j">Get back to “Jump to”</a>
 
@@ -78,13 +79,13 @@
 
       <COMMENT_BLOCK_EXIST>
         <section>
-          <header><h2 id="c">Comments <a href="&ENTRY_COMMENT_HREF;atom/" class=r><span>Atom feed with comments</span></a></h2></header>
+          <h2 id="c">Comments <a href="&ENTRY_COMMENT_HREF;atom/" class=r><span>Atom feed with comments</span></a></h2>
           <p class="t"><a href="#j">Get back to “Jump to”</a>
           <COMMENT_BLOCK>
             <article class="k &COMMENT_NICK_CLASS;" id="comm&COMMENT_ID;">  <!-- comment -->
               <COMMENT_FAVICON_EXIST>&COMMENT_FAVICON;</COMMENT_FAVICON_EXIST>
               <COMMENT_FAVICON_NOT_EXIST><img src="/files/no-fav.png" alt=""></COMMENT_FAVICON_NOT_EXIST>
-              <header><h3><a href="#comm&COMMENT_ID;" title="Permanent link to the comment.">»»</a><span>&COMMENT_NICK;</span></h3></header>
+              <h3><a href="#comm&COMMENT_ID;" title="Permanent link to the comment.">»»</a><span>&COMMENT_NICK;</span></h3>
 
               <footer class="m">
                 <ul>
@@ -107,7 +108,7 @@
       <COMMENT_ALLOWED_BLOCK>
         <COMMENT_PREVIEW_EXIST>
           <article class="k">
-            <header><h3>Preview</h3></header>
+            <h3>Preview</h3>
             <div class="c kp">
               &COMMENT_PREVIEW_BODY;
               <p><strong>This is only a preview!</strong> Do not forget to submit.
@@ -116,25 +117,24 @@
         </COMMENT_PREVIEW_EXIST>
 
         <section id="k">
-          <header><h2>Add a comment</h2></header>
+          <h2>Add a comment</h2>
           <COMMENT_FORM_BLOCK>
             <form action="&COMMENT_FORM_ACTION;" method="post">
-              <textarea name="commbody" id="commbody" cols="70"
-                        rows="6">&COMMENT_FORM_BODY;</textarea>
+              <label for=cb>Text of the comment<br></label>
+              <textarea name="commbody" id="cb" cols="70" rows="6"
+                        placeholder="Text of the comment"
+                       >&COMMENT_FORM_BODY;</textarea>
 
               <COMMENT_FORM_NOUSER_BLOCK>
                 <div style="overflow: auto">
                   <div style="float: right">&COMMENT_FORM_RECAPTCHA;</div>
               </COMMENT_FORM_NOUSER_BLOCK>
-              <div>
-                <label for="commnickid">Nick:</label>
-                <input type="text" name="commnickid" id="commnickid"
-                       value="&COMMENT_FORM_NICKID;">
-              </div>
-              <input type="submit" name="preview" class="b"
-                     value="Preview">
-              <input type="submit" name="submit" class="b"
-                     value="Submit">
+              <label for="commnickid">Nick:</label>
+              <input type="text" name="commnickid" id="commnickid"
+                     value="&COMMENT_FORM_NICKID;">
+              <br>
+              <input type="submit" name="preview" class="b" value="Preview">
+              <input type="submit" name="submit" class="b" value="Submit">
               <COMMENT_FORM_NOUSER_BLOCK>
                 </div>
               </COMMENT_FORM_NOUSER_BLOCK>
@@ -145,8 +145,9 @@
                 <li>*<em>emphasis</em>*, _<em>emphasis</em>_,
                 <li>**<strong>strong emphasis</strong>**, __<strong>strong emphasis</strong>__,
                 <li>`<code>inline code</code>`, ``<code>code ` more inline code</code>``,
-                <li>[<a href="http://example.com/">Link</a>](http://example.com/),
-                <li>[<a href="http://example.com/" title="Title">Link</a>](http://example.com/ "Title") and
+                <li>[<a href="http://example.com/">Example link</a>](http://example.com/),
+                <li>[<a href="http://example.com/"
+                title="Title">Examle link with title</a>](http://example.com/ "Title") and
                 <li>&lt;<a href="http://example.com">http://example.com/</a>&gt;.
               </ul>
             </form>
@@ -165,7 +166,7 @@
           Sorry for the inconvenience.
       </COMMENT_LOGGED_BLOCK>
 
-    </div>  <!-- end main content of the site -->
+    </main>  <!-- end main content of the site -->
     <INCLUDE>sidebar.html</INCLUDE>
   </div>  <!-- end content wrap -->
 </div>  <!-- end global wrap -->
