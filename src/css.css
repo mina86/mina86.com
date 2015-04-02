@@ -75,7 +75,7 @@ html, body {
 	padding: 0;
 }
 
-small, .l, #j, .m, #e li:before {
+small, .l, #j, .m, #e li:before, .News {
 	font-size: 0.8em;
 }
 
@@ -97,11 +97,10 @@ img {
 	border: none;
 }
 
-img.NewsImage, #w, textarea, .p {
+img.News, #w, textarea, .p {
 	width: 100%;
 	box-sizing: border-box;
 }
-
 
 #w, #r, pre {
 	overflow: auto;
@@ -535,6 +534,9 @@ q:before, q:after {
 .c p {
 	margin: 1em 0;
 }
+p.News {
+	margin-top: 0;
+}
 .c p.i {
 	text-align: left;
 	font-sstyle: italic;
@@ -704,5 +706,11 @@ h2 .r span {
 	}
 	#k, #b, #h img, #h nav, #h ul, #r, .t, .np, .p, form, #j, .c footer {
 		display: none !important;
+	}
+}
+
+@media speech, braille, embossed, tty {
+	.News {
+		display: none;
 	}
 }
