@@ -57,7 +57,8 @@ html {
 	height: 100%;
 }
 html, body {
-	font: 1em Verdana, Helvetica;
+	font: Tahoma, sans-serif;
+	text-rendering: optimizelegibility;
 	/* Going from colour of the Universe (a.k.a. Cosmic Latte, see
 	 * <http://www.pha.jhu.edu/~kgb/cosspec/>) to colour of the Milky Way
 	 * (see >http://www.news.pitt.edu/milkywaycolor>). */
@@ -81,6 +82,7 @@ small, .l, #j, .m, #e li:before, .News {
 
 h1, h2, h3, h4 {
 	page-break-after: avoid;
+	line-height: 1em;
 }
 
 .l {
@@ -399,8 +401,8 @@ main {
 }
 
 main h2 {
-	font: 1.8em Georgia;
-	margin: 1em 0 0.5em 0;
+	font-size: 1.8em;
+	margin: 1.1em 0 .6em;
 	text-align: center;
 }
 
@@ -432,7 +434,7 @@ article, .k, .m {
 
 article h3 {
 	font-size: 1.25em;
-	margin: 1.4em 0 1em;
+	margin: .8em 0;
 }
 
 h4 {
@@ -587,8 +589,16 @@ tt {
 }
 
 @media screen, projection, tv  {
-	.c {
+	main {
 		line-height: 1.5em;
+		text-shadow: 0.05rem 0.05rem 0 #D9D9E6;
+	}
+	pre {
+		line-height: 1.3em;
+		text-shadow: none;
+	}
+	h2, h3 {
+		text-shadow: 0.05rem 0.05rem 0 #C6D9EC;
 	}
 }
 
