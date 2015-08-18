@@ -559,15 +559,17 @@ p.News {
 	padding: 0;
 	margin: 1em 0;
 }
-.c dt, .c li, .c dd {
+.c li {
 	padding: 0;
-	margin: 0 1em 0 2em;
+	margin: 0;
+	margin-left: 2em;
 }
 .c dt, .c dd {
-	margin: 0.25em 1em 0.25em 2em;
+	padding: 0;
+	margin: 0.25em 0 0.25em 1em;
 }
 .c dd {
-	margin-left: 4em;
+	margin-left: 2em;
 }
 .c dd+dt {
 	margin-top: 1em;
