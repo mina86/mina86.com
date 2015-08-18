@@ -625,7 +625,7 @@ pre {
 }
 
 #e {
-	background: url('/files/head.png') 100% 100% no-repeat;
+	background: url('DATA<head.png>') 100% 100% no-repeat;
 }
 
 #e li {

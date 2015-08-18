@@ -24,11 +24,12 @@
 
 set -e
 
-in=$1
-out=$2
+out=$1
+in=$2
 jar=$3
+shift 3
 
-tmp="$2~$$~compressor~"
+tmp="$out~$$~compressor~"
 trap 'rm -f -- "$tmp"' 0
 
 run () {
@@ -39,14 +40,15 @@ run () {
 echo " ### ${out##*/}"
 mkdir -p "${out%/*}"
 
-case $1 in
+case $in in
 *.js)
 	echo '// github.com/mina86/mina86.com' >$tmp
 	run java -jar "$jar" -v --type js "$in" >>$tmp
 	;;
 *.css)
 	echo -n '/* github.com/mina86/mina86.com */' >$tmp
-	run java -jar "$jar" -v --type css "$in" >>$tmp
+	run java -jar "$jar" -v --type css "$in" | \
+		perl ./bin/data-uri.pl "$@" >>$tmp
 	;;
 *.html)
 	run java -jar "$jar" -t html \

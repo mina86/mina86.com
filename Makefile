@@ -10,20 +10,20 @@ HTMLCOMPRESSOR = bin/htmlcompressor-$(HTMLCOMPRESSOR_VERSION).jar
 all: $(ALL)
 
 touch:
-	touch src/*
+	touch src/*.* src/data/*.*
 
 clean:
 	-rm -r out
 
 
 out/%.js: src/%.js $(YUICOMPRESSOR)
-	@sh bin/compressor.sh "$<" "$@" "$(YUICOMPRESSOR)"
+	@exec sh bin/compressor.sh $@ $^
 
-out/%.css: src/%.css $(YUICOMPRESSOR)
-	@sh bin/compressor.sh "$<" "$@" "$(YUICOMPRESSOR)"
+out/%.css: src/%.css $(YUICOMPRESSOR) $(wildcard src/data/*.*)
+	@exec sh bin/compressor.sh $@ $^
 
 out/%.html: src/%.html $(HTMLCOMPRESSOR)
-	@exec sh bin/compressor.sh $< $@ $(HTMLCOMPRESSOR)
+	@exec sh bin/compressor.sh $@ $^
 
 out/html5.js: src/html5.js
 	exec cp -- $< $@
