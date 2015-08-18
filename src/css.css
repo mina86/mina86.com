@@ -732,3 +732,7 @@ h2 .r span {
 		display: none;
 	}
 }
+
+.rht {
+	text-align: right;
+}
