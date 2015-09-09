@@ -451,7 +451,7 @@ h4 {
 }
 
 blockquote, .r span, #f a, .plFlag, .enFlag {
-	background: url('/files/t.png') no-repeat;
+	background: url(/files/t.png) no-repeat;
 }
 
 blockquote {
@@ -644,7 +644,7 @@ pre {
 }
 
 #e {
-	background: url('DATA<head.png>') 100% 100% no-repeat;
+	background: url(DATA<head.png>) 100% 100% no-repeat;
 }
 
 #e li {

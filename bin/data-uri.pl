@@ -1,8 +1,9 @@
 use strict;
 use warnings;
+
 use File::Basename;
-use File::MimeInfo;
 use MIME::Base64;
+
 
 sub readFile {
 	my ($filename) = @_;
@@ -14,23 +15,55 @@ sub readFile {
 }
 
 
+my %mimetypes = (
+	png => 'image/png',
+	svg => 'image/svg+xml',
+);
+
+
+sub encodeBase64 {
+	my ($mime, $data) = @_;
+	$data = encode_base64($data);
+	$data =~ s/\s+//g;
+	"data:$mime;base64,$data";
+};
+
+
+sub encodeString {
+	my ($mime, $data, $q) = @_;
+	$data =~ s/\n/\\n/g;
+	$data =~ s/$q/\\$q/g;
+	"${q}data:$mime,$data$q";
+};
+
+
 sub insertData {
 	my ($basename, @files) = @_;
 	for (@files) {
 		if ($basename ne basename $_) {
 			next;
 		}
-		my $mime = mimetype $_;
-		my $data = readFile $_;
-		my $data64 = encode_base64($data);
-		$data64 =~ s/\s+//g;
-		$data =~ s/^\s+|\s+$//g;
-		$data =~ s/([\0-\x1f\x80-\xff'#])/sprintf('%%%02x', ord($1))/ge;
-		if (7 + length $data64 < length $data) {
-			return "data:$mime;base64,$data64";
-		} else {
-			return "data:$mime,$data";
+
+		my $mime = (/\.([^.\/]*)/ ? $mimetypes{$1} : undef);
+		if (!$mime) {
+			print STDERR "$_: unknown MIME type\n";
+			$mime = '';
 		}
+
+		my $data = readFile $_;
+		my @encodings;
+
+		push @encodings, encodeBase64 $mime, $data;
+
+		$data =~ s/^\s+|\s+$//g;
+		$data =~ s/([\0-\x1f\x80-\xff%#])/sprintf('%%%02x', ord($1))/ge;
+
+		push @encodings, encodeString $mime, $data, '"';
+		push @encodings, encodeString $mime, $data, "'";
+
+		@encodings = sort { length $a <=> length $b; } @encodings;
+
+		return $encodings[0];
 	}
 	die "Could not find <$basename>\n";
 }
