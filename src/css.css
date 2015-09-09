@@ -565,6 +565,7 @@ p.News {
 	padding: 0;
 	margin: 0;
 	margin-left: 2em;
+	list-style: url(DATA<dot.svg>);
 }
 .c dt, .c dd {
 	padding: 0;
