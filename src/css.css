@@ -309,10 +309,10 @@ body > footer {
 	}
 
 	pre {
-		background: #eef;
+		background: #f6f6ff;
 		border: 1px solid #ddf;
-		border-bottom-color: #fff;
-		border-right-color: #fff;
+		border-bottom-color: #eef;
+		border-right-color: #eef;
 	}
 
 	#r {
