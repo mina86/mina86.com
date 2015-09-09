@@ -603,6 +603,7 @@ tt {
 }
 
 pre {
+	font: 1em Hack, monospace;
 	color: #030;
 	margin: 1em 0;
 	padding: 0.5em;
