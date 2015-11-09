@@ -57,7 +57,7 @@ html {
 	height: 100%;
 }
 html, body {
-	font: Tahoma, sans-serif;
+	font-family: Verdana, "Trebuchet MS", Tahoma, Helvetica, sans-serif;
 	text-rendering: optimizelegibility;
 	/* Going from colour of the Universe (a.k.a. Cosmic Latte, see
 	 * <http://www.pha.jhu.edu/~kgb/cosspec/>) to colour of the Milky Way
@@ -393,7 +393,13 @@ body > footer {
 }
 
 h1 span {
+	-webkit-font-feature-settings: 'smcp', 'c2cs';
+	-moz-font-feature-settings: 'smcp=1', 'c2cs=1';
+	-ms-font-feature-settings: 'smcp', 'c2cs';
+	-o-font-feature-settings: 'smcp', 'c2cs';
+	font-feature-settings: 'smcp', 'c2cs';
 	font-variant: small-caps;
+	font-variant: small-caps, all-small-caps;
 }
 
 main {
@@ -457,11 +463,28 @@ blockquote, .r span, #f a, .plFlag, .enFlag {
 blockquote {
 	background-position: -125px 0;
 	min-height: 20px;
+	padding: 0 26px;
+	margin: 1em 0;
+	font-style: italic;
 }
 blockquote blockquote {
 	background: none;
 	min-height: 0;
 }
+
+table, tr, th, td {
+	border-collapse: collapse;
+}
+th, td {
+	padding: 0.5em;
+}
+thead th, thead td {
+	padding: 0.2em 0.5em;
+}
+.c table {
+	margin: 1em auto;
+}
+
 
 
 /* Comment */
@@ -555,6 +578,12 @@ p.News {
 	text-justify: distribute;
 	text-justify: newspaper;
 	hanging-punctuation: first allow-end last;
+	-webkit-font-feature-settings: 'pnum', 'onum';
+	-moz-font-feature-settings: 'pnum=1', 'onum=1';
+	-ms-font-feature-settings: 'pnum', 'onum';
+	-o-font-feature-settings: 'pnum', 'onum';
+	font-feature-settings: 'pnum', 'onum';
+	font-variant-numeric: proportional-nums oldstyle-nums;
 }
 
 .c ul, .c ol, .c dl {
@@ -578,15 +607,19 @@ p.News {
 	margin-top: 1em;
 }
 
-blockquote {
-	padding: 0 26px;
-	margin: 1em 0;
-	font-style: italic;
+tt, code {
+	font-family: "Input Sans", Verdana, "Trebuchet MS", Tahoma, Helvetica, sans-serif;
+	font-variant-numeric: lining-nums proportional-nums slashed-zero;
+	color: #363;
 }
 
-tt {
-	font: inherit;
-	color: #363;
+tt, code, pre {
+	-webkit-font-feature-settings: 'lnum', 'tnum', 'zero';
+	-moz-font-feature-settings: 'lnum=1', 'tnum=1', 'zero=1';
+	-ms-font-feature-settings: 'lnum', 'tnum', 'zero';
+	-o-font-feature-settings: 'lnum', 'tnum', 'zero';
+	font-feature-settings: 'lnum', 'tnum', 'zero';
+	font-variant-numeric: lining-nums tabular-nums slashed-zero;
 }
 
 @media screen, projection, tv  {
@@ -603,12 +636,13 @@ tt {
 	}
 }
 
-pre {
+pre, pre code {
 	font: 1em Hack, monospace;
+}
+pre {
 	color: #030;
 	margin: 1em 0;
 	padding: 0.5em;
-	font-variant-numeric: slashed-zero;
 }
 
 /* Flags */
