@@ -126,8 +126,11 @@
                        >&COMMENT_FORM_BODY;</textarea>
 
               <COMMENT_FORM_NOUSER_BLOCK>
-                <div style="overflow: auto">
-                  <div style="float: right">&COMMENT_FORM_RECAPTCHA;</div>
+                <div style="float: right">
+                  <img src="&COMMENT_FORM_CODE;" alt="Weryfikacja antyspamowa" /><br>
+                  <label id="codelab" for="code">Code:</label>
+                  <input type="text" name="code" id="code" />
+                </div>
               </COMMENT_FORM_NOUSER_BLOCK>
               <label for="commnickid">Nick:</label>
               <input type="text" name="commnickid" id="commnickid"
@@ -136,7 +139,7 @@
               <input type="submit" name="preview" class="b" value="Preview">
               <input type="submit" name="submit" class="b" value="Submit">
               <COMMENT_FORM_NOUSER_BLOCK>
-                </div>
+              <br style="clear:both">
               </COMMENT_FORM_NOUSER_BLOCK>
               <ul>
                 <li>Single Return produces a line break.
