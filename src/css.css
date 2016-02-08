@@ -754,6 +754,16 @@ h2 .r span {
 		text-decoration: none;
 		color: inherit;
 	}
+	.c a:after {
+		color: #333;
+		font-size: 0.75em;
+	}
+	.c a[href^="http://"]:after, .c a[href^="https://"]:after {
+		content: " (" attr(href) ")";
+	}
+	.c a[href^="/"]:after {
+		content: " (mina86.com" attr(href) ")";
+	}
 
 	body {
 		background: #fff;
