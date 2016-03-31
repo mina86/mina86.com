@@ -26,12 +26,12 @@ out/d/%.css: src/%.css $(YUICOMPRESSOR) $(wildcard src/data/*.*)
 
 out/d/%: static/%
 	@exec mkdir -p $(dir $@)
-	@echo " ### $(notdir $@)"
+	@echo " CP  $(notdir $@)"
 	@exec cp -- $< $@
 
 out/%: root/%
 	@exec mkdir -p $(dir $@)
-	@echo " ### $(notdir $@)"
+	@echo " CP  $(notdir $@)"
 	@exec cp -- $< $@
 
 

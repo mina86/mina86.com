@@ -37,7 +37,7 @@ run () {
 	"$@"
 }
 
-echo " ### ${out##*/}"
+echo " MIN  $out"
 mkdir -p "${out%/*}"
 
 case $in in
