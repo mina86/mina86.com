@@ -1,5 +1,6 @@
 ALL	= $(addprefix out/d/,$(notdir $(wildcard src/*.*) \
-	                              $(wildcard static/*.*)))
+	                              $(wildcard static/*.*))) \
+	  $(addprefix out/,$(notdir $(wildcard root/*.*)))
 
 YUICOMPRESSOR_VERSION = 2.4.8
 YUICOMPRESSOR = bin/yuicompressor-$(YUICOMPRESSOR_VERSION).jar
@@ -24,6 +25,11 @@ out/d/%.css: src/%.css $(YUICOMPRESSOR) $(wildcard src/data/*.*)
 	@exec sh bin/compressor.sh $@ $^
 
 out/d/%: static/%
+	@exec mkdir -p $(dir $@)
+	@echo " ### $(notdir $@)"
+	@exec cp -- $< $@
+
+out/%: root/%
 	@exec mkdir -p $(dir $@)
 	@echo " ### $(notdir $@)"
 	@exec cp -- $< $@
