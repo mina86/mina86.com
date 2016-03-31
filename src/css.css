@@ -184,7 +184,7 @@ body > footer {
 		width: 100%;
 		height: 14em;
 		z-index: 1;
-		background: #69f url(/files/top-img.jpg) no-repeat;
+		background: #69f url(/d/top-img.jpg) no-repeat;
 		background-size: 100% auto;
 		filter: brightness(1.2) blur(5px);
 	}
@@ -193,7 +193,7 @@ body > footer {
 		width: 100%;
 		height: 14em;
 		position: relative;
-		/* background: #69f url(/files/top-img.jpg) no-repeat; */
+		/* background: #69f url(/d/top-img.jpg) no-repeat; */
 		/* background-size: cover; */
 	}
 
@@ -462,7 +462,7 @@ h4 {
 }
 
 blockquote, .r span, #f a, .plFlag, .enFlag {
-	background: url(/files/t.png) no-repeat;
+	background: url(/d/t.png) no-repeat;
 }
 
 blockquote {
