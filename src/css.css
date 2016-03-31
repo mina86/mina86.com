@@ -445,7 +445,7 @@ article, .k {
 
 article h3 {
 	font-size: 1.25em;
-	margin: .8em 0;
+	margin: 1.6em 0 0.8em;
 }
 
 h4 {
@@ -629,11 +629,14 @@ tt, code, pre {
 
 @media screen, projection, tv  {
 	main {
-		line-height: 1.5em;
+		line-height: 2em;
 		text-shadow: 0.05rem 0.05rem 0 #D9D9E6;
 	}
+	main .m {
+		line-height: 1.5em;
+	}
 	pre {
-		line-height: 1.3em;
+		line-height: 1.5em;
 		text-shadow: none;
 	}
 	h2, h3 {
