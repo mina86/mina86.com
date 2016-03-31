@@ -1,4 +1,5 @@
-ALL	= $(addprefix out/,$(notdir $(wildcard src/*.*)))
+ALL	= $(addprefix out/d/,$(notdir $(wildcard src/*.*) \
+	                              $(wildcard static/*.*)))
 
 YUICOMPRESSOR_VERSION = 2.4.8
 YUICOMPRESSOR = bin/yuicompressor-$(YUICOMPRESSOR_VERSION).jar
@@ -16,14 +17,16 @@ clean:
 	-rm -r out
 
 
-out/%.js: src/%.js $(YUICOMPRESSOR)
+out/d/%.js: src/%.js $(YUICOMPRESSOR)
 	@exec sh bin/compressor.sh $@ $^
 
-out/%.css: src/%.css $(YUICOMPRESSOR) $(wildcard src/data/*.*)
+out/d/%.css: src/%.css $(YUICOMPRESSOR) $(wildcard src/data/*.*)
 	@exec sh bin/compressor.sh $@ $^
 
-out/html5.js: src/html5.js
-	exec cp -- $< $@
+out/d/%: static/%
+	@exec mkdir -p $(dir $@)
+	@echo " ### $(notdir $@)"
+	@exec cp -- $< $@
 
 
 $(YUICOMPRESSOR):
