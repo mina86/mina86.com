@@ -1,0 +1,126 @@
+<!-- subject: Standard-agnostic HTML code -->
+<!-- date: 2013-07-17 07:42:38 -->
+<!-- tags: html, html5, xhtml -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>HTML has gone quite a long way since its inception.  This means
+  a lot of new features but also some small incompatibilities which
+  may pose issues in certain situations.  For instance, when posting
+  a code snippet for others to include on their websites, it's best if
+  it works correctly on as many sites as possible which implies being
+  compatible with as many versions of HTML as possible.  But how to
+  create a snippet that works both in HTML and XHTML?  Here are a few
+  tips:
+
+<!-- EXCERPT -->
+
+<ul>
+  <li><strong>Always use lowercase</strong>.  This applies to element
+    names, attribute names and enumerated attribute values (such as
+    values for the <tt>type</tt> attribute of <tt>input</tt> element),
+    but it helps to apply this rule to fragment identifies and class
+    names as well (since fragment identifiers and class names are case
+    sensitive in XHTML and therefore it's easy to create a piece of JavaScript
+    code or a style sheet which won't work for XHTML documents).
+  <li><strong>Include and quote attribute values</strong>.  Always put
+    double quotes around attribute values and don't use empty
+    attributes syntax, i.e. always include value for attributes such
+    as <tt>compact</tt>, for example <tt>&lt;dl
+    compact="compact"&gt;</tt>.
+  <li><strong>Use <tt>lang</tt> and <tt>xml:lang</tt></strong>.  XHTML
+    replaces <tt>lang</tt> attribute with <tt>xml:lang</tt> so for
+    compatibility use both.
+  <li><strong>Use well formed document</strong>.  Close all tags and
+    do that in reverse order to how they opened.  Furthermore, avoid
+    void elements (such as <tt>br</tt>) but if they are necessary (for
+    instance <tt>img</tt>) close them using minimised syntax (with
+    a space before the slash) as in <tt>&lt;img … /&gt;</tt>. This is
+    technically invalid in HTML4 but all respectable browsers will
+    interpret it correctly.
+  <li><strong>Always include optional elements</strong>.  Always open
+    the following elements: <tt>html</tt>, <tt>head</tt>,
+    <tt>body</tt>, <tt>colgroup</tt> and most notably <tt>tbody</tt>.
+    Otherwise JavaScript or CSS may stop working correctly
+    when <tt>tbody</tt> element suddenly appears as a first and only
+    child of <tt>table</tt>.
+  <li><strong>Use numeric entities</strong>.  Except
+    for <tt>&amp;lt;</tt>, <tt>&amp;gt;</tt>, <tt>&amp;amp;</tt>
+    and <tt>&amp;quot;</tt>, always use numeric entity references.
+    Moreover, when using hexadecimal notation, use lowercase <tt>x</tt>.
+  <li><strong>Always escape special characters</strong>.  Always
+    escape &lt;, &gt; and &amp; characters. That means inside of <tt>href</tt> too.
+  <li><strong>Avoid HTML5 goodness</strong>.  HTML5 defines bunch of
+    new elements, attributes and attribute values.  For maximum
+    compatibility, avoid them, unless the fact that it won't work is
+    acceptable (e.g. <tt>placeholder</tt> attribute may be nice to
+    have but not required).
+  <li><strong>Avoid deprecated features</strong>.  Here's a few
+    elements that are best avoided: <tt>basefont</tt>, <tt>big</tt>,
+    <tt>center</tt>, <tt>font</tt>, <tt>strike</tt>, <tt>tt</tt>,
+    <tt>iframe</tt>, <tt>frame</tt>, <tt>frameset</tt>, <tt>noframes</tt>,
+    <tt>acronym</tt> (use <tt>abbr</tt>), <tt>applet</tt> (use
+    <tt>object</tt>), <tt>isindex</tt>, <tt>dir</tt> and <tt>u</tt>.
+    There's also a whole bunch of attributes that HTML5 does not
+    include, but it may be hard to avoid them all.  As a rule of
+    thumb, if something is purely presentational use styles instead.
+  <li><strong>CDATAify inline JavaScript and CSS</strong>.  If it contains &lt;, &gt; or &amp; characters, either use
+    external file or the following syntax:
+    <pre>&lt;script type="text/javascript"&gt;//&lt;![CDATA[
+<i>JavaScript code here</i>
+//]]&gt;&lt;/script&gt;
+
+&lt;style type="text/css"&gt;/*&lt;![CDATA[*/
+<i>CSS code here</i>
+/*]]&gt;*/&lt;/style&gt;</pre>
+    And yes, include <tt>type</tt> attribute and do not hide the code
+    with HTML comments (<tt>&lt;!-- … --&gt;</tt>).
+    Also, while talking about inline code, avoid <tt>&lt;/</tt> sequence
+    since depending on what follows, it may terminate the element.
+</ul>
+
+<h3>JavaScript</h3>
+
+<ul>
+  <li><strong>Convert <tt>tagName</tt> to lowercase</strong>, also
+    applies to <tt>nodeName</tt>.  In HTML they return uppercase names
+    but in XHTML they return lowercase names.
+    Using <tt>tagName.toLowerCase()</tt> unifies the values.
+  <li><strong>Specify namespace</strong>.
+    Use <tt>createElementNS</tt> instead of <tt>createElement</tt> if
+    available.  Same goes for <tt>getElementsByTagNameNS</tt>
+    and <tt>{create,set,get,has,remove}AttributeNS</tt>.  you happen
+    to use it.
+</ul>
+
+<h3>Afterword</h4>
+
+<p>It needs to be noted that the above rules are not exhaustive and do
+  not include things that everyone is doing anyway (like
+  using <tt>id</tt> attribute for fragment identifiers instead of
+  (just) <tt>name</tt>), have limited application to code snippets
+  (like styling of <tt>html</tt> and <tt>body</tt> differences), or
+  produce only minor differences (like handling of white-space in
+  attributes or leading line feed in <tt>pre</tt>).  Neither does this
+  entry advertise writing whole documents in something that appears to
+  be valid HTML4, XHTML and HTML5 (but for HTML5 which is valid XML
+  see <a href="http://dev.w3.org/html5/html-xhtml-author-guide/">polyglot
+  markup</a>), even though it does advertise writing JavaScript and
+  CSS code that works in all those recommendations and their various
+  variants.
+
+<!-- COMMENT -->
+<!-- date: 2013-07-17 20:20:52 -->
+<!-- nick: ellem -->
+
+<p>or use html5.</p>
+
+<!-- COMMENT -->
+<!-- date: 2013-07-18 09:35:13 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<blockquote>
+  <p>or use html5.</p>
+</blockquote>
+
+<p>Except, if you provide a snippet for <em>others</em> to include on <em>their</em> website, you have no control over which recommendation they are using.</p>

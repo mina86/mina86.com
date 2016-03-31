@@ -1,0 +1,114 @@
+<!-- subject: Miscellaneous tips and tricks -->
+<!-- date: 2014-12-14 20:48:11 -->
+<!-- tags: git, emacs, python -->
+<!-- categories: Articles, English, Misc, Techblog -->
+
+<p>Don't you hate it when you need to do something you did in the past, but cannot remember exactly how.  What if looking it up takes much more time than it should?
+
+<p>There are couple of things I had to do at least twice in the past, and every time I did, searching up for a correct method was considerably harder than it should.  Because of that, here's a bag of notes so I can easy reference if I ever need to do listed things again:
+
+<ul>
+  <li><a href=/2014/12/14/miscellaneous-tips-and-tricks/#chrome>Getting past Chrome certificate error</a>
+  <li><a href=/2014/12/14/miscellaneous-tips-and-tricks/#gitgc>“Compressing” git repository</a>
+  <li><a href=/2014/12/14/miscellaneous-tips-and-tricks/#author>Changing commits author</a>
+  <li><a href=/2014/12/14/miscellaneous-tips-and-tricks/#letter>How to start a letter in English</a>
+  <li><a href=/2014/12/14/miscellaneous-tips-and-tricks/#rise>Re-rising Python exception preserving back-trace</a>
+  <li><a href=/2014/12/14/miscellaneous-tips-and-tricks/#flatten>Flattening a list in Python</a>
+  <li><a href=/2014/12/14/miscellaneous-tips-and-tricks/#sum>Summing numbers in a column in Emacs</a>
+</ul>
+
+<!-- EXCERPT -->
+
+<h3 id=chrome>Getting past Chrome certificate error</h3>
+
+<p>Chrome does not let people go to websites with invalid certificates.  Proper web browsers usually have an “I know, get me there anyway” button, but Chrome makes this option a little more hidden. If you ever find a need to visit a site without valid certificate, on the Chrome error message screen <b>type “proceed”</b> or if that does not work <b>type “danger"</b>. Which word needs to by typed depends on kind of error I think. Whatever, just try both.
+
+<h3 id=gitgc>“Compressing” git repository</h3>
+
+<p>By now everyone should know that the <tt>--aggressive</tt> flag of <tt>git gc</tt> is not to be used. In general git should handle pack file effectively, but what if you <em>really</em> want to try and squeeze every byte out of it?
+
+<pre>git repack -a -d --depth=10000 --window=10000</pre>
+
+<p><a href=http://gcc.gnu.org/ml/gcc/2007-12/msg00165.html>Torvalds suggested</a> smaller numbers but his message is from 2007 and I found that today's machines handle high numbers quickly enough even on big repositories.
+
+<h3 id=author>Changing commit author</h3>
+
+<p>On the topic of git, to change author of a commit simply run:
+
+<pre>git commit --amend --author "Jane Doe &lt;jane@doe.com&gt;"</pre>
+
+<p>(Yeah, I know, this is obvious, but I keep forgetting that <tt>--author</tt> option exists).</p>
+
+<h3 id=letter>How to start a letter in English</h3>
+
+<p>This one is hard to find because the Internet is filled with pages that give too much information where all I need to know is proper salutation and valediction.  Here it is: If you <strong>do not know</strong> the name of the person you are writing to:
+
+<blockquote><p>Dear Sir or Madam,
+<p>I am writing to inform you of a fire that has broken out on the premises of 123 Cavendon Road…
+<p>Yours faithfully,<br>John Smith</blockquote>
+
+<p>If you <strong>know the name</strong> of the person you are writing to:
+
+<blockquote><p>Dear Ms. Doe,
+<p>I am writing to inform you of a fire that has broken out on the premises of 123 Cavendon Road…
+<p>Yours sincerely,<br>John Smith</blockquote>
+
+<p>Polish speakers might note that — since English has a nonsensical typography and orthography rules — the salutation finishes with a comma even though the next paragraph starts with a capital letter.  In languages which make more sense (e.g. Polish), the salutation is closed with a period.
+
+<h3 id=rise>Re-rising Python exception preserving back-trace</h3>
+
+<pre>import sys
+
+exc_info = []
+
+def fail(): assert False
+
+def run():
+    try: fail()
+    except: exc_info[:] = sys.exc_info()
+
+def throw(): raise exc_info[0], exc_info[1], exc_info[2]
+
+def call_throw(): throw()
+
+if not run(): call_throw()</pre>
+
+<p>When <tt>throw</tt> rises the exception again, back-trace will contain all frames that led up to having the exception caught in <tt>run</tt>:
+
+<pre>$ python exc.py
+Traceback (most recent call last):
+  File "exc.py", line 15, in <module>
+    if not run(): call_throw()
+  File "exc.py", line 13, in call_throw
+    def call_throw(): throw()
+  File "exc.py", line 8, in run
+    try: fail()
+  File "exc.py", line 5, in fail
+    def fail(): assert False
+AssertionError</pre>
+
+<p>This is a bit like bare <tt>rise</tt> in <tt>except</tt> clause but performing the re-rising at arbitrary later time.
+
+<h3 id=flatten>Flattening a list in Python</h3>
+
+<p>To turn a list of lists (or in more generic terms, an iterable of iterables) into a single sequence use one of:
+
+<pre>def flatten(sequences):
+    return itertools.chain.from_iterable(sequences)
+
+def flatten(sequences):
+    return (x for lst in sequences for x in lst)</pre>
+
+<p>(If you feel confused about nested comprehension don't feel bad – it's syntax is broken.  The thing to remember is that you write a normal nested for-if-for-if-… sequence but then put the final statement at the beginning of the line instead of at the end).
+
+<p>If all elements are known to be lists or tuples, using <tt>sum</tt> may be considered easier:
+
+<pre>def flatten(lists):
+    return sum(lists, [])
+
+def flatten(tuples):
+    return sum(tuples, ())</pre>
+
+<h3 id=sum>Summing numbers in a column in Emacs</h3>
+
+<p>Select column containing the numbers to sum and simply invoke <tt>C-u C-x * :</tt>.

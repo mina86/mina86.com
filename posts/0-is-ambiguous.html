@@ -1,0 +1,270 @@
+<!-- subject: 0 is ambiguous -->
+<!-- date: 2010-10-24 12:28:06 -->
+<!-- tags: c, c++, null, nullptr, null pointer -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>It has been a long time since my last entry.  In fact, it was so
+long, that this condition has already been <a
+href="http://zboczuch.jogger.pl/2010/10/20/moje-wpisy-sa-wieksze-od-twoich/">pointed
+out</a> pushing me into finally writing something.  Inspired by <a
+href=http://blogs.fsfe.org/adridg/?p=1014>Adriaan de
+Groot's entry</a>, I decided to write something about <tt>0</tt>,
+<tt>NULL</tt> and upcoming <tt>nullptr</tt>.
+
+<p>I will try to be informative and explain what the whole buzz is
+about and then give my opinion about <tt>nullptr</tt>.  Let us first
+inspect how a <a
+href=http://en.wikipedia.org/wiki/Pointer_(computing)#Null_pointer>null
+pointer</a> can be donated in C and C++.
+
+<!-- EXCERPT -->
+
+<h3>The confusing <tt>0</tt></h3>
+
+<p>In C and C++, the literal <tt>0</tt> has two meanings: it's either
+an octal (yes, octal) literal representing number zero or a null
+pointer.  Which meaning is used depends on context, which compiler can
+usually figure out.  For instance:
+
+<pre><b>void</b> number(<b>int</b>);
+<b>void</b> pointer(<b>char</b> *);
+
+<b>int</b> main(<b>void</b>) {
+	<b>char</b> ch, *ptr;
+	ch = 0;		/* number zero (ch is of type char) */
+	ptr = 0;	/* null pointer (ptr is of type pointer to char)*/
+	number(0);	/* number zero (number accepts int as argument) */
+	pointer(0);	/* null pointer (pointer accepts pointer to
+			 * char as argument) */
+	<b>return</b> 0;	/* number zero (main returns int) */
+}</pre>
+
+<p>However, if function lacks a prototype or has variable length of
+arguments, there may be too little information to figure out what
+programmer meant.  A good example is <tt>printf()</tt> function from
+standard library:
+
+<pre>#include &lt;stdio.h&gt;
+
+<b>int</b> main(<b>void</b>) {
+	printf("%p\n", 0);	/* ??? */
+	<b>return</b> 0;
+}</pre>
+
+<p>In those situations, the first meaning is assumed but since it is
+not so common nowadays it is not such a big issue.  Still there are
+two things to keep in mind: (i) <em>always</em> provide function
+prototypes and (ii) when using functions with variable arguments use
+<tt>(<i>foo</i> *)0</tt> to mean a null pointer.
+
+
+<h3>The confusing <tt>NULL</tt></h3>
+
+<p>Since context is not always obvious some programmers prefer to
+explicitly indicate the intended meaning by using different notations
+for numbers and pointers.  For those purposes, <tt>NULL</tt> macro has
+been introduced.  Standard requires that it is defined in such a way,
+that it can be used in pointer context to mean a null pointer.  In C,
+the macro is often defined as:
+
+<pre>#define NULL ((void *)0)</pre>
+
+<p>This guarantees not only that <tt>NULL</tt> means a null pointer in
+pointer context but also that a diagnostic message must be issued when
+one tries to use <tt>NULL</tt> as a number, ie.:
+
+<pre>$ <i>cat test.c</i>
+#include &lt;stddef.h&gt;
+
+<b>int</b> main(<b>void</b>) {
+	<b>return</b> NULL;
+}
+$ <i>gcc -ansi -pedantic test.c</i>
+test.c: In function ‘main’:
+test.c:4: warning: return makes integer from pointer without a cast
+$</pre>
+
+<p>But then comes C++ with stricter typing and says implicit
+conversions from pointer to void to any other pointer type are
+invalid, which renders the following an invalid C++ code:
+
+<pre><b>int</b> main(<b>void</b>) {
+	<b>char</b> *ptr = (<b>void</b> *)0;
+	<b>return</b> 0;
+}</pre>
+
+<p>The easiest way around is to define <tt>NULL</tt> as plain
+<tt>0</tt> or <tt>0L</tt>.  This is in fact what often happens.  GCC
+uses <tt>__null</tt> extension but it seems <tt>__null</tt> is treated
+like <tt>0L</tt> in some contexts:
+
+<pre>$ <i>cat test.c</i>
+#include &lt;stddef.h&gt;
+
+<b>int</b> main(<b>void</b>) {
+	<b>int</b> ret = NULL;	/* no complains */
+	ret += <b>__null</b>;
+	ret += NULL;
+	<b>return</b> ret;
+}
+$ <i>g++  -ansi -pedantic test.c</i>
+test.c: In function ‘int main()’:
+test.c:5: warning: NULL used in arithmetic
+test.c:6: warning: NULL used in arithmetic
+$</pre>
+
+<p>So, whenever you use <tt>NULL</tt>, you have to keep in mind that
+you never know what it really is.  This in particular means, that the
+following code, after pre-processing, may or may not be valid:
+
+<pre>#include &lt;stdio.h&gt;
+
+<b>int</b> main(<b>void</b>) {
+	printf("%p\n", NULL);	/* ((void *)0)? 0? 0L? __null? */
+	<b>return</b> 0;
+}</pre>
+
+
+<h3>Function overloading</h3>
+
+<p>And since we are in the realm of C++ we can now deal with the
+biggest issue.  As you may already know, C++ allows function
+overloading, so that several functions with the same name can exist so
+long as they have different arguments.  As a consequence, function
+name is not enough to figure out function's prototype.  Let us
+consider the following simple code:
+
+<pre><b>void</b> print(<b>int</b> num);
+<b>void</b> print(<b>void</b> *ptr);
+
+<b>int</b> main(<b>void</b>) {
+	print(0);
+	<b>return</b> 0;
+}</pre>
+
+<p>The above will invoke the first function.  To call the second one,
+we should use a cast, since we know that using <tt>NULL</tt> is not
+reliable:
+
+<pre><b>int</b> main(<b>void</b>) {
+	print((<b>void</b> *)0);
+	<b>return</b> 0;
+}</pre>
+
+<p>The lesson here is that in C++ you must always use
+<tt>(<i>foo</i> *)0</tt> when you want to pass a null pointer to
+a function.  Even if the call is not ambiguous at this time, someone
+may add an overloaded version of the function which will break the
+code if cast is not used in the first case.
+
+
+<h3>Useless <tt>nullptr</tt></h3>
+
+<p>Addressing those issues, the C++ working group defined a new
+<tt>nullptr</tt> keyword which evaluates to a null pointer of type
+<tt>std::nullptr_t</tt> which can be implicitly converted to any other
+pointer while, at the same time, cannot be converted to a number.
+
+<p>This seems like a good thing, right? Unfortunately, there are two
+issues with this approach.  First one is that it does not fix the
+problem.  For instance, the following is still ambiguous:
+
+<pre><b>void</b> print(<b>char</b> *);
+<b>void</b> foo(wchar_t *);
+
+<b>int</b> main(<b>void</b>) {
+	print(<b>nullptr</b>);
+}</pre>
+
+<p>At the same time, yet another keyword has been introduced which
+serves no purpose.  <tt>NULL</tt> was a perfectly fine identifier
+which might be used without polluting keyword name space (which is
+a problem since adding a keyword to the language may break existing
+code).
+
+<p>So my recommendation is not to bother with it.  Just ignore this
+thing and stick to <tt>NULL</tt> where context is clear and
+<tt>(<i>foo</i> *)0</tt> when calling function.
+
+<p>UPDATE: It has been pointed out to me that <tt>nullptr</tt> in fact
+fixes a single problem: it prevents an incorrect function from being
+called.  This is true but it does not change much in my reasoning:
+I still recommend ignoring <tt>nullptr</tt> and using <tt>NULL</tt>,
+which is more portable and when <tt>nullptr</tt> comes around,
+compilers will define the latter as the former anyway. This is also
+what C++ committee should do instead of adding to the confusion by
+introducing <em>yet another</em> method of representing a null
+pointer.
+
+<h3>Null pointer representation</h3>
+
+<p>The last thing I want to talk about is a null pointer's
+representation.  There are two misconceptions that came from the fact
+that <tt>0</tt> is used to mean a null pointer.  The first one is that
+a null pointer is in fact represented by a “zero value” (ie. all bits
+clear).  The second one is that when implementation uses a different
+representation assigning <tt>0</tt> to a pointer does not yield a null
+pointer.
+
+<p>Both of those are incorrect.  In some implementations
+(microcontrollers, x86 real mode, …) a “zero pointer” is perfectly
+fine and using (for instance) all bits set representation to mean
+a null pointer may make more sense.  At the same time, it's compiler
+responsibility to use correct representation whenever <tt>0</tt> is
+used to mean a <tt>null pointer</tt>.
+
+<p>UPDATE: Przemoc <a href=http://c-faq.com/null/machexamp.html>has
+pointed to one of <tt>comp.lang.c</tt> FAQs</a> which gives examples
+of machines where null pointers that are not represented by all bits
+clear as well as machines with different representation of pointers of
+different types (which I haven't mentioned in this article). Also, the
+recurring issue of not being able to comment has been fixed (hopefully
+for good this time).
+
+<h3>Summary</h3>
+
+<p>To sum things up, here are all the tips that you should keep in
+mind while programming in C or C++:
+
+<ol>
+  <li>Always define function prototypes.  Always.
+  <li>When function has variable number of arguments, use
+  <tt>(<i>foo</i> *)0</tt> to mean a null pointer.
+  <li>In C++, when specifying function arguments, use
+  <tt>(<i>foo</i> *)0</tt> to mean a null pointer.  This also
+  applies to a single argument constructors where no explicit
+  function call is made.
+  <li>When new C++ standard comes around, just ignore
+  <tt>nullptr</tt>, it solves no problems and only adds to the
+  confusion.
+</ol>
+
+<!-- COMMENT -->
+<!-- date: 2010-10-29 11:39:55 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>I usually do not compare against 0 or NULL.  I find it too verbouse, p and !p is just enqugh for me. :)</p>
+
+<!-- COMMENT -->
+<!-- date: 2010-10-31 10:36:42 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>I never really felt the need to invent such a class even though it most probably will work as expected.  Actually my attitude towards NULL has changed recently: In the past I considered NULL too confusing and never used it (in favour of plain 0 or (foo *)0).  This had an advantage that whenever I wrote foo(0) I was fully aware that this may be interpreted as a number one day when a new overloaded version of foo() will come around.  Linux kernel hacking messed with my brain thought and I started using NULL. :P</p>
+
+<p>In the end, however, anyone should use what works for them.  The above is a nice class indeed and if anyone feels like it, they should use it.</p>
+
+<p>This also shows that compilers and the committee do something wrong.  Why on Earth, compilers don't define NULL in terms of such an object?  This is really beyond me.  It would partially solve the problem (at least the part that nullptr tries to solve) without the need for standard to be changed at all.</p>
+
+<!-- COMMENT -->
+<!-- date: 2013-03-03 15:14:40 -->
+<!-- nick: mina86.com -->
+<!-- nick_url: http://mina86.com/2011/03/27/null-the-never-ending-story/ -->
+
+<p>Null: The never-ending story<br /><br />I have already mentioned some problems with the null<br />
+pointer but my recent discovery knocked my socks off.<br />
+<br />
+By now, it should come with no surprise to anyone that 0<br />
+in pointer context acts as a null pointer (no matter of its<br />
+actual re[...]</p>

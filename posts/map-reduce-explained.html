@@ -1,0 +1,202 @@
+<!-- subject: Map-reduce explained -->
+<!-- date: 2014-05-18 21:15:38 -->
+<!-- tags: map reduce, mapreduce -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>Outside of functional programming context, map-reduce refers to
+  a technique for processing data.  Thanks to properties of map and
+  reduce operations, computations which can be expressed using them
+  can be highly parallelised, which allows for faster processing of
+  high volumes of data.
+
+<p>If you've ever wondered how tools such as Apache Hadoop work,
+  you're at the right page.  In this article I'll explain what map and
+  reduce are and later also introduce a shuffle phase.
+
+<!-- EXCERPT -->
+
+<p>Even though <a href=/2010/01/31/python-wrazenia/>Python is
+  a terrible language [pl]</a> which <a href=http://dozzie.jogger.pl/2014/04/11/python-tuples-the-useless-thing-in-language/>misuses terms from
+  functional programming world</a>, I'll use it to demonstrate the
+  concepts.  Lisp or Haskell would arguably be better, but people
+  knowing those languages are likely familiar with map-reduce anyway.
+
+<p>By the way, all code and data used in this article can be accessed at
+  <a href=https://github.com/mina86/map-reduce-explained>map-reduce-explained
+  git repository</a>.
+
+
+<h3>Map and reduce functions</h3>
+
+<pre>map(function, sequence) → list
+
+reduce(function, sequence, initial_state) → final_state
+    # function(state, element) → state</pre>
+
+<p><dfn>map</dfn> applies <var>function</var> to each element of
+  a <var>sequence</var> and returns a list containing results of those
+  applications.  <dfn>reduce</dfn> allows a <var>sequence</var> to be
+  reduced (hence the name) into a single value.  <var>function</var>
+  is called for each element of the <var>sequence</var> with state
+  passed as another argument.  It returns a new state which will be
+  passed to next invocation of the <var>function</var>.  Here are some
+  simple examples:
+
+<pre>>>> <i># Square each element in a list of numbers</i>
+... <b>map(lambda x: x*x, [1, 2, 3, 4])</b>
+[1, 4, 9, 16]
+
+>>> <i># Sum elements of a list</i>
+... <b>reduce(lambda state, el: state + el, [1, 4, 9, 16], 0)</b>
+30
+
+>>> <i># Sum squares of elements of a list</i>
+... <b>reduce(lambda state, el: state + el,</b>
+...        <b>map(lambda x: x*x, [1, 2, 3, 4]),</b>
+...        <b>0)</b>
+30
+
+>>> <i># Calculating values of a polynomial</i>
+... <b>def poly(coefficients, x):</b>
+...     <i># go from a_n to a_0</i>
+...     <b>coefficients = reversed(coefficients)</b>
+...     <b>return reduce(lambda state, a: state * x + a,</b>
+...     <b>              coefficients, 0)</b>
+... <b>poly([1, -2, 3], 2)</b>
+9
+>>> <b>x = 2</b>
+>>> <b>((3 * x) - 2) * x + 1</b>
+9</pre>
+
+
+<h3>Analysing logs</h3>
+
+<p>Let's use this approach to find out how many words each user of
+  #slackware.pl FreeNode IRC channel (formerly #forum.slackware.pl at
+  QuakeNet) have said over the years.  The map stage will take a line
+  from the logs and return user name and number of words in that line:
+
+<pre>import sys, re
+
+def getWords(line):
+    m = re.search(r'^\[\d\d:\d\d\] &lt;([^>]*)> (.*)$', line)
+    if not m:
+        return '_', 0
+    return m.group(1), len(re.split(r'\s+', m.group(2).strip()))
+
+for nick, count in map(getWords, sys.stdin):
+    print nick, count</pre>
+
+<p>This script can be used to analyse all the logs by feeding them
+  through it:
+
+<pre>cat temp/logs/* | python code/calc-words.py</pre>
+
+<p>This is a bit wasteful of a multi-core machine though.
+  Fortunately, it's enough to realise the result of the getWords
+  function depends on a single line only.  Therefore in the most
+  extreme case we could spawn a process for each line in the logs.
+  Because of process creation and synchronisation overhead, such
+  approach would turn out to be slower.
+
+<p>The way to go is to <dfn>shard</dfn> the whole log into smaller
+  chunks and map entries in each of them separately.  Fortunately, the
+  data is already split into per-day files.  Parallelising the process
+  is as simple as running a process for each file:
+
+<pre>mkdir -p temp/words
+parallel "$@" --eta '
+	&lt; {} python code/calc-words.py >temp/words/{#}' \
+	::: temp/logs/*
+cat temp/words/*</pre>
+
+<p>The next step is to aggregate and calculate the sum for each user:
+
+<pre>import sys
+
+def aggregate(state, line):
+    name, count = line.strip().split(' ')
+    state[name] = state.get(name, 0) + int(count)
+    return state
+
+for nick, count in reduce(aggregate, sys.stdin, {}).iteritems():
+    print nick, count</pre>
+
+<p>The script can be run as:
+
+<pre>cat temp/words/* | python code/reduce.py</pre>
+
+<p>But again, only one CPU does the work while all the others are
+  slacking off.  This time, each step depends on the result of the
+  previous one, so they cannot be run independently of one another,
+  they have to be run in sequence.  Fortunately, result for nick “foo”
+  does not depend on results for nick “bar” so there could be
+  a separate reduce processes for each nick.
+
+<p>The result of map phase is not split by usernames though.  This is
+  where <dfn>shuffle</dfn> comes into play.  It takes output of the
+  map phase and divides it into shards suitable for processing in the
+  reduce phase.  For processing IRC logs, shuffle will read output of
+  each map process and divide it into per-nick directories.  Like so:
+
+<pre>import errno, os, sys
+
+_, outdir, shardname = sys.argv
+files = {}
+
+for line in sys.stdin:
+    name, count = line.split(' ')
+    if name not in files:
+        dirname = os.path.join(outdir, name)
+        if not os.path.isdir(dirname):
+            os.makedirs(dirname)
+        files[name] = open(os.path.join(dirname, shardname), 'w')
+    files[name].write('%s %s\n' % (name, count))</pre>
+
+<p>With that script, we can parallelise the reduce phase as well:
+
+<pre>rm -rf -- temp/shuffled
+mkdir -p temp/shuffled
+parallel "$@" --eta '
+	&lt; {} python code/shuffle.py temp/shuffled {#}' \
+	::: temp/words/*
+
+mkdir -p temp/reduced
+parallel "$@" --eta '
+	cat {}/* |
+	python code/reduce.py >temp/reduced/{#}' \
+	::: temp/shuffled/*</pre>
+
+<h3>Real world</h3>
+
+<p>In real deployments more care is taken to make the pipeline run
+  efficient.  For example, shards should be balanced and there should
+  not be too many of them.  In case of the above analysis, there are
+  several issues:
+
+<ul>
+  <li><p>There are 1668 separate files.  Unless the analysis is run on
+    hundreds of parallel jobs, the overhead will be noticeable.
+    Instead of running a process per file, the logs sholud be split
+    into several groups (or shards) such that each job/worker has just
+    a few groups to work on.
+
+  <li><p>#slackware.pl's popularity decreased over time so the per-day
+    files are very unbalanced (this is in addition to weekly
+    variances).  When sharding the files, they should be grouped so
+    that size of each group is similar.
+
+  <li><p>The above two points apply to the output of shuffle phase as
+    well.  In real deployements shuffle should try to make the shards
+    balanced and their number in the order of magnitude of the number
+    of workers.
+</ul>
+
+<p>I leave you, dear reader, with a homework to change
+  <a href=https://github.com/mina86/map-reduce-explained>map-reduce-explained
+  code</a> to address the above points.  In case of the first two,
+  file size is a good approximation of the amount of work needed to be
+  done.  For the last one, the way to go is to shuffle data not by the
+  nick name, but by a hash of the nick name module 50 (or so).
+  This would control the number of shards and hopefully distribute
+  data uniformly across them.

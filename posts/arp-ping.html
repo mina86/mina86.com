@@ -1,0 +1,62 @@
+<!-- subject: ARP ping -->
+<!-- date: 2008-06-06 18:49:58 -->
+<!-- tags: arp, dhcp, mac, ip, arpping, arping -->
+<!-- categories: Articles, Techblog -->
+
+<p>Czas jakiś temu zainstała u mnie potrzeba sprawdzenia, na
+  komputerze bez przydzielonego adresu sieciowego, czy komputer
+  o danym adresie istnieje.  Chciałem mianowicie, zależnie od wyników
+  sprawdzenia skonfigurować sieć statycznie lub dynamicznie.
+  Stosunkowo szybko doszedłem do wniosku, iż szczególną uwagę należy
+  zwrócić na
+  protokół <a href=http://tools.ietf.org/html/rfc826><abbr lang=en
+  title="Address Resolution Protocol">ARP</abbr></a>.
+
+<p>W protokole Ethernet urządzenia są rozpoznawane za pomocą
+  adresów <abbr lang=en title="Media Access Control">MAC</abbr>,
+  a więc, aby móc wysłać pakiet do komputera
+  o danym <span lang=en>IP</span> należy najpierw poznać jego adres
+  sprzętowy.  Do tego właśnie służy protokół ARP (gwoli ścisłości,
+  może on być wykorzystany również przy innych protokołach warstwy
+  drugiej i trzeciej).
+
+<p>Jak to działa? Pierwsza strona rozsyła do wszystkich (na adres
+  broadcast, <abbr title="to jest">tj.</abbr> <tt>FF:FF:FF:FF:FF:FF</tt>) zapytanie, wypełniając
+  swój adres <abbr lang=en title="Internet Protocol">IP</abbr>
+  i <abbr lang=en title="Media Access Control">MAC</abbr> oraz
+  adres <abbr lang=en title="Internet Protocol">IP</abbr>, o który
+  chce się zapytać.  W odpowiedzi, druga strona wysyła ramkę z oboma
+  adresami, swoimi i komputera wysyłającego pytanie.
+
+<p>Nie każdy zdaje sobie sprawę, iż protokół ten można wykorzystywać
+  nawet jeżeli nie ma się swojego adresu sieciowego–wówczas
+  w odpowiednie pole wpisujemy same zera.  W niczym to nie
+  przeszkadza–w żadnym momencie protokół warstwy trzeciej nie
+  jest wszak wykorzystywany.
+
+<p>Warto wspomnieć, iż mechanizm ten jest wykorzystywany przez
+  klienty <abbr lang=en title="Dynamic Host Configuration
+  Protocol">DHCP</abbr>, do sprawdzania (na wszelki wypadek), czy
+  adres im nadany jest faktycznie wolny–nazywa się to <a lang=en
+  href=ftp://ftp.rfc-editor.org/in-notes/internet-drafts/draft-cheshire-ipv4-acd-06.txt>Adress
+  Conflict Detection</a>.
+
+<p>Dla zainteresowanych <a href=http://tinyapps.cvs.sourceforge.net/*checkout*/tinyapps/tinyapps/arpping.c>aplikacja</a>,
+  która próbuje wykryć adres sprzętowy urządzenia o podanym adresie
+  sieciowym.
+
+<!-- COMMENT -->
+<!-- date: 2008-06-07 07:53:29 -->
+<!-- nick: Sad -->
+<!-- nick_url: http://sad.jogger.pl -->
+
+<p>Co więcej, komputer <em>zawsze</em> odpowie na arpinga bez względu na to, jak bardzo restrykcyjnego firewalla byśmy nie mieli*. Przydatne jest to do sprawdzania, czy dany komputer &#8222;żyje&#8221; czy nie. </p>
+
+<p>*) No chyba, że ktoś jest maniakiem i do tego guru.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-06-23 00:21:27 -->
+<!-- nick: Outlaw -->
+<!-- nick_url: http://blog.outlaw.one.pl -->
+
+<p>Sad komputer nie odpowie tylko jego karta sieciowa odpowie :) W szak to tam praktycznie kończy się sieć do której jest wpięty nasz komputer :)</p>

@@ -1,0 +1,228 @@
+<!-- subject: Przywracanie możliwości bootwania GNU/Linuksa -->
+<!-- date: 2008-02-12 05:16:12 -->
+<!-- tags: linux, mbr, lilo, boot -->
+<!-- categories: Articles, Techblog -->
+
+<p>W artykule poniższym zamierzam opisać jak przywrócić
+<acronym title="LInux LOader" xml:lang="en">LILO</acronym> jako bootloader w sytuacji, gdy został on
+zastąpiony loaderem z Windowsów NT, co w efekcie powoduje niemożność
+uruchomienia GNU/Linuksa.  Zakładam, że na dysku zainstalowany jest
+zarówno GNU/Linux (którego nie można uruchomić) oraz Windows z serii
+NT (w szczególności Windows 2000 i Windows XP, przy pozostałych
+Windowsach NT sprawa może wyglądać trochę inaczej).  Co więcej, opis
+dotyczy <acronym title="LInux LOader" xml:lang="en">LILO</acronym>, ale ogólna idea może zostać
+zastosowana również w przypadku innych bootloaderów (zmieniają się
+jedynie pliki konfiguracyjne i polecenie update'owania
+bootloadera).</p>
+
+<!-- EXCERPT -->
+
+<p>Należy pamiętać, że mając płytę instalacyjną Windowsów (dotyczy to
+przynajmniej <abbr>Win2k</abbr>) można zawsze przywrócić stan MBR
+uruchamiający loadera Windowsów, więc w razie jakichś niepowodzeń
+można z tego skorzystać. Opisane jest to <a href="#winrescue">na
+końcu</a> artykułu.</p>
+
+<p>Informuje również, że opisuję tutaj sposób, który przez niektórych
+ludzi (nie wiem czemu) jest niezalecany.  <acronym>IMO</acronym> jest
+wygodniejszy, a wcale nie jest gorszy, chyba że ktoś często uruchamia
+Windowsa oraz ma włączone wyświetlanie menu Windowsów.  W takim
+przypadku będzie zmuszony najpierw przejść przez
+<acronym title="LInux LOader" xml:lang="en">LILO</acronym> (czy inny bootloader Linuksa), a potem dopiero
+wchodzi do menu Windowsów.  Inny sposób powoduje, że wszystko wygląda
+dokładnie na odwrót.</p>
+
+<p>Tradycyjnie, z góry zaznaczam, że nie ponoszę odpowiedzialności za
+jakiekolwiek szkody wynikające z korzystania z poniższego opisu.</p>
+
+<h3 id="livecd">LiveCD</h3>
+
+<p>Jeżeli w naszym posiadaniu istnieje jakaś dystrybucja GNU/Linuksa
+bootowalna bezpośrednio z <acronym title="Compact Disc" xml:lang="en">CD</acronym> (<abbr title="na przykład">np.</abbr>
+Knoppix, LiveSlack), bądź przynajmniej płyta instalacyjna GNU/Linuksa
+(<abbr title="na przykład">np.</abbr> Slackware'a) to prawdopodobnie z dużym powodzeniem
+można ją użyć do rozwiązania problemu.</p>
+
+<p>Jeśli przy bootowaniu z <acronym title="Compact Disc" xml:lang="en">CD</acronym> odpala się
+<acronym title="LInux LOader" xml:lang="en">LILO</acronym> i czeka na wpisanie magicznych parametrów lub
+wciśnięcie entera to jest duża szansa, że wystarczy wpisać:
+<tt><i>&lt;kernel&gt;</i> root=/dev/<i>&lt;rootdev&gt;</i> ro
+noinitrd</tt>, gdzie <i>&lt;kernel&gt;</i> to nazwa jądra (jaka
+konkretnie ma być powinno być gdzieś napisane na ekranie, przykładowo
+dla płytki instalacyjnej Slackware'a w 99% przypadków jest
+to <tt>bare.i</tt>), a <i>&lt;rootdev&gt;</i> to partycja, na której
+jest root file system (<abbr title="to jest">tj.</abbr> "<tt>/</tt>"; <abbr title="na przykład">np.</abbr>
+u mnie jest to
+<tt>hda1</tt>).  Cała linijka może wyglądać tak: <tt>bare.i
+root=/dev/hda1 ro noinitrd</tt>.</p>
+
+<p>Jeżeli nie masz zielonego pojęcia jakie winno być
+<i>&lt;rootdev&gt;</i> to na 99% gdzieś w <tt>/etc/lilo.conf</tt>
+(Zawczasu plik <tt>/etc/lilo.conf</tt> można bez większych problemów
+odczytać odpalając Linuksa z płyty.  Należy jedynie pamiętać, żeby
+potem odczytać prawidłowy plik (<abbr title="to jest">tj.</abbr> ten z dysku))
+znajdziesz opcje root z odpowiednim wpisem.  Będzie ona poprzedzona
+wpisem <tt>image = <i>&lt;costam&gt;</i></tt>, <abbr title="na przykład">np.</abbr>:</p>
+
+<pre class="code">image = /boot/bzImage
+  root = /dev/hda1</pre>
+
+<p>Jeżeli po wciśnięciu ENTER wszystko będzie działać poprawnie i
+odpali się zainstalowany na dysku GNU/Linux to można przejść do <a
+href="#liloinst">instalacji <acronym title="LInux LOader" xml:lang="en">LILO</acronym></a>.  W przeciwnym
+wypadku należy próbować innych sztuczek:</p>
+
+<h3 id="chroot">LiveCD i chroot</h3>
+
+<p>Spróbujmy więc uruchomić GNU/Linuksa z płyty, przy czym najlepiej
+w trybie single lub przynajmniej w trybie tekstowym (chociaż prawdę
+mówiąc włączone iXy nie powinny mieć większego znaczenia).  Następnie
+(będąc zalogowanym jako root) zamontować gdzieś root file system
+z dysku (<abbr title="na przykład">np.</abbr> do <tt>/mnt/root</tt>) po czym "zchrootować"
+do tego katalogu i na wszelki wypadek zamontować wszystkie partycje.
+Całość można wykonać następującym poleceniem: <tt>mkdir /mnt/root
+&amp;&amp; mount /dev/<i>&lt;rootdev&gt;</i> /mnt/root &amp;&amp;
+chroot /mnt/root &amp;&amp; mount -a &amp;&amp; echo OK</tt>
+(<i>&lt;rootdev&gt;</i> to ciągle ta sama partycja z root file
+systemem).</p>
+
+<p>Jest pewne niezerowe prawdopodobieństwo (w gruncie rzeczy zawsze
+jest jakieś prawdopodobieństwo), że wszystko zadziała prawidłowo
+i jeśli tak to wystarczy już zainstalować to nieszczęsne
+<acronym title="LInux LOader" xml:lang="en">LILO</acronym>.</p>
+
+<h3 id="liloinst">Instalacja <acronym title="LInux LOader" xml:lang="en">LILO</acronym></h3>
+
+<p>Czas zmodyfikować plik <tt>/etc/lilo.conf</tt> (oczywiście wszystko
+należy wykonywać jako root).  Przede wszystkim należy upewnić się co
+do wartości opcji <tt>boot</tt>, należy podać: <tt>boot =
+/dev/hda</tt> .  Następnie dodać wpis z Windowsami - będzie on
+wyglądał mniej więcej tak:</p>
+
+<pre class="code">other = /dev/<i>&lt;windev&gt;</i>
+  label = windows</pre>
+
+<p>gdzie <i>&lt;windev&gt;</i> to partycja z dyskiem C Windowsów
+(<abbr title="na przykład">np.</abbr> <tt>hda2</tt>).  Aby się upewnić co to tam jest
+można odpalić polecenie: <tt>fdisk -l /dev/hda</tt> i wyszukać
+pierwszą partycję, która w kolumnie System ma 'Win95' lub 'FAT16'.
+Dodatkowo, partycja ta powinna być oznaczona gwiazdką w kolumnie Boot.
+Jeżeli nie jest to może być lipnie. ;) Ja mam coś takiego:</p>
+
+<pre class="code">Disk /dev/hda: 120.0 GB, 120034123776 bytes
+255 heads, 63 sectors/track, 14593 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/hda1               1         625     5020312   83  Linux
+/dev/hda2   *         626        1875    10040625    c  W95 FAT32 (LBA)
+/dev/hda3            1876       14568   101956522+   5  Extended
+/dev/hda4           14569       14593      200812+  82  Linux swap
+/dev/hda5            1876        2175     2409749+  83  Linux
+/dev/hda6            2176        2475     2409749+  83  Linux
+/dev/hda7            2476       14568    97137022   83  Linux</pre>
+
+<p>Aby się dodatkowo upewnić co do trafności wyboru, można odpalić
+jeszcze polecenie <tt>mount</tt> i tam (jeżeli partycje windowsowe są
+podmontowane) powinna być gdzieś szukana informacja.  Dla przykładu, u
+mnie jedna z linijek wygląda następująco (przełamanie linii dodane
+ręcznie):</p>
+
+<pre class="code">/dev/hda2 on /C type vfat (rw,umask=0,shortname=winnt,codepage=852,
+                           quiet,iocharset=iso8859-2)</pre>
+
+<p>Warto również sprawdzić, czy w pliczku <tt>/etc/lilo.conf</tt> jest
+opcja <tt>prompt</tt>, a <tt>timeout</tt> jest ustawiony na conajmniej
+10 (jest on podawany w dziesiątych sekundy).  Po wprowadzeniu
+koniecznych zmian wystarczy odpalić LILO poleceniem:
+<tt>lilo -v</tt></p>
+
+<p>Jeżeli wszystko pójdzie dobrze to przy następnym reboocie winien
+pokazać się napis "<i>LILO</i>" i powinniśmy móc wybrać system
+operacyjny.  Jeżeli nic nie będzie się chciało włączyć, należy
+skorzystać z płyty instalacyjnej Windowśów, żeby przywrócić poprzedni
+MBR.</p>
+
+<h3 id="winrescue">Przywracanie MBR Windowsów</h3>
+
+<p>Aby przywrócić poprzednie ustawienia wystarczy zabootować z płyty
+instalacyjnej Windowsów i szukać tam czegoś takiego co się zwie Rescue
+Console.  Zaraz po starcie instalatora trzeba wybrać opcję naprawiania
+systemu (wciskając przycisk R), a potem wybrać konsolę (wciskając C) -
+może to się różnić zależnie od wersji Windowsów.  Po zalogowaniu się
+(wymagane jest hasło administratora) wystarczy uruchomić polecenie:
+<tt>fixmbr</tt> i zrestartować komputer.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-12 18:52:59 -->
+<!-- nick: Stanisław 'dozzie' Klekot -->
+<!-- nick_url: http://dozzie.jogger.pl -->
+
+<p>Przeprazam bardzo, ale Slackware i pochodne Slaksa w żadnym przypadku nie są dystrybucjami GNU/Linuksa, tylko po prostu Linuksa.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-12 18:56:01 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>Jasne&#8230; A te całe coreutils, binutils, findutils, bash i wiele innych to Linus T. też sam napisał na poczekaniu?</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-12 19:22:36 -->
+<!-- nick: Stanisław 'dozzie' Klekot -->
+<!-- nick_url: http://dozzie.jogger.pl -->
+
+<p>A Apache, X.Org, <span class="caps">KDE</span>, <span class="caps">GNOME</span>, zsh, BerkeleyDB, Busyboksa, wszystkie daemony *cron i masę innych to niby <span class="caps">GNU</span> stworzyło?</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-12 19:25:01 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>A mówię, że stworzyło? Ale to co potocznie ludzie nazywają Linuksem jest bardziej <span class="caps">GNU</span> niż Linux.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-12 19:32:17 -->
+<!-- nick: Stanisław 'dozzie' Klekot -->
+<!-- nick_url: http://dozzie.jogger.pl -->
+
+<p>Tylko jeśli się uprzeć i pousuwać wszystkie użyteczne programy, zostawiając li tylko coreutils i gcc.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-12 19:38:37 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>Ośmielę się nie zgodzić. Linux to samo jądro, stosunkowo niewielka część systemu operacyjnego. Narzędzia <span class="caps">GNU</span> stanowią, w moim odczuciu, znacznie większą część całości. Cała reszta: Apache, X.Org, <span class="caps">KDE</span>, <span class="caps">GNOME</span>, zsh, <span class="caps">BDB</span> itp są kolejnymi składowymi. Dlatego właśnie uważam, iż w &#8222;Linuksach&#8221; więcej jest <span class="caps">GNU</span> niż Linuksa.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-12 19:43:43 -->
+<!-- nick: Stanisław 'dozzie' Klekot -->
+<!-- nick_url: http://dozzie.jogger.pl -->
+
+<p>Ciekawe. Bez <span class="caps">GNU</span> da się całkiem przyzwoicie obejść (Mikrotiki wszelkiej maści, Maemo, Familiar&#8230;), a bez kernela linuksowego <span class="caps">GNU</span> jest praktycznie bezużyteczny. To po raz.</p>
+
+<p>Poza tym Linux to nie samo jądro, ale również właśnie cały śmietnik userspace&#8217;owy, wliczając libc, kompilatory, powłoki, środowisko graficzne i tak dalej. Dlatego mówiąc o jądrze nie mówi się o Linuksie, tylko o kernelu Linuksa.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-12 19:50:57 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>Narzędzia <span class="caps">GNU</span> możesz zainstalować na Solarisie. Nie potrzebujesz do tego wcale Linuksa.</p>
+
+<p>A z nazewnictwem, jak widać, bywa różnie. Dla mnie Linux to samo jądro. Niby czemu &#8222;cały śmietnik&#8221; miałby się również nazywać Linux? Wszakże w skład tego &#8222;śmietnika&#8221; wchodzi wiele programów, które mogą sobie bardzo dobrze radzić bez Linuksa.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-12 19:59:13 -->
+<!-- nick: Stanisław 'dozzie' Klekot -->
+<!-- nick_url: http://dozzie.jogger.pl -->
+
+<p>A próbowałeś kompilować narzędzia projektu <span class="caps">GNU</span> na rzeczonym Solarisie? Bo o ile dobrze pamiętam, trzeba trochę je było poprawiać zanim się skompilowały i zadziałały. Poza tym czy to byłby już GNU/Solaris? W żadnym przypadku.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-12 20:09:34 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>Nie próbowałem, ale z powodzeniem korzystam z binutils, basha i gcc na moim uczelnianym koncie na Solarisie. Czy byłby to GNU/Solaris można się sprzeczać, ale pomiędzy Solarisem, a Linuksem jest taka podstawowa różnica, że Solaris od zawsze było nazwą całego systemu operacyjnego, a Linux to nazwa jądra.</p>

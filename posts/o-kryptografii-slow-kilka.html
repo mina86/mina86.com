@@ -1,0 +1,217 @@
+<!-- subject: O kryptografii słów kilka -->
+<!-- date: 2008-02-12 05:41:45 -->
+<!-- tags: kryptografia, szyfrowanie, hash -->
+<!-- categories: Articles, Techblog -->
+
+<p>Każdy człowiek ma jakieś tajemnice, których nie chce nikomu
+zdradzać.  Równocześnie każdy ma sekrety, którymi chce się z kimś
+podzielić, ale tak, żeby nikt więcej ich nie poznał.  Sytuacje takie
+mogą się zdarzać w codziennym życiu przeciętnego obywatela, w życiu
+dużej firmy lub całego państwa.  Utrzymanie w tajemnicy pewnych
+tajemnic może się przyczynić do czyjegoś sukcesy lub porażki. <a
+href="http://pl.wikipedia.org/wiki/Winston_Churchill">Winston
+Churchill</a> (1874-1965) przyznał, że złamanie kodów <a
+href="http://pl.wikipedia.org/wiki/Enigma">Enigmy</a> przez trzech
+polskich matematyków (<a
+href="http://pl.wikipedia.org/wiki/Marian_Rejewski">Mariana
+Rejewskiego</a> (1905-1980), <a
+href="http://pl.wikipedia.org/wiki/Jerzy_Różycki">Jerzego
+Różyckiego</a> (1906-1942) i <a
+href="http://pl.wikipedia.org/wiki/Henryk_Zygalski">Henryka
+Zygalskiego</a> (1906-1978)) pozwoliło w znacznym stopniu skrócić czas
+wojny (i co za tym idzie, zmniejszyć liczbę ofiar).</p>
+
+<!-- EXCERPT -->
+
+<h3 id="oznaczenia">Oznaczenia</h3>
+
+<p>W artykule tym (oraz kolejnych artykułach o kryptografii) będę używał
+następujących oznaczeń:</p>
+<dl>
+  <dt><tt>M</tt></dt>
+  <dd>niezaszyfrowana wiadomość</dd>
+
+  <dt><tt>m<sub>i</sub></tt></dt>
+  <dd><tt>i</tt>ty fragment niezaszyfrowanej wiadomości (niektóre
+    algorytmy wymagają podzielenia wiadomości na części przed
+    zaszyfrowaniem)</dd>
+
+  <dt><tt>C</tt></dt>
+  <dd>zaszyfrowana wiadomość</dd>
+
+  <dt><tt>c<sub>i</sub></tt></dt>
+  <dd><tt>i</tt>ty fragment zaszyfrowanej wiadomości</dd>
+
+  <dt><tt>E()</tt></dt>
+  <dd>funkcja szyfrująca</dd>
+  <dd>jeżeli przyjmuje dwa parametry, to drugim parametrem jest
+    klucz</dd>
+
+  <dt><tt>D()</tt></dt>
+  <dd>funkcja deszyfrująca</dd>
+  <dd>jeżeli przyjmuje dwa parametry, to drugim parametrem jest
+    klucz</dd>
+
+  <dt><tt>H()</tt></dt>
+  <dd>funkcja skrótu (<abbr title="tak zwany">tzw.</abbr>
+    <span xml:lang="en">hash</span>)</dd>
+  <dd>jeżeli przyjmuje dwa parametry, to drugim parametrem jest
+    klucz</dd>
+
+  <dt><tt>k</tt></dt>
+  <dd>klucz</dd>
+
+  <dt><tt>k<sub>pub</sub></tt></dt>
+  <dd>klucz publiczny</dd>
+
+  <dt><tt>k<sub>priv</sub></tt></dt>
+  <dd>klucz prywatny</dd>
+</dl>
+
+<h3 id="zasada">Zasada działania</h3>
+
+<p>Zasada działania szyfrowania jest bardzo prosta.  Mamy dwie funkcje
+<tt>E()</tt> i <tt>D()</tt>, które spełniają następujący warunek:
+<tt>dla każdego M zachodzi M = D( E( M ) )</tt>.  W przypadku
+niektórych algorytmów <tt>D = E</tt>, jednakże nie ma to istotnego
+znaczenia dla mocy szyfru.  Jest to jedynie ułatwienie implementacji
+algorytmu, bo zamiast pisać dwie funkcję wystarczy napisać jedną, którą
+będzie można szyfrować i deszyfrować.</p>
+
+<h3 id="sym">Szyfrowanie symetryczne</h3>
+
+<p>Przy takim zapisie widać, że wystarczy poznać funkcje deszyfrującą,
+żeby móc rozszyfrowywać zaszyfrowane wiadomości i żeby uniemożliwić to
+musielibyśmy zmieniać cały algorytm szyfrowania.  Z tego powodu do
+algorytmów wprowadzono klucze, dzięki czemu jednym algorytmem można
+szyfrować na różne sposoby zależnie od klucza i równocześnie nie
+znając klucza nie da się wiadomości rozszyfrować.  Algorytmy z kluczem
+powinny spełniać następujący warunek: <tt>dla każdego M,
+k<sub>1</sub>, k<sub>2</sub> zachodzi: jeśli k<sub>1</sub> =
+k<sub>2</sub> to C = E(M, k<sub>1</sub>) = E(M, k<sub>2</sub>) i M =
+D(C, k<sub>1</sub>) = D(C, k<sub>2</sub>)</tt>.  Należy zauważyć, że
+warunkiem jest implikacja, ale kożystnie jest jeżeli zachodzi
+równoważność.</p>
+
+<p>Przy takich założeniach algorytm szyfrowania może być znany każdemu, a
+jedynie klucz jest rzeczą, która nie może się dostać w niepowołane ręce.
+Szyfrowaniem, w którym ten sam klucz służy do szyfrowania i deszyfrowania
+wiadomości nazywamy szyfrowaniem symetrycznym i ma ono pewne wady.</p>
+
+<h3 id="asym">Szyfrowanie asymetryczne</h3>
+
+<p>Problem jest taki, że jeżeli dwie osoby chcą bezpiecznie komunikować się ze sobą, to muszą ustalić jakiś klucz.  Problem w tym, jak to zrobić żeby nikt inny go nie poznał.  Nie dość, że zmniejsza to bezpieczeństwo to jeszcze wydłuża czas przekazywania informacji.  Sytuacji, w których zwykłe szyfrowanie symetryczne nie wystarcza jest oczywiście więcej.</p>
+
+<p>Na pomoc przychodzi nam szyfrowanie asymetryczne, które korzysta
+z pary kluczy, klucza publicznego (<tt>k<sub>pub</sub></tt>), który
+możemy dawać każdemu i da się nim jedynie szyfrować wiadomości; oraz
+z klucza prywatnego (<tt>k<sub>priv</sub></tt>), który służy jedynie
+do rozszyfrowywania wiadomości i powinien być w posiadaniu tylko
+i wyłącznie jednej osoby.  Bardziej matematycznie można zapisać, że
+szyfrowanie asymetryczne musi spełniać następujący warunek: <tt>dla
+każdego M, k<sub>pub</sub>, k<sub>priv</sub> zachodzi jeśli
+k<sub>pub</sub> i k<sub>priv</sub> stanowią parę to M = D( E( M,
+k<sub>pub</sub> ), k<sub>priv</sub>)</tt>.</p>
+
+<p>Oczywiście algorytm szyfrowania asymetrycznego musi być tak
+obmyślony, żeby nie dało się odtworzyć klucza prywatnego na podstawie
+klucza publicznego.  Gdyby było to możliwe, to algorytm straciłby cały
+swój sens.</p>
+
+<h3 id="logowanie">Logowanie z kluczem</h3>
+
+<p>Algorytmy szyfrowania asymetrycznego mogą zostać wykorzystane w
+systemie logowania.  Zapobiega to przesyłaniu hasła pomiędzy
+komputerami i właściwie uniemożliwia zalogowanie się bez znajomości
+klucza prywatnego.  Proces logowania z kluczem wygląda
+następująco:</p>
+
+<ol>
+  <li>serwer losuje sobie jakąś liczbę <tt>n</tt>,</li>
+  <li>szyfruje ją kluczem publicznym (<tt>C = E( n, k<sub>pub</sub> )</tt>),</li>
+  <li>zaszyfrowaną liczbę wysyła klientowi,</li>
+  <li>klient deszyfruje liczbę kluczem prywatnym (<tt>m = D( C, k<sub>priv</sub> )</tt>),</li>
+  <li>wysyła otrzymaną liczbę serwerowi,</li>
+  <li>serwer porównuje obie liczby (wysłaną przez klienta i wylosowaną w 1 kroku) (<tt>n =? m</tt>):
+    <ul>
+      <li>jeśli obie liczby są równe, to logowanie się powiodło,</li>
+      <li>jeśli są one różne, to logowanie się nie powiodło.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="podpis">Podpis cyfrowy</h3>
+
+<p>Algorytmy szyfrowania asymetrycznego mogą dodatkowo spełniać
+jeszcze jeden warunek.  Mianowicie: <tt>dla każdego M,
+k<sub>pub</sub>,k<sub>priv</sub> zachodzi k<sub>pub</sub> i
+k<sub>priv</sub> stanowią parę =&gt; M = D( E( M, k<sub>priv</sub> ),
+k<sub>pub</sub>)</tt>.  Czyli, że szyfrując wiadomość kluczem
+prywatnym będzie można ją rozszyfrować kluczem publicznym.  Własność
+taką posiada algorytm RSA i dzięki temu jest wykorzystywany w podpisie
+cyfrowym (<abbr title="also known as" xml:lang="en">aka</abbr> podpisie elektronicznym, <abbr title="also known as" xml:lang="en">aka</abbr>
+e-podpisie).  Tuż przed wysłaniem wiadomości, zostaje wyliczony jej
+hash (<abbr title="also known as" xml:lang="en">aka</abbr> skrót), który jest następnie szyfrowany przy
+użyciu klucza prywatnego (matematycznie jest to wynik operacji: <tt>ep
+= E( H(M), k<sub>priv</sub> )</tt>).  Osoba, która odbiera wiadomość
+rozszyfrowuje tenże hash i porównuje go z hashem przez siebie
+wyliczonym.  Jeżeli są one różne, wiadomość została zmodyfikowana po
+podpisaniu.</p>
+
+<h3 id="hash">Hash</h3>
+
+<p>Przybliżmy więc pojęcie hasha.  Jest to taka funkcja, która
+z łańcucha o dowolnej długości generuje łańcuch o określonej długości.
+Dodatkowo algorytm generowania tego hasha powinien być taki, że przy
+zmianie jednego bitu wiadomości hash się zmienia w dość dużym stopniu
+(<abbr title="to znaczy">tzn.</abbr> każdy bit wiadomości wpływa na conajmniej kilka
+bitów hasha).  Co więcej powinno być praktycznie niemożliwe stworzenie
+dwóch różnych łańcuchów o takim samym hashu.</p>
+
+<p>Funkcja skróty jest często wykorzystywana w systemach logowania.
+Hasło użytkownika jest hashowane i w takiej postaci zapisywane.  W
+momencie logowania oblicza się hash z podanego hasła i porównuje z
+zapisanym hashem (<tt>zapisany hash = H( podane hasło ) =&gt;
+użytkownik podał poprawne hasło</tt>).</p>
+
+<p>Trzeba pamiętać, że nieprawdą jest, iż <tt>dla każdego x, y
+zachodzi H( x ) = H( y ) =&gt; x = y</tt>.  Jednakże nieścisłość tą
+można bez żadnych obaw pominąć.  Po prostu jeżeli chcemy mieć większą
+pewność to używamy innego algorytmu, np. zamiast MD5 to SHA1...</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-12 13:36:40 -->
+<!-- nick: Walker -->
+<!-- nick_url: http://blog.walker.net.pl -->
+
+<p>Gratulacje za obszerny, porządny wpis :).</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-14 15:48:09 -->
+<!-- nick: Piotr Konieczny -->
+<!-- nick_url: http://blog.konieczny.be -->
+
+<p>Warto dodać, że w świetle polskiej ustawy, mechanizmy które opisałeś (kryptografie) wykorzystuje tylko tzw. Bezpieczny Podpis Elektroniczny. (Samo pojecie podpisu elektronicznego jest wg ustawy szersze i może także dotyczyć podpisu odręcznego, zeskanowanego).</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-15 17:47:03 -->
+<!-- nick: GiM -->
+<!-- nick_url: http://gim.jogger.pl -->
+
+<p>a jakąż to &#8216;większą&#8217; pewność daje nam sha-1 zamiast md5 skoro algorytmy kolidowania są od 3 lat znane? :&#62; (pewnym zabezpieczeniem staje si w tym momencie salt)</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-19 11:42:57 -->
+<!-- nick: Moarc/J-23 -->
+<!-- nick_url: http://moarc.jogger.pl -->
+
+<p>@GM: Pewnym zabezpieczeniem jest SHA-512 albo SHA-1024 ;)</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-19 12:37:35 -->
+<!-- nick: GiM -->
+<!-- nick_url: http://gim.jogger.pl -->
+
+<p>@Moarc/J-23 (JW23? :&#62;) pewnym jest, ciekawe na jak długo :).</p>
+
+<p>btw: sha-1024? takiej nie znaju.</p>

@@ -1,0 +1,695 @@
+<!-- subject: New C features proposal -->
+<!-- date: 2010-04-18 22:55:45 -->
+<!-- tags: c, c++, c1x, programming, standard -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>As the committee gathered to discuss how the new C standard will
+look like I did some thinking of my own. I thought about features that
+I would love to see in C. I even collected thoughts of my twisted mind
+and condensed them into a text file.</p>
+
+<p>What is outrageous is that since I believe information and ideas
+want to be free and shared I have decided to post my concepts on the
+net instead of imprisoning them in my wicked brain.</p>
+
+<p>Maybe someone will find it useful somehow. Maybe even some
+committee member will read those and bring them out on the next
+meeting.</p>
+
+<!-- EXCERPT -->
+
+<p>(This post has also <a href="http://groups.google.com/group/comp.std.c/browse_thread/thread/8a637cf658cb0005">been sent</a> to <a href="http://groups.google.com/group/comp.std.c/topics">comp.std.c</a> newsgroup.)</p>
+
+<h3><small>I</small> Default Function Argument</h3>
+  <ol>
+    <li>
+        The default value of a function's argument has proved to be useful
+        in C++ programs as well as in other languages which has such
+        a notion.  It allows for more condensed function call in the usual
+        cases still allowing for a configuration when required.
+    </li>
+    <li>
+        Syntax and semantics of such feature should be the same as in C++.
+    </li>
+    <li>
+        Example:
+      </p>
+<pre>struct node {
+    struct node *next;
+    int key;
+    const char *value;
+};
+
+struct void *get(struct node *first, int key, const char *def = NULL) {
+    for (; first; first = first-&gt;next) {
+        if (first-&gt;key == key)
+            return first-&gt;value;
+    return def;
+}</pre>
+    </li>
+    <li>
+        In the current standard, such syntax it is invalid thus it will
+        not affect existing code.  Moreover, many C implementations are
+        also capable of accepting C++ code thus implementing this feature
+        would be an easy task in many such cases.
+    </li>
+  </ol>
+<h3><small>II</small> Named Arguments</h3>
+  <ol>
+    <li>
+        It has been observed that calls to functions with many arguments
+        are somehow unreadable since it is hard to keep track of which
+        argument means what.
+    </li>
+    <li>
+        To mitigate this problem named arguments could be added to the
+        C language with a syntax similar to one used in structures and
+        union initialisation.
+    </li>
+    <li>
+        Example:
+      </p>
+<pre>void message(const char *msg,
+             enum level .level, enum colour .colour);
+
+/* ... */
+message("A message", .level = LVL_INFO, .colour = WHITE);
+message("An error", .colour = RED, .level = LVL_ERROR);</pre>
+    </li>
+    <li>
+        The name of the argument would become part of a function's
+        prototype thus the following would be illegal:
+      </p>
+<pre>void f1(int .bar);
+void f1(int .baz); /* different name */
+void f2(int bar);
+void f2(int .bar); /* unnamed vs. unnamed */</pre>
+    </li>
+    <li>
+        If different names (or lack of names) was used in different
+        translation unit behaviour would be still well defined as long as
+        order and types of arguments match.
+    </li>
+    <li>
+        Similarly, when taking function's address or casting between
+        pointers to functions the names of arguments would be ignored,
+        hence the following would be still well defined and perfectly
+        legal:
+      </p>
+<pre>int cmp(const void *.a, const void *.b)
+
+int arr[10];
+
+qsort(arr, sizeof arr / sizeof *arr, sizeof *arr, cmp);
+cmp(.a = &amp;arr[0], .b = &amp;arr[1]);
+
+int (*foo)(const void *.x, const void *.y);
+foo = cmp;
+foo(.x = &amp;arr[0], .y = &amp;arr[1]);
+    /* same as cmp(.a = &amp;arr[0], .b = &amp;arr[1]) */
+
+int (*bar)(const void *.b, const void *.a);
+bar = cmp;
+bar(.a = &amp;arr[0], .b = &amp;arr[1]);
+    /* same as cmp(.a = &amp;arr[1], .b = &amp;arr[0]) */</pre>
+    </li>
+    <li>
+        Named arguments would have to be specified using their name, thus,
+        with earlier <tt>message()</tt> declaration, the following would be
+        invalid:
+      </p>
+<pre>message("A message", LVL_INFO, WHITE);</pre>
+    </li>
+    <li>
+        Since the name of the argument would have to be specified, they
+        could appear in any order, intermixed with unnamed arguments.  For
+        instance:
+      </p>
+<pre>void format(const char *format,
+            enum level .level, enum colour .colour,
+            ...) {
+    va_list ap;
+
+    /* ... do something with level and colour ... */
+
+    va_start(ap, colour);
+    vprintf(format, ap);
+    va_end(ap);
+    putchar('n');
+}
+
+format("%s is ready", dish_name,
+       .level = LVL_INFO, .colour = WHITE);
+format(.level = LVL_ERROR, .colour = READ,
+       "%s is burnt", cake_name);
+format("we are out of %s",
+       .level = LVL_WARN, .colour = WHITE,
+       resource_name);</pre>
+    </li>
+    <li>
+        Proposed syntax is an invalid syntax in the current standard so
+        this change would not impact existing code.  At the same time,
+        implementations use such syntax in initialisation list thus it
+        would be simplified to use the same syntax in named arguments.
+    </li>
+    <li>
+        Named arguments would be especially powerful with conjunction with
+        default value.  In particular, <tt>format()</tt> could be defined as:
+      </p>
+<pre>void format(const char *format,
+            enum level .level = LVL_INFO,
+            enum colour .colour = WHITE,
+            ...);</pre>
+      <p>
+        And then, previous calls could be shortened to:
+      </p>
+<pre>format("%s is ready", dish_name);
+format(.level = LVL_ERROR, .colour = READ,
+       "%s is burnt", cake_name);
+format("we are out of %s",
+       .level = LVL_WARN,
+       resource_name);</pre>
+    </li>
+  </ol>
+<h3><small>III</small> Inlined Structures and Unions</h3>
+  <ol>
+    <li>
+        The new standard draft allow declaration of anonymous structures
+        and anonymous unions in structures and unions:
+      </p>
+<pre>struct {
+    union {
+        int i;
+        struct {
+            short s;
+            char c;
+        };
+    };
+} a;
+
+/* All valid: */
+a.i;
+a.s;
+a.c;</pre>
+    </li>
+    <li>
+        This technique is used already by some C implementations and has
+        proved useful however is limited to a simple case.  A syntax where
+        by using <tt>inline</tt> keyword one could achieve similar effect for
+        named structures (especially defined elsewhere) or fields that
+        otherwise have name could be handy.
+    </li>
+    <li>
+        Proposed syntax looks as follows:
+      </p>
+      <dl>
+        <dt>inlined-member:</dt>
+        <dd>structure-or-union-type identifier<sub>opt</sub> <b>inline</b> inline-list<sub>opt</sub></dd>
+
+        <dt>inline-list:</dt>
+        <dd><b>(</b> identifiers-list<sub>opt</sub> <b>)</b></dd>
+        <dd><b>(</b> identifiers-list<sub>opt</sub> <b>,</b> <b>)</b></dd>
+
+        <dt>identifiers-list:</dt>
+        <dd>identifier</dd>
+        <dd>identifiers-list <b>,</b> identifier</dd>
+      </dl>
+    </li>
+    <li>
+        The <tt>inline</tt> keyword would mean that all the members of the
+        structure or union are accessible from namespace the declaration
+        is in.
+    </li>
+    <li>
+        An optional list of identifier would make only listed identifiers
+        be accessible from the namespace.  An empty list would mean no
+        identifiers would be inlined but this would be useful with
+        casting&#160;&#8211;read further.
+    </li>
+    <li>
+        An optional identifier would allow accessing the structure as
+        a whole as well as each individual member via the name.
+    </li>
+    <li>
+        Example:
+      </p>
+<pre>struct s1 { int i1, j1; };
+struct s2 { int i2, j2; };
+struct s3 { int i3, j3; };
+
+struct {
+    struct s1   inline;
+    struct s2 s inline;
+    struct s3 a inline(i3);
+    struct s3 b inline(j3);
+} s;
+
+/* To reach each of the fields: */
+s.i1;
+s.j1;
+s.i2; /* same as */ s.s.i2;
+s.j2; /* same as */ s.s.j2;
+s.i3; /* same as */ s.a.s3;
+s.j3; /* same as */ s.b.j3;
+s.a.j3;
+s.b.i3;</pre>
+    </li>
+    <li>
+        This allows to nicely build structures that share some common
+        data.  For instance:
+      </p>
+<pre>struct header_head {
+    unsigned length;
+    unsigned type;
+};
+
+struct foo_header {
+    struct header_head inline;
+    unsigned some_field_1;
+    unsigned some_field_2
+};
+
+struct bar_header {
+    struct header_head inline;
+    unsigned some_field_1;
+    unsigned some_field_2
+};
+
+union header {
+    struct header_head inline;
+    struct foo_header foo;
+    struct bar_header foo;
+};
+
+
+union header header;
+if (header.type == FOO_HEADER_TYPE) {
+    handle_foo(&amp;header.foo);
+} else if (header.type == BAR_HEADER_TYPE) {
+    handle_foo(&amp;header.bar);
+} else {
+    error();
+}</pre>
+    </li>
+    <li>
+        This would not be limited to defining structure's or union's
+        members but could be used in other scopes.  For instance:
+      </p>
+<pre>void do_stuff(int use_double) {
+    union {
+        float f;
+        double d;
+    } inline;
+    if (use_double)
+        /* ... do stuff using "d" */
+    else
+        /* ... do stuff using "f" */
+}</pre>
+    </li>
+    <li>
+        Proposed syntax is not valid C99 syntax so it would not affect
+        existing code.
+    </li>
+  </ol>
+<h3><small>IV</small> Casting to Inlined Members</h3>
+  <ol>
+    <li>
+        Inlined structures and unions would be especially powerful if
+        implicit casting to an inlined member was allowed.  This would
+        allow for an object oriented programming without the need for
+        explicit cast and/or run-time checking.
+    </li>
+    <li>
+        Example:
+      </p>
+<pre>struct point {
+    double x, y;
+};
+struct circle {
+    struct point inline;
+    double r;
+};
+
+void moveBy(struct point *p, double x, double y) {
+    p-&gt;x += x;
+    p-&gt;y += y;
+}
+
+void paintCircle(struct circle *c);
+
+struct circle *c;
+for (int i = 0; i &lt; 10; ++i) {
+    paintCircle(c);
+    moveBy(c, 1.0, 1.0);
+}</pre>
+    </li>
+    <li>
+        Should implicit cast be ambiguous it should be disallowed, ie.:
+      </p>
+<pre>struct rectangle {
+    struct point tl inline(x, y);
+    struct point br inline();
+};
+
+struct rectangle *r;
+moveBy(r, 1.0, 1.0); /* illegal */</pre>
+    </li>
+    <li>
+        For compatibility reasons, an explicit cast to a pointer to a type
+        of one of inlined member would produce different results.
+    </li>
+    <li>
+        Explicit casting to inlined member would not need to be supported
+        by the language as users could name an inlined member and use <tt>&amp;</tt>
+        operator to acquire it's address.  For instance:
+      </p>
+<pre>moveBy(&amp;r-&gt;tl, 1.0, 1.0);
+moveBy(&amp;r-&gt;br, 1.0, 1.0);</pre>
+    </li>
+    <li>
+        Implicit casting of a pointer to one structure or unione to
+        a pointer to another structure or union is not valid thus this
+        change would not affect exiting code.
+    </li>
+  </ol>
+<h3><small>V</small> The <tt>_Containerof</tt> operator</h3>
+  <ol>
+    <li>
+        User may sometimes face the following problem: Having pointer to
+        a member of a structure how do I get pointer to the structure?
+        This would be especially useful with conjunction with inlined
+        members and implicit casting to inlined members (as I will show).
+    </li>
+    <li>
+        To solve this issue the following construct, similar to one used
+        in the Linux kernel, could be used:
+      </p>
+<pre>type *_Containerof(pointer, type, accessor);</pre>
+    </li>
+    <li>
+        Where accessor would be a list of identifiers separated by a dot
+        such that if X was an object of type type then X.accessor would
+        yield an object of type the same as *pointer.
+    </li>
+    <li>
+        The result of the construct would be a pointer to an object X of
+        type type such that &amp;X-&gt;accessor == pointer.
+    </li>
+    <li>
+        For inlined members, either of the following variants could be
+        used:
+      </p>
+<pre>type *_Containerof(pointer, type);
+type *_Containerof(pointer, type, auto);</pre>
+      <p>
+        (I'll assume the former in the rest of the text.)
+    </li>
+    <li>
+        Since identifiers starting with an underscore followed by an
+        upper-case letter are reserved for further version of the standard
+        this change would not affect conforming programs.
+    </li>
+    <li>
+        A C1x specific header (for instance <tt>stdc1x.h</tt>) could be provided
+        which would define a <tt>containerof()</tt> macro, as:
+      </p>
+<pre>#define containerof(...) _Containerof(__VA_ARGS)</pre>
+    </li>
+  </ol>
+<h3><small>VI</small> Object Oriented Programming</h3>
+  <ol>
+    <li>
+        All of the above features would allow for an object oriented
+        programming with minimal need for explicit casts and/or run-time
+        checking:
+      </p>
+<pre>struct point {
+    double x, y;
+};
+
+void point_init(struct point *p,
+                double x = 0.0, double y = 0.0) {
+    p-&gt;x = x;
+    p-&gt;y = y;
+}
+
+
+struct figure {
+    const struct figure_vtab *vtab;
+    struct point inline;
+};
+
+struct figure_vtab {
+    double (*area)(struct figure *f);
+};
+
+void figure_move_by(struct figure *f, double x, double y) {
+    f-&gt;x += x;
+    f-&gt;y += y;
+}
+
+double figure_area(struct figure *f) {
+    return f-&gt;vtab-&gt;area(f);
+}
+
+void figure_init(struct figure *f,
+                 double x = 0.0, double y = 0.0) {
+    point_init(f, x, y);
+}
+
+
+struct circle {
+    struct figure inline;
+    double r;
+};
+
+double circle_area_vtab(struct figure *f) {
+    struct circle *c = containerof(f, struct circle);
+    return M_PI * r * r;
+}
+
+void circle_init(struct circle *c, double x = 0.0, double y = 0.0,
+                 double r = 1.0) {
+    figure_init(c, x, y);
+    c-&gt;r = r;
+
+    c-&gt;vtab = &amp;(const struct figure_vtab){
+        .area = circle_area_vtab,
+    };
+}
+
+
+struct rectangle {
+    struct figure inline;
+    double width;
+    double height;
+};
+
+double rectangle_area_vtab(struct figure *f) {
+    struct rectangle *r = containerof(f, struct rectangle);
+    return r-&gt;width * r-&gt;height;
+}
+
+void rectangle_init(struct circle *c, double x = 0.0, double y = 0.0,
+                    double w = 1.0, double h = 1.0) {
+    figure_init(c, x, y);
+    c-&gt;width = w;
+    c-&gt;height = h;
+
+    c-&gt;vtab = &amp;(const struct figure_vtab){
+        .area = rectangle_area_vtab,
+    };
+}</pre>
+    </li>
+  </ol>
+<h3><small>VII</small> Function Overloading</h3>
+  <ol>
+    <li>
+        Function overloading is a feature that may help programmer
+        concentrate on the general idea of the code he or she is
+        developing without thinking too much about types that are being
+        used.
+    </li>
+    <li>
+        Function declared in <tt>math.h</tt> are perfect example of such
+        situation.  Existence of functions such as <tt>sin`, `sinf</tt> and
+        <tt>sinl</tt> force programmer to think about underlying type whereas it
+        may not be that important.
+    </li>
+    <li>
+        The situation goes worse when one decides that a different type is
+        to be used.  In such situation, all calls to type-dependent
+        functions have to be traced and replaced.  This operation is
+        rather boring and error-prone.
+    </li>
+    <li>
+        Situation gets even more complicated when one wants to develop
+        a code where the type used is dependent on a macro definition or
+        a typedef.  This may be even more tricky if the macro/typedef
+        comes from the external library and there's no clear way of
+        telling what type it is during prepossessing stage.
+    </li>
+    <li>
+        All such situations would be trivial if function overloading was
+        allowed.
+    </li>
+    <li>
+        To maximise compatibility with older implementations a syntax
+        taken from C++ could be used for functions with external linkage:
+      </p>
+<pre>extern "C++" float mysin(float x) { return sinf(x); }
+extern "C++" float mysin(double x) { return sin(x); }
+extern "C++" float mysin(long double x) { return sinl(x); }</pre>
+      <p>
+        and analogous syntax far functions with internal linkage:
+      </p>
+<pre>static "C++" float mysin(float x) { return sinf(x); }
+static "C++" float mysin(double x) { return sin(x); }
+static "C++" float mysin(long double x) { return sinl(x); }</pre>
+    </li>
+    <li>
+        In the current standard, function overloading is invalid thus it
+        will not affect existing code.  Moreover, many C implementations
+        are also capable of accepting C++ code thus implementing this
+        feature would be an easy task in many such cases.
+    </li>
+  </ol>
+<h3><small>VIII</small> Type Agnostic Limits Functions</h3>
+  <ol>
+    <li>
+        Macros defined in the <tt>limits.h</tt> header suffer from the same
+        problems described above.  It would be nice to have constructs
+        such as <tt>_Type_min`, `_Type_max</tt>, etc. which, the same as
+        <tt>sizeof</tt>, take an expression or type as an argument and return the
+        smallest, biggest, etc. value representable by the type.
+    </li>
+    <li>
+        Identifiers starting by an underscore followed by capital letter
+        are reserved thus this feature would not affect existing code.
+    </li>
+  </ol>
+<h3><small>IX</small> Nested Static Functions</h3>
+  <ol>
+    <li>
+        It is often desirable to limit a scope of an identifier both to
+        avoid erroneous usage from outside of the scope or simply not to
+        pollute the outer scope.
+    </li>
+    <li>
+        User may define static variables in a local scope so why not let
+        them define static functions in local scope.  For instance:
+      </p>
+<pre>struct foo;
+void sort_foo(struct foo *foos, size_t n) {
+    static int cmp(const void *_a, const void *_b) {
+        const struct foo *a = _a, *b = _b;
+        /* ... */
+        return /* ... */;
+    }
+    qsort(foos, n, sizeof *foos, cmp);
+}</pre>
+    </li>
+    <li>
+        Such a function would behave as if it was a normal function expect
+        it could not be accessed via name from outside of to outer
+        function and it would have access to all other static functions
+        and variables defined in the same scope prior to itself.
+    </li>
+    <li>
+        Current standard does not allow function nesting thus this change
+        would have no effect on existing code.
+    </li>
+  </ol>
+<h3><small>X</small> Compound Functions</h3>
+  <ol>
+    <li>
+        The current standard have introduced compound literals for
+        defining unnamed static objects.  The same syntax could be used
+        to define functions:
+      </p>
+<pre>struct foo;
+void sort_foo(struct foo *foos, size_t n) {
+    qsort(foos, n, sizeof *foos,
+          (int ()(const void *_a, const void *_b)){
+        const struct foo *a = _a, *b = _b;
+        /* ... */
+        return /* ... */;
+    });
+}</pre>
+    </li>
+    <li>
+        This change would prevent namespace pollution and allow for
+        shorter notation for callback functions.  It would also look quite
+        familiar for users familiar with functional programming.
+    </li>
+    <li>
+        In the current standard such syntax is invalid thus this change
+        would not affect existing code.
+    </li>
+  </ol>
+<h3><small>XI</small> Unnamed Arguments</h3>
+  <ol>
+    <li>
+        It sometimes happens that a function takes an argument but does
+        not use it.  This most common for callback functions or &#8220;virtual
+        methods&#8221; when simulating object oriented programing.
+    </li>
+    <li>
+        At the same time, some implementations allow to turn diagnostics
+        informing of unused variables on.  Such diagnostics may help in
+        identifying problems in the code.
+    </li>
+    <li>
+        However, when the two above combined, warnings about unused
+        arguments are produced when it is user's intend no to use them.
+        Common technique is to cast such an argument to void at the
+        beginning of a function to silence the warning.
+    </li>
+    <li>
+        C++ allows for a name of an argument to be omitted in function
+        definition which solves the above problem.  The same could be
+        implemented in C.
+    </li>
+    <li>
+        The current standard requires names to be present for all
+        function's arguments in function definition so this change would
+        not affect conforming code.  At the same time, many
+        C implementations are also capable of compiling C++ code thus
+        implementing this feature could be easy and straightforward.
+    </li>
+  </ol>
+<h3><small>XII</small> The <tt>alignof</tt> operator</h3>
+  <ol>
+    <li>
+        The new C standard draft proposes an <tt>alignof</tt> operator that
+        takes type as it's operand.  Why cannot it take an expression as
+        it's operand the same way <tt>sizeof</tt> does?
+    </li>
+    <li>
+        The <tt>alignof</tt> operator is added in the new standard thus this
+        change would not impact existing code any further then adding the
+        <tt>alignof</tt> did itself.
+    </li>
+    <li>
+        Since in the current standard, <tt>alignof</tt> is perfectly valid
+        identifier, why not define an <tt>_Alignof</tt> operator and add
+        a <tt>stdc1x.h</tt> header with the following macro:
+      </p>
+<pre>#define alignof _Alignof</pre>
+    </li>
+  </ol>
+<h3><small>XIII</small> The Tags</h3>
+  <ol>
+    <li>
+        Even though structures, unions and enumerations use different word
+        for identifying the type, they still use the same namespace for
+        tags.  In particular, the following is invalid:
+      </p>
+<pre>struct foo { int a; };
+union  foo { int b; char c; };
+enum   foo { A, B, C };</pre>
+    </li>
+    <li>
+        How about using different namespaces for those tags?
+    </li>
+  </ol>

@@ -1,0 +1,114 @@
+<!-- subject: Bash right prompt -->
+<!-- date: 2015-09-28 22:29:55 -->
+<!-- tags: bash, rprompt, inputrc -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>There are multiple ways to customise Bash prompt.  There’s no need
+  to look for long to find plethora of examples with fancy, colourful
+  <code>PS1</code>s.  What have been a bit problematic is having text
+  on the right of the input line.  In this article I’ll try to address
+  that shortcoming.
+
+<h3>Getting text on the right</h3>
+
+<p>The typical approach is using <code>PROMPT_COMMAND</code> to output
+  desired content.  The variable specifies a shell code Bash executes
+  prior to rendering the primary prompt (i.e. <code>PS1</code>).
+
+<p>The idea is to align text to the right and then using carrier
+  return move the cursor back to the beginning of the line where Bash
+  will start rendering its prompt.  Let’s look at an example of
+  showing time in various locations:
+
+<pre>__command_rprompt() {
+	local times= n=$COLUMNS tz
+	for tz in ZRH:Europe/Zurich PIT:US/Eastern \
+	          MTV:US/Pacific TOK:Asia/Tokyo; do
+		[ $n -gt 40 ] || break
+		times="$times ${tz%%:*}\e[30;1m:\e[0;36;1m"
+		times="$times$(TZ=${tz#*:} date +%H:%M)\e[0m"
+		n=$(( $n - 10 ))
+	done
+	[ -z "$times" ] || printf "%${n}s$times\\r" ''
+}
+PROMPT_COMMAND=__command_rprompt</pre>
+
+<a href=/files/rprompt.png><img src=/files/rprompt.png width=480 height=240 alt="Terminal window presenting right prompt behaviour." style="max-width: 100%; height: auto"></a>
+
+<h3>Clearing the line on execution</h3>
+
+<p>The above has one annoying issue though: the right text reminds on
+  screen even after executing a user command.  Usually this is
+  a matter of aesthetic but it also makes copying and pasting session
+  history a little bit trickier.
+
+<p>A manual solution is to use <code>redraw-current-line</code>
+  readline function (e.g. by binding it to <kbd>C-l</kbd>).  When
+  called, it clears the whole line and outputs the primary prompt and
+  whatever input has been entered thus far.  Since it’s unaware of the
+  right prompt (and <code>PROMPT_COMMAND</code> is <em>not</em>
+  executed), the right text does not reappear.
+
+<p>Fortunately, lack of automation can be addressed quite simply with
+  a tiny bit of readline magic and a <code>~/.inputrc</code> file
+  which receives much more fame than what it usually gets.
+
+<p>Tricky part is bindind <kbd>C-m</kbd> and <kbd>C-j</kbd> to two
+  readline functions, <code>redraw-current-line</code> followed by
+  <code>accept-line</code>, which is normally not possible.  This
+  limitation can be overcome by binding the key sequences to
+  a different sequence which will be interpreted recursively.
+
+<p>To test that idea it’s enough to execute:
+
+<pre>bind '\C-l:redraw-current-line'
+bind '\M-\C-j:accept-line'
+bind '\C-j:"\C-l\M-\C-j"' '\C-m:"\C-j"'</pre>
+
+<p>And making this permanent is as easy as adding the following lines
+  to <code>~/.inputrc</code>:
+
+<pre>$if Bash
+    "\C-l": redraw-current-line
+    "\e\C-j": accept-line
+    "\C-j": "\C-l\e\C-j"
+    "\C-m": "\C-l\e\C-j"
+$endif</pre>
+
+<p>With that, the right prompt will disappear as soon as the shell
+  command is executed.  (Note the use of <kbd>\M-</kbd> in bind
+  command vs. <kbd>\e</kbd> in <code>~/.inputrc</code> file).
+
+<!-- EXCERPT -->
+
+<h3>Caveats</h3>
+
+<p>Even though improvement over straight <code>PROMPT_COMMAND</code>
+  solution, the aforementioned method still has some minor downsides.
+  Most importantly, the standard prompt and entered text may at some
+  point clash with the text on the right.  Furthermore, deleting
+  characters from the middle of the entered line might lead to right
+  prompt being shifted by one character.
+
+<p>The latter can be addressed with similar way
+  as <code>accept-line</code> but even without a solution the two
+  issues are rather minor and should bother only the most pedantic.
+
+<h3>Post Scriptum</h3>
+
+<p>Dear Zed Shell users.  I know zsh
+  has <code>RPROMPT</code>.  I’ve tried this shell and didn’t like it.
+
+<!-- COMMENT -->
+<!-- date: 2015-09-29 10:50:26 -->
+<!-- nick: torero -->
+<!-- nick_url: http://torero.jogger.pl -->
+
+<p>Jak rzekła młodziutka Cerro do króla Vridanka na ich pierwszej schadzce: "Niebrzydka rzecz, ale czy ma jakieś zastosowanie praktyczne?" :)</p>
+
+<!-- COMMENT -->
+<!-- date: 2015-09-29 13:42:18 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>Jak widać na załączonym obrazku, używam tego do wyświetlania czasu w różnych strefach czasowych. Czyszczenie tekstu natomiast, jak opisałem w artykule, przydaje się, gdy muszę kopiować sesję do maili, pastebinów itp.</p>

@@ -1,0 +1,98 @@
+<!-- subject: LazyProxy in Python -->
+<!-- date: 2012-07-08 20:56:47 -->
+<!-- tags: python, lazy proxy -->
+<!-- categories: Articles, Techblog -->
+
+<p>Paths of destiny lead mysterious ways.  Not so long ago, I was
+  a hard-core C hacker and now, I spend a lot of the time coding in <a
+  href="/2010/01/31/python-wrazenia/">Python</a>.</p>
+
+  <p>In somehow related news, I have discovered that my
+  search-foo is not good enough, when I was unable to find a decent
+  implementations of several design patterns in Python.</p>
+
+  <p>What I needed was a generic proxy that would defer initialisation
+  of an object to the moment it is first used.  Here is what I came up with:</p>
+
+<pre>class LazyProxy(object):
+    __slots__ = '__get'
+
+    def __init__(self, cls, *args, **kw):
+        object.__setattr__(self, '_LazyProxy__get',
+                           lambda: self.__set(cls(*args, **kw)))
+
+    def __set(self, obj):
+        object.__setattr__(self, '_LazyProxy__get', lambda: obj)
+        return obj
+
+    def __getattr__(self, name):
+        return getattr(self.__get(), name)
+
+    def __setattr__(self, name, value):
+        return setattr(self.__get(), name, value)
+
+    def __delattr__(self, name):
+        return delattr(self.__get(), name)</pre>
+
+<!-- EXCERPT -->
+
+<p>Here's how one can use it:</p>
+
+  <pre>class Foo(object):
+    foo = 'foo'
+
+    def __init__(self, bar, baz):
+        print 'Creating Foo...'
+        self.foo = 'foobar'
+        self.bar = bar
+        self.baz = baz
+
+    def a(self):
+        print 'Foo.a: self=(foo=%s, bar=%s, baz=%s)' % (
+            self.foo, self.bar, self.baz)
+
+    @classmethod
+    def b(cls):
+        print 'Foo.b: cls=%s, cls.foo=%s' % (
+            cls.__name__, cls.foo)
+
+    @staticmethod
+    def c():
+        print 'Foo.c'
+
+foo = LazyProxy(Foo, 'bar', baz='qux')
+print 'LazyProxy created'
+foo.a()
+foo.b()
+foo.c()</pre>
+
+  <p><tt>foo</tt> can be used in (almost) the same
+  way as an already created <tt>Foo</tt> object would.  The only
+  caveat is it will not be an instance of <tt>Foo</tt> which may or
+  may not be an issue. Also, it is not thread safe.</p>
+
+<p><small>Code © Google Inc.</small></p>
+
+<!-- COMMENT -->
+<!-- date: 2012-07-09 07:07:32 -->
+<!-- nick: Radek -->
+<!-- nick_url: http://rdominiak.jogger.pl -->
+
+<p>"Not so long ago, I was a hard-core C hacker and now, I spend a lot of the time coding in Python."</p>
+
+<p>I remember that some time ago you also wrote somethink like "why I don't like Gentoo", so next post will be "Coding Python on Gentoo"? ;)</p>
+
+<!-- COMMENT -->
+<!-- date: 2012-07-09 22:09:03 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<blockquote>
+  <p>I remember that some time ago you also wrote somethink like "why I don't like Gentoo", so next post will be "Coding Python on Gentoo"? ;)</p>
+</blockquote>
+
+<p>That's really unlikely. ;)  If to anything, I'd probably switch to Debian, but than again, I've never looked at Arch and it was recommended to me a few times.</p>
+
+<p>True enough though, that no one can tell what future will bring, and there may be some bizarre event which will make me use Gentoo.</p>
+
+<p>PS. The referenced article: <a href="http://mina86.com/2008/02/12/wrazenia-z-gentoo/">Wrażenia z Gentoo</a> (Polish).</p>

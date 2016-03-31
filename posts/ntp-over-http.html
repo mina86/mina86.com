@@ -1,0 +1,93 @@
+<!-- subject: NTP over HTTP -->
+<!-- date: 2010-01-16 01:27:45 -->
+<!-- tags: ntp over http, ntp http proxy, time synchronisation, ntp, http -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>Sitting in a&#160;dark office, after swearing for hours at ATI
+video cards I&#160;noticed time on my PC was incorrect.  &#8220;No
+problem&#8221; I&#160;thought as I&#160;started typing
+<tt>ntpdate</tt> but before finishing I&#160;realised that our
+<em>beloved</em> IT department had blocked most of the Internet.
+Checking the time on a&#160;watch or a&#160;mobile phone was not an
+option&#160;&#8211; I&#160;have neither&#160;&#8211; nor was looking
+at GKrellM on another PC&#160;&#8211; that's&#160;just lame.</p>
+
+<p>&#8220;I&#160;wish there was a&#160;NTP-over-HTTP protocol&#8221;
+I&#160;dreamed sighting.  And then, a&#160;few curses on the IT
+department later, I&#160;came up with an idea&#8230;</p>
+
+<!-- EXCERPT -->
+
+<p>If you recall that web servers return their time in response
+headers solution becomes clear.</p>
+
+<pre>httpdate="$(wget --no-cache -S -O /dev/null google.com 2&gt;&amp;1 |
+	sed -n -e 's/  *Date: *//p' -eT -eq)"
+[ -n "$httpdate" ] && date -s "$httpdate"</pre>
+
+<p>Did the trick! (update: Thanks <b>almaz</b> for pointing out problems when connection is unsuccessful).</p>
+
+<p>This has some disadvantages, granted, but works great for
+situations where millisecond accuracy is not required which is the
+case on most personal computers&#160;&#8211; do you really care if
+it's&#160;10 or 11 seconds after the minute?</p>
+
+<p>It also requites GNU coreutils (for
+<tt>date</tt>'s&#160;<tt>-s</tt> switch) (but implementing <a
+href="http://gist.github.com/278534">simple RFC1123 date parser</a> is
+not that hard), wget (which can however be replaced by other tools
+including telnet) and sed (which is POSIX utility and also can be
+replaced by <a href="http://gist.github.com/278539">a&#160;13-line
+C&#160;program</a>).</p>
+
+<p>Therefore implementing a&#160;complete tool written in C&#160;is
+left as a&#160;simple exercise for reader (less ambitious reader may
+limit themselves to some scripting language with regexpes). :)</p>
+
+<!-- COMMENT -->
+<!-- date: 2012-07-05 15:05:17 -->
+<!-- nick: Anonim -->
+
+<p>Improved version to ignore proxy cache servers:</p>
+
+<pre>date -s "$(wget --no-cache -S -O /dev/null google.com 2&gt;&amp;1 | \
+    sed -n -e '/  *Date: */ {' -e s///p -e q -e '}')"</pre>
+
+<p>And set http_proxy env. variable if you have a proxy server in your way, as:</p>
+
+<pre>http_proxy=http://youruser:yourpassword@proxyip:proxyport;export http_proxy</pre>
+
+<p>For instance the whole thing could be:</p>
+
+<pre>http_proxy=http://user:password@192.168.1.5:3128
+export http_proxy
+date -s "$(wget --no-cache -S -O /dev/null google.com 2&gt;&amp;1 | \
+    sed -n -e '/  *Date: */ {' -e s///p -e q -e '}')"</pre>
+
+<!-- COMMENT -->
+<!-- date: 2012-07-05 22:34:06 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>Looks good, thanks, even thought I'd get rid of the export not to pollute the environment as so:</p>
+<pre>date -s "$(
+    http_proxy=http://youruser:yourpassword@proxyip:proxyport \
+    wget --no-cache -S -O /dev/null google.com 2&gt;&amp;1 | \
+    sed -n -e '/  *Date: */ {' -ep -eq -e '}')"</pre>
+
+<!-- COMMENT -->
+<!-- date: 2012-08-17 11:23:52 -->
+<!-- nick: almaz -->
+
+<p>If no connection is reset time at 00:00:00</p>
+
+<!-- COMMENT -->
+<!-- date: 2013-05-14 21:21:08 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<blockquote>
+  <p>If no connection is reset time at 00:00:00.</p>
+</blockquote>
+
+<p>True. To solve that one would have to check the output. I'll update the entry.</p>

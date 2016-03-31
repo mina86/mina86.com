@@ -1,0 +1,84 @@
+<!-- subject: Null: The never-ending story -->
+<!-- date: 2011-03-27 17:20:20 -->
+<!-- tags: c, c++, null, null pointer -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>I&#160;have already mentioned <a
+href="/2010/10/24/0-is-ambiguous/">some problems with the null
+pointer</a> but my recent discovery knocked my socks off.</p>
+
+<p>By now, it should come with no surprise to anyone that <tt>0</tt>
+in pointer context acts as a&#160;null pointer (no matter of its
+actual representation).  Moreover, it takes only a&#160;tiny bit of
+experimenting to figure out that expressions like <tt>(int)0</tt> do
+as well.  The latter is in itself a&#160;bit of a&#160;pita but it is
+conforming to the C++ standard which says:</p>
+
+<!-- EXCERPT -->
+
+<blocquote>
+  <p>4.10.1&#160;A <dfn>null pointer constant</dfn> is an integral
+  constant expression rvalue of integer type that evaluates to
+  zero. [&#8230;]</p>
+
+  <p>5.19.1&#160;[&#8230;] An <dfn>integral constant-expression</dfn>
+  can involve only literals, enumerators, const variables or static
+  data members of integral or enumeration types initialized with
+  constant expressions, non-type template parameters of integral or
+  enumeration types, and <tt>sizeof</tt> expressions. [&#8230;]</p>
+
+  <p>3.9.1.7&#160;Types <tt>bool</tt>, <tt>char</tt>,
+  <tt>wchar_t</tt>, and the signed and unsigned integer types are
+  collectively called <dfn>integral types</dfn>.  A synonym for
+  integral type is <dfn>integer type</dfn>.  [&#8230;]</p>
+</blocquote>
+
+<p>So yes, not only <tt>(int)0</tt> is a&#160;perfectly valid null
+pointer constant, but so are <tt>false</tt>, <tt>1 - 1</tt>,
+<tt>sizeof(char) - sizeof(char)</tt>, etc.  Not only that,
+a&#160;const variable of type int with value of zero is also
+a&#160;valid null pointer constant.</p>
+
+<p>This is not limited to C++ by the way.  C&#160;has similar wording
+even though it treats fewer things as a&#160;constant expression.  As
+a&#160;matter of fact, in the upcoming C++ standard it will become
+even worse as it adds more things to the definition of constant
+expression.</p>
+
+<p>Like I've said, this comes to me as a&#160;bit of surprise and
+I&#160;have real trouble believing that it was C&#160;and C++ standard
+committees.  Who could possibly want to represent a&#160;null pointer
+in a&#160;different way than plain <tt>0</tt> (or <tt>NULL</tt> (or
+<tt>nullptr</tt>)).</p>
+
+<p>So now, a super important public service announcement: don't feed
+the yao guai.  Oh wait, wrong one.  Beware of dereferencing
+a&#160;pointer cause you might assign null value to it instead of
+zeroing pointed to object.</p>
+
+<p>“Thanks for listening chilllldren!”</p>
+
+<!-- COMMENT -->
+<!-- date: 2011-03-27 20:56:14 -->
+<!-- nick: Remigiusz 'lRem' Modrzejewski -->
+<!-- nick_url: http://blog.lrem.net -->
+
+<p>Thank you captain obvious!</p>
+
+<p>On the other hand, most weird cases will give you a warning when using a real compiler with proper flags.</p>
+
+<!-- COMMENT -->
+<!-- date: 2011-03-27 21:22:51 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>IMO those are far from obvious (ie. not everyone knows about it) and in fact counterintuitive.  Also, it seems gcc does not produce warnings which for me was troubling at best.</p>
+
+<!-- COMMENT -->
+<!-- date: 2011-03-27 23:14:59 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>C and C++ do not have that much of dangerous implicit type conversions.  In fact, C++ ever removed a few as it disallows implicit conversion of a pointer to void to some other pointer, and enumeration type to integer type. This made me hope that “false” or “UINT_MAX + 1” are not valid null pointers.</p>
+<p>In the worst case, I would at least expect GCC to issue a warning.</p>
+<p>Guess it was not obvious only to me though.</p>

@@ -1,0 +1,86 @@
+<!-- subject: SSL and dropping “www.” with mod_rewrite -->
+<!-- date: 2013-02-10 21:51:43 -->
+<!-- tags: apache, ssl, mod_rewrite, www -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>Surprisingly I couldn't find any HTTPS-aware examples how to drop the <tt>www.</tt> prefix from web hosts in Apache,
+so I had to come up with one myself.  Firstly, the following lines
+need to find their way to the end of Apache configuration file
+(<tt>/etc/httpd/conf/httpd.conf</tt> or something):</p>
+
+<pre>RewriteEngine on
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} ^www\.(.*)$
+RewriteRule ^(.*)$ http://%1$1 [L,R=301]</pre>
+
+<p>Secondly, analogous lines need to be added <em>inside</em> of the
+<tt>&lt;VirtualHost _default_:443&gt;</tt> directive of mod_ssl
+configuration file (<tt>/etc/httpd/conf.d/ssl.conf</tt> or similar),
+like so:</p>
+
+<pre>&lt;VirtualHost _default_:443&gt;
+	<i># … various directives …</i>
+
+	<i># Here's what needs to be added:</i>
+	RewriteEngine on
+	RewriteCond %{HTTP_HOST} ^www\.(.*)$
+	RewriteRule ^(.*)$ https://%1$1 [L,R=301]
+&lt;/VirtualHost&gt;</pre>
+
+<p>Now, after a restart, Apache will drop the <tt>www.</tt> prefix for
+both secure and insecure connections.</p>
+
+<!-- EXCERPT -->
+
+<p>To <em>force</em> secure connection and drop the prefix at the same
+time the part in main configuration file has to become:</p>
+
+<pre>RewriteEngine on
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} ^(www\.)?(.*)$
+RewriteRule ^(.*)$ https://%2$1 [L,R=301]</pre>
+
+<p>To force secure connection only for one domain, say
+<tt>example.com</tt>:</p>
+
+<pre>RewriteEngine on
+
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} ^(www\.)?(example\.com)$
+RewriteRule ^(.*)$ https://%2$1 [L,R=301]
+
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} ^www\.(.*)$
+RewriteRule ^(.*)$ http://%1$1 [L,R=301]</pre>
+
+
+<p>mod_rewrite has also a <tt>REQUEST_SCHEME</tt> variable and it's
+tempting to use it, but it seems that it's value is not what is
+advertised and instead it contains scheme and host name which is not
+that useful.</p>
+
+<p>If you want to <em>add</em> the prefix, <a
+href="http://no-www.org/">check out this site</a>.</p>
+
+<!-- COMMENT -->
+<!-- date: 2014-05-21 19:46:50 -->
+<!-- nick: todds -->
+
+<p>THANK YOU NICK!!!! THANK YOU THANK YOU THANK YOU!!!! I don't know why this was so hard to find. I doubt you and I are the only ones on the planet that want to do this or that we are the only two clueless people on the planet. Thanks again!</p>
+
+<!-- COMMENT -->
+<!-- date: 2015-04-15 14:13:59 -->
+<!-- nick: recurse -->
+
+<p>You could do things easier and drop the www. in your DNS configuration, remove the www. from ServerName in your vhost config, then forward all requests to www. back to http://domain.com/requesting-page.blah using: </p>
+
+<p>RewriteEngine On<br />
+RewriteCond %{HTTP_HOST} ^www.<br />
+RewriteRule ^(.*)$ http://domain.com/$1 [R=301,L]</p>
+
+<!-- COMMENT -->
+<!-- date: 2015-04-23 15:13:16 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>recurse, what you’re describing is plain HTTP only.</p>

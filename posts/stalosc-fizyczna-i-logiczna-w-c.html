@@ -1,0 +1,476 @@
+<!-- subject: Stałość fizyczna i logiczna w C++ -->
+<!-- date: 2008-03-21 13:48:41 -->
+<!-- tags: const, mutable, c++, c -->
+<!-- categories: Articles, Techblog, WEiTI -->
+
+<p>Chciałbym zaprezentować pewien tekst, który przygotowałem na jeden z przedmiotów na studiach. Traktuje on o modyfikatorze <tt>const</tt> i <tt>mutable</tt> oraz określa pojęcie <i>stałości logicznej</i> czyli niezmienności zachowania obiektu, gdy patrzymy z zewnątrz. Może komuś się to przyda. Czekam również na wszelkie komentarze.</p>
+
+<!-- EXCERPT -->
+
+<h3>Deklarowanie stałych</h3>
+
+<p>Stałość fizyczna występuje, gdy w momencie kompilacji określamy przy pomocy modyfikatora <tt>const</tt>, że jakiejś wartości nie należy zmieniać.</p>
+
+<pre>const int foo = 42;  /* Definicja "zmiennej" foo będącej stałą
+                        liczbą całkowitą i inicjacja jej wartością 42. */
+foo = 666;           /* Błąd kompilacji */</pre>
+
+<p>Modyfikator ten odnosi się do typu, co ma szczególne znaczenie przy
+  wskaźnikach:</p>
+
+<pre>int bar, baz;
+
+const int *ptr1 = &amp;bar;    /* Wskaźnik na stały int. */
+ptr1 = &amp;baz;               /* Poprawne. */
+*ptr1 = 666;               /* Błąd kompilacji. */
+
+int *const ptr2 = &amp;bar;    /* Stały wskaźnik na int. */
+ptr2 = &amp;baz;               /* Błąd kompilacji. */
+*ptr2 = 666;               /* Poprawne. */
+
+const int *const ptr3 = &amp;bar; /* Stały wskaźnik na stały int. */
+ptr3 = &amp;baz;               /* Błąd kompilacji. */
+*ptr3 = 666;               /* Błąd kompilacji. */</pre>
+
+<p>Rzecz jasna mamy do dyspozycji także większe "zagłębienia"
+  wskaźników:</p>
+
+<pre>const int **ptr4;          /* Wskaźnik na wskaźnik na stały int. */
+int *const *ptr5;          /* Wskaźnik na stały wskaźnik na int. */
+int **const ptr6;          /* Stały wskaźnik na wskaźnik na int. */
+
+const int *const *ptr7;    /* Wskaźnik na stały wskaźnik na stały int. */
+const int **const ptr8;    /* Stały wskaźnik na wskaźnik na stały int. */
+int *const *const ptr9;    /* Stały wskaźnik na stały wskaźnik na int. */
+
+const int *const *const ptrA;  /* Stały wskaźnik na stały wskaźnik
+                                  na stały int. */</pre>
+
+<p>Możnaby tak w nieskończoność, szczególnie, że mamy jeszcze
+  wskaźniki do funkcji...  No ale, powstrzymam się. ;)
+  Przypominam, że w C oraz C++ typy czyta się "od prawej do
+  lewej".</p>
+
+
+<h3>Stałość a modyfikowalność</h3>
+
+
+<p>Należy zwrócić uwagę, iż z faktu, że wskaźnik jest stałego typ nie
+  wynika, iż wskazywana wartość nie może się zmienić.  Jest to częste,
+  a niesłuszne domniemanie.  Najprostrzym przykładem może być kod:</p>
+
+<pre>int foo = 42;
+int *bar = &amp;foo;
+const int *baz = &amp;bar;
+/* baz ma wartość 42 */
+*bar = 666;
+/* baz ma wartość 666 */</pre>
+
+<p>(Utrudnia to optymalizację różnych funkcji, które przyjmują dwa
+  wskaźniki do tego samego typu.  Jeżeli tylko jeden ze wskaźników
+  wskazuje na typ stały kompilator nie wie, czy ten drugi nie wskazuje
+  na (przynajmniej w części) ten sam obszar.  Aby temu zaradzić, w C99
+  (C++ tego nie ma) zostało dodane słówko <tt>restrict</tt>, które
+  odnosi się do wskaźników i określa, że wskazywana wartość nie może
+  być osiągalna przez inne wskaźniki.)</p>
+
+<p id="modify_const_objects">Różnie bywa z wartościami zadeklarowanymi
+  jako stałe.  Mogą one zostać zapisane w niemodyfikowalenj
+  przestrzeni pamięci i próba zmiany ich wartości może spowodować coś
+  pokroju <span xml:lang="en">segmentation fault</span>, ale równie
+  dobrze mogą być umieszczone w zwykłej przestrzeni
+  i wówczas sztuczka z rzutowaniem pozwoli na ich zmianę:</p>
+
+<pre>const int foo = 42;
+*const_cast&lt;int*&gt;(&amp;foo) = 666;     /* niezdefiniowane zachowanie */
+
+const_cast&lt;char*&gt;("bar")[2] = 'z'; /* niezdefiniowane zachowanie */</pre>
+
+
+<h3>Stałość argumentów funkcji</h3>
+
+<p>Deklarowanie argumentów (chodzi o sam argument, a nie ewentualne
+  wskazywane typy, a więc referencje odpadają z rozważań) funkcji jako
+  stałych nie wpływa na zewnętrzne zachowanie funkcji, gdyż i tak argumenty przekazywane są
+  przez wartość (o ile nie jest to referencja).  Można to jednak
+  stosować, aby zapobiec zmianie wartości argumentów, co jest zalecaną
+  przez niektórych praktyką, <abbr title="na przyklad">np.</abbr>:</p>
+
+<pre>int add(const int a, const int b) {
+    a += b;        /* Błąd kompilacji. */
+    return a + b;  /* Poprawne. */
+}</pre>
+
+<p>Deklarowanie typów wskazywanych przez funkcje jako stałe ma za to
+  duży wpływ na zachowanie zewnętrzne programu
+  i <strong>należy</strong> je stosować wszędzie tam, gdzie jest to
+  możliwe.  <abbr title="to znaczy">Tzn.</abbr> jeżeli jakaś funkcja
+  przyjmuje wskaźnik lub referencję na argument, którego nie zamierza
+  modyfikować powinna wskazywany typ zadeklarować jako stały,
+  <abbr title="na przyklad">np.</abbr>:</p>
+
+<pre>int sum(unsigned n, const int *nums) {
+    int ret = 0;
+    while (n--) {
+        ret += *num++;
+    }
+    return ret;
+}
+
+static const int nums[] = { /* ... */ };
+/* ... */
+sum(sizeof nums / sizeof *nums, nums);   /* gdyby w prototypie funkcja
+       miała typ `int*`, a nie `const int*` ta linijka spowodowałaby
+       błąd kompilacji. */</pre>
+
+<p>Ponadto, często o wiele lepiej przekazywać argument przez stałą
+  referencję zamiast przez wartość, gdyż nie wymaga to kopiowania
+  całego obiektu, <abbr title="na przyklad">np.</abbr>:</p>
+
+<pre>int foo(const std::vector&lt;int&gt; &amp;vec) {
+    /* Rób coś na wektorze */
+}
+
+/* versus */
+
+int foo(std::vector&lt;int&gt; vec) {
+    /* Rób coś na wektorze */
+}</pre>
+
+<p>W obu przypadkach, wołając funkcję, mamy pewność, iż wektor
+  przekazany jako argument nie zostanie zmodyfikowany (mowa
+  o zachowaniu na zewnątrz funkcji), ale przekazywanie wektora przez
+  wartość jest po prostu stratą czasu.  Dotyczy to również innych
+  mniejszych i większych obiektów.  Szczególnie, gdy definiujemy jakiś
+  szablon należy stosować mechanizm przekazywania argumentów przez
+  stałą referencję zamiast przez wartość, gdyż nie wiemy z jakim typem
+  będziemy mieli do czynienia.  W szczególności klasa może nie mieć
+  (publicznego) konstruktora kopiującego.</p>
+
+
+<h3>Rzutowanie</h3>
+
+
+<p>Jak można się domyślić, rzutowanie z typu bez
+  modyfikatora <tt>const</tt> na tym z takim modyfikatorem jest
+  automatyczne, np.:</p>
+
+<pre>int foo = 42;
+const int *bar = &amp;foo;</pre>
+
+<p>Rzutowanie w drugą stronę nie jest już automatyczne i wymaga
+  zastosowanie operatora rzutowania:</p>
+
+<pre>const int foo = 42;
+int *bar = (int*)&amp;foo;              /* styl C */
+int *baz = const_cast&lt;int*&gt;(&amp;foo);  /* styl C++ */</pre>
+
+<p>Generalnie zalecany jest styl C++, gdyż w ten sposób jesteśmy
+  pewni, że rzutowanie zmieni jedynie stałość typu.  Przykładowo,
+  gdybyśmy zmienili typ zmiennej <tt>foo</tt>, a zapomnieli zmienić typy
+  w operatorach rzutowania kompilator bez żadnych ostrzeżeń
+  skompilowałby rzutowanie w stylu C, ale zgłosiłby błąd przy
+  rzutowaniu w stylu C++, gdyż zmiana dotyczy nie tylko stałości
+  typu:</p>
+
+<pre>const long foo = 42;
+int *bar = (int*)&amp;foo;              /* Skompiluje się. */
+int *baz = const_cast&lt;int*&gt;(&amp;foo);  /* Błąd kompilacji. */</pre>
+
+<p>Pewien wyjątek stanowią literały ciągów znaków, który wywodzi się
+  z czasów, gdy w języku C nie było słówka <tt>const</tt>.  Zasadniczo
+  literały ciągów znaków są typu <tt>const char[]</tt> jednak, aby nie
+  psuć tysięcy istniejących programów, przypisanie literału do zmiennej
+  typu <tt>char*</tt> jest poprawne. <strong>Nie</strong> oznacza
+  to jednak, iż literały takie można modyfikować!  Następująca
+  instrukcja powoduje niezdefiniowane zachowanie: <tt>char *foo = "foo"; foo[0] =
+  'F';</tt> (problem ten został już poruszony przy
+  omawianiu <a href="#modyfikalności">modyfikowalności</a>)</p>
+
+<p>Kolejnym aspektem, który może wydać się dziwny, jest fakt, iż
+  konwersja <tt>Foo**</tt> do <tt>const Foo**</tt> <em>nie</em> jest
+  automatyczna.  Można powiedzieć, że stałość musi być dodana wszędzie
+  po prawej stronie (za wyjątkiem samej zmiennej) i konwersja
+  <tt>Foo**</tt> do <tt>const Foo* const *</tt> jest już dozwolona:</p>
+
+<pre>void bar(const Foo **arr);
+void baz(const Foo *const *arr);
+
+int main(void) {
+    Foo **arr;
+    /* ... */
+    bar(arr); /* Błąd kompilacji. */
+    baz(arr); /* Poprawny kod. */
+    /* ... */
+}</pre>
+
+<p>Aby zrozumieć czemu tak jest należy przeanalizować poniższy
+  kod:</p>
+
+<pre>const int x = 42;
+int *p;
+const int **pp = &amp;p;  /* konwersja `int**` do `const int**`*/
+*pp = &amp;x;             /* `*pp` jest typu `const int*`, więc można mu
+                         przypisać adres zmiennej `x`. */
+                      /* w tym momencie `p` wskazuje na `x` (gdyż `pp`
+                         wskazywało na `p`. */
+*p = 666;             /* `x` jest modyfikowane! */</pre>
+
+
+
+<h3>Stałość w strukturach</h3>
+
+<p>Stałe struktury (klasy) nie umożliwiają zmiany pól w ich wnętrzu.
+  Przykładowo, poniższy kod się nie kompiluje:</p>
+
+<pre>struct Foo {
+    int bar;
+};
+
+const Foo baz = { 42 };
+baz.bar = 666;</pre>
+
+<p>Jednakże, jeżeli elementem struktury (klasy) jest wskaźnik jedynie
+  on sam staje się stały, ale wartość wskazywana nie, <abbr title="na
+  przyklad">np.</abbr>:</p>
+
+<pre>struct Foo {
+    int *bar;
+};
+
+static int qux = 42, quux = 042;
+const Foo baz { &amp;qux };
+*baz.bar = 666;       /* Poprawne. */
+baz.bar = &amp;quux;      /* Błąd kompilacji. */</pre>
+
+<p>Jest to problem <a href="#logic_const">stałości logicznej</a>,
+  o której poniżej.</p>
+
+<p>Niestatyczne metody klas również mogą być zadeklarowane jako stałe.
+  Metody takie nie mogą modyfikować pól klasy (chyba, że posiadają
+  <a href="#mutable">modyfikator <tt>mutable</tt></a>, o którym niżej)
+  ani wołać innych metod, które nie są zadeklarowane jako stałe.</p>
+
+<pre>struct Foo {
+    int get()       { return bar; }             /* [1] */
+    int get() const { return bar; }             /* [2] */
+
+    int sum(int v)       { return get() + v; }  /* [3]; woła [1] */
+    int sum(int v) const { return get() + v; }  /* [4]; woła [2] */
+
+    void set(int v)       { bar = v; }          /* [5] */
+    void set(int v) const { bar = v; }          /* niepoprawne */
+
+    void add(int v)       { set(sum(v)); }      /* woła [3] i [5] */
+    void add(int v) const { set(sum(v)); }      /* niepoprawne, woła
+                              [4], ale [5] nie jest metodą stałą. */
+
+private:
+    int bar;
+};</pre>
+
+<p>Czasami bywa tak, że metoda ma swoją wersję stałą i niestałą, które
+  robią identyczną rzecz, ale <abbr title="na przykład">np.</abbr>
+  jedna zwraca wskaźnik do stałego obiektu, a druga do niestałego
+  obiektu.  Aby nie musieć pisać dwa razy tego samego kodu można
+  zastosować rzutowanie, <abbr title="na przykład">np.</abbr>:</p>
+
+<pre>struct Foo {
+    /* ... */
+    const int *find(int arg) const;
+    int *find(int arg) {
+        return const_cast&lt;int*&gt;(const_cast&lt;const Foo*&gt;(this)-&gt;find(arg));
+    }
+    /* ... */
+};</pre>
+
+<p>lub</p>
+
+<pre>struct Foo {
+    /* ... */
+    const int *find(int arg) const {
+        return const_cast&lt;Foo*&gt;(this)-&gt;find(arg);
+    }
+    int *find(int arg);
+    /* ... */
+};</pre>
+
+<p>Rzutowanie słówka <tt>this</tt> wymusza wołanie stałej lub
+   niestałej wersji danej metody.  Bez niego mielibyśmy do czynienia
+   z niekończącą się rekurencją.</p>
+
+<p id="mutable">C++ wprowadza jeszcze jedno słowo kluczowe --
+  <tt>mutable</tt>, które oznacza, że dany element struktury może być
+  modyfikowany, w tej klasie nawet jeżeli jest ona stała.
+  Przykładowo:</p>
+
+<pre>struct Foo {
+    int bar;
+    mutable int baz;
+
+    void mutate() const {
+        bar = 042; /* Błąd kompilacji. */
+        baz =  42; /* Kod poprawny. */
+    }
+};
+
+const Foo foo = { 42, 042 };
+foo.bar = 666;  /* Błąd kompilacji. */
+foo.baz = 666;  /* Kod poprawny. */</pre>
+
+<p>Mechanizm ten powinien być stosowany tylko i wyłącznie dla pól,
+  które nie wpływają na zewnętrzny wygląd i zachowanie klasy (patrz
+  <a href="#logic_const">stałość logiczna</a>).  Przykładowo, można
+  zaimplementować cache, w której przechowywane by były ostatnie
+  wyniki jakichś zapytań czy wyszukiwań:</p>
+
+<pre>struct Foo {
+
+    /* ... */
+
+    const int *find(int arg) const {
+        if (last_arg == arg) {
+            return last_found;
+        } else {
+            int *found;
+            /* Wyszukaj i ustaw `found` odpowiednio. */
+            last_arg = arg;
+            return last_found = found;
+        }
+    }
+
+    /* ... */
+
+private:
+    mutable int *last_found;
+    mutable int last_arg;
+};</pre>
+
+<p>Alternatywą dla słówka <tt>mutable</tt> byłoby rzutowanie, jednak
+  w różnych przypadkach może ono spowodować niezdefiniowane
+  zachowanie, <a href="#modify_const_objects">co zostało już
+  omówione</a>.</p>
+
+
+<h3 id="logic_const">Stałość logiczna</h3>
+
+<p>Stałość logiczna to oczekiwanie, że zewnętrzne zachowanie i wygląd
+  jakiegoś obiektu nie ulegnie zmianie.  Dla przykładu weźmy strukturę
+  do przechowywania liczb zespolonych:</p>
+
+<pre>struct Complex {
+    double re, im;
+};</pre>
+
+<p>W tym przypadku zadeklarowanie jakiejś zmiennej jako stałej
+  gwarantuje nam stałość logiczną, <abbr title="na
+  przykład">np.</abbr>:</p>
+
+<pre>double abs(const Complex &amp;c) {
+    return hypot(c.re, c.im);
+}</pre>
+
+<p>Jednak w bardzo rzadkich przypadkach stałość fizyczna może
+  być <i>nadgorliwa</i>, <abbr title="na przykład">np.</abbr> jeżeli
+  cacheujemy wyniki:</p>
+
+<pre>struct Complex {
+    double re, im, abs;
+    bool abs_valid;
+}
+
+double abs(const Complex &amp;c) {
+    if (c.abs_valid) {
+        return c.abs;
+    } else {
+        c.abs_valid = true;
+        return c.abs = hypot(c.re, c.im);
+    }
+}</pre>
+
+<p>Powyższy kod oczywiście się nie skompiluje, ale z pomocą przychodzi
+  nam już wcześniej
+  opisane <a href="#mutable">słówko <tt>mutable</tt></a>.</p>
+
+<p>O wiele częściej stałość fizyczna jest <i>za mało gorliwa</i>.
+  Przykładowo, jeżeli mamy strukturę przechowującą ciągi znaków, to
+  spodziewamy się, iż po zadeklarowaniu zmiennej jako stała struktura
+  nie będzie możliwości zmieniać samego napisu, ale niestety tak nie
+  jest:</p>
+
+<pre>struct String {
+    char *data;
+    unsigned length;
+};
+
+void modify(const String &amp;s) {
+    s.data[0] = 'A';
+}</pre>
+
+<p>W takich przypadkach należy odpowiednio obudowywać takie klasy
+  dodając im przeciążone akcesory istniejące zarówno w wersji jako
+  metoda stała oraz w wersji jako zwykła metoda.</p>
+
+<pre>struct String {
+    char *getData() { return data; }
+    const char *getData() const { return data; }
+    unsigned getLength() const { return length; }
+
+private:
+  char *data;
+  unsigned length;
+};</pre>
+
+<p>Oczywiście nadal wewnątrz stałej metody obiekty wskazywane przez
+  pole <tt>data</tt> mogą być modyfikowane i dlatego cała
+  odpowiedzialność, za utrzymanie stałości logicznej spada na
+  programiście, który implementuje daną klasę.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-03-22 16:46:19 -->
+<!-- nick: cysiek10 -->
+
+<p>Świetny artykuł, teraz już wiem jak to jest z tym słówkiem const w C/C++, dziękuje</p>
+
+<p>Tutaj jest list Linusa na temat słówka const:<br />
+http://kerneltrap.org/Linux/C_Semantics_Constants_and_Pointers</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-03-26 08:42:00 -->
+<!-- nick: SirMike -->
+<!-- nick_url: http://www.sirmike.org -->
+
+<p>Fajne podsumowanie. Dzieki.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-04-09 21:16:29 -->
+<!-- nick: GiM -->
+<!-- nick_url: http://gim.jogger.pl -->
+
+<p>&#8222;W obu przypadkach, wołając funkcję, mamy pewność, iż wektor przekazany jako argument nie zostanie zmodyfikowany&#8221; </p>
+
+<p>No właśnie problem w tym, że nie mamy, to jest tylko wskazówka, nigdy nie wiadomo czy genialnemu autorowi danej metody/funkcji, nie przyszło do głowy zrobić sobie od tak const_cast, albo dajmy na funkcja/metoda, przyjmuje jako jeden z parametrów obiekt/strukturę, a element przekazywanej klasy/struktury ma atrybutu mutable.</p>
+
+<p>http://codepad.org/dwwyB6a3</p>
+
+<p>Poza tym, const wiąże się lewostronnie, dla wygody programistów zrobiono, że:<br />
+const int **p = int const **p;<br />
+Myślę, że część przykładów mogłabybyć czytelniejsza, gdybyś konsekwentnie używał lewostronnej wersji, np przykład<br />
+z rzutowaniem <br />
+Foo** =na= Foo const * const *<br />
+staje się moim zdaniem automatycznie jaśniejszy.</p>
+
+<!-- COMMENT -->
+<!-- date: 2009-01-08 18:41:23 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>&#8222;No właśnie problem w tym, że nie mamy, to jest tylko wskazówka, nigdy nie wiadomo czy genialnemu autorowi danej metody/funkcji, nie przyszło do głowy zrobić sobie od tak const_cast&#8221; </p>
+
+<p>Oczywiście masz rację, ale milcząco założyłem, iż autor funkcji/metody poprawnie ją zaprojektował.</p>
+
+<p>&#8222;albo dajmy na funkcja/metoda, przyjmuje jako jeden z parametrów obiekt/strukturę, a element przekazywanej klasy/struktury ma atrybutu mutable.&#8221; </p>
+
+<p>Ponownie może źle się wyraziłem &#8212; faktycznie fizycznie obiekt może się zmienić, choć z naszego punktu widzenia nie ma to znaczenia, bo logicznie jest to ciągle ten sam obiekt przechowujący taką samą wartość (ponownie pomijam sytuacje, gdy klasa jest źle zaprojektowana).</p>
+
+<p>Co do lewostronności słowa kluczowego to już się przyzwyczaiłem i nie potrafię się przerzucić, choć próbowałem. Najbardziej przemawia do mnie przypadek, gdy pod funkcją zwracającą np. &#8222;Foo&amp;&#8221; deklaruję funkcję zwracającą &#8222;Foo const&amp;&#8221; &#8212; zastosowanie lewostronnego zapisu nazwy funkcji można ładnie wyrównać w kolumnach bez narzekania edytora na wcięcia. :)</p>

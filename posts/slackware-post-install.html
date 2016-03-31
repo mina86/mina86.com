@@ -1,0 +1,522 @@
+<!-- subject: Slackware post install -->
+<!-- date: 2014-01-25 21:41:28 -->
+<!-- tags: slackware, linux, hardening -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>Same
+as <a href=/2008/02/12/pierwsze-kroki-po-zainstalowaniu-slackware-a/>my
+previous article written</a> in Polish, this text will describe some steps
+I take after installing <a href=http://slackware.com>Slackware Linux</a>.  I try to strike a balance between
+performance, security and usability, but not everything written here may work
+for everyone.  You have been warned.
+
+<!-- EXCERPT -->
+
+<h3>New user</h3>
+
+<p>The very first step is creation of a new user account.  Since I have recently
+discovered benefits of having a group for each user I now do it with the
+following commands:
+
+<pre>sed -i 's/^ENCRYPT_METHOD.*/ENCRYPT_METHOD SHA512/' \
+    /etc/login.defs
+useradd -U -G users,root,wheel -m <var>username</var>
+passwd <var>username</var></pre>
+
+
+<h3>root access</h3>
+
+<p>Having the user in root and wheel groups makes it easy to restrict access
+to su command:
+
+<pre>echo 'ALL:ALL EXCEPT GROUP root:DENY' &gt;&gt;/etc/suauth
+sed -i 's/^SU_WHEEL_ONLY.*/SU_WHEEL_ONLY yes/' /etc/login.defs
+chown root:root /bin/su
+chmod 4750 /bin/su
+echo chown root:root /bin/su &gt;&gt;/etc/rc.d/rc.local
+echo chmod 4750 /bin/su &gt;&gt;/etc/rc.d/rc.local</pre>
+
+<p>It prevents any users not in root and wheel groups from using su.
+Both on command's configuration level and file system level.
+Modifying <code>/etc/rc.d/rc.local</code> file makes sure that file system
+permissions will be preserved even if shadow package is upgraded or
+reinstalled.
+
+<p>In case of <code>sudo</code> the file to edit is <code>/etc/sudoers</code> and
+executable to protect is <code>/bin/sudo</code>.  Since I do not use
+<code>sudo</code> on Slackware, exactly what needs to be done is left as
+an exercises for the reader.
+
+
+<h3>Local login restrictions</h3>
+
+<p>Another thing to block is letting root log in directly to the system.
+I recommend that change since having a single path of gaining super user
+privileges (namely via first logging in a user account and then switching to
+root via su) is more secure and easier to audit.
+
+<p>Login restrictions are set in a <code>/etc/login.access</code> file and to give
+only a single user access just run:
+
+<pre>echo '-:ALL EXCEPT <var>username</var>:ALL' &gt;&gt;/etc/login.access</pre>
+
+<p>It denies access to all users except <var>username</var> when
+logging from any host.  Changing <var>username</var> to <code>users</code>
+would let all users in group users to log in.  For greater control,
+creating a new group, say <code>ttylogin</code>, is also an option.
+
+<p>Before proceeding, it is advisable to verify (on another TTY) whether
+logging in to the machine still works.
+
+
+<h3>Remote login restrictions</h3>
+
+<p>With local logins taken care of, <abbr title="Secure Shell">SSH</abbr> is
+all that is left.  Its configuration is stored in
+<code>/etc/ssh/sshd_config</code> file.  To limit who can ssh in and
+increase security of SSH the following options need to be set:
+
+<pre>Protocol 2
+
+PermitRootLogin no
+DenyUsers root
+AllowUsers <var>username</var>
+
+AllowTcpForwarding no
+X11Forwarding no
+
+# Allow <var>username</var> use X11 and port forwarding
+Match User <var>username</var>
+	X11Forwarding yes
+	AllowTcpForwarding yes</pre>
+
+<p>Similarly to local login, one might use <code>AllowGroups users</code> instead
+of <code>AllowUsers</code> to let all users in, or create additional group, say
+sshlogin, with users who are granted the privilege of accessing the machine
+remotely.  The <code>Match</code> directive can also be replaced with <code>Match
+Group <var>users</var></code>.
+
+<p>Another thing to consider is changing listening port to a non-standard one.
+Changing <code>Port</code> option to, say, <code>1000</code>, will achieve that
+result.  It should keep log files slightly cleaner by avoiding some brute
+force attacks, but it is not a bullet proof solution of course.
+
+
+<h3>X11 security</h3>
+
+<p><code>/tmp/.ICE-unix</code> and <code>/tmp/.X11-unix</code> directories are used by
+X server but they do not need to be writable only by users who are supposed to
+have access to X window system.  The directories are initialised
+in <code>/etc/rc.d/rc.S</code> file in the following way:
+
+<pre>  mkdir -p /tmp/.ICE-unix
+  chmod 1777 /tmp/.ICE-unix</pre>
+
+<p>with the same code for the other directory.  To achieve greater security,
+this should be changed to:
+
+<pre>  mkdir -p /tmp/.ICE-unix
+  chgrp users /tmp/.ICE-unix
+  chmod 1730 /tmp/.ICE-unix</pre>
+
+<p>with analogous change for <code>.X11-unix</code> directory.
+
+<p>Furthermore, to prevent X server from ever listening on network interfaces,
+the following changes should be applied:
+<ul>
+  <li>in <code>/usr/X11R6/bin/startx</code>, set
+    <code>defaultserverargs="<b>-nolisten tcp</b>"</code>
+  <li>in <code>/etc/X11/xdm/Xservers</code>, add <code>:0 local
+    /usr/X11R6/bin/X <b>-nolisten tcp</b></code>
+  <li>in <code>/etc/rc.d/rc.4</code>, add <code>exec /usr/X11R6/bin/xdm <b>-nodaemon -udpPort 0</b></code> and
+  <li>in <code>/etc/X11/fs/config</code>, set <code>use-syslog = <b>yes</b></code> and <code><b>no-listen = tcp</b></code>
+</ul>
+
+
+<h3>NTP</h3>
+
+<p>I usually do not set up <abbr title="Network Time Protocol">NTP</abbr>
+daemon to run, but still want to have my clock synchronised, so instead I am
+using ntpdate to query for the time every hour.  This can be set up by
+invoking:
+
+<pre>cat &gt;/etc/crontab.hourly/ntpsync &lt;&lt;EOF
+#!/bin/sh
+# Change to two-letter code of the country the machine is in.
+country=<var>us</var>
+exec /usr/sbin/ntpdate -u -s 0.$$country.pool.ntp.org \
+	1.$$country.pool.ntp.org 2.$$country.pool.ntp.org
+EOF
+chmod 755 /etc/crontab.hourly/ntpsync
+/etc/crontab.hourly/ntpsync</pre>
+
+
+<h3>Logging</h3>
+
+<p>In <code>/etc/rc.d/rc.syslog</code> modify syslogd and klogd invocations:
+
+<pre>    /usr/sbin/syslogd <b>-m 0</b>
+    /usr/sbin/klogd -c 3 -x <b>-p</b></pre>
+
+<p>Adding <code>-m 0</code> disables the <code>-- MARK --</code> messages (which are
+arguably useful but I find them noisy) and <code>-p</code> enables klogd's
+paranoia mode.
+
+<p>Furthermore, to be able to see log messages on TTY 12 run the following:
+
+<pre>echo '*.* -/dev/tty12' &gt;&gt;/etc/syslog.conf
+kill -SIGHUP $(cat /var/run/syslogd.pid)</pre>
+
+<p>With one more addition to <code>/etc/rc.d/rc.local</code> the 12th TTY can also
+include a convenient clock:
+
+<pre>## Clock on TTY12
+(
+	renice -n 20 $$
+	cd /
+	while sleep 1; do
+		printf %s\\r "$(LANG=C date '+%b %e %H:%M:%S')"
+	done &gt;&gt;/dev/tty12 2&gt;/dev/null &lt;/dev/null &amp;
+) &amp;</pre>
+
+<p>Another thing to add to <code>/etc/rc.d/rc.local</code> is:
+
+<pre>/usr/sbin/icmpinfo -vvv -s -l</pre>
+
+<p>Which will log any <abbr title="Internet Control Message Protocol">ICMP</abbr> packets sent to the host.  This may be noisy especially
+for hosts that are connected directly to the Internet, i.e. without a router
+or a firewall which blocks most traffic.
+
+<p>Log files are rotated with logrotate whose configuration is saved
+in <code>/etc/logrotate.conf</code>.  To increase amount of logs kept without
+increasing disk usage much, it may be good idea to change <code>rotate</code>
+option to <code>12</code> (or so) and uncomment <code>compress</code> option.
+
+
+<h3>Other network security</h3>
+
+<p>To prevent, or at least limit, sniffing on local network, it's beneficial
+to set up a static hardware addresses for the default gateway and some most
+important hosts the machine is connecting to.  For this to work those hosts
+need to have a static IP as well of course.
+
+<pre>arp -n |awk 'FNR > 1 &amp;&amp; NF == 5 {print $3, $1}' &gt;&gt;/etc/ethers
+# Remove entries that should not have static entries
+nano /etc/ethers
+arp -f
+# Make sure everything still works before proceeding
+echo 'arf -f' &gt;&gt;/etc/rc.d/rc.local</pre>
+
+<p>Block <abbr title="File Transfer Protocol">FTP</abbr> access to everyone
+except for a single user:
+
+<pre>cut -d: -f1 /etc/passwd |\
+    grep -v '^<var>username</var>$' &gt;&gt;/etc/ftpusers</pre>
+
+<p>Or just block it to everyone if FTP is not used with:
+
+<pre>cut -d: -f1 /etc/passwd &gt;&gt;/etc/ftpusers</pre>
+
+<p>In <code>/etc/inetd.conf</code> comment out <code>auth</code> which turn all lines
+in that files to comments.</p>
+
+<p>Finally, configure <a href=http://en.wikipedia.org/wiki/TCP_Wrapper><abbr title="Transmission Control Protocol">TCP</abbr> Wrapper</a> to prevent any services using them from
+accepting connections:
+
+<pre>echo 'sshd: ALL: ALLOW' &gt;&gt;/etc/hosts.allow
+echo 'ALL: ALL' &gt;&gt;/etc/hosts.deny</pre>
+
+
+<h3>Other miscellaneous security</h3>
+
+<p>There is a bunch of files normal users do not need access to:
+
+<pre>chmod -R go-rwx /etc/cron.*
+chmod -R go-rwx /etc/rc.d
+chmod -R o-rwx /var/log</pre>
+
+<p>Furthermore, users don't need to be able to list contents of <code>/tmp</code>
+directory, thus it's safe to change <code>/etc/rc.d/rc.M</code> file by modifying
+the lines setting permissions for <code>/tmp</code> and <code>/var/tmp</code>
+directories to:
+
+<pre>chmod 1733 /tmp /var/tmp</pre>
+
+
+<h3>Filesystems</h3>
+
+<p>All the file systems mounted during the boot on the system are configured
+in the <code>/etc/fstab</code> file.  There are a few options that's worth adding:
+
+<dl>
+  <dt><code>noatime</code>
+  <dd>Disables access time tracking which speeds things up by reducing number
+  of IO operations.  Even if it's desired to have accurate access time, it's
+  best to add <code>relatime</code> option.
+  <dt><code>nodev</code>
+  <dd>Disables device files.  Should be set up on all file systems except
+  for <code>/</code> (or <code>/dev</code> if it's on separate partition).
+  <dt><code>noexec</code>
+  <dd>Disables executable bit.  The limitation is relatively easy to work
+  around, but I still add it to <code>/boot</code> and <code>/var</code>.
+  <dt><code>nosuid</code>
+  <dd>Disables set-UID bit.  Should be set on all file systems except
+  for <code>/</code>, <code>/usr</code> and <code>/opt</code> (if any of those are on
+  separate partitions).
+</dl>
+
+
+<h3>LILO</h3>
+
+<p>Slackware comes with a splash screen used in <abbr title="Linux Loader">LILO</abbr> and a 30-second prompt timeout.  For me both are just
+annoyances.  To improve the situation, note down value of the <code>boot</code>
+option as well as <code>root</code> options for all the images, run <code>chmod 600
+/etc/lilo.conf</code>, and finally edit it to have the following content:
+
+<pre># Enter a password only when a boot time parameter is used
+restricted
+# Enter a password with every boot
+# mandatory
+# Use "lilo -p" to set up password after modifying lilo.conf
+password = ""
+
+append = "vt.default_utf8=1"
+
+compact
+lba32
+
+install = text
+vga = normal
+prompt
+single-key
+timeout = 5
+
+change-rules
+	reset
+
+boot = <var>/dev/sda</var>  # Replace with whatever was in old lilo.conf
+
+image = /boot/vmlinuz
+	root = <var>/dev/sda1</var>  # Ditto
+	label = l
+	read-only
+
+image = /boot/vmlinuz
+	root = <var>/dev/sda1</var>  # Ditto
+	label = s
+	read-only
+	append = "single"
+	# Require password for single boot
+	mandatory
+
+# Possibly some “other” entries may follow.  If they do,
+# labels for all of them have to be changed to one-letter long.</pre>
+
+<p>With those changes a single-key text prompt will be used with half a second
+timeout.  This requires a timely pressing of a desired key in order to boot
+non-default system.
+
+<p>The other thing those changes do is require password when “single” mode is
+enabled.  Password can be enabled for all systems by
+choosing <code>mandatory</code> as opposed to <code>restricted</code>.
+
+
+<h3>Miscellaneous customisations</h3>
+
+<p>Back in <code>/etc/login.defs</code> file, some eye-candy can be achieved by
+changing the following options:
+
+<pre>MAIL_CHECK_ENAB no
+LOGIN_STRING    "%s's password:"
+ISSUE_FILE      /etc/issue
+MOTD_FILE       /etc/motd</pre>
+
+<p>and then edit <code>/etc/issue</code> file to contain:
+
+<pre>                 __
+            ,-~¨^  ^¨-,           _,
+           /          / ;^-._...,¨/
+          /          / /         /
+         /          / /         /
+        /          / /         /
+       /,.-:''-,_ / /         /     Welcome to
+       _,.-:--._ ^ ^:-._ __../      Microsoft®
+     /^         / /¨:.._¨__.;     Windows™ 3.11
+    /          / /      ^  /      for Workgroups
+   /          / /         /
+  /          / /         /
+ /_,.--:^-._/ /         /
+^            ^¨¨-.___.:^  ™ - G33K</pre>
+
+<p>Or if you prefer something with not so many lines:</p>
+
+<pre>       ._,-,_.          _    ________    _       ______    __
+       ||| |||         / \  |__    __|  / \     |   _  \  |  |
+       ||| |||        / . \    |  |    / . \    |  |_) /  |  |
+       ;|| ||:       / /_\ \   |  |   / /_\ \   |     (   |  |
+     ./ /| |\ \.    /  ___  \  |  |  /  ___  \  |  |\  \  |  |
+     |./ :_: \.|   /__/   \__\ |__| /__/   \__\ |__| \__\ |__|</pre>
+
+<p>Of course any other <a href="http://mina86.com/2008/02/20/linux-console-is-sexy/"><abbr title="American Standard Code for Information Interchange">ASCII</abbr> art</a> will do, and with <a href=http://en.wikipedia.org/wiki/ANSI_escape_code><abbr title="American National Standards Institute">ANSI</abbr> escape codes</a> even colours can be added!
+
+<p>While on the topic of colours, I find blue to be too dark on my terminals
+(since I prefer black backgrounds), so the next thing I do is change colour of
+directories to white, by editing <code>/etc/DIR_COLORS</code>:
+
+<pre>DIR 01;37      # directory</pre>
+
+<p>Since I like a fast repeat rate of my keyboard:
+
+<pre>echo 'kbdrate -r 50 -d 250' &gt;&gt;/etc/rc.d/rc.local</pre>
+
+<p>And since I reboot and halt the machine from command line without switching
+to root account, I also do this:
+
+<pre>cmds='/sbin/shutdown /sbin/halt /sbin/reboot /sbin/poweroff'
+echo "chown root:root $cmds" &gt;&gt;/etc/rc.d/rc.local
+echo "chmod 4750 $cmds" &gt;&gt;/etc/rc.d/rc.local</pre>
+
+
+<h3>Final clean ups</h3>
+
+<p>Depending on the way Slackware was installed, it may contain many packages
+that aren't used.  Those should be removed since the fewer packages system has,
+the fewer bugs it contains.  For instance, I haven't used finger or talk for
+ages, and really don't see a need for those as well as some other packages
+to be installed:
+
+<pre>cd /var/log/packages
+removepkg biff+comsat bsd-finger netkit-* netwrite pidentd
+removepkg inetd ytalk uucp NetworkManager trn yptools
+removepkg slrn sendmail-* procmail</pre>
+
+<p>Using grep all series of packages can be removed.  For example, if
+X packages were installed by mistake (for example because full installation
+has been chosen), but the machine will not run X window system, this will
+remove all packages from x, xap, kde and kdei series:
+
+<pre>cd /var/log/packages
+removepkg $(grep -l \
+    -e 'PACKAGE LOCATION:.*/slackware/xap/' \
+    -e 'PACKAGE LOCATION:.*/slackware/x/' \
+    -e 'PACKAGE LOCATION:.*/slackware/kde/' \
+    -e 'PACKAGE LOCATION:.*/slackware/kdei/' \
+    *)</pre>
+
+<p>Choice of which packages should be removed and which should be kept needs
+  to be made individually.  What may help is this command:
+
+<pre>cd /var/log/packages
+grep 'PACKAGE LOCATION.*/slackware/.*/' * | \
+    sed 's~^\([^:]*\):.*/slackware/\([^/]*\)/.*~\2 \1~' | \
+    sort</pre>
+
+<p>It prints all the packages that have been installed from Slackware image
+with series they came from.  Packages in a and l series should be handled with
+care, but for other series my motto is “if in doubt, removepkg”.  This is
+especially true for n series which includes many servers.
+
+<p>Besides packages, Slackware comes with a bunch of user accounts and groups
+that aren't really used for anything.  First make sure that those are really
+unused by invoking:
+
+<pre>find / -user adm -o -user games -o -user gdm -o -user lp \
+    -o -user news -o -user operator -o -user pop -o -user rpc \
+    -o -user uucp -o -group adm -o -group lp -o -group news \
+    -o -group pop -o -group uucp -ls</pre>
+
+<p>If that command returns no files (errors about any files in <code>/proc</code>
+can be ignored) it should then be safe to run the following commands to remove
+unnecessary users and groups:
+
+<pre>for USR in adm gdm lp news operator pop rpc uucp halt \
+                shutdown sync; do userdel "$USR"; done
+for GRP in adm news pop; do groupdel "$GRP"; done</pre>
+
+<!-- COMMENT -->
+<!-- date: 2014-01-26 16:27:36 -->
+<!-- nick: Jarosław Rzeszótko -->
+
+<p>Could you write something more about your usage patterns? Are you using Slackware for your personal computing, or on servers? How long have you been doing it? I loved Slackware back in the day, but Slackware's package management falled behind at some point, the ease with which you can install almost anything in Debian's apt, Gentoo's portage or FreeBSD ports system is a huge advantage compared to the austerity of Slackware. Has this changed recently? Why would you use Slackware today over Gentoo or Arch?</p>
+
+<!-- COMMENT -->
+<!-- date: 2014-01-26 17:25:55 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>I've been using Slackware as my main operating system for over ten years both on my desktop and later on <a href="http://mina86.com/2010/05/16/msi-wind-i-dziewiec-komor/" rel="nofollow">my netbook</a> which recently become a pure server.</p>
+
+<p><a href="http://mina86.com/2008/02/12/wrazenia-z-gentoo/" rel="nofollow">I've tried Gentoo a while back</a> but didn't really like it especially as I don't find the idea of compiling everything appealing any more.</p>
+
+<p>What I like Slackware for is its simplicity. It sticks to simple text files when it comes to configuration without any unnecessary GUIs. Almost all configurations that worked ten years ago, still work.</p>
+
+<p>As for package management I really don't mind lack of dependency resolution. It's usually not a big issue for me, and majority of tools I need Slackware includes, so there's not many packages that I need to compile myself.</p>
+
+<!-- COMMENT -->
+<!-- date: 2014-01-26 20:23:04 -->
+<!-- nick: slawek@g.pl -->
+
+<p>what about modern, huge sata / sas drives and LILO ? ? ? is that works too?</p>
+
+<!-- COMMENT -->
+<!-- date: 2014-01-26 20:29:51 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>I don't see why it wouldn't. I used LILO on a 1T SATA drive with no problems. Currently I'm using it with a RAID-1 set up on two 40G SSD SATA-3 drives. I have never had a SAS drive, but I really don't see why it would not work. Slackware 14.1 includes ELILO so Slackware works on UEFI systems as well.</p>
+
+<!-- COMMENT -->
+<!-- date: 2014-04-02 04:40:11 -->
+<!-- nick: Deny Dias -->
+
+<p>Hi, mina86! That's a wonderful piece of writing on Slackware's post install and security! Thanks for writing it.</p>
+
+<p>I just moved to a new notebook and did a fresh install of Slackware. Most of the working files at ~/ came from backup. But even with a backup, if you don keep track of every single file changed after install, it's easy to get lost on all the minor changes made. For instance: how to remember that we've changed that one single line at /etc/rc.d/rc.local?!?</p>
+
+<p>So, do you have a hint on how to keep track of the changed files after initial install? That would be really useful to backup those files properly, and mainly to rebuild a new system scratch.</p>
+
+<p>I took a look at the wild for info on that (although not that deep) and can't found nothing straight to the matter. On Slackware, I thought that an checksum comparison between the original distribution files (namely CHECKSUMS.md5) and the current filesystem wold get it done. The thing is that process is quite time consuming. I have doubts if this is an elegant approach.</p>
+
+<p>Do you have any ideas on that matter?</p>
+
+<!-- COMMENT -->
+<!-- date: 2014-04-02 14:17:19 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>I do not install Slackware so often to give this problem much thought or try to implement any of my ideas. This time around, I had my previous article and my desktop so I could easily recreate all the configuration I needed.</p>
+
+<p>If you know in advance that you're going to reinstall the system, you can simply <code>tar</code> the <code>/etc/rc.d</code> directory of the old system and extract it after installation is done.  You can do that with the whole <code>/etc</code> but beware of files with user and group information, SSH and SSL keys, etc.</p>
+
+<p>Yet another option is to keep <code>/etc</code> in a git repository periodically pushed to a safe location. Just initialise a repository in <code>/etc</code> and exclude specific files and directories using <code>.gitignore</code>.</p>
+
+<!-- COMMENT -->
+<!-- date: 2014-04-02 16:47:35 -->
+<!-- nick: Deny Dias -->
+
+<p>Hummm! I don't reinstall the system that often too. I did that now because the old machine, a MacBook Pro, required lots of customizations to deal with Apple's craps so Linux became usable in it as the only OS installed (no dual boot). As the new machine is pretty standard, Slackware's generic kernel is more than enough to handle it. So I thought it worth the time to reinstall from scratch to clean lots of the unnecessary stuff rather then just copy the old /etc and some at /lib, /lib64 and /opt.</p>
+
+<p>Right know, my installation can be migrated to a new pretty standard machine just by moving the SSD itself to the new hardware. But I feel more safe if I can just start from a fresh Slackware install and replace only the changed files. That would be quite quick to accomplish if one keep track of the changed files only.</p>
+
+<p>That git approach might be very useful here. I'll look into it later and report here if I get into something simple to implement. Actually, I already do that with dotfiles at ~/ by using homeshick (I wrote an <a href="http://mexapi.macpress.com.br/2013/10/ordem-nos-dotfiles.html" rel="nofollow">article</a> about this, in Portuguese). Maybe the same approach may apply here too.</p>
+
+<!-- COMMENT -->
+<!-- date: 2015-03-01 08:30:20 -->
+<!-- nick: nick -->
+
+<p>i found this really insightful and it helps immensely with my user configuration. can you link me to any other articles by you or that you find helpful? i'm trying to start from the bottom, get my user account and security set up, update, then configure my login shell (zsh), then my console apps (vim, mc, lynx, the ones i'll use most.) thanks for this.</p>
+
+<!-- COMMENT -->
+<!-- date: 2015-03-11 03:03:59 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>There is <a href="http://slackbook.org/" rel="nofollow">Slack book</a> which has documentation on Slackware. I haven’t read it myself though so cannot review it either way. But actually once you add a user, most things should just work.</p>
+
+<!-- COMMENT -->
+<!-- date: 2016-02-17 00:47:06 -->
+<!-- nick: Nick -->
+
+<p>Thanks for this very good article.<br />
+It helped me a lot.<br />
+Slackware is the best.</p>

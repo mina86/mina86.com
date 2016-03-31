@@ -1,0 +1,257 @@
+<!-- subject: CSS sprites as background -->
+<!-- date: 2013-05-06 02:46:10 -->
+<!-- tags: html, css, sprites -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>CSS sprites aren’t anything new.  They have been around for years
+    now, and are one of the methods to optimise website load time.
+    The idea is to incorporate several images into a single bigger one
+    and in this way decrease number of round trips between HTTP server
+    and a browser.
+
+  <p>In its traditional use, CSS sprites work as a replacement for
+    images and cannot be used as a background.  But background is
+    exactly how I’d implemented quote image left of long quotes and
+    flags indicating language paragraph was written in, e.g.:
+
+  <blockquote>
+    <p>A few of the entries on my blog have text both in English and
+      Polish.  On those, I use some simple icons to indicate which is
+      which:
+    <p class=plFlag>Polish flag on the left indicates paragraph is
+      written in Polish.
+    <p class=enFlag>Union Jack on the left indicates paragraph is
+      written in English.
+  </blockquote>
+
+  <p>After a bit of playing around I finally figured out how to get
+    this working, and even though there are some caveats, sprites can
+    be used as a top-left no-repeat background image as well.
+
+<!-- EXCERPT -->
+
+<h3>Basics</h3>
+
+  <p>Let’s start with the basics.  Like I’ve alluded above,
+    sprites incorporate many images into a bigger one and use CSS to
+    display only what is needed.  Take the below image with a
+    roll-over image for example.
+
+  <style>
+    #html5 { width: 450px; }
+    #html5, #html5 span { height: 100px; }
+    #html5 span {
+      display: inline-block;
+      text-indent: 100%;
+      overflow: hidden;
+      background-image: url('/files/html5-sprite.jpg');
+    }
+    #spriteh {
+      width: 74px;
+    }
+    #spritet {
+      width: 52px;
+      background-position: -74px 0;
+    }
+    #spritem {
+      width: 90px;
+      background-position: -126px 0;
+    }
+    #spritel {
+      width: 96px;
+      background-position: -216px 0;
+    }
+    #sprite5 {
+      width: 138px;
+      background-position: -312px 0;
+    }
+    #spriteh:hover {
+      background-position: 0 -110px;
+    }
+    #spritet:hover {
+      background-position: -74px -110px;
+    }
+    #spritem:hover {
+      background-position: -126px -110px;
+    }
+    #spritel:hover {
+      background-position: -216px -110px;
+    }
+    #sprite5:hover {
+      background-position: -312px -110px;
+    }
+  </style>
+  <div id=html5><span id=spriteh>H</span><span id=spritet>T</span><span id=spritem>M</span><span id=spritel>L</span><span id=sprite5>5</span></div>
+
+  <p>Without sprites it would require 10 separate files but thanks to
+    CSS one is enough.  HTML code is rather simple and
+    unimpressive:
+
+  <pre>&lt;div id=&quot;html5&quot;&gt;&lt;span
+id=&quot;spriteh&quot;&gt;H&lt;/span&gt;&lt;span
+id=&quot;spritet&quot;&gt;T&lt;/span&gt;&lt;span
+id=&quot;spritem&quot;&gt;M&lt;/span&gt;&lt;span
+id=&quot;spritel&quot;&gt;L&lt;/span&gt;&lt;span
+id=&quot;sprite5&quot;&gt;5&lt;/span&gt;&lt;/div&gt;</pre>
+
+  <p>In the absence of styles it simply spell ‘HTML5’ which is
+    excellent.  To make an image out of those spans their dimension
+    must be set, text content hidden, and background image added:
+
+<pre>#html5 { width: 500px; }
+#html5, #html5 span { height: 100px; }
+
+#html5 span {
+  display: inline-block;
+  text-indent: 100%;
+  overflow: hidden;
+  background-image: url('html5-sprite.jpg');
+}
+
+#spriteh { width:  74px; }
+#spritet { width:  52px; }
+#spritem { width:  90px; }
+#spritel { width:  96px; }
+#sprite5 { width: 188px; }
+</pre>
+
+  <p>So far it’s nothing more than a standard ‘replace text with
+    a picture’ CSS trick.  Because of that, each span would display
+    the image starting with its top-left corner, end result being
+    a rather repetitive image of a letter ‘H’.
+
+  <p>To solve this issue browser has to be told to start drawing the
+    image from a different offset—that’s exactly
+    what <tt>background-position</tt> property does.  With a bit more
+    styling, the code is almost complete:
+
+<pre>#spritet { background-position:  -74px 0; }
+#spritem { background-position: -126px 0; }
+#spritel { background-position: -216px 0; }
+#sprite5 { background-position: -312px 0; }</pre>
+
+  <p>The way this works is simple really.  In abstract terms,
+    a background image repeats indefinitely in all four directions and
+    its top-left corner is aligned with element’s top-left corner.
+    When rendering the page, browser takes the part of background that
+    overlaps and uses it.
+
+  <div><img src=/files/html5-sprite-expl.jpg alt=""/></div>
+
+  <p><tt>background-position</tt> property instructs it to shift the
+    abstract background by given length and only <em>than</em> cut
+    whatever overlaps with the element.  By setting position
+    to <tt>-126px</tt>, the 127th pixel of the background image will
+    be aligned with top-left corner of the element.
+
+  <p>With that knowledge, getting roll-over effect is now trivial:
+
+<pre>#spriteh:hover { background-position:    0   -110px; }
+#spritet:hover { background-position:  -74px -110px; }
+#spritem:hover { background-position: -126px -110px; }
+#spritel:hover { background-position: -216px -110px; }
+#sprite5:hover { background-position: -312px -110px; }</pre>
+
+  <p>Note that the big image has a ten-pixel gap between
+    sprites.  It prevents pixels from adjacent sprites
+    ‘bleeding’ over to the other images.
+
+  <h3>A bit simpler method</h3>
+
+  <p>The above method is the ‘normal’ one to use sprites, but in the
+    case of the image presented here, there’s an easier way.  Instead
+    of setting background image for each individual span element, it’s
+     simpler to set background for the wrapping div element and
+    cover with span’s only when they are hovered.  CSS code
+    for that looks as follows:
+
+<pre>#html5, #html5 span { height: 100px; }
+#html5 {
+  width: 500px;
+  background-image: url('html5-sprite.jpg');
+}
+#html5 span {
+  display: inline-block;
+  text-indent: 100%;
+  overflow: hidden;
+}
+#spriteh {
+  width: 74px;
+  background-position: 0 -110px;
+}
+#spritet {
+  width: 52px;
+  background-position: -74px -110px;
+}
+#spritem {
+  width: 90px;
+  background-position: -126px -110px;
+}
+#spritel {
+  width: 96px;
+  background-position: -216px -110px;
+}
+#sprite5 {
+  width: 188px;
+  background-position: -312px -110px;
+}
+#html5 span:hover {
+  background-image: url('html5-sprite.jpg');
+}</pre>
+
+  <h3>Using sprites for background</h3>
+
+  <p>Let’s compare the above with a way to implement an icon in
+    a top-left corner of an element:
+
+<pre>blockquote {
+  background: url('…') no-repeat;
+  padding: 0 26px;
+  min-height: 20px;
+}</pre>
+
+  <p>The trick here is the <tt>no-repeat</tt> value which causes the
+    background image to be painted only once.  This is contrary to the
+    way sprites work where interesting part of the image is cropped
+    thanks to the limited size of the element.  Trying to use an image
+    with multiple sprites as a background would result in whatever is
+    on the right or bottom of the icon to be shown as well.
+
+  <p>Here’s the thing though, if there’s nothing on the right or below
+    the icon, if it is the last thing in the sprites image, the above
+    is no longer an issue.  This realisation makes it apparent that
+    using a staircase-like image with nothing but transparent
+    background below the diagonal, sprites <em>on</em> the diagonal
+    can be used as a top-left no-repeat background icon.
+
+  <div><img src=/files/icon-sprites.png alt="" id=iconsprites/></div>
+  <script type=text/javascript src=/files/icon-sprites.js></script>
+
+  <p>With that knowledge, the following styles can be constructed:
+
+<pre>blockquote, .plFlag, .enFlag {
+  background: url('/files/s.png') no-repeat;
+}
+blockquote {
+  background-position: -100px 0;
+  min-height: 20px;
+}
+.plFlag {
+  background-position: -50px -50px;
+  text-indent: 22px;
+}
+.enFlag {
+  background-position: -75px -25px;
+  text-indent: 22px;
+}</pre>
+
+  <p>This technique can be extended in certain situations—either when
+    the height or width of the element is specified.  In those
+    situations, more icons can be present either on the right or below
+    the sprite used as a background.
+
+  <p>Certainly limited, but if there are only a few cases when this
+    method needs to be used, it allows more images to be converted
+    into sprites than previously expected.  And it’s what enabled me
+    to convert all but one small images on this site to CSS
+    sprites.

@@ -1,0 +1,579 @@
+<!-- subject: Deep Dive into Contiguous Memory Allocator -->
+<!-- date: 2012-06-10 12:10:33 -->
+<!-- tags: linux, cma, contiguous, memory, allocator -->
+<!-- categories: Articles, English, Techblog -->
+
+<p class=i>This is the first part of an extended version
+of <a href="http://lwn.net/Articles/486301/">an LWN article on
+CMA</a>.  It contains much more detail on how to use CMA, and a lot of
+boring code samples.  Should you be more interested in an overview,
+consider reading <a href="http://lwn.net/Articles/486301/">the
+original</a> instead.
+
+<p><a href=http://thread.gmane.org/gmane.linux.kernel.mm/76241>Contiguous
+Memory Allocator</a> (or CMA) has been developed to allow big
+physically contiguous memory allocations.  By initialising early at
+boot time and with some fairly intrusive changes to Linux memory
+management, it is able to allocate big memory chunks without a need to
+grab memory for exclusive use.
+
+<p>Simple in principle, it grew to be a quite complicated system which
+requires cooperation between boot-time allocator, buddy system, DMA
+subsystem, and some architecture-specific code.  Still, all that
+complexity is usually hidden away and normal users won't be exposed to
+it.  Depending on perspective, CMA appears slightly different and
+there are different things to be done and look for.
+
+<!-- EXCERPT -->
+
+<h3>Using CMA in device drivers</h3>
+
+<p>From device driver author's point of view, nothing should change.
+CMA is integrated with DMA subsystem, so the usual calls to the DMA
+API (such as <tt>dma_alloc_coherent</tt>) should work as usual.
+
+<p>In fact, device drivers should never need to call the CMA API
+directly.  Most importantly, device drivers operate on kernel mappings
+and bus addresses whereas CMA operates on pages and PFNs.
+Furthermore, CMA does not handle cache coherency, which the DMA API
+was designed to deal with.  Lastly, it is more flexible and allows
+allocations in atomic contexts (e.g. interrupt handler) and creation
+of memory pools, which are well suited for small allocations.
+
+<p>For a quick example, this is how allocation might look like:
+
+<pre>dma_addr_t dma_addr;
+void *virt_addr =
+	dma_alloc_coherent(dev, 100 &lt;&lt; 20, &amp;dma_addr, GFP_KERNEL);
+if (!virt_addr)
+	return -ENOMEM;</pre>
+
+<p>Provided that <tt>dev</tt> is a pointer to a valid <tt>struct
+device</tt>, the above code will allocate 100 MiBs of memory.  It may
+or may not be a CMA memory, but it is a portable way to get buffers.
+The following can be used to free it:
+
+<pre>dma_free_coherent(dev, 100 &lt;&lt; 20, virt_addr, dma_addr);</pre>
+
+<p><a href=http://thread.gmane.org/gmane.linux.kernel/1263136>Barry
+Song has posted a very simple test driver</a> which uses those two to
+allocate DMA memory.
+
+<p>More information about the DMA API can be found in <a
+href="http://git.kernel.org/?p=linux/kernel/git/torvalds/linux.git;a=blob;f=Documentation/DMA-API.txt"><tt>Documentation/DMA-API.txt</tt></a>
+and <a
+href="http://git.kernel.org/?p=linux/kernel/git/torvalds/linux.git;a=blob;f=Documentation/DMA-API-HOWTO.txt"><tt>Documentation/DMA-API-HOWTO.txt</tt></a>.
+Those two documents describe provided functions and give
+usage examples.
+
+<h3>Integration with architecture code</h3>
+
+<p>Obviously, CMA has to be integrated with given architecture's DMA
+subsystem beforehand.  This is performed in a few, fairly easy steps.
+<a href=http://thread.gmane.org/gmane.linux.kernel.mm/76241>The CMA
+patchset</a> integrates it with
+<a href=http://article.gmane.org/gmane.linux.kernel.mm/76245>x86</a>
+and
+<a href=http://article.gmane.org/gmane.linux.kernel/1277101>ARM</a>
+architectures.  This section will refer to both patches as well as
+quote their relevant portions.
+
+<h4 id=reserve_mem>Reserving memory</h4>
+
+<p>CMA works by reserving memory early at boot time.  This memory,
+called <dfn>CMA area</dfn> or <dfn>CMA context</dfn>, is later
+returned to the buddy system so it can be used by regular
+applications.  To make reservation happen, one needs to call:
+
+<pre>void dma_contiguous_reserve(
+	phys_addr_t limit);</pre>
+
+<p>just after memblock is initialised but prior to the buddy allocator
+setup.
+
+<p>The <tt>limit</tt> argument, if not zero, specifies physical
+address above which no memory will be prepared for CMA.  Intention is
+to allow limiting CMA contexts to addresses that DMA can handle.  The
+only real constraint that CMA imposes is that reserved memory must
+belong to the same zone.
+
+<p>In case of ARM the limit is set to <tt>arm_dma_limit</tt> or
+<tt>arm_lowmem_limit</tt>, whichever is smallest:
+
+<pre>diff --git a/arch/arm/mm/init.c b/arch/arm/mm/init.c
+@@ -364,6 +373,12 @@ void __init arm_memblock_init(struct meminfo *mi, struct machine_desc *mdesc)
+    if (mdesc->reserve)
+            mdesc->reserve();
+
++	/*
++	 * reserve memory for DMA contigouos allocations,
++	 * must come from DMA area inside low memory
++	 */
++	dma_contiguous_reserve(min(arm_dma_limit, arm_lowmem_limit));
++
+ 	arm_memblock_steal_permitted = false;
+ 	memblock_allow_resize();
+ 	memblock_dump_all();</pre>
+
+<p>On x86 it is called just after memblock is set up in
+<tt>setup_arch</tt> function with no limit specified:
+
+<pre>diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+@@ -934,6 +935,7 @@ void __init setup_arch(char **cmdline_p)
+ 	}
+ #endif
+ 	memblock.current_limit = get_max_mapped();
++	dma_contiguous_reserve(0);
+
+ 	/*
+ 	 * NOTE: On x86-32, only from this point on, fixmaps are ready for use.</pre>
+
+<p>The amount of reserved memory depends on a few Kconfig options and
+a <tt>cma</tt> kernel parameters which will be <a href=#size>describe
+later on</a>.
+
+<h4>Architecture specific memory preparations</h4>
+
+<p><tt>dma_contiguous_reserve</tt> function will reserve memory and
+prepare it to be used with CMA.  On some architectures
+architecture-specific work may need to be performed as well.  To allow
+that, CMA will call the following function:
+
+<pre>void dma_contiguous_early_fixup(
+	phys_addr_t base,
+	unsigned long size);</pre>
+
+<p>It is architecture's responsibility to provide it along with its
+declaration in <tt>asm/dma-contiguous.h</tt> header file.  The
+function will be called quite early, so some of the kernel
+subsystems – ike <tt>kmalloc</tt> – will not be available.
+Furthermore, it may be called several times, but no more than
+<tt>MAX_CMA_AREAS</tt> times.
+
+<p>If an architecture does not need any special handling, the header
+file may just say:
+
+<pre>#ifndef H_ARCH_ASM_DMA_CONTIGUOUS_H
+#define H_ARCH_ASM_DMA_CONTIGUOUS_H
+#ifdef __KERNEL__
+
+#include &lt;linux/types.h&gt;
+#include &lt;asm-generic/dma-contiguous.h&gt;
+
+static inline void
+dma_contiguous_early_fixup(phys_addr_t base, unsigned long size)
+{ /* nop */ }
+
+#endif
+#endif</pre>
+
+<p>ARM <a href="http://lwn.net/Articles/450286/">requires some work
+modifying mappings</a> and so it provides a full definition of this
+function:
+
+<pre>diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
+<i>[…]</i>
++static struct dma_contig_early_reserve dma_mmu_remap[MAX_CMA_AREAS] __initdata;
++
++static int dma_mmu_remap_num __initdata;
++
++void __init dma_contiguous_early_fixup(phys_addr_t base, unsigned long size)
++{
++	dma_mmu_remap[dma_mmu_remap_num].base = base;
++	dma_mmu_remap[dma_mmu_remap_num].size = size;
++	dma_mmu_remap_num++;
++}
++
++void __init dma_contiguous_remap(void)
++{
++	int i;
++	for (i = 0; i &lt; dma_mmu_remap_num; i++) {
+		<i>[…]</i>
++	}
++}</pre>
+
+<pre>diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
+@@ -1114,11 +1122,12 @@ void __init paging_init(struct machine_desc *mdesc)
+ {
+ 	void *zero_page;
+
+-	memblock_set_current_limit(lowmem_limit);
++	memblock_set_current_limit(arm_lowmem_limit);
+
+ 	build_mem_type_table();
+ 	prepare_page_table();
+ 	map_lowmem();
++	dma_contiguous_remap();
+ 	devicemaps_init(mdesc);
+ 	kmap_init();</pre>
+
+<h4>DMA subsystem integration</h4>
+
+<p>Second thing to do is to change architecture's DMA API to use the
+whole machinery.  To allocate memory from CMA one uses:
+
+<pre>struct page *dma_alloc_from_contiguous(
+	struct device *dev,
+	int count,
+	unsigned int align);</pre>
+
+<p>Its first argument is the device allocation is performed on behalf
+of.  The second one specifies <em>number of pages</em> (not bytes or
+order) to allocate.
+
+<p>The third argument is the alignment expressed as a page order.  It
+enables allocation of buffers which are aligned to at least
+2<sup><tt>align</tt></sup> pages.  To avoid fragmentation, if at all
+possible, pass zero here.  It is worth noting that there is a Kconfig
+option (<tt>CONFIG_CMA_ALIGNMENT</tt>) which specifies maximal
+alignment accepted by the function.  By default, its value is 8
+meaning an alignment of 256 pages.
+
+<p>The return value is the first of a sequence of <tt>count</tt>
+allocated pages.
+
+<p>Here's how allocation looks on x86:
+
+<pre>diff --git a/arch/x86/kernel/pci-dma.c b/arch/x86/kernel/pci-dma.c
+@@ -99,14 +99,18 @@ void *dma_generic_alloc_coherent(struct device *dev, size_t size,
+ 				 dma_addr_t *dma_addr, gfp_t flag)
+ {
+	<i>[…]</i>
+ again:
+-	page = alloc_pages_node(dev_to_node(dev), flag, get_order(size));
++	if (!(flag &amp; GFP_ATOMIC))
++		page = dma_alloc_from_contiguous(dev, count, get_order(size));
++	if (!page)
++		page = alloc_pages_node(dev_to_node(dev), flag, get_order(size));
+ 	if (!page)
+ 		return NULL;</pre>
+
+<p>To free allocated buffer, one needs to call:
+
+<pre>bool dma_release_from_contiguous(
+	struct device *dev,
+	struct page *pages,
+	int count);</pre>
+
+<p><tt>dev</tt> and <tt>count</tt> arguments are the same as before,
+whereas <tt>pages</tt> is what
+<tt>dma_alloc_from_contiguous</tt> has returned.
+
+<p>If region passed to the function did not come from CMA, the
+function will return <tt>false</tt>.  Otherwise, it will return
+<tt>true</tt>.  This removes the need for higher-level functions to
+track which allocations were made with CMA and which were made using
+some other method.
+
+<p>Again, here's how it is used on x86:
+
+<pre>diff --git a/arch/x86/kernel/pci-dma.c b/arch/x86/kernel/pci-dma.c
+@@ -126,6 +130,16 @@ again:
+ 	return page_address(page);
+ }
+
++void dma_generic_free_coherent(struct device *dev, size_t size, void *vaddr,
++			       dma_addr_t dma_addr)
++{
++	unsigned int count = PAGE_ALIGN(size) >> PAGE_SHIFT;
++	struct page *page = virt_to_page(vaddr);
++
++	if (!dma_release_from_contiguous(dev, page, count))
++		free_pages((unsigned long)vaddr, get_order(size));
++}
++
+ /*
+  * See &lt;Documentation/x86/x86_64/boot-options.txt&gt; for the iommu kernel
+  * parameter documentation.</pre>
+
+<h4>Atomic allocations</h4>
+
+<p>Beware that <tt>dma_alloc_from_contiguous</tt> may not be called
+from atomic context (e.g. when spin lock is hold or in an interrupt).
+It performs some “heavy” operations such as page migration, direct
+reclaim, etc., which may take a while.  Because of that, to
+make <tt>dma_alloc_coherent</tt> and co. work as advertised,
+architecture needs to have a different method of allocating memory in
+atomic context.
+
+<p>The simplest solution is to put aside a bit of memory at boot time
+and perform atomic allocations from it.  This is in fact what ARM is
+doing.  Existing architectures most likely have a special path for
+atomic allocations already.
+
+<h4>Special memory requirements</h4>
+
+<p>At this point, most of the drivers should “just work”.  They use
+the DMA API which calls CMA.  Life is beautiful.  Except some devices
+may have special memory requirements.  For instance, Samsung's
+Multi-format codec (MFC) requires different types of buffers to be
+located in different memory banks (which allows reading them through
+two memory channels, thus increasing memory bandwidth).  Furthermore,
+one may want to separate some device's allocations from others as to
+limit fragmentation within CMA areas.
+
+<p>As mentioned earlier, CMA operates on contexts describing a portion
+of system memory to allocate buffers from.  One global area is created
+to be used by devices by default, but if a device needs to use
+a different area, it can easily be done.
+
+<p>There is a many-to-one mapping between <tt>struct device</tt>
+and <tt>struct cma</tt> (ie. CMA context).  This means, that if
+a single device driver needs to use more than one CMA area, it has to
+have separate <tt>struct device</tt> objects.  At the same time,
+several <tt>struct device</tt> objects may point to the same CMA
+context.
+
+<h4>Assigning CMA area to a single device</h4>
+
+<p>To assign a CMA area to a device, all one needs to do is call:
+
+<pre>int dma_declare_contiguous(
+	struct device *dev,
+	unsigned long size,
+	phys_addr_t base,
+	phys_addr_t limit);</pre>
+
+<p><a href=#reserve_mem>As with
+<tt>dma_contiguous_reserve</tt></a>, this needs to be called after
+memblock initializes but before too much memory gets grabbed from it.
+For ARM platforms, a convenient place to put invocation of this
+function is machine's <tt>reserve</tt> callback.
+
+<p>The first argument of the function is the device that the new
+context is to be assigned to.  The second is its <em>size in
+bytes</em> (not in pages).  The third is physical address of the area
+or zero.  The last one has the same meaning as <tt>limit</tt> argument
+to <tt>dma_contiguous_reserve</tt>.  The return value is either zero
+(on success) or a negative error code.
+
+<p>For an example, one can take a look at the code called from
+<a href=http://article.gmane.org/gmane.linux.kernel.mm/76246>Samsung's
+S5P platform's <tt>reserve</tt> callback</a>.  It creates two CMA
+contexts for the MFC driver:
+
+<pre>diff --git a/arch/arm/plat-s5p/dev-mfc.c b/arch/arm/plat-s5p/dev-mfc.c
+@@ -22,52 +23,14 @@
+ #include &lt;plat/irqs.h&gt;
+ #include &lt;plat/mfc.h&gt;
+
+<i>[…]</i>
+ void __init s5p_mfc_reserve_mem(phys_addr_t rbase, unsigned int rsize,
+ 				phys_addr_t lbase, unsigned int lsize)
+ {
+	<i>[…]</i>
++	if (dma_declare_contiguous(&amp;s5p_device_mfc_r.dev, rsize, rbase, 0))
++		printk(KERN_ERR "Failed to reserve memory for MFC device (%u bytes at 0x%08lx)\n",
++		       rsize, (unsigned long) rbase);
+	<i>[…]</i>
++	if (dma_declare_contiguous(&amp;s5p_device_mfc_l.dev, lsize, lbase, 0))
++		printk(KERN_ERR "Failed to reserve memory for MFC device (%u bytes at 0x%08lx)\n",
++		       rsize, (unsigned long) rbase);
+ }</pre>
+
+<p>There is a limit to how many “private” areas can be declared,
+namely <tt>CONFIG_CMA_AREAS</tt>.  Its default value is seven but it
+can be safely increased if need arises.  Called more times,
+<tt>dma_declare_contiguous</tt> function will print an error
+message and return <tt>-ENOSPC</tt>.
+
+<h4>Assigning CMA area to multiple devices</h4>
+
+<p>Things get a bit more complicated if the same (not default) CMA
+context needs to be used by two or more devices.  The current API does
+not provide a trivial way to do that.  What can be done is
+use <tt>dev_get_cma_area</tt> to figure out CMA area one device is
+using, and <tt>dev_set_cma_area</tt> to set the same context to
+another device.  This sequence must be called no sooner than
+in <tt>postcore_initcall</tt>.  Here is how it could look like:
+
+<pre>static int __init foo_set_up_cma_areas(void)
+{
+	struct cma *cma;
+
+	cma = dev_get_cma_area(device1);
+	dev_set_cma_area(device2, cma);
+	return 0;
+}
+postcore_initcall(foo_set_up_cma_areas);</pre>
+
+<p>Of course, <tt>device1</tt>'s area must be set up with
+<tt>dma_declare_contiguous</tt> as described in previous
+subsection.
+
+<p>Device's CMA context may be changed any time as long as the device
+hold no CMA memory – it will be rather tricky to release any
+allocation after area change.
+
+<h3>No default context</h3>
+
+<p>As a matter of fact, there is nothing special about the default
+context that is created by <tt>dma_contiguous_reserve</tt> function.
+It is in no way required and system may work without it.
+
+<p>If there is no default context, for devices without assigned
+areas <tt>dma_alloc_from_contiguous</tt> will return
+<tt>NULL</tt>.  <tt>dev_get_cma_area</tt> can be used
+distinguish this situation and allocation failure.
+
+<p>Of course, if there is no default area, architecture should provide
+other means to allocate memory, for devices without assigned CMA
+context.
+
+<h3 id=size>Size of the default context</h3>
+
+<p><tt>dma_contiguous_reserve</tt> does not take a size as an
+argument, which brings a question of how does it know how much memory
+should be reserved.  There are two sources this information comes
+from.
+
+<p>First of all, there is a set of Kconfig options, which specify the
+default size of the reservation.  All of those options are located
+under “Device Drivers” » “Generic Driver Options” » “Contiguous Memory
+Allocator” in the Kconfig menu.  They allow specifying one of four
+possible ways of calculating the size: it can be an absolute size in
+megabytes, a percentage of total memory, the lower of the two, or the
+larger of the two.  By default is to allocate 16 MiBs of memory.
+
+<p>Second of all, there is a <tt>cma</tt> kernel command line option.
+It lets one specify the size of the area at boot time without the need
+to recompile the kernel.  This option specifies the size in bytes and
+accepts the usual suffixes.
+
+<p><small><i>Code samples in this article are taken from the public
+Linux kernel mailing list. For copyright and licensing information
+refer to the original email.</i></small>
+
+<!-- COMMENT -->
+<!-- date: 2012-10-15 11:46:50 -->
+<!-- nick: Lars -->
+
+<p>Great article and feature but I do not see any NUMA support. Am I missing something?</p>
+
+<!-- COMMENT -->
+<!-- date: 2012-10-19 06:13:25 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>What do you mean by NUMA support? You can create separate CMA regions in different banks of memory and let different devices use those.</p>
+
+<!-- COMMENT -->
+<!-- date: 2013-09-17 04:52:20 -->
+<!-- nick: wenpin -->
+
+<p>hi, michael, thanks for your contribution. is it necessary to do some fix for mips arch?  Btw, where is the partII?</p>
+
+<!-- COMMENT -->
+<!-- date: 2013-09-18 12:27:37 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>I'm unaware of any specific fixes for MIPS architecture. To best of my knowledge, the steps described in “Integration with architecture code” should apply to that architecture as well, but it is likely that something needs to be done (just like in ARM's case) with reserved memory for it to work as CMA region.</p>
+
+<p>And sorry about part two, I've never gotten to finalising the draft. It lays somewhere on my disk, but unfortunately it's not fit for publication.</p>
+
+<!-- COMMENT -->
+<!-- date: 2013-09-18 14:47:43 -->
+<!-- nick: wenpin -->
+
+<p>Thanks,  Michael. Today I ported it to MIPS, it works fine.  What I have done for mips is changing memblock_reserve to bootmem_alloc, The original one causes the bad_page warning when activating the CMA region. The memblock_reseve failed to reserve the memory, so when the later CMA want to release the reserved memory to buddy system, It's already freed. I'm not sure why.</p>
+
+<!-- COMMENT -->
+<!-- date: 2013-09-23 01:10:04 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>Looks legit. Not every platform is using memblock, so yeah, some architectures will need to use bootmem instead. Happy to hear you manage to get it working. Also, feel free to send patches upstream. :)</p>
+
+<!-- COMMENT -->
+<!-- date: 2014-01-09 13:43:32 -->
+<!-- nick: Kirill -->
+
+<p>I read this article and run cma_test.c by Barry Song.<br />
+It does not work. I get an error:<br />
+<code>echo 1024 &gt; /dev/cma_test</code><br />
+<code>misc cma_test: no mem in CMA area.</code><br />
+Of course, CMA patch was included in kernel and CMA area was reserved successfully. </p>
+
+<p><code>dma_alloc_coherent()</code> return NULL at this point (dma-mapping.h):</p>
+
+<pre><code>if (!dev)
+      dev = &amp;x86_dma_fallback_dev;
+
+if (!is_device_dma_capable(dev))
+      return NULL;
+</code></pre>
+
+<p>Here dev is <code>/dev/cma_test</code> which created by test module.<br />
+Could you explain me why is this happening and how to fix this bug?</p>
+
+<!-- COMMENT -->
+<!-- date: 2014-07-02 14:06:06 -->
+<!-- nick: Robert -->
+
+<p>Hi,</p>
+
+<p>I tried the test of Barry Song and it kind of works, but I can't figure out why I can use only 15 of 16 MiB.</p>
+
+<p>This is what I turned on in the kernel config:</p>
+
+<p>-----<br />
+CONFIG<em>MEMORY</em>ISOLATION=y<br />
+CONFIG<em>CMA=y<br />
+CONFIG</em>CMA<em>DEBUG=y<br />
+CONFIG</em>DMA<em>CMA=y<br />
+#<br />
+# Default contiguous memory area size:<br />
+#<br />
+CONFIG</em>CMA<em>SIZE</em>MBYTES=16<br />
+CONFIG<em>CMA</em>SIZE<em>SEL</em>MBYTES=y<br />
+# CONFIG<em>CMA</em>SIZE<em>SEL</em>PERCENTAGE is not set<br />
+# CONFIG<em>CMA</em>SIZE<em>SEL</em>MIN is not set<br />
+# CONFIG<em>CMA</em>SIZE<em>SEL</em>MAX is not set<br />
+CONFIG<em>CMA</em>ALIGNMENT=8<br />
+CONFIG<em>CMA</em>AREAS=7<br />
+-----</p>
+
+<p>and the bootlog says:</p>
+
+<p>[    0.000000] Booting Linux on physical CPU 0x0<br />
+[    0.000000] Linux version 3.12.21-custom-student-dirty (student@armv7a) (gcc version 4.8.1 (GCC) ) #3 Tue Jun 24 00:43:28 EEST 2014<br />
+[    0.000000] CPU: ARM926EJ-S [41069265] revision 5 (ARMv5TEJ), cr=00053177<br />
+[    0.000000] CPU: VIVT data cache, VIVT instruction cache<br />
+[    0.000000] Machine: Freescale MXS (Device Tree), model: DENX M28EVK<br />
+[    0.000000] cma: CMA: reserved 16 MiB at 46800000</p>
+
+<p>so one would expect 16 MiB cma<br />
+... but ...<br />
+we can only allocate 15 MiB:</p>
+
+<p>15360<br />
++ echo 15360 &gt; /dev/cma<em>test<br />
+&amp;lt;7&amp;gt;[  619.105416] cma: dma</em>alloc<em>from</em>contiguous(cma c0dc3624, count 3840, align 8)<br />
+&lt;7&gt;[  619.108868] cma: dma<em>alloc</em>from<em>contiguous(): returned c0ea7000<br />
+&amp;lt;6&amp;gt;[  619.163590] misc cma</em>test: allocate CM    at virtual address: 0xc6900000 address: 0x46900000 size:15360KiB<br />
++ cat /dev/cma<em>test<br />
+&amp;lt;7&amp;gt;[  619.224230] cma: dma</em>release<em>from</em>contiguous(page c0ea7000)<br />
+&lt;6&gt;[  619.245306] misc cma<em>test: free CM at virtual address:    0xc6900000 dma address: 0x46900000 size:15360KiB<br />
+0<br />
+ 16384<br />
++ echo 16384 &amp;gt; /dev/cma</em>test<br />
+&lt;7&gt;[  619.272522] cma: dma<em>alloc</em>from<em>contiguous(cma c0dc3624, count 4096, align 8)<br />
+&amp;lt;7&amp;gt;[  619.272618] cma: dma</em>alloc<em>from</em>contiguous(): returned   (null)<br />
+&lt;3&gt;[  619.272682] misc cma<em>test: no mem in CMA area<br />
+./03</em>run.sh: line 29: echo: write error: No space left on device</p>
+
+<p>Note that the start address changed from 0x46800000 to 0x46900000 ???</p>
+
+<p>Do you have an explanation for this?</p>
+
+<p>Regards,</p>
+
+<p>Robert</p>
+
+<!-- COMMENT -->
+<!-- date: 2014-10-04 13:46:35 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>The test device is not the only one which does allocations. It appears that other devices have already allocated some of the memory.</p>

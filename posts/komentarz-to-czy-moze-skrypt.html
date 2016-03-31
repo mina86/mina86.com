@@ -1,0 +1,131 @@
+<!-- subject: Komentarz to, czy może skrypt? -->
+<!-- date: 2008-02-12 22:45:40 -->
+<!-- tags: javascript, xhtml, mime -->
+<!-- categories: Articles, Techblog -->
+
+<p>Przenosząc się na Joggera straciłem sporo czasu na dochodzenie czemu skrypty, które zamieszczałem nie działały tak jak powinny (<abbr title="to znaczy">tzn.</abbr> nie działały w ogóle). Okazało się, że zależnie od typu <acronym title="Multipurpose Internet Mail Extensions" xml:lang="en">MIME</acronym> strony skrypty są różnie interpretowane. A dokładniej mechanizmy <i>ochrony</i> skryptów.</p>
+
+<p>Ze względu na przeglądarki nie rozumiejące tagu <tt>script</tt> przyjęło się kod skryptu umieszczać w komentarzu. Przeglądarki wspierające skrypty domyślały się, że to tak naprawdę kod skryptu i jakoś sobie z tym radziły. Ku memu lekkiemu zdziwieniu odkryłem, że <a href="http://www.opera.com/">Opera</a> i <a href="http://www.mozilla-europe.org/pl/products/firefox/">Firefox</a> przestają wykonywać kod skryptu, gdy strona jest dostarczona jako <tt>application/xhtml+xml</tt>. Aby sprawę zbadać bardziej szczegółowo stworzyłem taką oto stronę testową:</p>
+
+<!-- EXCERPT -->
+
+<pre>&lt;?php
+$type = isset($_GET['xml']) ? 'application/xhtml+xml' : 'text/html';
+header('content-type: ' . $type . '; charset=iso-8859-2');
+?&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+          "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+  &lt;head&gt;
+    &lt;title&gt;Test&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p&gt;Wysłany nagłówek Content-Type: &lt;tt&gt;&lt;?php echo($type); ?&gt;;
+        charser=iso-8859-2&lt;/tt&gt;.&lt;/p&gt;
+
+    &lt;script type="text/javascript"&gt;&lt;!--
+       alert('Skrypt "chroniony" komentarzem.');
+    //--&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;alert('"Goły" skrypt.');&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;&lt;![CDATA[
+      alert('Skrypt "chroniony" przez CDATA.');
+    ]]&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+<p>Okazuje się, że wysyłając stronę jako <tt>text/html</tt> wykonują się dwa pierwsze, a jako <tt>application/xhtml+xml</tt> dwa ostatnie skrypty. Co to oznacza w praktyce? Otóż, mamy do wyboru:</p>
+<ul>
+<li>wysyłanie typu <tt>text/html</tt> i wówczas naszemu dokumentowi <acronym xml:lang="en" title="Extensible Hypertext Markup Language">XHTML</acronym> będą towarzyszyły niepoprawne nagłówki,</li>
+<li>wysłanie typu <tt>application/xhtml+xml</tt> i wówczas niektóre przeglądarki (np. IE) będą miały kłopoty z wyświetleniem strony,</li>
+<li>zastosowanie negocjacji typu <acronym title="Multipurpose Internet Mail Extensions" xml:lang="en">MIME</acronym> i pozostawienie <i>gołych</i> skryptów <del>powodując tym samym, że  strona przestanie się walidować (chyba, że w kodzie skryptu nie będzie używany znak mniejszości, większości ani etka)</del><ins>(update: okazuje się, że coś mi się pomyliło z tym, że walidator <acronym xml:lang="en" title="World Wide Web Consorcium">W3C</acronym> odrzuca takie dokumenty)</ins>,</li>
+<li>zastosowanie negocjacji i sprytnego mechanizmu po stronie serwera, który będzie stosował odpowiednie sekwencje otwierające i zamykające skrypt albo</li>
+<li>zastosowanie negocjacji i trzymanie wszystkich skryptów w plikach, dołączanych do strony za pomocą elementu <tt>script</tt> z atrybutem <tt>src</tt>.</li>
+</ul>
+<p>Cóż rzec... takie uroki <acronym xml:lang="en" title="Extensible Hypertext Markup Language">XHTML</acronym>-a.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-12 23:03:11 -->
+<!-- nick: Michał Górny -->
+
+<p>Jeszcze była jakaś metoda z zastosowaniem jednocześnie <span class="caps">CDATA</span> i komentarza. O ile dobrze pamiętam, to chyba otwarcie i zamknięcie komentarza się pakowało w <span class="caps">CDATA</span> ( ;.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-13 07:36:06 -->
+<!-- nick: brtk -->
+<!-- nick_url: http://sunridin.jogger.pl -->
+
+<p>Zapomniałeś o jednym: skrypt można dołączyć w oddzielnym pliku.</p>
+
+<p>Poza tym chyba nie ma już przeglądarek, które nie wiedzą co to &#60;script&#62;, więc te komentarze ochronne można olać.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-13 14:37:21 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>O&#8230; rzeczywiście. Wydawało mi się, że walidator się burzył, a okazuje się, że nie.</p>
+<p>Co do plików zewnętrznych to nie zapomniałem--ostatni punkt.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-13 20:55:20 -->
+<!-- nick: D4rky -->
+<!-- nick_url: http://nerdblog.jogger.pl -->
+
+<p>i ostatni punkt jest jako jedyny semantyczny. inline-script jest ble i nie powinno sie go stosowac, po to bozia dala zewnetrzne pliki ;]</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-13 20:58:15 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>To znaczy, jeżeli chce umieścić jakiś skrypt na jednej tylko stronie i skrypt ten jest bardzo króciutki (kilka linijek, kilkaset bajtów) to mam dla niego tworzyć nowy plik i zmuszać przeglądarkę, aby bezsensownie wysyłała kolejne zapytania do serwera? Moim zdaniem po to bozia dała inline-script, żeby jest stosować tam gdzie ma to sens.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-13 20:59:43 -->
+<!-- nick: D4rky -->
+<!-- nick_url: http://nerdblog.jogger.pl -->
+
+<p>mina86 &#8211; tak, po to masz zmuszac przegladarke, aby bezsensownie wysylala kolejne zapytania do serwera. Tak samo powinenes <span class="caps">CSS</span> trzymac w osobnym pliku i to nie ma znaczenia czy plik ma 1, 2 czy 50 KB. Rules are rules ;)</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-13 21:04:08 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p><acronym title="Cascading Style Sheet">CSS</acronym> trzymam w osobnym pliku, gdyż jest on wspólny dla wielu stron. Gdybym tworzył pojedynczy plik <acronym title="Extensible HyperText Markup Language">XHTML</acronym> i miał do niego tworzyć style to zapisałbym je wewnątrz tego pliku zamaist bawić się w kolejne. Nie znam zasady, która nakzuje trzymanie skryptów i styli w osobnych plikach, robię tak gdy ma to sens.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-13 21:06:39 -->
+<!-- nick: Michał Górny -->
+
+<p>D4rky: Patrz: <span class="caps">MTU</span>.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-19 20:47:47 -->
+<!-- nick: mcv -->
+<!-- nick_url: http://mcv.jogger.pl -->
+
+<p>Przeglądarki poprawnie interpretują kod, wycinając to co jest w komentarzu <span class="caps">XML</span> &#60;!&#8212; … &#8212;&#62;, czyli skrypt. ;-)</p>
+
+<p>Poprawne rozwiązanie to:<br />
+&#60;script …&#62; // &#60;![CDATA[
+ …<br />
+// ]]&#62;&#60;/script&#62;</p>
+
+<p>Przeglądarki nie rozumiejące XHTML-a (XML-a) zignorują tagi sekcji <span class="caps">CDATA</span>, bo są one zakomentowane (a raczej zinterpretują jako kod JS, który jest… zakomentowany). Te rozumiejące najpierw przepuszczą stronę przez parser <span class="caps">XML</span>, który już zadba o to by sekcje <span class="caps">CDATA</span> były zrozumiane jako tekst.</p>
+
+<!-- COMMENT -->
+<!-- date: 2009-02-26 16:31:34 -->
+<!-- nick: BLACK CAT -->
+
+<p>Zastosowanie wprowadzenia w pierwszym wpisie pisanej (pierwszej linijce kodu) strony html czy htm oznaczenia skryptu php i jego forma jest zalezna od specyfikacji <span class="caps">DTD</span>, do której się odwołujesz za pomocą &#60;<span class="caps">DOCTYPE</span> ......&#62; w następnej lini kodu i do ich przeczytania odsyłam. Ogólnie jeżeli skrypt pojawia się jako załączony plik zewnętrzny to tylko strony xhtml wymagaja wpisu, którego użyłeś w przykładowej stronie testowej i dlatego jest to częściej stosowana metoda. Jeżeli wprowadzasz kod za pomocą pliku zewnętrznego, to większość przeglądarek świetnie sobie z tym poradzi bez wspomnianej pierwszej linijki &#8211; parser &#8222;przeskoczy&#8221; na obsługę php bezproblemowo. Warto pamiętać, że jeżeli chodzi o instrukcję przetwarzania kodu &#60;script&#62;&#60;/script&#62; to w przypadku php nawala na maxa i lepiej tego nie stosować. Nadmienię jedynie, że w przyszłości XHTML/<span class="caps">XML</span> całkowicie ma zostać wyłączona wspomniana tu instrukcja przetwarzania kodu &#60;script&#62; oraz jakakolwiek możliwość załączania skryptów bezpośrednio do kodu html czy htm. Więc już polecam zewnętrzne pliki i jeszcze raz odsyłam do specyfikacji.</p>
+
+<!-- COMMENT -->
+<!-- date: 2013-07-17 07:42:53 -->
+<!-- nick: mina86.com -->
+<!-- nick_url: http://mina86.com/2013/07/17/standard-agnostic-html-code/ -->
+
+<p>Standard-agnostic HTML code<br /><br />HTML has gone quite a long way since its inception.  This means<br />
+  a lot of new features but also some small incompatibilities which<br />
+  may pose issues in certain situations.  For instance, when posting<br />
+  a code snippet for others to include on [...]</p>

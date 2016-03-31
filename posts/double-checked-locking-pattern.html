@@ -1,0 +1,275 @@
+<!-- subject: Double-checked locking pattern -->
+<!-- date: 2008-04-29 23:46:33 -->
+<!-- tags: singleton, double-checked locking -->
+<!-- categories: Articles, Techblog, WEiTI -->
+
+<p>Jakiś czas temu w pewnych okolicznościach poruszony został
+  wzorzec <i xml:lang="en">double-checked locking singleton</i>, który
+  jak powszechnie wiadomo nie jest do końca poprawny.  Wynikła z tego
+  krótka dyskusja, której kompilację pozwolę sobie wkleić poniżej
+  (gdyż nie jest ona ogólnie dostępna, a nie lubię, gdy informacje się
+  marnują).</p>
+
+<!-- EXCERPT -->
+
+<p>Witam wszystkich,</p>
+
+<p>chciałbym odnieść się do poruszonego przeze mnie problemu
+  poprawności efektywnego wzorca singletonu dla programów
+  wielowątkowych zwanego również <i xml:lang="en">double-checked
+  locking pattern</i><sup><a href="#f1" id="fl1">[1]</a></sup>.  W tym
+  celu, na początku przywołam trochę teorii.</p>
+
+<p>Standard C++ definiuje pojęcie <i xml:lang="en">sequence point</i>,
+  na bazie którego określa zachowanie programu.  Konkretnie opisuje
+  stan środowiska wykonującego program w konkretnych punktach
+  sekwencyjnych.  Co się dzieje pomiędzy nimi nie jest powiedziane.
+  W szczególności nie jest prawdą, że wyrażenie po prawej stronie
+  operatora przypisania musi być wykonane zanim nastąpi przypisanie.
+  Bardzo prostym przykładem jest kod:</p>
+
+<pre>int foo = 0x42;
+int bar = 42;
+/* 1 */
+foo = bar++;
+/* 2 */</pre>
+
+<p>w którym standard definiuje, iż w 1. punkcie zmienne <var>foo</var>
+  i <var>bar</var> mają wartości odpowiednio 0x42 i 42, a w 2. &#8211;
+  42 i 43, ale nie określa ich wartości przejściowych.  Kompilator
+  może powyższy kod zaimplementować najpierw przypisując
+  zmiennej <var>foo</var> wartość zmiennej <var>bar</var>, a potem
+  dopiero inkrementując tą drugą<sup><a href="#f2"
+  id="fl2">[2]</a></sup>:</p>
+
+<pre>foo = bar;
+++bar;</pre>
+
+<p>Sugerowałoby to, iż miałem rację twierdząc, iż
+  instrukcja <tt>instance = new Foo();</tt> może spowodować
+  uruchomienie konstruktora dopiero po przypisaniu adresu
+  przydzielonej pamięci do zmiennej.  Muszę się jednak przyznać, iż
+  standardu C++ nie studiowałem tak dogłębnie jak standardu C i nie
+  wiem, czy przez przypadek operator new nie wprowadza kolejnego
+  punktu sekwencyjnego<sup><a href="#f3" id="fl3">[3]</a></sup>.
+  Gdyby tak było, to kod ten należałoby traktować jak:</p>
+
+<pre>Foo *new_foo() { return new Foo(); }
+/* ... */
+instance = new_Foo();</pre>
+
+<p>w którym problem nie powinien<sup><a href="#f4"
+  id="fl4">[4]</a></sup> już występować, gdyż wszystkie efekty uboczne
+  funkcji muszą zostać wykonane zanim zwróci ona swoją wartość, a więc
+  konstruktor musi być wywołany zanim funkcja zwróci adres
+  przydzielonej pamięci.</p>
+
+<p>Po tych wszystkich przemyśleniach postanowiłem sprawdzić jak to
+  wygląda w praktyce i faktycznie, kompilacja kodu:</p>
+
+<pre>struct Foo {
+    static Foo *instance() {
+        static Foo *inst = 0;
+        if (!inst) inst = new Foo(0);
+        return inst;
+    }
+
+    int get() const { return 0; }
+
+    Foo(int p) : param(p) { }
+
+private:
+    int param;
+};
+
+int main(void) {
+    return Foo::instance()->get();
+}</pre>
+
+<p>wskazuje, iż wartość do zmiennej inst została przypisana dopiero po
+  wywołaniu konstruktora.</p>
+
+<p>Czas na chwilę refleksji.  Przeanalizowany przykład nie potwierdził
+  moich zarzutów, ale wcale nie spowodowało to, iż przestałem uważać,
+  iż mam rację, że wzorzec ten jest błędny. :) Czemu jestem taki pewny
+  siebie? Ponieważ, nawet jeżeli w C++ standard wymaga wywołania
+  konstruktora zanim operator new zwróci wynik, to kto mi
+  zagwarantuje, że identycznie zachowują się wszystkie języki
+  programowania?  Z informacji, które swego czasu do mnie dotarły
+  wynika, iż Java oraz C# mają co do tego ździebko odmienne
+  zdanie.</p>
+
+<p>Skoro już się tyle rozpisałem to należy też poświęcić trochę uwagi
+  poruszonemu (przez kogoś z tyłu sali) problemowi, gdy instrukcja
+  przypisania jest nieatomowa.  Zostawiam to na sam koniec po części
+  dlatego, że kończy to całą dyskusję, a jeśli chodzi o różne dziwne,
+  założenia, że instrukcja przypisania jest zawsze atomowa odpowiadam
+  bardzo prostym przykładem: 16-bitowy procesor Intel 8086 (do 80286
+  włącznie), w którym dalekie wskaźniki są 32-bitowe, a procesor
+  potrafi wykonywać atomowe operacje jedynie na 16-bitowych porcjach
+  danych<sup><a href="#f5" id="fl5">[5]</a></sup>.  Jeżeli ktoś mi
+  zarzuci, iż to jakieś przedpotopowe procesory, to z chęcią podam
+  drugi przykład: zapis do 32-bitowej zmiennej leżącej na granicy
+  linii cache'u<sup><a href="#f6" id="fl6">[6]</a></sup> powoduje
+  w procesorach i386 dwa zapisy przy równoczesnym braku blokowania
+  magistrali<sup><a href="#f7" id="fl7">[7]</a></sup>.</p>
+
+<p>Poza tym artykuł na stronie IBM uświadomił mi<sup><a href="#f8"
+  id="fl8">[8]</a></sup>, iż w grę wchodzi jeszcze kolejność
+  wykonywania operacji przez procesor, która wcale nie musi być
+  tożsama z kolejnością instrukcji w kodzie maszynowym.  Procesor może
+  stwierdzić, iż lepiej będzie najpierw zapisać wskaźnik, a dopiero
+  potem wykonać jakieś przypisanie z konstruktora, nawet jeżeli
+  napotkał na te instrukcje w odwrotnej kolejności.  W przypadku
+  maszyn jednoprocesorowych nie stanowi to problemu, ale w przypadku
+  maszyn wieloprocesorowych (wielordzeniowych) już tak.</p>
+
+
+<h3>Przypisy</h3>
+<p><sup><a href="#fl1" id="f1">[1]</a></sup> Dla osób nieobecnych na
+wykładzie, chodzi o:</p>
+
+<pre>class Foo {
+    Foo *getInstance() {
+        static Foo *instance = 0;
+        if (!instance) {
+            Lock lock(mutex);
+            if (!instance)
+                instance = new Foo();
+            }
+        }
+        return instance;
+    }
+};</pre>
+
+<p>Twierdzę, iż wzorzec ten jest niepoprawny.</p>
+
+<p><sup><a href="#fl2" id="f2">[2]</a></sup> Szczerze mówiąc tak
+  właśnie bym się spodziewał, że ta instrukcja zostanie
+  zaimplementowana, gdyż alternatywą wobec tego jest tworzenie
+  niepotrzebnych zmiennych tymczasowych (np. niepotrzebne zużywanie
+  rejestru).  Aby sprawdzić swoją intuicję postanowiłem zrobić pewien
+  test:</p>
+
+<pre>[mina86@tuptus ~/code]$ cat foo.c
+int main(void) {
+    int foo = 42;
+    int bar = 0x42;
+    foo = bar++;
+    return foo + bar;
+}
+[mina86@tuptus ~/code]$ g++ -S -o foo.s foo.c
+[mina86@tuptus ~/code]$ cat foo.s
+        .file   "foo.c"
+        .text
+        .align 2
+.globl main
+        .type   main, @function
+main:
+.LFB2:
+        leal    4(%esp), %ecx
+.LCFI0:
+        andl    $-16, %esp
+        pushl   -4(%ecx)
+.LCFI1:
+        pushl   %ebp
+.LCFI2:
+        movl    %esp, %ebp
+.LCFI3:
+        pushl   %ecx
+.LCFI4:
+        subl    $16, %esp
+.LCFI5:
+        movl    $42, -12(%ebp)
+        movl    $66, -8(%ebp)
+<b>        movl    -8(%ebp), %eax      ; ### eax = bar ###</b>
+<b>        movl    %eax, -12(%ebp)     ; ### foo = eax ###</b>
+<b>        incl    -8(%ebp)            ; ### ++bar     ###</b>
+        movl    -8(%ebp), %eax
+        addl    -12(%ebp), %eax
+        addl    $16, %esp
+        popl    %ecx
+        popl    %ebp
+        leal    -4(%ecx), %esp
+        ret
+.LFE2:
+        .size   main, .-main
+.globl __gxx_personality_v0
+        .ident  "GCC: (GNU) 4.1.2"
+        .section        .note.GNU-stack,"",@progbits</pre>
+
+<p>Wyróżnione przeze mnie linie wskazują, iż kompilator zachowuje się
+  tak jak przewidziałem.</p>
+
+<p><sup><a href="#fl3" id="f3">[3]</a></sup> Wydaje się, iż
+  w przypadku przeciążania tego operatora sequence point faktycznie
+  jest dodawany, z racji faktu, iż jego użycie jest wówczas
+  zamaskowanym wywołaniem funkcji, a wywołania funkcji dodają sequence
+  point.</p>
+
+<p><sup><a href="#fl4" id="f4">[4]</a></sup> Nadal jakiś kompilator
+  mógłby próbować to optymalizować, ale wówczas nie byłby to
+  kompilator zgodny ze standardem C++.</p>
+
+<p><sup><a href="#fl5" id="f5">[5]</a></sup> Takie samo zachowanie
+  występuje rzecz jasna na nowszych generacjach tego procesora
+  działających w trybie real.</p>
+
+<p><sup><a href="#fl6" id="f6">[6]</a></sup> Chyba wystarczy, żeby nie
+  była wyrównana do jakiejś mniejszej jednostki.</p>
+
+<p><sup><a href="#fl7" id="f7">[7]</a></sup> Przynajmniej nie
+  znalazłem wzmianki o tym, aby instrukcja mov blokowała magistralę
+  w intelowskim Software Developer's Manual.</p>
+
+<p><sup><a href="#fl8" id="f8">[8]</a></sup> Link do artykułu, na
+  który się powoływałem, gdzieś mi niestety zaginął.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-04-30 08:04:42 -->
+<!-- nick: AdamK -->
+<!-- nick_url: http://blog.adam.klobukowski.pl -->
+
+<p>Co do dostępu do pamięci i atomowości, to można w skrócie powiedzieć że pamięć obsługiwana jest w podzieleniu na &#8216;segmenty&#8217; (nie mylić z rejestrem segmentowym i związanym z nim komplikacjami). Jeżeli nasz dostęp mieści się w jednym segmencie to operacja będzie (zazwyczaj) atomowa. Natomiast jeśli dostęp zahacza o dwa segmenty, operacja nie będzie atomowa. (Oczywiście to spore uproszczenie jest)</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-04-30 08:14:56 -->
+<!-- nick: rozie -->
+<!-- nick_url: http://rozie.jogger.pl -->
+
+<p>Ciekawy wpis. Taka mała prośba, czy mógłbyś korzystać z kategorii techblog dla wpisów z kategorii techniczne? Ten wpis jak najbardziej tam pasuje, pozostałe zapewne też, a nie ginęłyby w gąszczu innych.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-04-30 08:41:45 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p><b>rozzie</b>, korzystam. Jednak kategoria Techblog nie jest na mojej stronie wyszcególniana (w większości pokrywa się z Techniczną).</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-04-30 08:47:49 -->
+<!-- nick: rozie -->
+<!-- nick_url: http://rozie.jogger.pl -->
+
+<p>Aha, OK. Jakoś dziś nie zacząłem od techbloga, patrzę w kategorie, a tam nie ma&#8230; ;) A szkoda by się marnowało.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-04-30 12:51:41 -->
+<!-- nick: Khorne -->
+<!-- nick_url: http://blog.rzechonek.net -->
+
+<p>Sama prawda :)</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-04-30 18:20:55 -->
+<!-- nick: bigfun -->
+<!-- nick_url: http://bigfun.jogger.pl -->
+
+<p>Ciekawy wpis. Gdybyś jeszcze odpuścił sobie te przypisy, albo   jakos wczesniej je umieszczal, zamiast na koncu calego arta, byloby ekstra. Skumulowane na końcu utrudniaja czytanie.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-04-30 21:14:12 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>Dodałem linki, może będzie milej czytać. ;)</p>

@@ -1,0 +1,51 @@
+<!-- subject: A.I. -->
+<!-- date: 2013-09-22 21:53:28 -->
+<!-- tags: perl, userfriendly -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>While cleaning <a href=http://tinyapps.sf.net>Tiny Applications Collection</a> a little I've dropped both artificial intelligence scripts.  However, not wanting to let them disappear, I've decided to post them here for posterity.
+
+<p>The first one is an eight line of code version that might just be what <a href=http://ars.userfriendly.org/cartoons/?id=20001014>Sid wrote</a> as his first program ever:
+
+<pre>#!/usr/bin/perl -wWtT
+while (&lt;&gt;) {
+	if (/[aeiouyAEIOUY][^a-zA-Z]*$/) {
+		print "Yes.\n";
+	} elsif (!/^\s*$/) {
+		print "No.\n";
+	}
+}</pre>
+
+<p>The second one is an “improved” six-line version akin to <a href=http://ars.userfriendly.org/cartoons/?id=19990602>Pitr's code</a>:
+
+<pre>#!/usr/bin/perl -wWtTn
+if (/[aeiouyAEIOUY][^a-zA-Z]*$/) {
+	print "No!\n";
+} elsif (!/^\s*$/) {
+	print "Yes.\n";
+}</pre>
+
+<!-- EXCERPT -->
+
+<p>Below is recreation of the scenes from UserFriendly comic strips:
+
+<pre>$ <i>./ai-sid.pl</i>
+<i>Is it blue?</i>
+Yes.
+<i>Is it bigger than a breadbox?</i>
+No.
+<i>Is it smaller than a breadbox?</i>
+No.
+<i>Does it go wiki-wiki-wiki?</i>
+Yes.
+<i>^D</i>
+$ <i>./ai-pitr.pl</i>
+<i>Is my name Mike Floyd?</i>
+Yes.
+<i>Very clever Pitr is, Da?</i>
+No!
+^D</pre>
+
+<p>Interestingly, both versions give opposite responses to the same
+question.  Joining their standard inputs with standard outputs (as to
+make them talk with each other) does not yield interesting results.

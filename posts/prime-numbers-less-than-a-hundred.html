@@ -1,0 +1,231 @@
+<!-- subject: Prime numbers less than 100 -->
+<!-- date: 2010-12-12 18:30:59 -->
+<!-- tags: c, primes, brain-teaser -->
+<!-- categories: English, Misc, Techblog -->
+
+<p>Anyone working in a&#160;big corporation must have been hit by some
+“funny” mail from a&#160;coworker that helps everyone gets through the
+day.  No different at my office&#160;&#8211; at one point all
+engineers have been challenged to write the shortest code in
+C&#160;that prints all prime numbers (and only prime numbers) less
+than a&#160;hundred each on separate line.</p>
+
+<p>This is an interesting brain-teaser so posting it here so others
+may choose to think about it while <a
+href="http://xkcd.com/303/">their code's&#160;compiling</a>.</p>
+
+<p>Of course, a&#160;“C&#160;program” needs not to be taken too
+seriously&#160;&#8211; depending on not too far fetched undefined
+behaviours of given implementation is all right (but please
+do not use <tt>system()</tt> or <tt>exec()</tt> family of calls ;)
+).</p>
+
+<!-- EXCERPT -->
+
+<h3>The solution</h3>
+
+<p>I have managed to came up with two 61-character (this excludes new
+line at the end of the file) solutions&#160;&#8211; one uses two loops
+and the other only one:</p>
+
+<pre>main(i,j){for(;j=i++&lt;99;)for(;++j&lt;i||printf("%d\n",i),i%j;);}</pre>
+<pre>main(j,i){for(i=2;i%++j||(i>j||printf("%d\n",i),j=i++&lt;99););}</pre>
+
+<p>I&#160;have used a&#160;comma operator to print the prime number
+but <a href="#comm1573336">Wasacz solution</a> shown that it is not
+necessary and thus a&#160;60-character solution can be created:</p>
+
+<pre>main(i,j){for(;j=++i&lt;99;j&lt;i||printf("%d\n",i))for(;i%++j;);}</pre>
+
+<h3>Analysis</h3>
+
+<p>Let's&#160;look at the code to see how much does it bend the
+C&#160;language rules.  I will look through some of the surprising
+constructs and try to clarify them.  Some of the comments are of
+historic importance only but nonetheless may be interested for
+a&#160;C&#160;programmer curious about ins and outs of the
+language.</p>
+
+<p><b>Implicit return type</b>.  Starting from the very beginning, the
+<tt>main()</tt> function has no return type specified.  That is
+actually quite all right since C89 defaults function's return type to
+<tt>int</tt>.</p>
+
+<p><b>Old function prototype</b>.  This is not the only “problem” with
+the function though.  <tt>main()</tt>'s prototype lacks also argument
+types.  This is also a&#160;perfectly valid C&#160;syntax.  In
+original design types were not part of function declaration and, not
+to break old code, this (otherwise deprecated syntax) remained in C89.
+The old function definition looks as follows:</p>
+
+<pre><i>rettype</i> foo(<i>arg1</i>, <i>arg2</i>)
+	<i>type1</i> <i>arg1</i>;
+	<i>type2</i> <i>arg2</i>;
+{
+	&#8230;
+}</pre>
+
+<p>Programmers were responsible for guaranteeing correct function
+invocation which lead to many hard to find bugs and thus
+a&#160;<tt>sparse</tt> tool was created which, among other things,
+checked whether all function invocations match function
+definition.</p>
+
+<p>Digging more in this topic, when C89 standard was published not all
+compilers were fully compatible with it (in particular, not all
+supported the new function prototypes), which lead programmers to the
+use of a macro that let them omit function prototype when compiling
+with old compiler, ie.:</p>
+
+<pre>#if __STDC__
+#  define P(x) x
+#else
+#  define P(x) ()
+#endif
+
+<i>rettype</i> foo P((<i>type1</i>, <i>type2</i>));</pre>
+
+<p>What is quite important to note here is that in C empty arguments
+list in function declaration does not mean that the function take no
+argument (which is true in C++).  It means function take unspecified
+number of arguments.  To declare function with no arguments one needs
+to use <tt>void</tt> keyword, ie.: <tt>int foo(void)</tt>.</p>
+
+<p><b>Implicit type</b>.  So, what <em>is</em> the type of
+<tt>main()</tt> arguments?  There was none specified anywhere.  This
+is, yet again, quite all right since C89 defaults to <tt>int</tt>.
+Generally, anything that has been declared but has no type specified
+is of type <tt>int</tt>.  For example <tt>static i;</tt> is the same
+thing as <tt>static int i;</tt>.</p>
+
+<p><b>Incorrect argument type</b>.  This brings us to the next issue.
+The two <tt>main()</tt> function prototypes defined by the standard
+are:</p>
+
+<pre>int main(int, char **);
+int main(void);</pre>
+
+<p>This stays in conflict with our second argument being (implicitly)
+defined as having type <tt>int</tt>.  This is the first place were
+undefined behaviour is introduced.  Theoretically, undefined behaviour
+can lead to anything, including daemons coming out of your nose, but
+because in most (for some definitions of “most”) implementations
+<tt>sizeof(int)</tt> is no smaller than <tt>sizeof(char *)</tt>,
+passing convention for the two type is compatible and <tt>int</tt> has
+no trap representations, we are in the clear.</p>
+
+<p><b><tt>i</tt>'s initialisation</b>.  Looking carefully at the code
+one notices that <tt>i</tt> is never initialised and instead it uses
+the value passed as first argument to <tt>main()</tt> as its initial
+value.  This reveals a&#160;quite interesting bug: if one calls the
+program with some arguments, it will skip initial prime numbers.</p>
+
+<p>What I&#160;find more fascinating though is situation where
+<tt>main()</tt>'s&#160;first argument is zero (which standard
+permits).  In this situation <tt>j</tt> will overflow (which is
+undefined behaviour for signed integers) and the second loop will
+finish when <tt>j</tt> reaches <tt>-1</tt>.  This is also
+a&#160;situation where <tt>b/a</tt> will yield undesired true value
+hence it is better to use <tt>j&lt;i</tt> comparison.</p>
+
+<p><b>Implicit declaration</b>.  Obviously, to print the prime number
+we have used the <tt>printf()</tt>.  This is a&#160;straight forward
+approach, but what is&#160;interesting is that there is no
+<tt>printf()</tt> declaration.  And yet another time, this is quite
+all right from C89's&#160;point of view.  If function declaration is
+missing an implicit declaration based on types of passed arguments
+with <tt>int</tt> as a&#160;return type is assumed.</p>
+
+<p>Let's stay here for a&#160;second because this is a&#160;good
+opportunity to yet again remind everybody not to cast result of
+<tt>malloc()</tt> function.  Consider the following code:</p>
+
+<pre>int main(void) {
+	int *p = (int *)malloc(sizeof *p); /* incorrect */
+	return p ? 0 : *p;
+}</pre>
+
+<p>Some compilers will (rightly) accept such code with no complains
+even though one forgot to include the <tt>stdlib.h</tt> header file.
+Because of the implicit function declaration rule the compiler will
+assume a&#160;<tt>int malloc(size_t)</tt> prototype and then (because
+of cast operator) will obediently convert <tt>int</tt> into
+a&#160;pointer to <tt>int</tt>.  Without the cast, compiler will have
+to complain about implicit conversion from <tt>int</tt> to pointer
+type reminding about the header file:</p>
+
+<pre>int main(void) {
+	int *p = malloc(sizeof *p); /* correct */
+	return p ? 0 : *p;
+}</pre>
+
+<p><b>Lack of return</b>.  The last issue with the prime number
+printing code is the lack of return statement.  C99 specifies that
+“reaching the <tt>}</tt> that terminates the <tt>main()</tt> function
+returns a&#160;value of zero.”  One cannot hide behind C99 though
+since the code uses various C89 only “features” (implicit type,
+implicit function declaration, etc).  So yes, this is another
+undefined behaviour in the code.</p>
+
+<p>Hope you have all enjoyed this little brain-teaser and maybe even
+got some interesting information about the C&#160;language from this
+entry.</p>
+
+<!-- COMMENT -->
+<!-- date: 2010-12-12 21:50:52 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>72 actually since "%d " needs to be "%d\n".</p>
+
+<p>Three hints:<br />
+1. Is “if” the only control structure that can be used?<br />
+2. Would pre-incrementation (as opposed to post-incrementation) change anything?<br />
+3. Do you need to compare with 100?</p>
+
+<!-- COMMENT -->
+<!-- date: 2010-12-13 10:16:10 -->
+<!-- nick: Wasacz -->
+<!-- nick_url: http://blog.wasacz.net -->
+
+<p>Hints applied: http://ideone.com/iHe9v</p>
+
+<p>;)</p>
+
+<!-- COMMENT -->
+<!-- date: 2010-12-13 11:19:00 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>Yep, that's it. :) When I get back from work I'll also post a version with one loop as it may be interesting.</p>
+
+<!-- COMMENT -->
+<!-- date: 2010-12-13 11:24:15 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>Ha! Actually, modifying your code I got down to 60. ;) Hint: Does you need the literal “1” value in the source code?</p>
+
+<!-- COMMENT -->
+<!-- date: 2010-12-13 11:54:38 -->
+<!-- nick: Wasacz -->
+<!-- nick_url: http://blog.wasacz.net -->
+
+<p>Wow ;) http://ideone.com/LqjjH</p>
+
+<!-- COMMENT -->
+<!-- date: 2010-12-14 08:42:44 -->
+<!-- nick: rozie -->
+<!-- nick_url: http://rozie.blox.pl/ -->
+
+<p>Perlgolfa widziałem, ale Cgolf? 8-o<br />
+Fajne. ;-)</p>
+
+<!-- COMMENT -->
+<!-- date: 2010-12-29 22:40:30 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>Still, you can optimise it a bit (85):</p>
+
+<pre>main(n,j){long long x=0x3986291891100;for(puts("2");x/=4;printf("%d\n",n+=x%4*2+2));}</pre>

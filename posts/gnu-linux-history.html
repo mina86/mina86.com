@@ -1,0 +1,298 @@
+<!-- subject: GNU/Linux History -->
+<!-- date: 2008-02-12 05:20:57 -->
+<!-- tags: gnu, linux, history -->
+<!-- categories: Misc -->
+
+<p>This article was prepared as presentation for my English class and
+since I made it I thought to put it on my homepage.  As presentation
+it was not <i>designed</i> to read so please excuse me for lousy
+language.  Moreover, I don't claim that it presents the whole history
+nor that it is the best source of information, however someone may
+find it useful.
+
+<!-- EXCERPT -->
+
+<h3 id=printer>The printer</h3>
+
+<p>Once upon a time <a rel=nofollow
+href=http://www.csail.mit.edu>Artificial Intelligence Laboratory</a>
+(AI Lab) at <a rel=nofollow href=http://www.mit.edu>Massachusetts
+Institute of Technology</a> (MIT) got a prototype of a new Xerox 9700
+laser printer, which printed pages faster and in higher quality then
+the old printer used at the lab.  Unfortunately, it turned out that it
+tended to get jammed.
+
+<p>Engineers at the lab quickly realised that, because it was
+a modified version of a xerox machine, it was designed to work with
+a supervisor how could quickly solve any problems, however, after
+modification it worked as a network machine so no one stood next to it
+to make sure everything went fine.
+
+<p>The previous printer that had been used at the lab (the XGP,
+Xerographic Printer) had similar bug and a simple <i>hack</i> had been
+applied to its software to solve it – when the printer got jammed it
+noticed everyone who had jobs on the queue so eventually someone would
+come and examine the problem.  This solution did the job, so
+<a href=http://stallman.org>Richard M. Stallman</a> decided to do the
+same thing with the new printer.
+
+<p>He started looking for the source code of printer's software,
+however, it turned out that there was no human-readable version
+available.  Stallman had never encountered situation when source code
+of an application is unavailable before, nevertheless he hoped that
+someone who used the same printer had decoded the software's binaries
+and made it available.
+
+<p>He remembered that when AI Lab needed a new network controlling
+software instead of writing everything from stretch they took a copy
+of tools written at Harvard university, modified it a bit and with
+small effort made it work in their laboratory.  They also fixed some
+bugs so Harvard could benefit from this as well.
+
+<p>Stallman soon realised that it won't be easy to get to printer's
+software's source code (he even met a programmer who worked on
+printer's software at Xerox but could not give him the code) because
+of a new kind of contract called <i>non disclosure agreement</i> (or
+NDA for short) which prevented programmers from revealing information
+about software they develop.
+
+<p>Now, think of a software as a recipe.  They are very similar since
+recipe gives steps you have to follow to get some kind of result.
+Software is the same – it takes some steps to accomplish a task.  In
+real life you use recipe, share them with your friends who can then
+change it so that they like the meal better.  Now, imagine a world
+where you cannot share your recipe.  Where you cannot even modify it,
+so there is some kind of dictator who decide how given meal tastes and
+you cannot do anything about it even if you think the meal would be
+better with a little more garlic.  That's what software licenses made
+to software – you cannot modify proprietary software to fit your needs
+and you cannot even share it with your friends.
+
+<p>If you really want to you can blame
+<a href=http://en.wikipedia.org/wiki/Bill_Gates>Bill Gates</a> for
+that because he was on of the pioneers of proprietary software model.
+On February 3, 1976, he wrote
+<a href=http://en.wikipedia.org/wiki/Open_Letter_to_Hobbyists
+title="Open Letter to Hobbyists">an open letter</a> in
+a <a href=http://en.wikipedia.org/wiki/Homebrew_Computer_Club>Homebrew
+Computer Club</a> (formed by a group of hackers and computer
+hobbyists) Newsletter.  The main point of the letter was that no one
+will work for free to produce a good quality software.  Example he
+pointed was his own BASIC application used by many people who did not
+pay for it which made time spent on developing Altair BASIC worth less
+than two dollars per hour.
+
+<h3 id=gnu>The GNU project</h3>
+
+<p>On September 27, 1983 Richard Stallman announced on the
+net.unix-wizards and net.usoft newsgroups that he's going to write
+a free operating system which will be compatible with Unix OSes.
+Later on, on January 5, 1984, he quits his job at Massachusetts
+Institute of Technology so that they could not claim ownership or
+interfere with distributing <a href=http://www.gnu.org>GNU</a> as free
+software.
+
+<p>The goal was to bring a wholly free software operating system into
+existence.  Stallman wanted computer users to be free, as most were in
+the 1960s and 1970s: free to study the source code of the software
+they use, free to share the software with other people, free to modify
+the behaviour of the software, and free to publish their modified
+versions of the software.  This philosophy was published in March 1985
+as <a href=http://www.gnu.org/gnu/manifesto.html>the GNU
+Manifesto</a>.
+
+<p>Also in 1985, Stallman invented and popularized the concept of
+<a href=http://www.gnu.org/copyleft/copyleft.html>copyleft</a>,
+a legal mechanism to protect the modification and redistribution
+rights for free software.  It was first implemented in the GNU Emacs
+General Public License, and in 1989 the first program-independent
+<a href=http://www.gnu.org/licenses/gpl.html>GNU General Public
+License</a> (GPL) was released.
+
+<p>As there wasn't many free software in 1980s, much of the needed
+tools had to be written from scratch, but existing compatible free
+software components were used.  Two examples were the
+<a href=http://en.wikipedia.org/wiki/TeX>TeX typesetting system</a>,
+and the <a href=http://www.x.org>X Window System</a>.  Most of GNU has
+been written by volunteers; some in their spare time, some paid by
+companies, educational institutions, and other non-profit
+organisations.  In October 1985, Stallman set up the
+<a href=http://www.fsf.org>Free Software Foundation</a> (FSF).  In the
+late 1980s and 1990s, the FSF hired software developers to write the
+software needed for GNU.
+
+<p>As GNU gained prominence, interested businesses began contributing
+to development or selling GNU software and technical support.  The
+most prominent and successful of these was
+<a href=http://en.wikipedia.org/wiki/Cygnus_Solutions>Cygnus Solutions
+funded</a> in 1989, now part of <a rel=nofollow
+href=http://www.redhat.com>Red Hat</a>.
+
+<h3 id=kernel>Missing kernel</h3>
+
+<p>By 1990, the GNU system had an extensible text editor (Emacs),
+a very successful optimising compiler (GCC), and most of the core
+libraries and utilities of a standard Unix distribution.
+
+<p>The main component still missing was the kernel.  In the GNU
+Manifesto, Stallman had mentioned that “an initial kernel exists but
+many more features are needed to emulate Unix.”  He was referring to
+<a href=http://en.wikipedia.org/wiki/Trix_(operating_system)>TRIX</a>,
+a remote procedure call kernel developed at MIT, whose authors had
+decided to distribute it as free software, and was compatible with
+Version 7 Unix.  In December 1986, work had started on modifying this
+kernel.  However, the developers eventually decided it was unusable as
+a starting point, primarily because it only ran on “an obscure,
+expensive 68000 box” and would therefore have to be ported to other
+architectures before it could be used.
+
+<p>The GNU Project's early plan was to adapt the
+<a href=http://en.wikipedia.org/wiki/BSD>BSD</a> 4. 4-Lite kernel for
+GNU.  Thomas Bushnell, the initial
+<a href=http://www.gnu.org/software/hurd/hurd.html>Hurd</a> architect
+said in hindsight that “It is now perfectly obvious to me that this
+would have succeeded splendidly and the world would be a very
+different place today”.  However, due to a lack of cooperation from
+the Berkeley programmers, the <a rel=nofollow
+href=http://www-2.cs.cmu.edu/afs/cs/project/mach/public/www/mach.html>Mach</a>
+message-passing kernel being developed at <a rel=nofollow
+href=http://cs.cmu.edu>Carnegie Mellon University</a> was being
+considered instead, although its release as free software was delayed
+until 1990 while its developers worked to remove code copyrighted to
+AT&amp;T.
+
+<h3 id=linux>The Linux kernel</h3>
+
+<p>At the same time,
+<a href=http://en.wikipedia.org/wiki/Linus_Torvalds>Linus Torvalds</a>
+at <a rel=nofollow href=http://www.cs.helsinki.fi>University of
+Helsinki</a> started creating an operating systems for Intel
+architecture.  He announced that in September 1991 in a notice posted
+to comp.os.minix newsgroup.  Soon the first 0.01 version of Linux was
+released.
+
+<p>Torvaldds himself have chosen the name <i>Freax</i> which combines
+<i>free</i>, <i>freak</i> and the obligatory <i>x</i> since it was a
+Unix-like system.  However, the person who put source codes on the
+FTP site didn't like the name and put them in directory called Linux
+and so the name stayed.
+
+<p>At the beginning Linux was developed under stricter conditions then
+those imposed by GNU General Public License.  In particular it could
+not be used sold.  Quickly, however, the license was changed to the
+GNU GPL.
+
+<p>Because more and more people played with the Linux kernel (Linus
+Torvalds describes that in 1992 it was no longer he and a couple of
+friends but he and hundred people who he didn't know where they live
+or who they are) some tried to find a software that would run on it.
+They soon found the GNU system which perfectly matched the kernel
+forming the complete operating system, unfortunately they didn't
+realise that it was a GNU system and in turn started calling the whole
+thing <i>Linux</i> which made it more difficult to get people
+attention to the GNU project and the idea behind it.
+
+<p>Because of that Richard Stallman advocates use of
+a term <i>GNU/Linux</i> which points out that it's not
+just <i>Linux</i> but it also contains the GNU software.  He also
+advocates to read it with <i>GNU slash Linux</i> since <i>GNU
+Linux</i> could give an impression that Linux is a GNU software
+package.
+
+<h3 id=apachee>Killer app</h3>
+
+<p>To become popular GNU/Linux needed a killer app which will brought
+the new operating system to light and make it available for business.
+
+<p>In 1994 development of <a rel=nofollow
+href=http://www.ncsa.uiuc.edu>National Center for Supercomputing
+Applications</a> web server, known simply as
+NCSA <abbr title="HyperText Transfer Protocol Daemon"
+lang=en>HTTPd</abbr>, stalled leaving a variety of patches for
+improvements circulating through e-mails.
+<a href=http://en.wikipedia.org/wiki/Rob_McCool>Rob McCool</a> and
+several other developers decided to take all available patches and
+continue development.  They chose <a href=http://apache.org>Apache</a>
+as a name because it started as a set of patches, that is it is <i>a
+patchy</i> web server.
+
+<p>At the same time, Internet becomes more and more popular.  All new
+<abbr title="Internet Service Provider" lang=en>ISP</abbr> companies
+a web server and it turned out that GNU/Linux with Apache installed
+was a stable and cost effective alternative to Windows NT
+with <abbr title="Internet Information Services" lang=en>IIS</abbr> or
+<a rel=nofollow href=http://netscape.com>Netscape Communications
+Corporation</a> web server.  For instance, ISP could host many web
+pages on a single machine which wasn't possible with commercial
+solutions.
+
+<h3 id=big>Big companies</h3>
+
+<p>Later on, in late 1990s a browser war begun.  <a rel=nofollow
+href=http://netscape.com>Netscape Communication Corporation</a> with
+their <a href=http://en.wikipedia.org/wiki/Netscape_Navigator>Netscape
+Navigator</a> thought against <a rel=nofollow
+href=http://microsoft.com>Microsoft</a> with their Internet Explorer
+to gain dominance in web browser market.  It was really important for
+Netscape not to lose this war because otherwise Microsoft with
+monopoly could modify <abbr title="HyperText Transfer Protocol"
+lang=en>HTTP</abbr> and <abbr title="HyperText Markup Language"
+lang=en>HTML</abbr> witch would make Netscape's web server
+incompatible with the mostly used web browser and web server was where
+Netscape really earned money.
+
+<p>At the time Netscape Navigator was a closed source application even
+though it was available free of charge.  The idea of releasing the
+source code, however, was present in the company.
+
+<p>Finally, on January 22, 1995 Netscape Communication released its
+browser source code giving the new browser the name
+<a href=http://www.mozilla.org>Mozilla</a> web browser.  It was
+another important step in GNU/Linux history since Netscape was the
+first big company which invested in the idea of free software.  It
+gave GNU/Linux visibility and credibility with investors.
+
+<h3 id=open>Open Source</h3>
+
+<p>Some of the developers felt that the term <i>Free Software</i> is
+not good for business.  It didn't help GNU/Linux to spread.  The term
+was either connected with a <i>free as in beer</i> and therefore
+probably worthless software or with Richard Stallman who had
+criticised copyright and intellectual property and (even though he was
+never against business) wasn't really liked with businessmen.
+
+<p>In the early 1995, in the <a rel=nofollow
+href=http://www.vasoftware.com>VA Linux</a> office in Mountain View
+a new term was introduced – <i>Open Source</i> software.  Its focus
+was in practical advantages of <i>open source</i>, that is the cost
+effectiveness, instant peer review and possibility to modify
+application in such a way that it fits your needs best.  Soon an
+<a rel=nofollow href=http://opensource.org/docs/osd>Open Source
+Definition</a> (based on
+<a href=http://www.debian.org/social_contract>The Debian Free Software
+Guidelines</a>) was created witch pointed rules which software have to
+meet to be called an Open Source software and an <a rel=nofollow
+href=http://opensource.org>Open Source Initiative</a> (or OSI for
+short) was funded to spread the idea of Open Source Software.
+
+<h3 id=community>The community</h3>
+
+<p>Richard Stallman criticises the new term and the new Open Source
+movement.  He does agree with arguments stated but he believes that
+there is something more important in Free Software than creating high
+quality tools.  He believes that the freedom to share and modify, that
+the advantages for the community are more important than the practical
+benefits.
+
+<p>It's a bit sad that the man who started everything doesn't really
+have attention he deserves.  Even more so since ideas he believes in
+are really noble and he cares about community more than other Open
+Source developers.
+
+<h3 id=candy>Candy</h3>
+
+<p>When we were in elementary school, teachers touched us to
+share – if you bring a candy share it with others.  Now however, we
+are told that sharing is bad – if you bring a piece of software do not
+share it because it's stealing.  World will be a much worse place if
+we stop sharing candies or lending sugar to your neighbour...

@@ -1,0 +1,289 @@
+<!-- subject: Obsługa archiwów plików -->
+<!-- date: 2008-02-12 05:08:52 -->
+<!-- tags: tar, gzip, bzip2, linux, pakowanie, rozpakowywanie -->
+<!-- categories: Articles, Techblog -->
+
+<p>Prędzej czy później, korzystając z GNU/Linuksa przyjdzie konieczność
+  zpakowania lub rozpakowania jakichś plików. Artykuł opisuje jak to
+  zrobić z głównym naciskiem pracy w konsoli.
+
+<!-- EXCERPT -->
+
+<h3 id=rozpakowywanie>Rozpakowywanie</h3>
+<p>Jak to zwykle bywa, rodzaj archiwum rozpoznaje się po rozszerzeniu
+  pliku, a zależnie od rodzaju pliku należy wykonać różne
+  polecenia:
+
+<dl>
+  <dt>gz
+  <dd><tt>gzip -d nazwa-pliku.<i>roz</i></tt><sup>(1)</sup>
+  <dd><tt>gzip -cd &lt;nazwa-pliku.<i>roz</i> &gt;nazwa-pliku</tt>
+
+  <dt>bz2, xz lub lzma
+  <dd><tt>bzip2</tt>/<tt>xz</tt>/<tt>lzma</tt> -d nazwa-pliku.<i>roz</i></tt><sup>(1)</sup>
+  <dd><tt>bzip2</tt>/<tt>xz</tt>/<tt>lzma</tt> -cd &lt;nazwa-pliku.<i>roz</i> &gt;nazwa-pliku</tt>
+  <dd><tt>bzip2</tt>/<tt>xz</tt>/<tt>lzma</tt> -kd nazwa-pliku.<i>roz</i></tt>
+
+  <dt>tar
+  <dd><tt>tar xvf nazwa-pliku.tar</tt><sup>(2)</sup>
+
+  <dt>tar.Z
+  <dd><tt>tar Zxvf nazwa-pliku.tar.Z</tt><sup>(2, 4)</sup>
+  <dd><tt>uncompress -c &lt;nazwa-pliku.tar.Z | tar vx</tt><sup>(2)</sup>
+
+  <dt>tar.gz lub tgz<sup>(3)</sup>
+  <dd><tt>tar zxvf nazwa-pliku.<i>roz</i></tt><sup>(2, 4)</sup>
+  <dd><tt>gzip -d &lt;nazwa-pliku.<i>roz</i> | tar vx</tt><sup>(2)</sup>
+
+  <dt>tar.bz2 lub tbz<sup>(3)</sup>
+  <dd><tt>tar jxvf nazwa-pliku.<i>roz</i></tt><sup>(2, 4)</sup>
+  <dd><tt>bzip2 -d &lt;nazwa-pliku.<i>roz</i> | tar vx</tt><sup>(2)</sup>
+
+  <dt>tar.xz lub txz<sup>(3)</sup>
+  <dd><tt>tar Jxvf nazwa-pliku.<i>roz</i></tt><sup>(2, 4)</sup>
+  <dd><tt>xz -d &lt;nazwa-pliku.<i>roz</i> | tar vx</tt><sup>(2)</sup>
+
+  <dt>tar.lzma
+  <dd><tt>xz -d &lt;nazwa-pliku.tar.lzma | tar vx</tt><sup>(2)</sup>
+
+  <dt>Z
+  <dd><tt>uncompress nazwa-pliku.Z</tt><sup>(1)</sup>
+  <dd><tt>uncompress -c &lt;nazwa-pliku.Z &gt;nazwa-pliku</tt>
+
+  <dt>arj
+  <dd><tt>unarj nazwa-pliku</tt>
+
+  <dt>zip
+  <dd><tt>unarj/unzip nazwa-pliku</tt>
+
+  <dt>rar
+  <dd><tt>unrar nazwa-pliku.rar</tt>
+
+  <dt>ace
+  <dd><tt>unace x nazwa-pliku.ace</tt>
+
+  <dt>7z
+  <dd>7zr x nazwa-pliku.7z</dd>
+</dl>
+
+<p>Notki:
+<ol>
+  <li>Po rozpakowaniu plik źródłowy zostanie skasowany.  Aby temu
+    zapobiec należy skorzystać z jednej z alternatyw.
+  <li>Wytłumaczenie znaczenia literek w pierwszym parametrze:
+    <ul>
+      <li><b>x</b> (od <span xml:lang=en>eXtract</span>) – rozpakuj
+        plik,
+      <li><b>v</b> (od <span xml:lang=en>Verbose</span>) – zapisz do
+        stderr (najprawdopodobniej na konsole) nazwy aktualnie
+        przetwarzanych plików,
+      <li><b>f</b> (od <span xml:lang=en>File</span>) – odczytaj (w
+        przypadku <a href=#pakowanie>tworzenia archiwum TAR</a>
+        zapisz) dane z (do) pliku podanego jako kolejny argument,
+      <li><b>Z</b>, <b>z</b>, <b>j</b>, <b>J</b> – „filtruj” dane
+        przez odpowiednio <tt>uncompress</tt>, <tt>gzip -d</tt>,
+        <tt>bzip2 -d</tt> lub <tt>xz -d</tt>, dzięki czemu zostaje on
+        najpierw dekompresowany (w
+        przypadku <a href=#dwakroki>tworzenia skomrpesowanego
+        archiwum TAR</a> parametr powoduje kompresje pliku).
+    </ul>
+  <li><tt>tgz</tt> to skrót od <tt>tar.gz</tt>, <tt>tbz</tt> od
+    <tt>tar.bz2</tt> (rzadko spotykane), a&#160;<tt>txz</tt> od
+    <tt>tar.xz</tt>.
+  <li>Na niektórych systemach opcje <b>Z</b>, <b>z</b>, <b>j</b>
+    lub <b>J</b> programu <tt>tar</tt> mogą nie działać.  Wówczas
+    należy użyć alternatywnej wersji z potokiem.
+</ol>
+
+<h3 id=pakowanie>Pakowanie</h3>
+<p>W przypadku pakowania plików opiszę jedynie archiwa <tt>tar</tt>,
+  gdyż (o ile mi wiadomo) inne popularne archiwa wymagają korzystania
+  z programów nie będących wolnym oprogramowaniem. Aby spakować kilka
+  plików lub katalog do archiwum należy użyć polecenia:
+<pre>tar vcf nazwa-pliku.tar katalog/lista-plików</pre>
+<p>i po sprawie, przy czym pliki są jedynie
+  spakowane, a nie skompresowane. Jak je skompresować opiszę <a
+  href=#kompresia>niżej</a>.
+<p>Jako ciekawostkę można powiedzieć, że archiwum <tt>tar</tt> zostało
+  pierwotnie zaprojektowane jako system plików do zapisu danych na
+  kasetach magnetofonowych, z których najłatwiej było odczytywać bloki
+  po 512 bajtów przez co wewnętrzna struktura pliku <tt>tar</tt>
+  charakteryzuje się użyciem takich właśnie bloków. Każdy plik ma
+  nagłówek zajmujący 512 bajtów i jest przechowywany w blokach po 512
+  bajtów każdy. Jeżeli ostatniego bloku nie zapełnia do końca to jest
+  on wypełniany zerami.
+<p>Należy również zauważyć, że program <tt>tar</tt> używa filozofii
+  blokowej także w stosunku do samego pliku archiwum. Przejawia się to
+  parametrem <tt>-N</tt>, dzięki któremu można określić wielkość
+  takiego bloku. Domyślnie jest to 20*512 czyli 10KiB. Warto mieć to
+  na uwadze, żeby później się nie zdziwić, że dwa czy trzy pliki,
+  które sumarycznie mają rozmiar 1KiB w rezultacie są pakowane do
+  archiwum o wielkości 10KiB.
+
+<h3 id=kompresja>Kompresja</h3>
+<p>By skompresować jakiś plik (np. wcześniej utworzone
+  archiwum <tt>tar</tt>) należy użyć jednej z komend:
+
+<dl>
+ <dt>Z
+ <dd><tt>compress nazwa-pliku</tt>
+ <dd><tt>compress &lt;nazwa-pliku &gt;nazwa-pliku.Z</tt>
+
+ <dt>gz
+ <dd><tt>gzip -9 nazwa-pliku</tt>
+ <dd><tt>gzip -9 &lt;nazwa-pliku &gt;nazwa-pliku.gz</tt>
+
+ <dt>bz2, xz lub lzma
+ <dd><tt>bzip2</tt>/<tt>xz</tt>/<tt>lzma -9 nazwa-pliku</tt>
+ <dd><tt>bzip2</tt>/<tt>xz</tt>/<tt>lzma -9 &lt;nazwa-pliku &gt;nazwa-pliku.<i>roz</i></tt>
+ <dd><tt>bzip2</tt>/<tt>xz</tt>/<tt>lzma -9k nazwa-pliku</tt>
+</dl>
+
+<p>Pierwsze polecenie z serii powoduje, że nieskompresowany plik
+  zostaje skasowany.
+
+<p>Format <tt>Z</tt> jest już starym, zapomnianym formatem i w
+  zasadzie jedyne jego wykorzystanie to trzymanie źródeł Linuksa 0.01
+  coby były w takiej formie w jakiej były udostępnione przez Linusa
+  Torvaldsa. Zdecydowanie nie zaleca się używania tegoż formatu.
+
+<p>Format <tt>bz2</tt> daje zazwyczaj lepszą kompresję niż <tt>gz</tt>
+  (choć nie musi to być prawdą dla małych plików) przy czym działa
+  wolniej, co jest w szczególnie odczuwalne w przypadku dużych plików.
+  Idąc dalej, <tt>xz</tt> kompresują zazwyczaj jeszcze lepiej.
+
+<h3 id=dwakroki>Pakowanie i kompresja razem</h3>
+<p>Pakowanie i kompresje można wykonać w jednym kroku. Oto jak tego
+  dokonać:
+
+<dl>
+ <dt>tar.Z
+ <dd><tt>tar Zcf nazwa-pliku.tar.Z lista-plików</tt>
+ <dd><tt>tar Zc lista-plików &gt;nazwa-pliku.tar.Z</tt>
+ <dd><tt>tar c lista-plików | compress &gt;nazwa-pliku.tar.Z</tt>
+
+ <dt>tar.gz
+ <dd><tt>tar zcf nazwa-pliku.tar.gz lista-plików</tt>
+ <dd><tt>tar zc lista-plików &gt;nazwa-pliku.tar.gz</tt>
+ <dd><tt>tar c lista-plików | gzip -9 &gt;nazwa-pliku.tar.gz</tt>
+
+ <dt>tar.bz2
+ <dd><tt>tar jcf nazwa-pliku.tar.bz2 lista-plików</tt>
+ <dd><tt>tar jc lista-plików &gt;nazwa-pliku.tar.bz2</tt>
+ <dd><tt>tar c lista-plików | bzip2 -9 &gt;nazwa-pliku.tar.bz</tt>
+
+ <dt>tar.xz
+ <dd><tt>tar Jcf nazwa-pliku.tar.xz lista-plików</tt>
+ <dd><tt>tar Jc lista-plików &gt;nazwa-pliku.tar.xz</tt>
+ <dd><tt>tar c lista-plików | xz -9 &gt;nazwa-pliku.tar.xz</tt>
+
+ <dt>tar.lzma
+ <dd><tt>tar c lista-plików | lzma -9 &gt;nazwa-pliku.tar.lzma</tt>
+</dl>
+
+<p>Osobiście preferuję ostatnią metodę, gdyż daje ona największą
+  kontrolę nad poleceniem kompresji.  Dodatkowo,
+  opcje <b>Z</b>, <b>z</b>, <b>j</b> lub <b>J</b> mogą nie działać na
+  danym systemie, a wersja z potokami działa zawsze.
+
+<h3 id=mc>Midnight Commander</h3>
+<p>Jeżeli ktoś nie lubi bawić się czystą linią komend to może też
+  skorzystać z Midnight Commandera (<tt>mc</tt>). Obsługuje on część
+  z wymienionych formatów.  W przypadku rozpakowywania wystarczy do
+  archiwum „wejść” tak jak do zwykłego katalogu i można z niego
+  przegrywać pliki gdzie tylko się chce. W przypadku pakowania
+  i kompresji należy zaznaczyć pliki, które chce się spakować
+  i wcisnąć <b>F2</b>. Powinno pojawić się okienko, w którym należy
+  podać tym archiwum oraz jego nazwę.
+
+<h3 id=programy>Potrzebne programy</h3>
+<p>Większość z tych programów jest dostępna w najpopularniejszych
+  dystrybucjach Linuksa.
+
+<dl>
+ <dt>tar
+ <dd>
+  <a href="http://www.gnu.org/software/tar/">www.gnu.org/software/tar/</a>
+  <small>(licencja: GNU GPL)</small>
+
+ <dt>gzip
+ <dd>
+  <a href="http://www.gzip.org/">www.gzip.org</a>
+  <small>(licencja: GNU GPL)</small>
+
+ <dt>bzip2
+ <dd>
+  <a href="http://sources.redhat.com/bzip2/">sources.redhat.com/bzip2/</a>
+  <small>(licencja: BSD-style)</small>
+
+ <dt>xz
+ <dd>
+   <a href="http://tukaani.org/xz/">tukaani.org/xz/</a>
+   <small>(licencja: <i>public domain</i>, GNU GPL, GNU LGPL)</small>
+
+ <dt>lzma
+ <dd>
+   <a href="http://tukaani.org/lzma/">tukaani.org/lzma/</a>
+   <small>(licencja: <i>public domain</i>, GNU GPL, GNU LGLP)</small>
+
+ <dt>7zip
+ <dd>
+   <a href="http://www.7-zip.org/">www.7-zip.org</a>
+   <small>(licencja: GNU LGPL)</small>
+
+ <dt>unzip
+ <dd>
+  <a href="http://www.info-zip.org/pub/infozip/UnZip.html">www.info-zip.org/pub/infozip/UnZip.html</a>
+  <small>(licencja: bazuje na BSD)</small>
+
+ <dt>unrar
+ <dd>
+  <a href="http://www.rarlabs.com/">www.rarlabs.com</a>
+  <small>(licencja: Closed Source, ale darmowa)</small>
+
+ <dt>unace
+ <dd>
+  <a href="http://www.winace.com/">www.winace.com</a>
+  <small>(licencja: Closed Source, ale darmowa)</small>
+</dl>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-12 09:21:31 -->
+<!-- nick: kuku -->
+<!-- nick_url: http://kuku.jogger.pl -->
+
+<p>moze jeszcze o 7z dopisać &#8211; i dobrze by było o pakowaniu zipem &#8211; czasem zip jest przydatny (duzo programów go wykorzystuje do swoich archiwów &#8211; np taki quake)</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-12 10:37:07 -->
+<!-- nick: radmen -->
+<!-- nick_url: http://radmen.jogger.pl -->
+
+<p>hah u mnie w większości wypadków &#8222;tar xvvf&#8221; załatwia sprawę ;p</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-12 10:49:14 -->
+<!-- nick: pybar -->
+
+<p>oprócz powyższych rozszerzeń spotyka się *.tbz, który jest wynikiem zazdrości używających bz2 o skrót .tar.gz  .tgz Zatem niektórzy wprowadzają .tar.bz2  .tbz.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-12 13:09:17 -->
+<!-- nick: zen -->
+<!-- nick_url: http://tomasz.napierala.org -->
+
+<p>Polecam: http://www.linux.com/feature/125790</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-14 15:35:00 -->
+<!-- nick: Piotr Konieczny -->
+<!-- nick_url: http://blog.konieczny.be -->
+
+<p>Taka luźna myśl, może powinniśmy zacząć wybierać post tygodnia na techblogu? Ten, miałby mój głos.</p>
+
+<!-- COMMENT -->
+<!-- date: 2008-02-14 16:06:29 -->
+<!-- nick: mina86 -->
+<!-- nick_url: http://mina86.com -->
+
+<p>No cóż mogę rzec&#8230; dziękuje za uznanie. :)</p>
