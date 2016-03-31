@@ -22,9 +22,6 @@ out/%.js: src/%.js $(YUICOMPRESSOR)
 out/%.css: src/%.css $(YUICOMPRESSOR) $(wildcard src/data/*.*)
 	@exec sh bin/compressor.sh $@ $^
 
-out/%.html: src/%.html $(HTMLCOMPRESSOR)
-	@exec sh bin/compressor.sh $@ $^
-
 out/html5.js: src/html5.js
 	exec cp -- $< $@
 
