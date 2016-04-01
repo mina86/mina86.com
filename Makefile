@@ -82,7 +82,12 @@ generate: .tmp
 
 public: static generate
 
-.PHONY: .tmp tmp-to-public compress-public generate public
+upload: public
+	@echo " UP"
+	@rsync -mrltvze ssh --delete-after --chmod=a+r,u+w,og-w,D+x,F-x \
+	       --progress $^ nfs:/home/
+
+.PHONY: .tmp tmp-to-public compress-public generate public upload
 
 
 $(YUICOMPRESSOR):
