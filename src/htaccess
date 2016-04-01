@@ -18,6 +18,11 @@ RewriteRule "^files/(.*)"                                  "d/$1"           [L,R
 # redirect them to proper URLs.
 RewriteRule "^sid/[a-z0-9A-Z]*/(.*)$"                      "$1"             [L,R=permanent]
 
+# Icons
+RewriteCond "%{DOCUMENT_ROOT}/d/$1" -f
+RewriteRule "^(?:apple-)?touch-icon-[0-9]+x([0-9]+\.png)$" "d/$1"           [L,R=permanent]
+RewriteRule "^(?:apple-)?touch-icon.png$"                  "d/192.png"      [L,R=temp]
+
 # If browser supports gzip and we have compressed file, send it.
 RewriteCond %{HTTP:Accept-Encoding} gzip
 RewriteCond %{REQUEST_FILENAME}.gz -f
