@@ -1,6 +1,7 @@
 STATIC	= $(addprefix public/d/,$(notdir $(wildcard src/*.*) \
 	                                 $(wildcard static/*.*))) \
-	  $(addprefix public/,$(notdir $(wildcard root/*.*)))
+	  $(addprefix public/,$(notdir $(wildcard root/*.*))) \
+	  public/.htaccess
 
 YUICOMPRESSOR_VERSION = 2.4.8
 YUICOMPRESSOR = bin/yuicompressor-$(YUICOMPRESSOR_VERSION).jar
@@ -52,6 +53,10 @@ public/%: .tmp/%
 public/%.gz: public/%
 	@echo " GZ   $(notdir $<)"
 	@exec gzip -9 <$< >$@
+
+public/.htaccess: src/htaccess
+	@echo " CP   $(notdir $<)"
+	@exec cp -- $< $@
 
 
 static: $(STATIC)
