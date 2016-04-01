@@ -84,7 +84,8 @@ public: static generate
 
 upload: public
 	@echo " UP"
-	@rsync -mrltvze ssh --delete-after --chmod=a+r,u+w,og-w,D+x,F-x \
+	@rsync -mrltvze ssh --delete-after \
+	       --chmod=Du=rwx,Dgo=rw,Fu=rw,Fgo=r \
 	       --progress $^ nfs:/home/
 
 .PHONY: .tmp tmp-to-public compress-public generate public upload
