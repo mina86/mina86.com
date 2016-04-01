@@ -33,7 +33,7 @@ tmp="$out~$$~compressor~"
 trap 'rm -f -- "$tmp"' 0
 
 run () {
-	echo '    ' "$@" >&2
+	#echo '    ' "$@" >&2
 	"$@"
 }
 
@@ -61,7 +61,7 @@ case $in in
 		--remove-input-attr \
 		--simple-bool-attr \
 		"$in" >$tmp
-	echo "     sed -n -e ... -i $tmp" >&2
+	#echo "     sed -n -e ... -i $tmp" >&2
 	block='\(body\|br\|col\|div\|form\|h[1-6]\|head\|html\|link\|meta\|p\|script\|table\|t[dhr]\|textarea\|title\|[ou]l\|[A-Z_][A-Z_]*\|section\|header\|aside\|article\|nav\|footer\)'
 	sed -n -e "
 		H
