@@ -1,0 +1,30 @@
+{%- extends 'base.html' -%}
+
+{%- block jumpto -%}
+  <li><a href="#m">the article</a>
+  {# <li><a href="#k">comments</a> #}
+{%- endblock -%}
+
+{%- block main -%}
+  <article id=m>
+    <h2><a href="{{ entry.href }}" title="Permanent link to the entry.">{{
+        entry.subject }}</a></h2>
+
+    <p class="t"><a href="#j">Get back to “Jump to”</a>
+
+    <div class=c>
+      {{ entry.body | safe }}
+      <footer class="g">
+        {{ social(entry.href) }}
+      </footer>
+    </div>
+
+    <footer class="m">
+      {{ post_meta(entry) }}
+    </footer>
+  </article>
+{%- endblock -%}
+
+{%- block comments -%}
+  <p id="k" style="margin:1em 2em; text-align: justify">Sadly, comments are not implemented at this time.
+{%- endblock -%}

@@ -1,0 +1,191 @@
+{# Variables:
+ #   lang -- page's language code, if empty ‘en’ is used
+ #   title -- page’s title, if present ‘–mina86.com’ will be
+ #            appended to it
+ #   is_main_index -- whether it’s the main index page
+ #   atom_link -- link to atom feed, if any
+ #   prev, next -- previous and next page.  Those are dictionaries with
+ #                 href and title keys.
+ #   canonical -- canonical URL for the page
+ #}
+
+{%- macro link(rel, href, title='') -%}
+  {%- if href -%}
+    <link rel="{{ rel }}" href="{{ href }}"
+          {%- if title %} title="{{ title }}"
+          {%- endif %}>
+  {%- endif -%}
+{%- endmacro -%}
+
+{%- macro social(href, title='') -%}
+  <div class="g-plusone" data-size="medium"
+       data-href="{{ href }}"></div>
+  <a href="https://twitter.com/share"
+     class="twitter-share-button"
+     data-url="{{ href }}"
+     {%- if title %} data-text="{{ title }}"
+     {%- endif %}>Tweet</a>
+{%- endmacro -%}
+
+{%- macro post_meta(entry) -%}
+  <ul>
+    <li><span class="t">Added at </span>{{ entry.date }}
+    <li class="np"><a href="{{ entry.href }}"
+                      title="Permanent link to the entry.">permlink</a>
+   </ul>
+   <p class="t">In categories:
+   <ul>
+     {% for cat in entry.categories %}
+       <li><a href="{{ cat.href }}" rel="category">{{ cat }}</a>
+     {% endfor %}
+   </ul>
+
+   {% if entry.tags %}
+     <p class="t">Keywords:
+     <ul>
+       {% for tag in entry.tags %}
+         <li>{{ tag }}
+       {% endfor %}
+     </ul>
+   {% endif %}
+{%- endmacro -%}
+
+
+<!DOCTYPE html>
+<html lang={{ lang | default('en') }}>
+<meta charset=UTF-8>
+<title>{% if title %}{{ title }}―{% endif %}mina86.com</title>
+<meta name=viewport content="width=device-width, initial-scale=1">
+<!--[if lt IE 9]><script src="/d/html5.js"></script><![endif]-->
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/d/css.css"
+      media="screen, projection, tv, handheld, tty, print">
+<link rel="stylesheet"
+      href="//cdn.jsdelivr.net/font-hack/2.010/css/hack.min.css"
+      media="screen, projection, tv, handheld, tty, print">
+<link rel="home" href="/" title="{{ title | default('mina86.com') }}">
+<link rel="index" href="/" title="{{ title | default('mina86.com') }}">
+<link rel="alternate home" type="application/atom+xml"
+      href="/atom.xml" title="Atom feed">
+{{ link('canonical', canonical) }}
+{% if prev %}{{ link('prev', prev.href, prev.title) }}{% endif %}
+{% if next %}{{ link('next', next.href, next.title) }}{% endif %}
+
+<div id="v">
+
+  <header id="h" role=banner>
+    <h1><a href="/" role=presentation><span>mina86</span>.com</a></h1>
+    <nav>
+      <ul>
+        <li><a accesskey="H" href="/"><span class="a">H</span>ome</a>
+        <li><a accesskey="D" href="https://github.com/mina86/">Co<span class="a">d</span>e</a>
+        <li><a accesskey="F" href="/c/downloads/"><span class="a">F</span>iles</a>
+        <li class=d><a accesskey="C" href=#l><span class="a">C</span>ategories</a>
+        <li class=d><a accesskey="A" href=#a><span class="a">A</span>rchive</a>
+      </ul>
+    </nav>
+  </header>
+
+  <div id="w">
+
+    <nav id="j">
+      <p>Jump to…
+      <ul>
+        {% block jumpto %}{% endblock %}
+        <li><a href="#l">categories</a>
+        <li><a href="#a">archive</a>
+      </ul>
+    </nav>
+
+    <main>
+      {% block prev_next %}
+        {% if prev or next %}
+          <nav class="p">
+            <ul>
+              {%- if prev -%}
+                <li><a accesskey="P" href="{{ prev.href }}"
+                       title="{{ prev.title }}" rel="prev">«
+                       <span class=a>p</span>revious</a>
+              {%- endif -%}
+              {%- if next -%}
+                <li class="pn"><a accesskey="N" href="{{ next.href }}"
+                                  title="{{ next.title }}"
+                                  rel="next"><span class=a>n</span>ext »</a>
+              {%- endif -%}
+            </ul>
+          </nav>
+        {% endif %}
+      {% endblock %}
+
+      {% block main %}{% endblock %}
+
+      {{ self.prev_next() }}
+
+      {% block comments %}{% endblock %}
+    </main>
+
+    <nav id="r">
+      <h2>Sidebar</h2>
+
+      <section id="e">
+        <p>mina86
+        <ul>
+          <li><a href="mailto:mina86@mina86.com">mina86.com</a>
+          <li><a href="xmpp:mina86@jabber.org">jabber.org</a>
+          <li><a href="irc://irc.freenode.net/slackware.pl/">#slackware.pl</a>
+        </ul>
+        <p title="AC1F 5F5C D418 88F8 CC84  5858 2060 4012 5075 1FF4">pgp: <a href="http://pgp.mit.edu:11371/pks/lookup?op=get&amp;search=0x2060401250751FF4">0x50751FF4</a>
+      </section>
+
+      <section id="l">
+        <h3>Categories</h3>
+        <p class="t"><a href="#j">Get back to “Jump to”</a>
+        <ul>
+          {% for cat in categories %}
+            <li>
+              <a href="{{ cat.href }}">{{ cat.desc }}</a>
+              <small>({{ cat.count }})</small>
+              {% if cat.feed %}
+                <a href="{{ cat.feed }}" class="r"><span>Atom feed</span></a>
+              {% endif %}
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section id="a">
+        <h3>Archive</h3>
+        <p class="t"><a href="#j">Get back to “Jump to”</a>
+        <ul>
+          {% for arch in archives %}
+            <li><a href="{{ arch.href }}">{{ arch.desc }}</a> <small>({{ arch.count }})</small>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section id="f">
+        <p class="t"><a href="#j">Get back to “Jump to”</a>
+        <ul>
+          <li class=bf><a href="http://fsf.org/register_form?referrer=8793">FSF Associate Member #8793</a>
+          <li class=be><a href="http://fsfe.org/">FSF Europe</a>
+          <li class=bc><a href="http://fellowship.fsfe.org/">FSFE Fellow #1791</a>
+          <li class=bb><a href="http://sfconservancy.org/">Software Freedom Conservancy supporter</a>
+          <li class=bs><a href="http://slackware.com/">Slackware</a>
+        </ul>
+      </section>
+    </nav>  {# #r #}
+
+  </div>  {# #w #}
+</div>  {# #v #}
+
+<footer role=contentinfo>
+  <p>Unless stated otherwise, text of the entries licensed under
+  the <a rel="license nofollow"
+  href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA
+  4.0</a> license, and code – <a rel="license nofollow"
+  href="http://www.apache.org/licenses/LICENSE-2.0">Apache License,
+  Version 2.0</a>.
+</footer>
+
+<p class="t">End of the page, <a href="#j">get back to “Jump to”</a>.
+<div id="b"></div>
+<script src=/d/js.js></script>
