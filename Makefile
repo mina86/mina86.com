@@ -1,6 +1,6 @@
-ALL	= $(addprefix out/d/,$(notdir $(wildcard src/*.*) \
-	                              $(wildcard static/*.*))) \
-	  $(addprefix out/,$(notdir $(wildcard root/*.*)))
+ALL	= $(addprefix public/d/,$(notdir $(wildcard src/*.*) \
+	                                 $(wildcard static/*.*))) \
+	  $(addprefix public/,$(notdir $(wildcard root/*.*)))
 
 YUICOMPRESSOR_VERSION = 2.4.8
 YUICOMPRESSOR = bin/yuicompressor-$(YUICOMPRESSOR_VERSION).jar
@@ -15,21 +15,21 @@ touch:
 	touch src/*.* src/data/*.*
 
 clean:
-	-rm -r out
+	-rm -r public
 
 
-out/d/%.js: src/%.js $(YUICOMPRESSOR)
+public/d/%.js: src/%.js $(YUICOMPRESSOR)
 	@exec sh bin/compressor.sh $@ $^
 
-out/d/%.css: src/%.css $(YUICOMPRESSOR) $(wildcard src/data/*.*)
+public/d/%.css: src/%.css $(YUICOMPRESSOR) $(wildcard src/data/*.*)
 	@exec sh bin/compressor.sh $@ $^
 
-out/d/%: static/%
+public/d/%: static/%
 	@exec mkdir -p $(dir $@)
 	@echo " CP  $(notdir $@)"
 	@exec cp -- $< $@
 
-out/%: root/%
+public/%: root/%
 	@exec mkdir -p $(dir $@)
 	@echo " CP  $(notdir $@)"
 	@exec cp -- $< $@
