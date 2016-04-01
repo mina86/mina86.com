@@ -15,3 +15,11 @@ RewriteCond %{HTTP:Accept-Encoding} gzip
 RewriteCond %{REQUEST_FILENAME}.gz -f
 RewriteRule ^(.*)$ $1.gz [L]
 Header append Vary Accept-Encoding
+
+# application/javascript is technically correct but HTML5 uses text/javascript
+# as SCRIPT’s default TYPE so let’s stick to that.
+AddType text/javascript .js
+
+# Atom is the only thing .xml is used on the site so we might just as well use
+# proper content type for it.
+AddType application/atom+xml .xml
