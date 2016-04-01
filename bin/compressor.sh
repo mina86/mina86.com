@@ -63,16 +63,17 @@ case $in in
 		"$in" >$tmp
 	#echo "     sed -n -e ... -i $tmp" >&2
 	block='\(body\|br\|col\|div\|form\|h[1-6]\|head\|html\|link\|meta\|p\|script\|table\|t[dhr]\|textarea\|title\|[ou]l\|[A-Z_][A-Z_]*\|section\|header\|aside\|article\|nav\|footer\)'
+	sp='[[:space:]][[:space:]]*'
 	sed -n -e "
 		H
 		\$ {
 			x
-			s/[[:space:]][[:space:]]*/ /g
-			s/^ \\| \$//g
-			s~ \\(</\\?$block\\)~\\1~g
-			s~\\(<$block\\( [^>]*\\)\\?>\\) ~\\1~g
-			s~ \\?<li~ <li~g
-			s~ <link~<link~g
+		#	s/$sp/ /g
+			s/^$sp\\|$sp\$//g
+			s~$sp\\(</\\?$block\\)~\\1~g
+			s~\\(<$block\\($sp[^>]*\\)\\?>\\)$sp~\\1~g
+			s~$sp\\?<li~ <li~g
+			s~$sp<link~<link~g
 			s~^<!DOCTYPE[^>]*>~&<!-- github.com/mina86/mina86.com -->~
 			p
 		}
