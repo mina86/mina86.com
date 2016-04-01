@@ -36,3 +36,15 @@ AddType text/javascript .js
 # Atom is the only thing .xml is used on the site so we might just as well use
 # proper content type for it.
 AddType application/atom+xml .xml
+
+# Images almost never change so set a long expiry.  CSS and JavaScript
+# resources don’t change more frequent but still not that often;
+# a week should be enough.  Finally, everything else (so namely HTML
+# and feed files) may change rarely as well but it’s important that
+# the change is picked up quickly (I can live with slightly outdated
+# styles but user should see new posts as quickly as possible).
+ExpiresActive On
+ExpiresDefault "access plus 1 hour"
+ExpiresByType text/css "access plus 1 week"
+ExpiresByType text/javascript "access plus 1 week"
+ExpiresByType image/* "access plus 1 month"
