@@ -278,7 +278,7 @@ class Writer(object):
               self_url=e('%s/%s' % (BASE_HREF, filename)),
               page_url=e(BASE_HREF + href),
               date=entries[0].date)
-        for entry in entries:
+        for entry in entries[:10]:
             write('''
                 <entry>
                   <title>%(subject)s</title>
