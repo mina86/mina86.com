@@ -10,6 +10,14 @@ RewriteRule "^kategoria/([a-z]*)/$"                        "c/$1/"          [L,R
 RewriteRule "^(atom|rss)/cat/([a-z]*)/"                    "c/$2/atom.xml"  [L,R=permanent]
 RewriteRule "^(atom|rss)/(content|short)/(html/)?(\d*/)?"  "atom.xml"       [L,R=permanent]
 
+# In retrospect, I’m not sure if it was worth renaming from ‘files’ to ‘d’.
+RewriteRule "^files/(.*)"                                  "d/$1"           [L,R=permanent]
+
+# /sid/<code>/… is the way Jogger used to handle logged in users.  I’m
+# still getting requests like that so for the transition period,
+# redirect them to proper URLs.
+RewriteRule "^sid/[a-z0-9A-Z]*/(.*)$"                      "$1"             [L,R=permanent]
+
 # If browser supports gzip and we have compressed file, send it.
 RewriteCond %{HTTP:Accept-Encoding} gzip
 RewriteCond %{REQUEST_FILENAME}.gz -f
