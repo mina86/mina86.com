@@ -9,3 +9,9 @@ RewriteRule "^kategoria/([a-z]*)/$"                        "c/$1/"          [L,R
 # old site so this flattens all of the feeds to a single format.
 RewriteRule "^atom/cat/([a-z]*)/"                          "c/$1/atom.xml"  [L,R=permanent]
 RewriteRule "^atom/content/"                               "atom.xml"       [L,R=permanent]
+
+# If browser supports gzip and we have compressed file, send it.
+RewriteCond %{HTTP:Accept-Encoding} gzip
+RewriteCond %{REQUEST_FILENAME}.gz -f
+RewriteRule ^(.*)$ $1.gz [L]
+Header append Vary Accept-Encoding
