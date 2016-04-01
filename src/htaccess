@@ -7,8 +7,8 @@ RewriteRule "^kategoria/([a-z]*)/$"                        "c/$1/"          [L,R
 
 # Atom and RSS feeds.  Current code doesn’t have as much configuration as the
 # old site so this flattens all of the feeds to a single format.
-RewriteRule "^atom/cat/([a-z]*)/"                          "c/$1/atom.xml"  [L,R=permanent]
-RewriteRule "^atom/content/"                               "atom.xml"       [L,R=permanent]
+RewriteRule "^(atom|rss)/cat/([a-z]*)/"                    "c/$2/atom.xml"  [L,R=permanent]
+RewriteRule "^(atom|rss)/(content|short)/(html/)?(\d*/)?"  "atom.xml"       [L,R=permanent]
 
 # If browser supports gzip and we have compressed file, send it.
 RewriteCond %{HTTP:Accept-Encoding} gzip
