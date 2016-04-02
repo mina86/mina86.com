@@ -3,18 +3,18 @@
 <!-- tags: ntp over http, ntp http proxy, time synchronisation, ntp, http -->
 <!-- categories: Articles, English, Techblog -->
 
-<p>Sitting in a&#160;dark office, after swearing for hours at ATI
-video cards I&#160;noticed time on my PC was incorrect.  &#8220;No
-problem&#8221; I&#160;thought as I&#160;started typing
-<tt>ntpdate</tt> but before finishing I&#160;realised that our
+<p>Sitting in a dark office, after swearing for hours at ATI
+video cards I noticed time on my PC was incorrect.  “No
+problem” I thought as I started typing
+<tt>ntpdate</tt> but before finishing I realised that our
 <em>beloved</em> IT department had blocked most of the Internet.
-Checking the time on a&#160;watch or a&#160;mobile phone was not an
-option&#160;&#8211; I&#160;have neither&#160;&#8211; nor was looking
-at GKrellM on another PC&#160;&#8211; that's&#160;just lame.</p>
+Checking the time on a watch or a mobile phone was not an
+option – I have neither – nor was looking
+at GKrellM on another PC – that's just lame.</p>
 
-<p>&#8220;I&#160;wish there was a&#160;NTP-over-HTTP protocol&#8221;
-I&#160;dreamed sighting.  And then, a&#160;few curses on the IT
-department later, I&#160;came up with an idea&#8230;</p>
+<p>“I wish there was a NTP-over-HTTP protocol”
+I dreamed sighting.  And then, a few curses on the IT
+department later, I came up with an idea…</p>
 
 <!-- EXCERPT -->
 
@@ -29,19 +29,19 @@ headers solution becomes clear.</p>
 
 <p>This has some disadvantages, granted, but works great for
 situations where millisecond accuracy is not required which is the
-case on most personal computers&#160;&#8211; do you really care if
-it's&#160;10 or 11 seconds after the minute?</p>
+case on most personal computers – do you really care if
+it's 10 or 11 seconds after the minute?</p>
 
 <p>It also requites GNU coreutils (for
-<tt>date</tt>'s&#160;<tt>-s</tt> switch) (but implementing <a
+<tt>date</tt>'s <tt>-s</tt> switch) (but implementing <a
 href="http://gist.github.com/278534">simple RFC1123 date parser</a> is
 not that hard), wget (which can however be replaced by other tools
 including telnet) and sed (which is POSIX utility and also can be
-replaced by <a href="http://gist.github.com/278539">a&#160;13-line
-C&#160;program</a>).</p>
+replaced by <a href="http://gist.github.com/278539">a 13-line
+C program</a>).</p>
 
-<p>Therefore implementing a&#160;complete tool written in C&#160;is
-left as a&#160;simple exercise for reader (less ambitious reader may
+<p>Therefore implementing a complete tool written in C is
+left as a simple exercise for reader (less ambitious reader may
 limit themselves to some scripting language with regexpes). :)</p>
 
 <!-- COMMENT -->

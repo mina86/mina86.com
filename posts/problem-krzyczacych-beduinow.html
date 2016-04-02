@@ -27,7 +27,7 @@ z pewnością, przynajmniej jeden, inny beduin go usłyszy.  Beduini maja na tyl
 <!-- nick: Sad -->
 <!-- nick_url: http://sad.jogger.pl -->
 
-<p>Hmmm&#8230; co do części pierwszej: może EIGRP? :)</p>
+<p>Hmmm… co do części pierwszej: może EIGRP? :)</p>
 
 <p>Edit: Swoją drogą, porównywanie beduinów do routerów Cisco jest dość nietuzinkowe :P</p>
 
@@ -36,16 +36,16 @@ z pewnością, przynajmniej jeden, inny beduin go usłyszy.  Beduini maja na tyl
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Muszę jeszcze dokładniej poczytać o tym algorytmie, ale wydaje mi się, iż polega on w przypadku, gdy zakładamy ograniczoną pamięć beduinów, należy bowiem wziąć pod uwagę, że nie występuje tutaj coś takiego jak podsieci i &#8222;klasy&#8221; beduinów.</p>
+<p>Muszę jeszcze dokładniej poczytać o tym algorytmie, ale wydaje mi się, iż polega on w przypadku, gdy zakładamy ograniczoną pamięć beduinów, należy bowiem wziąć pod uwagę, że nie występuje tutaj coś takiego jak podsieci i „klasy” beduinów.</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-02-20 02:48:54 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>No i chyba obmyśliłem, jak można rozwiązać problem z ograniczoną pamięcią.  Do tej pory źle się zabierałem do sprawy&#8212;cała sztuczka polega na nadaniu beduinom adresów.</p>
+<p>No i chyba obmyśliłem, jak można rozwiązać problem z ograniczoną pamięcią.  Do tej pory źle się zabierałem do sprawy—cała sztuczka polega na nadaniu beduinom adresów.</p>
 
-<p>Na początek wybieramy arbitralnie jakiegoś beduina, który staje się korzeniem. Proces ten można zautomatyzować wybierając  beduina o &#8222;najmniejszym&#8221; (w sensie jakiegoś przyjętego dobrego porządku) imieniu.</p>
+<p>Na początek wybieramy arbitralnie jakiegoś beduina, który staje się korzeniem. Proces ten można zautomatyzować wybierając  beduina o „najmniejszym” (w sensie jakiegoś przyjętego dobrego porządku) imieniu.</p>
 
 <p>Teraz beduini zapamiętują odległość (którą na początku inicjują nieskończonością) oraz listę dzieci.  Korzeń rozpoczyna wszystko zerując swoją odległość i krzycząc trójkę (<span class="caps">NULL</span>, swoje imię, 1).  Gdy ktoś usłyszy komunikat (rodzic, imię, metryka) robi co następuje:
 <ol>
@@ -55,9 +55,9 @@ z pewnością, przynajmniej jeden, inny beduin go usłyszy.  Beduini maja na tyl
 </ol><br />
 Po odpowiednim czasie każdy z wierzchołków zna imiona swoich dzieci w tak zbudowanym drzewie.</p>
 
-<p>W tej chwili beduini mogą zapomnieć odległość, ale muszą ciągle pamiętać listę dzieci oraz swój identyfikator (adres).  Zabawę ponownie rozpoczyna korzeń ustawiając swój adres na &#8222;0&#8221; i wykrzykując dla każdego ze swoich dzieci komunikat (imię dziecka, &#8222;id.n&#8221;), gdzie <code>id</code> to jego identyfikator, a <code>n</code> to numer dziecka.  Po wykrzyczeniu tych komunikatów zapomina listę dzieci (gdyż nie będzie już potrzebna). Gdy ktoś usłyszy wiadomość, gdzie imię zgadza się z jego imieniem ustawia swój identyfikator na ten z wiadomości i powtarza czynność wykonaną przez korzeń.</p>
+<p>W tej chwili beduini mogą zapomnieć odległość, ale muszą ciągle pamiętać listę dzieci oraz swój identyfikator (adres).  Zabawę ponownie rozpoczyna korzeń ustawiając swój adres na „0” i wykrzykując dla każdego ze swoich dzieci komunikat (imię dziecka, „id.n”), gdzie <code>id</code> to jego identyfikator, a <code>n</code> to numer dziecka.  Po wykrzyczeniu tych komunikatów zapomina listę dzieci (gdyż nie będzie już potrzebna). Gdy ktoś usłyszy wiadomość, gdzie imię zgadza się z jego imieniem ustawia swój identyfikator na ten z wiadomości i powtarza czynność wykonaną przez korzeń.</p>
 
-<p>Aby wysłać wiadomość, beduin musi znać identyfikator odbiorcy&#8212;tutaj niestety trzeba zastosować zapytanie rozchodzące się po całej pustyni. Zakładamy, że każdy z beduinów będzie rozmawiał z taką liczbą osób, że jest w stanie zapamiętać identyfikatory ich wszystkich.</p>
+<p>Aby wysłać wiadomość, beduin musi znać identyfikator odbiorcy—tutaj niestety trzeba zastosować zapytanie rozchodzące się po całej pustyni. Zakładamy, że każdy z beduinów będzie rozmawiał z taką liczbą osób, że jest w stanie zapamiętać identyfikatory ich wszystkich.</p>
 
 <p>Tymczasem, gdy trzeba wysłać wiadomość do wierzchołka o konkretnym identyfikatorze, to po prostu przekazujemy ją do rodzica, aż do momentu, gdy identyfikator beduina będzie przedrostkiem identyfikatora odbiorcy, a następnie do dzieci zgodnie z docelowym adresem.</p>
 

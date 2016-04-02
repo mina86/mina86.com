@@ -3,8 +3,8 @@
 <!-- tags: python, python is evil, dynamic typing -->
 <!-- categories: Articles, Reviews -->
 
-<p>Niedawno miałem okazję stworzyć trochę kodu w&#160;Pythonie.
-Popisałem sobie w&#160;nim kilka dni i&#160;muszę przyznać&#8230;
+<p>Niedawno miałem okazję stworzyć trochę kodu w Pythonie.
+Popisałem sobie w nim kilka dni i muszę przyznać…
 język jest tragiczny, zastanowię się kilka razy zanim po raz kolejny
 go użyję.</p>
 
@@ -15,13 +15,13 @@ go użyję.</p>
 <h3>Wcięcia</h3>
 
 <p>Zacznę powolutku, od kwestii raczej mało istotnych, wręcz błahych,
-zatem na początek może o&#160;wcięciach. Jak niektórzy pewnie wiedzą, Python wyróżnia bloki za pomocą wcięć, czego efektów jest kilka.</p>
+zatem na początek może o wcięciach. Jak niektórzy pewnie wiedzą, Python wyróżnia bloki za pomocą wcięć, czego efektów jest kilka.</p>
 
 <p>Po pierwsze edytorowi tylko czasami udaje się zgadnąć
-poziom wcięcia.  W&#160;&#8222;zwykłych&#8221; językach, wystarczy
+poziom wcięcia.  W „zwykłych” językach, wystarczy
 dopasować do siebie klamerki (czy inne wyznaczniki bloku), aby móc
-bezbłędnie wskazać, w&#160;którym miejscu powinien zaczynać się tekst.
-Gdy jednak blok jest wyróżniony wcięciem, to w&#160;najlepszym
+bezbłędnie wskazać, w którym miejscu powinien zaczynać się tekst.
+Gdy jednak blok jest wyróżniony wcięciem, to w najlepszym
 wypadku, edytor będzie pozwalał na wielokrotne wciskanie taba, co
 spowoduje skakanie pomiędzy możliwymi poziomami wcięć.</p>
 
@@ -29,31 +29,31 @@ spowoduje skakanie pomiędzy możliwymi poziomami wcięć.</p>
 zagnieżdżenia dla większych fragmentów kodu jest zadaniem
 nietrywialnym.</p>
 
-<p>Po trzecie, jak powszechnie wiadomo &#8222;najlepszym&#8221;
+<p>Po trzecie, jak powszechnie wiadomo „najlepszym”
 sposobem debugowania jest dodanie printów wewnątrz kodu.  Mam zwyczaj
-pisać je od początku linii, dzięki czemu rzucają się w&#160;oczy
-i&#160;łatwo je potem usunąć.  W&#160;Pythonie coś takiego nie
-przejdzie&#160;&#8211; wywołania muszą być wyrównane, co
+pisać je od początku linii, dzięki czemu rzucają się w oczy
+i łatwo je potem usunąć.  W Pythonie coś takiego nie
+przejdzie – wywołania muszą być wyrównane, co
 skutecznie komplikuje późniejsze wyczyszczenie z nich kodu.</p>
 
 
 <h3>Upośledzona lambda</h3>
 
-<p>Pozostając jeszcze w&#160;strefie składni i&#160;wcięć, warto
-wspomnieć o&#160;upośledzonym wyrażeniu lambda.  W&#160;Pythonie
+<p>Pozostając jeszcze w strefie składni i wcięć, warto
+wspomnieć o upośledzonym wyrażeniu lambda.  W Pythonie
 bowiem, wyrażenie lambda owszem istnieje, ale może się składać tylko
-z&#160;pojedynczego wyrażenia.</p>
+z pojedynczego wyrażenia.</p>
 
 <p>Nie to, żeby mi to jakoś szczególnie przeszkadzało, no ale
-szkoda&#8230;</p>
+szkoda…</p>
 
 
 <h3>Komentarze</h3>
 
 <p>Przejdźmy jednak do następnego punktu.  Ponownie coś mało
 istotnego, co jest zresztą cechą wielu języków skryptowych.  Otóż
-w&#160;Pythonie nie ma komentarzy blokowych. Jest to złe
-z&#160;co najmniej dwóch powodów. </p>
+w Pythonie nie ma komentarzy blokowych. Jest to złe
+z co najmniej dwóch powodów. </p>
 
 <p>Po pierwsze, nie ma
 łatwego sposobu (bez wykorzystania rozbudowanego edytora) na
@@ -63,48 +63,48 @@ wcięcia zamiast hasha).</p>
 
 <p>Drugą wadą komentarzy liniowych (jeśli można je tak nazwać) jest
 fakt, że wszystko się psuje jeżeli wiersz zostanie zawinięty.
-I&#160;uwierzcie mi, zdarza się to nazbyt często na grupach czy
-w&#160;korespondencji mailowej.</p>
+I uwierzcie mi, zdarza się to nazbyt często na grupach czy
+w korespondencji mailowej.</p>
 
-<p>Osobiście sądzę, iż Ritchie miał tutaj rację&#160;&#8211; sam
-komentarz blokowy w&#160;zupełności wystarcza, gdy tymczasem sam
+<p>Osobiście sądzę, iż Ritchie miał tutaj rację – sam
+komentarz blokowy w zupełności wystarcza, gdy tymczasem sam
 komentarz liniowy to zdecydowanie za mało.</p>
 
 
 <h3>Magiczny przecinek</h3>
 
 <p>Niemniej, moje ulubione dziwactwo, na które się natknąłem
-w&#160;składni Pythona to &#8222;magiczny przecinek&#8221; jak go
+w składni Pythona to „magiczny przecinek” jak go
 zacząłem nazywać.  Otóż poniższe dwie linijki są jak najbardziej
-poprawnym kodem Pythona i&#160;znaczą coś zupełnie innego:</p>
+poprawnym kodem Pythona i znaczą coś zupełnie innego:</p>
 
 <pre>[ "a", "b" ]
 [ "a"  "b" ]</pre>
 
 <p>Fajnie, nie? Żeby połączyć ze sobą dwa literały znakowe wystarczy
 napisać jeden obok drugiego bez żadnego operatora.  Doprawdy boskie,
-a&#160;przynajmniej takie się wydaje do momenty gdy kilka razy
-o&#160;tym przecinku zapomnimy&#8230;</p>
+a przynajmniej takie się wydaje do momenty gdy kilka razy
+o tym przecinku zapomnimy…</p>
 
 <p>Krotki też dodają dodatkowej zabawy, no bo czy nie jest wyborne, że
 poniższa linijka jest jak najbardziej poprawnym kodem Pythona:</p>
 
 <pre>"a",</pre>
 
-<p>I&#160;bynajmniej, jej wynikiem nie jest ciąg znaków,
-a&#160;jednoelementowa krotka składająca się z&#160;ciągu znaków.
-Jakby nie można było w&#160;gramatyce zawrzeć, że krotki muszą być
-zawsze otoczone w&#160;nawiasy, o&#160;ile jaśniejsza byłby wówczas
-zapis i&#160;o&#160;ile trudniej o&#160;literówki.</p>
+<p>I bynajmniej, jej wynikiem nie jest ciąg znaków,
+a jednoelementowa krotka składająca się z ciągu znaków.
+Jakby nie można było w gramatyce zawrzeć, że krotki muszą być
+zawsze otoczone w nawiasy, o ile jaśniejsza byłby wówczas
+zapis i o ile trudniej o literówki.</p>
 
 <p>(Zresztą idea tego typu danych też trochę mi umknęła, bo po co
 krotka skoro są tablice?  Tak wiem, krotka nie może ulec zmianie, ale
-co z&#160;tego? No ale, Pythonem bawiłem się stosunkowo
-krótko, więc nie wnikam&#160;&#8211; wierzę, że jakiś powód na dodanie
+co z tego? No ale, Pythonem bawiłem się stosunkowo
+krótko, więc nie wnikam – wierzę, że jakiś powód na dodanie
 krotek był).</p>
 
-<p>Na zakończenie o&#160;magicznym przecinku wspomnę jeszcze
-o&#160;magicznym princie.  Print bowiem nie tylko oddziela argumenty
+<p>Na zakończenie o magicznym przecinku wspomnę jeszcze
+o magicznym princie.  Print bowiem nie tylko oddziela argumenty
 spacją (przez co jeżeli chcesz wypisać dwie wartości bez odstępu
 musisz je jawnie skleić), ale dodaje na końcu znak przejścia do nowej
 linii.  Co zrobić, jeżeli go nie chcemy?  Magiczny przecinek przybywa
@@ -116,47 +116,47 @@ print "world"</pre>
 
 <h3>do-while</h3>
 
-<p>Czas odejść od spraw błahych i&#160;zająć się czymś
+<p>Czas odejść od spraw błahych i zająć się czymś
 poważniejszym.  Zacznę od pętli do-while, a dokładniej jej braku.</p>
 
-<p>W&#160;pierwszej chwili sądziłem, że to jakieś przeoczenie, że
-w&#160;tutorialu nie wspomnieli o&#160;do-while, ale nie&#8230; Python
+<p>W pierwszej chwili sądziłem, że to jakieś przeoczenie, że
+w tutorialu nie wspomnieli o do-while, ale nie… Python
 czegoś takiego zwyczajnie nie ma.  Ciągle się zastanawiam jak można
 stworzyć język bez tak oczywistej konstrukcji.  Jest to jedyny znany
-mi nieezoteryczny język imperatywny, w&#160;której takiej pętli nie
+mi nieezoteryczny język imperatywny, w której takiej pętli nie
 ma.</p>
 
-<p>W&#160;trakcie googlania spotkałem się ze stwierdzeniem, że każda
-przemyślana pętla może być zapisana w&#160;postaci pętli
-while&#160;&#8211; w&#160;tym momencie zacząłem się zastanawiać, czy
-gość, który to napisał, ma pojęcia o&#160;czym mówi, czy może uważa, że <tt>while True:
-&#8230; if not warunek: break</tt> to naprawdę ładna konstrukcja.
+<p>W trakcie googlania spotkałem się ze stwierdzeniem, że każda
+przemyślana pętla może być zapisana w postaci pętli
+while – w tym momencie zacząłem się zastanawiać, czy
+gość, który to napisał, ma pojęcia o czym mówi, czy może uważa, że <tt>while True:
+… if not warunek: break</tt> to naprawdę ładna konstrukcja.
 Pocieszałem się tylko tym, że pewnie był to jakiś domorosły ekspert
-nie związany z&#160;tworzeniem Pythona.</p>
+nie związany z tworzeniem Pythona.</p>
 
 
 <h3>Widoczność pól klasy</h3>
 
-<p>W&#160;2004 roku wydany został PHP 5.  Wspominam o&#160;tym
-dlatego, że jedną ze zmian w&#160;stosunku do PHP 4&#160;było dodanie
+<p>W 2004 roku wydany został PHP 5.  Wspominam o tym
+dlatego, że jedną ze zmian w stosunku do PHP 4 było dodanie
 modyfikatorów zasięgu (<i>public</i>, <i>private</i>
-i&#160;<i>protected</i>).  Tymczasem Python, mimo iż jest językiem
+i <i>protected</i>).  Tymczasem Python, mimo iż jest językiem
 starszym przez co wydawałoby się dojrzalszym, ciągle takich mechanizmów nie
-ma (przynajmniej w&#160;2.6) i&#160;nadal opiera się na umowie
-&#8222;podkreślenie jest niepubliczne&#8221;.</p>
+ma (przynajmniej w 2.6) i nadal opiera się na umowie
+„podkreślenie jest niepubliczne”.</p>
 
 
-<h3>Dynamiczne typowanie i&#160;deklarowanie zmiennych</h3>
+<h3>Dynamiczne typowanie i deklarowanie zmiennych</h3>
 
-<p>I&#160;tak oto doszliśmy do najpoważniejszego moim zdaniem zarzutu.
+<p>I tak oto doszliśmy do najpoważniejszego moim zdaniem zarzutu.
 Winny jednak jestem słówko wyjaśnienia, bo niby co złego jest
-w&#160;dynamicznym typowaniu i&#160;braku deklaracji zmiennych?
+w dynamicznym typowaniu i braku deklaracji zmiennych?
 Przecież to upraszcza pisanie programów!</p>
 
-<p>Rzeczywiście, upraszcza&#8230; pisanie stulinijkowych skryptów,
+<p>Rzeczywiście, upraszcza… pisanie stulinijkowych skryptów,
 ale gdy tylko zaczynamy pisać coś większe przeradza się 
-w&#160;ogromną wadę.  Wystarczy porównać te dwa skrypty, jeden
-napisany w&#160;Pythonie, a&#160;drugi w, tak przez wszystkich
+w ogromną wadę.  Wystarczy porównać te dwa skrypty, jeden
+napisany w Pythonie, a drugi w, tak przez wszystkich
 znienawidzonym, Perlu:</p>
 
 <pre>import random
@@ -178,8 +178,8 @@ if (rand(100) &lt; 1) {
 }</pre>
 
 <p>Interpreter Pythona bez zmrużenia oka wykona podany skrypt
-i&#160;z&#160;99% prawdopodobieństwem nie dowiemy się, że mamy
-literówkę.  Tymczasem perl wyłoży się w&#160;momencie kompilacji
+i z 99% prawdopodobieństwem nie dowiemy się, że mamy
+literówkę.  Tymczasem perl wyłoży się w momencie kompilacji
 (nawet bez <tt>strict</tt> dostaniemy ostrzeżenie).</p>
 
 <p>Zupełnie analogiczny przykład można stworzyć na wadę dynamicznego
@@ -195,22 +195,22 @@ else:
 print foo + 10</pre>
 
 <p>Tymi prostymi przykładami chcę pokazać, że dynamiczne typowanie
-i&#160;brak deklarowania zmiennych nie jest wcale czymś korzystnym.
+i brak deklarowania zmiennych nie jest wcale czymś korzystnym.
 Efekt jest taki, że wiele błędów, które kompilator mógłby wykryć
-ujawniają się dopiero w&#160;czasie wykonania (a&#160;potem jest
-wielkie zdziwienie, gdy coś się wysypuje w&#160;trakcie prezentacji
+ujawniają się dopiero w czasie wykonania (a potem jest
+wielkie zdziwienie, gdy coś się wysypuje w trakcie prezentacji
 produktu na międzynarodowej konferencji).</p>
 
-<p>Z&#160;tych powodów, miałem nadzieję, że w&#160;nowych językach,
+<p>Z tych powodów, miałem nadzieję, że w nowych językach,
 twórcy będą już od tego odchodzić i tak samo się stanie w Pythonie, ale
-niestety jego twórcy postanowili brnąć w&#160;tą ślepą uliczkę&#8230;
+niestety jego twórcy postanowili brnąć w tą ślepą uliczkę…
 Szkoda.</p>
 
 
 <h3>Posłowie</h3>
 
 <p>Gdy zaczynałem pisać projekt to do języka podchodziłem
-z&#160;entuzjazmem&#160;&#8211; wcięcia co prawda zawsze mnie
+z entuzjazmem – wcięcia co prawda zawsze mnie
 odstraszały, ale tak go wszyscy zachwalali, że myślałem sobie, że może
 faktycznie jest taki wspaniały.  Niestety zawiodłem się.</p>
 

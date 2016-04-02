@@ -145,7 +145,7 @@ następująco:</p>
 <p>Algorytmy szyfrowania asymetrycznego mogą dodatkowo spełniać
 jeszcze jeden warunek.  Mianowicie: <tt>dla każdego M,
 k<sub>pub</sub>,k<sub>priv</sub> zachodzi k<sub>pub</sub> i
-k<sub>priv</sub> stanowią parę =&gt; M = D( E( M, k<sub>priv</sub> ),
+k<sub>priv</sub> stanowią parę ⇒ M = D( E( M, k<sub>priv</sub> ),
 k<sub>pub</sub>)</tt>.  Czyli, że szyfrując wiadomość kluczem
 prywatnym będzie można ją rozszyfrować kluczem publicznym.  Własność
 taką posiada algorytm RSA i dzięki temu jest wykorzystywany w podpisie
@@ -171,11 +171,11 @@ dwóch różnych łańcuchów o takim samym hashu.</p>
 <p>Funkcja skróty jest często wykorzystywana w systemach logowania.
 Hasło użytkownika jest hashowane i w takiej postaci zapisywane.  W
 momencie logowania oblicza się hash z podanego hasła i porównuje z
-zapisanym hashem (<tt>zapisany hash = H( podane hasło ) =&gt;
+zapisanym hashem (<tt>zapisany hash = H( podane hasło ) ⇒
 użytkownik podał poprawne hasło</tt>).</p>
 
 <p>Trzeba pamiętać, że nieprawdą jest, iż <tt>dla każdego x, y
-zachodzi H( x ) = H( y ) =&gt; x = y</tt>.  Jednakże nieścisłość tą
+zachodzi H( x ) = H( y ) ⇒ x = y</tt>.  Jednakże nieścisłość tą
 można bez żadnych obaw pominąć.  Po prostu jeżeli chcemy mieć większą
 pewność to używamy innego algorytmu, np. zamiast MD5 to SHA1...</p>
 
@@ -198,7 +198,7 @@ pewność to używamy innego algorytmu, np. zamiast MD5 to SHA1...</p>
 <!-- nick: GiM -->
 <!-- nick_url: http://gim.jogger.pl -->
 
-<p>a jakąż to &#8216;większą&#8217; pewność daje nam sha-1 zamiast md5 skoro algorytmy kolidowania są od 3 lat znane? :&#62; (pewnym zabezpieczeniem staje si w tym momencie salt)</p>
+<p>a jakąż to „większą” pewność daje nam sha-1 zamiast md5 skoro algorytmy kolidowania są od 3 lat znane? :&gt; (pewnym zabezpieczeniem staje się w tym momencie salt)</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-02-19 11:42:57 -->
@@ -212,6 +212,6 @@ pewność to używamy innego algorytmu, np. zamiast MD5 to SHA1...</p>
 <!-- nick: GiM -->
 <!-- nick_url: http://gim.jogger.pl -->
 
-<p>@Moarc/J-23 (JW23? :&#62;) pewnym jest, ciekawe na jak długo :).</p>
+<p>@Moarc/J-23 (JW23? :&gt;) pewnym jest, ciekawe na jak długo :).</p>
 
 <p>btw: sha-1024? takiej nie znaju.</p>

@@ -543,7 +543,7 @@ W przypadku serwera produkcyjnego to już połowa rozwiązań nie ma najmniejsze
 <!-- date: 2008-03-01 10:53:20 -->
 <!-- nick: Porter3 -->
 
-<p>mina86 &#8211; super art! tego mi brakowało. Pozdrawiam.</p>
+<p>mina86 – super art! tego mi brakowało. Pozdrawiam.</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-03-08 01:36:52 -->
@@ -559,12 +559,12 @@ pzdr</p>
 
 <p>Gdzie to dodac ?</p>
 
-<p>for f in &#8216;&#8217; bash_ z; do
-    echo TMOUT=1200 &#62;&#62;~mina86/.${f}profila<br />
+<p>for f in '' bash_ z; do
+    echo TMOUT=1200 &gt;&gt;~mina86/.${f}profila<br />
 done</p>
 
 <p>for f in shell bash zsh csh ksh; do
-    echo TMOUT=1200 &#62;&#62;~/.${f}rc<br />
+    echo TMOUT=1200 &gt;&gt;~/.${f}rc<br />
 done</p>
 
 <!-- COMMENT -->
@@ -586,28 +586,28 @@ done</p>
 <!-- nick_url: http://mina86.com -->
 
 <p><tt>/bin/su</tt> musi mieć co najmniej prawa 04750 (zarówno
-  z&#160;04700 jak i&#160;0755 byłby bezużyteczny),
-  a&#160;04750 w&#160;przypadku <tt>/sbin/halt</tt> i&#160;spółki
+  z 04700 jak i 0755 byłby bezużyteczny),
+  a 04750 w przypadku <tt>/sbin/halt</tt> i spółki
   pozwala na uruchamianie tych programów przez użytkowników
-  w&#160;grupie bez konieczności uruchamiania su czy sudo.</p>
+  w grupie bez konieczności uruchamiania su czy sudo.</p>
 
-<p>Czwórka na początku ustawia bit SUID.  O&#160;SUID
-  i&#160;SGID <a href="/p/systemy-operacyjne/">pisałem
-  w&#160;innej mojej notce</a> (sekcja &#8222;Prawa dostępu do plików,
-  bity SUID, SGID&#8221;).</p>
+<p>Czwórka na początku ustawia bit SUID.  O SUID
+  i SGID <a href="/p/systemy-operacyjne/">pisałem
+  w innej mojej notce</a> (sekcja „Prawa dostępu do plików,
+  bity SUID, SGID”).</p>
 
-<p>W&#160;skrócie chodzi o&#160;to, że
-  z&#160;ustawioną flagą SUID program jest uruchamiany tak jakby
-  uruchomił go jego właściciel, a&#160;nie osoba faktycznie to
-  czyniąca&#160;&#8211; w&#160;ten sposób, gdy <tt>/sbin/halt</tt> ma
-  ustawione prawa 04750 i&#160;własność na root:root to każda osoba
-  z&#160;grupy root może go uruchomić i&#160;program zadziała
+<p>W skrócie chodzi o to, że
+  z ustawioną flagą SUID program jest uruchamiany tak jakby
+  uruchomił go jego właściciel, a nie osoba faktycznie to
+  czyniąca – w ten sposób, gdy <tt>/sbin/halt</tt> ma
+  ustawione prawa 04750 i własność na root:root to każda osoba
+  z grupy root może go uruchomić i program zadziała
   poprawnie, gdyż dzięki SUID uzyska uprawnienia super
-  użytkownika&#160;&#8211; bez tej flagi narzekałby na brak
+  użytkownika – bez tej flagi narzekałby na brak
   uprawnień.</p>
 
-<p>Generalnie z&#160;flagami SUID i&#160;SGID należy uważać, ale
-  z&#160;drugiej strony są one po to, aby z&#160;nich korzystać.
+<p>Generalnie z flagami SUID i SGID należy uważać, ale
+  z drugiej strony są one po to, aby z nich korzystać.
   Przykładowo polecenia takie
   jak <tt>mount</tt>, <tt>ping</tt>, <tt>ping6</tt>, <tt>umount</tt>
   czy <tt>Xorg</tt> mają bit SUID ustawiony.</p>
@@ -616,7 +616,7 @@ done</p>
 <!-- date: 2009-03-05 10:31:46 -->
 <!-- nick: tomek -->
 
-<p>Artykuł bardzo dobry. W &#8222;Kasowanie zbędny userów i grup&#8221; w pierwszym poleceniu są powielone nazwy użytkowników i lista nie odpowiada tym z następnego polecenia.</p>
+<p>Artykuł bardzo dobry. W „Kasowanie zbędny userów i grup” w pierwszym poleceniu są powielone nazwy użytkowników i lista nie odpowiada tym z następnego polecenia.</p>
 
 <!-- COMMENT -->
 <!-- date: 2009-03-08 10:49:03 -->

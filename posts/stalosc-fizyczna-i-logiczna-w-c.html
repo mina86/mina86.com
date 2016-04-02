@@ -447,7 +447,7 @@ http://kerneltrap.org/Linux/C_Semantics_Constants_and_Pointers</p>
 <!-- nick: GiM -->
 <!-- nick_url: http://gim.jogger.pl -->
 
-<p>&#8222;W obu przypadkach, wołając funkcję, mamy pewność, iż wektor przekazany jako argument nie zostanie zmodyfikowany&#8221; </p>
+<p>„W obu przypadkach, wołając funkcję, mamy pewność, iż wektor przekazany jako argument nie zostanie zmodyfikowany” </p>
 
 <p>No właśnie problem w tym, że nie mamy, to jest tylko wskazówka, nigdy nie wiadomo czy genialnemu autorowi danej metody/funkcji, nie przyszło do głowy zrobić sobie od tak const_cast, albo dajmy na funkcja/metoda, przyjmuje jako jeden z parametrów obiekt/strukturę, a element przekazywanej klasy/struktury ma atrybutu mutable.</p>
 
@@ -465,12 +465,12 @@ staje się moim zdaniem automatycznie jaśniejszy.</p>
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>&#8222;No właśnie problem w tym, że nie mamy, to jest tylko wskazówka, nigdy nie wiadomo czy genialnemu autorowi danej metody/funkcji, nie przyszło do głowy zrobić sobie od tak const_cast&#8221; </p>
+<p>„No właśnie problem w tym, że nie mamy, to jest tylko wskazówka, nigdy nie wiadomo czy genialnemu autorowi danej metody/funkcji, nie przyszło do głowy zrobić sobie od tak const_cast” </p>
 
 <p>Oczywiście masz rację, ale milcząco założyłem, iż autor funkcji/metody poprawnie ją zaprojektował.</p>
 
-<p>&#8222;albo dajmy na funkcja/metoda, przyjmuje jako jeden z parametrów obiekt/strukturę, a element przekazywanej klasy/struktury ma atrybutu mutable.&#8221; </p>
+<p>„albo dajmy na funkcja/metoda, przyjmuje jako jeden z parametrów obiekt/strukturę, a element przekazywanej klasy/struktury ma atrybutu mutable.” </p>
 
-<p>Ponownie może źle się wyraziłem &#8212; faktycznie fizycznie obiekt może się zmienić, choć z naszego punktu widzenia nie ma to znaczenia, bo logicznie jest to ciągle ten sam obiekt przechowujący taką samą wartość (ponownie pomijam sytuacje, gdy klasa jest źle zaprojektowana).</p>
+<p>Ponownie może źle się wyraziłem — faktycznie fizycznie obiekt może się zmienić, choć z naszego punktu widzenia nie ma to znaczenia, bo logicznie jest to ciągle ten sam obiekt przechowujący taką samą wartość (ponownie pomijam sytuacje, gdy klasa jest źle zaprojektowana).</p>
 
-<p>Co do lewostronności słowa kluczowego to już się przyzwyczaiłem i nie potrafię się przerzucić, choć próbowałem. Najbardziej przemawia do mnie przypadek, gdy pod funkcją zwracającą np. &#8222;Foo&amp;&#8221; deklaruję funkcję zwracającą &#8222;Foo const&amp;&#8221; &#8212; zastosowanie lewostronnego zapisu nazwy funkcji można ładnie wyrównać w kolumnach bez narzekania edytora na wcięcia. :)</p>
+<p>Co do lewostronności słowa kluczowego to już się przyzwyczaiłem i nie potrafię się przerzucić, choć próbowałem. Najbardziej przemawia do mnie przypadek, gdy pod funkcją zwracającą np. „Foo&amp;” deklaruję funkcję zwracającą „Foo const&amp;” — zastosowanie lewostronnego zapisu nazwy funkcji można ładnie wyrównać w kolumnach bez narzekania edytora na wcięcia. :)</p>

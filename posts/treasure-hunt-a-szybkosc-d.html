@@ -6,28 +6,28 @@
 <p>Zachęcony
   <a href="http://gim.jogger.pl/2008/06/04/treasure-hunt/">wpisem
   GiMa</a> postanowiłem pobawić się
-  w&#160;<a href="http://treasurehunt.appspot.com/">Google Treasure
-  Hunt</a>.  Z&#160;początku moje wrażenia były negatywne, ale to
+  w <a href="http://treasurehunt.appspot.com/">Google Treasure
+  Hunt</a>.  Z początku moje wrażenia były negatywne, ale to
   dlatego, że zacząłem od zadania sieci, które jest co najmniej denne.
   Archiwum też nie napawało optymizmem, już zacząłem się zastanawiać,
-  czy wszystkie będą tak prymitywne&#160;&#8211; na szczęście nie
+  czy wszystkie będą tak prymitywne – na szczęście nie
   były.</p>
 
 <!-- EXCERPT -->
 
-<p>Robot&#160;&#8211; kolejne zadanie, za które sie
-  wziąłem&#160;&#8211; przypomniał mi stare dobre czasy, gdy to na
-  lekcjach rachunku prawdopodobieństwa z&#160;umiłowaniem wyliczaliśmy
-  na ile sposób można dojść z&#160;jednego rogu do drugiego albo ile
-  jest <var>n</var> elementowych ciągów o&#160;wyrazach naturalnych,
+<p>Robot – kolejne zadanie, za które sie
+  wziąłem – przypomniał mi stare dobre czasy, gdy to na
+  lekcjach rachunku prawdopodobieństwa z umiłowaniem wyliczaliśmy
+  na ile sposób można dojść z jednego rogu do drugiego albo ile
+  jest <var>n</var> elementowych ciągów o wyrazach naturalnych,
   których suma wynosi <var>m</var>.</p>
 
 <p>Na stworzenie tego wpisu zdecydowałem się jednak nie po to, aby się
   chwalić jaki to jestem mądry.  Sprowokowało mnie do tego
   <a href="http://dsource.org/projects/tango/wiki/BitArrayVsArrayOfBoolsExample">rozwiązanie
-  czwartego zadania</a>, w&#160;którym GiM wydawał się sugerować
-  jakoby język D&#160;był niezmiernie szybki.  Cóż&#8230; niechaj mój
-  pomiar mówi sam za siebie (program napisany w&#160;C, procesor
+  czwartego zadania</a>, w którym GiM wydawał się sugerować
+  jakoby język D był niezmiernie szybki.  Cóż… niechaj mój
+  pomiar mówi sam za siebie (program napisany w C, procesor
   Sempron 2500+ 1,4GHz):</p>
 
 <pre>$ <i>time ./sieve 20000000</i>
@@ -42,11 +42,11 @@ user    0m0.817s
 sys     0m0.077s</pre>
 
 <p>Jak widać na wolniejszym komputerze program znalazł przeszło
-  3&#160;razy więcej liczb pierwszych w&#160;czasie krótszym od
+  3 razy więcej liczb pierwszych w czasie krótszym od
   programu GiMa.</p>
 
-<p>Teraz tylko zachodzę w&#160;głowę o&#160;co biega z&#160;tą
-  koszulką, co to GiM ją niby dostał&#8230; ;)</p>
+<p>Teraz tylko zachodzę w głowę o co biega z tą
+  koszulką, co to GiM ją niby dostał… ;)</p>
 
 <!-- COMMENT -->
 <!-- date: 2009-01-10 12:42:28 -->
@@ -63,7 +63,7 @@ Nie dajcie sie oszukać, Java, Python i D nie będą szybsze od przemyślanego C
 
 <p>Paradoksalnie program napisany w assemblerze mógłby działać wolniej z tej prostej przyczyny, że nie udałoby się tak dobrze dobrać rejestrów tudzież nie znam wielu technik optymalizacji, z których korzysta kompilator.</p>
 
-<p>Jeśli chodzi o Javę, to ponoć w pewnych specyficznych warunkach może być szybsza od skompilowanego programu &#8212; osobiście nie za bardzo w to wierzę (podejrzewam, że jeżeli taki wynik komuś udało się uzyskać to zapewne były to całkiem teoretyczne pomiary oderwane od rzeczywistości). Teoria za tym stojąca jest taka, że program może być modyfikowany w trakcie działania co pozwala optymalizować skoki itp.</p>
+<p>Jeśli chodzi o Javę, to ponoć w pewnych specyficznych warunkach może być szybsza od skompilowanego programu — osobiście nie za bardzo w to wierzę (podejrzewam, że jeżeli taki wynik komuś udało się uzyskać to zapewne były to całkiem teoretyczne pomiary oderwane od rzeczywistości). Teoria za tym stojąca jest taka, że program może być modyfikowany w trakcie działania co pozwala optymalizować skoki itp.</p>
 
 <p>Python jako interpretowany język skryptowy z dynamicznymi typami ma faktycznie niewielkie szanse być szybszy od programów skompilowanych, ale też nie o to w nim do chodzi.</p>
 
@@ -87,16 +87,16 @@ napisana pętla for z użytym ~= co raczej sporo spowalnia wykonanie. Pętle tę
 <p>Ważniejszą rzeczą natomiast jest to, ile zajęłoby Ci napisanie tego nie mając pierwowzoru :)<br />
 Bo zdaje się, że w treasure-huncie brali pod uwagę czas pomiędzy opublikowaniem zadania a nadesłaniem odpowiedzi :)</p>
 
-<p>Pewnie, że mógłbym to napisać w C i pewnie nawet napisałbym szybciej niż to co napisałem w D, ale chciałem &#8216;poćwiczyć&#8217;, poza tym porównać jak się ma BitArray z tango do boola.</p>
+<p>Pewnie, że mógłbym to napisać w C i pewnie nawet napisałbym szybciej niż to co napisałem w D, ale chciałem ‘poćwiczyć’, poza tym porównać jak się ma BitArray z tango do boola.</p>
 
-<p>[Wszystko to to i tak nic w porównaniu z rozwiązaniem znajomego w Haskellu, które jest dosłownie zapisaniem postawionego problemu, mieści się w jakichś 10 linijkach, oczywiście nie ma sensu mówić tu o czasie wykonania, skoro czas napisania (tego w Haskellu) był nieporównywalnie krótszy :&#62;]</p>
+<p>[Wszystko to to i tak nic w porównaniu z rozwiązaniem znajomego w Haskellu, które jest dosłownie zapisaniem postawionego problemu, mieści się w jakichś 10 linijkach, oczywiście nie ma sensu mówić tu o czasie wykonania, skoro czas napisania (tego w Haskellu) był nieporównywalnie krótszy :&gt;]</p>
 
 <!-- COMMENT -->
 <!-- date: 2009-01-12 19:52:55 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Zależy jak na sprawę patrzeć. W kontekście <span class="caps">GTH</span> zapewne, to czy będzie liczyć pół sekundy czy pięć sekund dużego znaczenia nie ma, ale w ogólności takie różnice są istotne &#8212; wyobraź sobie co byś zrobił, gdyby Twój telefon komórkowy włączał się minutę (ostatnio coś podobnego analizowałem w pracy).</p>
+<p>Zależy jak na sprawę patrzeć. W kontekście <span class="caps">GTH</span> zapewne, to czy będzie liczyć pół sekundy czy pięć sekund dużego znaczenia nie ma, ale w ogólności takie różnice są istotne — wyobraź sobie co byś zrobił, gdyby Twój telefon komórkowy włączał się minutę (ostatnio coś podobnego analizowałem w pracy).</p>
 
 <p>Tak czy owak, pozwoliłem sobie w ten zakamuflowany sposób wyrazić moją opinię, iż język D nie ma przyszłości. ;)</p>
 
@@ -109,7 +109,7 @@ Bo zdaje się, że w treasure-huncie brali pod uwagę czas pomiędzy opublikowan
 
 <p>Uch, ciut za dużo generowałem, po poprawce, generowanie w D zabiera trochę ponad sekundę (używając dmd, gdc nie mam pod ręką nadal).</p>
 
-<p>Programuję na co dzień w C, ale zysk jaki daje w tym przypadku nie jest dla mnie zbyt wymierny&#8230;</p>
+<p>Programuję na co dzień w C, ale zysk jaki daje w tym przypadku nie jest dla mnie zbyt wymierny…</p>
 
 <p>A czy ma przyszłość, cóż czas pokaże. ;)</p>
 
@@ -120,9 +120,9 @@ Bo zdaje się, że w treasure-huncie brali pod uwagę czas pomiędzy opublikowan
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Hmm&#8230; Może faktycznie przesadziłem. Skoro jest moduł do <span class="caps">GCC</span>, to może rzeczywiście idzie to jakoś optymalizować. ;)</p>
+<p>Hmm… Może faktycznie przesadziłem. Skoro jest moduł do <span class="caps">GCC</span>, to może rzeczywiście idzie to jakoś optymalizować. ;)</p>
 
-<p>Nadal uważam jednak, że język nie ma świetlanej przyszłości &#8212; C++ (pomimo odczapowych szablonów) już się dobrze zadomowiło i trudno, żeby nagle miliardy linii kodu przerabiać na D, a tysiące programistów wysyłać na szkolenia.  Gdyby D był rozszerzeniem na C++ to mogłoby być lepiej, ale takie rozwiązanie miałoby inne wady.</p>
+<p>Nadal uważam jednak, że język nie ma świetlanej przyszłości — C++ (pomimo odczapowych szablonów) już się dobrze zadomowiło i trudno, żeby nagle miliardy linii kodu przerabiać na D, a tysiące programistów wysyłać na szkolenia.  Gdyby D był rozszerzeniem na C++ to mogłoby być lepiej, ale takie rozwiązanie miałoby inne wady.</p>
 
 <p>Zresztą patrząc na C++0x C++ idzie w dobrym kierunku (co prawda niektóre aspekty nowego standardu mnie się nie podobają) i powodów przejścia na D może być coraz mniej, szczególnie, że jak czytam opis na wiki to wygląda na to, że D wcale nie jest pozbawiony wad. ;)</p>
 
@@ -142,7 +142,7 @@ Bo zdaje się, że w treasure-huncie brali pod uwagę czas pomiędzy opublikowan
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>O nie&#8230; C++ nie musi nikogo gonić. Ma wiele mechanizmów, których programiści Javy mogą tylko pozazdrościć. Z pobierznej analizy D odniosłem wrażenie, że jedyne co ten język oferuje to łatwiejsze metaprogramowanie, a poza tym to czysty &#8222;syntetic sugar&#8221;. Z wad, jak czytam w wikipedii, mam na myślni niemożność zwracania referencji oraz dziwne zasady stałości (to drugie ma się ponoć zmienić w D 2.0).</p>
+<p>O nie… C++ nie musi nikogo gonić. Ma wiele mechanizmów, których programiści Javy mogą tylko pozazdrościć. Z pobierznej analizy D odniosłem wrażenie, że jedyne co ten język oferuje to łatwiejsze metaprogramowanie, a poza tym to czysty „syntetic sugar”. Z wad, jak czytam w wikipedii, mam na myślni niemożność zwracania referencji oraz dziwne zasady stałości (to drugie ma się ponoć zmienić w D 2.0).</p>
 
 <!-- COMMENT -->
 <!-- date: 2009-01-13 12:20:43 -->
@@ -154,7 +154,7 @@ Co do tych referencji, dla mnie to nie jest jakiś problem, tym bardziej, że ju
 Co do opisanego na wiki opIndexAssign, to akurat mi się podoba, bo wymusza pisanie blah+=1; ;)<br />
 Oczywiście miłoby było, gdyby dało się używać przeciążonych operatorów typu zwróconej referencji, ale do tej pory nie było mi to jakoś specjalnie potrzebne.</p>
 
-<p>Co do syntactic sugar &#8211; TAK! Ten syntactic sugar sprawia, że pisze mi się łatwiej, szybciej i przyjemniej (mówię całkiem poważnie).</p>
+<p>Co do syntactic sugar – TAK! Ten syntactic sugar sprawia, że pisze mi się łatwiej, szybciej i przyjemniej (mówię całkiem poważnie).</p>
 
 <p>Druga sprawa, że syntaktyka jest tak pomyślana, żeby usprawnić działanie kompilatora języka, dzięki czemu projekt (nie mówię tu o hello world) przerobiony z C++ na D kompiluje się nawet 10x szybciej (wystarczy się przegrzebać przez grupy digitalmarsowe, oidp conajmniej kilka osób opisywało takie doświadczenia, zresztą ja mam podobne).</p>
 
