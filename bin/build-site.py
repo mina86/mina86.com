@@ -372,7 +372,7 @@ def generate(writer, site):
             'href': '/',
             'desc': 'Everything',
             'count': len(posts),
-            'feed': '/atom.xml',
+            'feed': '/atom',
         }
     ]
     for cat in sorted(site.categories, key=lambda v: v.lower()):
@@ -380,7 +380,7 @@ def generate(writer, site):
             'href': cat.href,
             'desc': cat,
             'count': len(cat.entries),
-            'feed': '/c/%s/atom.xml' % cat.permalink,
+            'feed': '/c/%s/atom' % cat.permalink,
         })
 
     # Generate archive pages

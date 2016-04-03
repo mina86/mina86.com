@@ -24,10 +24,8 @@ RewriteRule "^(?:apple-)?touch-icon-[0-9]+x([0-9]+\.png)$" "d/$1"           [L,R
 RewriteRule "^(?:apple-)?touch-icon.png$"                  "d/192.png"      [L,R=temp]
 
 # If browser supports gzip and we have compressed file, send it.
-RewriteCond %{HTTP:Accept-Encoding} gzip
-RewriteCond %{REQUEST_FILENAME}.gz -f
-RewriteRule ^(.*)$ $1.gz [L]
-Header append Vary Accept-Encoding
+Options +MultiViews
+DirectoryIndex index
 
 # application/javascript is technically correct but HTML5 uses text/javascript
 # as SCRIPT’s default TYPE so let’s stick to that.
