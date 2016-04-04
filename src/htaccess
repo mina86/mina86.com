@@ -3,9 +3,11 @@ RewriteBase "/"
 
 # Old paths for post URLs and category indexes:
 RewriteCond "%{DOCUMENT_ROOT}/p/$1" -d
-RewriteRule "^20[01][0-9]/[0-1][0-9]/[0-3][0-9]/(.*)/"     "p/$1/"          [L,R=permanent]
+RewriteRule "^20[01][0-9]/[0-1][0-9]/[0-3][0-9]/(.*)/" \
+            "p/$1/"          [L,R=permanent]
 RewriteCond "%{DOCUMENT_ROOT}/c/$1" -d
-RewriteRule "^kategoria/([a-z-]*)/$"                       "c/$1/"          [L,R=permanent]
+RewriteRule "^kategoria/([a-z-]*)/$" \
+            "c/$1/"          [L,R=permanent]
 
 # Atom and RSS feeds.  Current code doesn’t have as much configuration as the
 # old site so this flattens all of the feeds to a single format.  This very long
@@ -19,21 +21,26 @@ RewriteRule "^(?:atom(?:\.xml(?:\.gz)?)?|rss)/(?:content|short)/(?:html/)?(?:\d*
             "atom"           [L,R=permanent]
 
 # In retrospect, I’m not sure if it was worth renaming from ‘files’ to ‘d’.
-RewriteRule "^files/(.*)"                                  "d/$1"           [L,R=permanent]
+RewriteRule "^files/(.*)" \
+            "d/$1"           [L,R=permanent]
 
 # /sid/<code>/… is the way Jogger used to handle logged in users.  I’m
 # still getting requests like that so for the transition period,
 # redirect them to proper URLs.
-RewriteRule "^sid/[a-z0-9A-Z]*/(.*)$"                      "$1"             [L,R=permanent]
+RewriteRule "^sid/[a-z0-9A-Z]*/(.*)$" \
+            "$1"             [L,R=permanent]
 
 # Icons
 RewriteCond "%{DOCUMENT_ROOT}/d/$1" -f
-RewriteRule "^(?:apple-)?touch-icon-[0-9]+x([0-9]+\.png)$" "d/$1"           [L,R=permanent]
-RewriteRule "^(?:apple-)?touch-icon.png$"                  "d/192.png"      [L,R=temp]
+RewriteRule "^(?:apple-)?touch-icon-[0-9]+x([0-9]+\.png)$" \
+            "d/$1"           [L,R=permanent]
+RewriteRule "^(?:apple-)?touch-icon.png$"                  \
+            "d/192.png"      [L,R=temp]
 
 # Some morons don’t know how to scrape Yahoo search.  Help them out so that logs
 # don’t get filled with 404s.
-RewriteRule "/RK=0/$"                                      "/"              [R=permanent]
+RewriteRule "/RK=0/$" \
+            "/"              [R=permanent]
 
 
 # If browser supports gzip and we have compressed file, send it.
@@ -49,12 +56,11 @@ AddType text/javascript .js
 	AddType application/atom+xml .xml
 </FilesMatch>
 
-# Images almost never change so set a long expiry.  CSS and JavaScript
-# resources don’t change more frequent but still not that often;
-# a week should be enough.  Finally, everything else (so namely HTML
-# and feed files) may change rarely as well but it’s important that
-# the change is picked up quickly (I can live with slightly outdated
-# styles but user should see new posts as quickly as possible).
+# Images almost never change so set a long expiry.  CSS and JavaScript resources
+# may change more frequently so a week expiry should be enough.  Finally, for
+# everything else (i.e. HTML and feed files) it’s important that changes are
+# picked up quickly (I can live with slightly outdated styles but user should
+# see new posts as quickly as possible).
 ExpiresActive On
 ExpiresDefault "access plus 1 hour"
 ExpiresByType text/css "access plus 1 week"
