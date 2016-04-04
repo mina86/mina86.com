@@ -38,9 +38,10 @@ DirectoryIndex index
 # as SCRIPT’s default TYPE so let’s stick to that.
 AddType text/javascript .js
 
-# Atom is the only thing .xml is used on the site so we might just as well use
-# proper content type for it.
-AddType application/atom+xml .xml
+# And lastly add proper type for atom files but don’t affect other XML files.
+<FilesMatch "^atom.xml">
+	AddType application/atom+xml .xml
+</FilesMatch>
 
 # Images almost never change so set a long expiry.  CSS and JavaScript
 # resources don’t change more frequent but still not that often;
