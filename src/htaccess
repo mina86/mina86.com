@@ -8,9 +8,15 @@ RewriteCond "%{DOCUMENT_ROOT}/c/$1" -d
 RewriteRule "^kategoria/([a-z-]*)/$"                       "c/$1/"          [L,R=permanent]
 
 # Atom and RSS feeds.  Current code doesn’t have as much configuration as the
-# old site so this flattens all of the feeds to a single format.
-RewriteRule "^(atom|rss)/cat/([a-z]*)/"                    "c/$2/atom.xml"  [L,R=permanent]
-RewriteRule "^(atom|rss)/(content|short)/(html/)?(\d*/)?"  "atom.xml"       [L,R=permanent]
+# old site so this flattens all of the feeds to a single format.  This very long
+# prefix is because mod_negotiate comes before mod_rewrite so any requests to
+# /atom/whatever end up being translated to /atom.xml/whatever or
+# /atom.xml.gz/whatever.
+RewriteCond "%{DOCUMENT_ROOT}/c/$1" -d
+RewriteRule "^(?:atom(?:\.xml(?:\.gz)?)?|rss)/cat/([a-z-]*)/.*" \
+            "c/$1/atom"      [L,R=permanent]
+RewriteRule "^(?:atom(?:\.xml(?:\.gz)?)?|rss)/(?:content|short)/(?:html/)?(?:\d*/)?" \
+            "atom"           [L,R=permanent]
 
 # In retrospect, I’m not sure if it was worth renaming from ‘files’ to ‘d’.
 RewriteRule "^files/(.*)"                                  "d/$1"           [L,R=permanent]
