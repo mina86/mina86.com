@@ -1,6 +1,6 @@
-STATIC	= $(addprefix public/d/,$(notdir $(wildcard src/*.*) \
-	                                 $(wildcard static/*.*))) \
-	  $(addprefix public/,$(notdir $(wildcard root/*.*))) \
+STATIC	= $(addprefix public/d/,$(notdir $(wildcard src/*.*))) \
+	  $(patsubst static/%,public/%,$(wildcard static/*.*) \
+	                               $(wildcard static/*/*.*)) \
 	  public/.htaccess
 
 YUICOMPRESSOR_VERSION = 2.4.8
@@ -32,12 +32,7 @@ public/d/%.js: src/%.js $(YUICOMPRESSOR)
 public/d/%.css: src/%.css $(YUICOMPRESSOR) $(wildcard src/data/*.*)
 	@exec sh bin/compressor.sh $@ $^
 
-public/d/%: static/%
-	@exec mkdir -p $(dir $@)
-	@echo " CP   $(notdir $@)"
-	@exec cp -- $< $@
-
-public/%: root/%
+public/%: static/%
 	@exec mkdir -p $(dir $@)
 	@echo " CP   $(notdir $@)"
 	@exec cp -- $< $@
