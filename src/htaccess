@@ -4,10 +4,10 @@ RewriteBase "/"
 # Old paths for post URLs and category indexes:
 RewriteCond "%{DOCUMENT_ROOT}/p/$1" -d
 RewriteRule "^20[01][0-9]/[0-1][0-9]/[0-3][0-9]/([^/]+)/?$" \
-            "p/$1/"          [L,R=permanent]
+            "p/$1/"          [END,R=permanent]
 RewriteCond "%{DOCUMENT_ROOT}/c/$1" -d
 RewriteRule "^kategoria/([a-z-]*)/?$" \
-            "c/$1/"          [L,R=permanent]
+            "c/$1/"          [END,R=permanent]
 
 # Atom and RSS feeds.  Current code doesn’t have as much configuration as the
 # old site so this flattens all of the feeds to a single format.  This very long
@@ -16,26 +16,26 @@ RewriteRule "^kategoria/([a-z-]*)/?$" \
 # /atom.xml.gz/whatever.
 RewriteCond "%{DOCUMENT_ROOT}/c/$1" -d
 RewriteRule "^(?:atom(?:\.xml(?:\.gz)?)?|rss)/cat/([a-z-]*)/.*" \
-            "c/$1/atom"      [L,R=permanent]
+            "c/$1/atom"      [END,R=permanent]
 RewriteRule "^(?:atom(?:\.xml(?:\.gz)?)?|rss)/(?:content|short)/(?:html/)?(?:\d*/)?" \
-            "atom"           [L,R=permanent]
+            "atom"           [END,R=permanent]
 
 # In retrospect, I’m not sure if it was worth renaming from ‘files’ to ‘d’.
 RewriteRule "^files/(.*)" \
-            "d/$1"           [L,R=permanent]
+            "d/$1"           [END,R=permanent]
 
 # /sid/<code>/… is the way Jogger used to handle logged in users.  I’m
 # still getting requests like that so for the transition period,
 # redirect them to proper URLs.
 RewriteRule "^sid/[a-z0-9A-Z]*/(.*)$" \
-            "$1"             [L,R=permanent]
+            "$1"             [END,R=permanent]
 
 # Icons
 RewriteCond "%{DOCUMENT_ROOT}/d/$1" -f
 RewriteRule "^(?:apple-)?touch-icon-[0-9]+x([0-9]+\.png)$" \
-            "d/$1"           [L,R=permanent]
+            "d/$1"           [END,R=permanent]
 RewriteRule "^(?:apple-)?touch-icon.png$"                  \
-            "d/192.png"      [L,R=temp]
+            "d/192.png"      [END,R=temp]
 
 # Some morons don’t know how to scrape Yahoo search.  Help them out so that logs
 # don’t get filled with 404s.
