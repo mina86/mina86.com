@@ -27,7 +27,6 @@
         catch (e) { }
       },
 
-      byId = D.getElementById.bind(D),
       byTag = function(element, tag) {
         return element.getElementsByTagName(tag || 'div');
       },
@@ -74,7 +73,7 @@
             node2.onclick = function() {
               T = this;
               i = T.href;
-              node2 = createElement(str_span);
+              node2 = createElement('span');
               return makeRequest(url = i.substring(0, getLength(i) - 2),
                                  function() {
                 try {
@@ -107,23 +106,22 @@
         node = createElement('script');
         node.type = 'text/javascript';
         node.async = TRUE;
-        node.src = 'http' + src;
+        node.src = 'https://' + src;
         i.appendChild(node);
       },
 
       str_a = 'a',
       str_load_more = 'l',
-      str_span = 'span',
 
       node,
       i = D.head;
 
   /* Google Analytics */
-  addScript('://www.google-analytics.com/ga.js');
+  addScript('www.google-analytics.com/ga.js');
 
   /* Social */
-  addScript('s://apis.google.com/js/plusone.js');
-  addScript('://platform.twitter.com/widgets.js');
+  addScript('apis.google.com/js/plusone.js');
+  addScript('platform.twitter.com/widgets.js');
 
   /* AJAX */
   W.opera || prepareMoreLinks(D.links);
