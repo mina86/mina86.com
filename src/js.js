@@ -2,7 +2,6 @@
   W['_gaq'] = [
     ['_setAccount', 'UA-240278-1'],
     ['_trackPageview'],
-    ['_setCustomVar', 1, 'user_type', W['mina86_user_type'] || 'guest']
   ];
 
   W['___gcfg'] = { lang: 'en-GB' };
@@ -116,13 +115,11 @@
       str_load_more = 'l',
       str_span = 'span',
 
-      commentTextarea = byId('commbody'),
-
       node,
       i = D.head;
 
   /* Google Analytics */
-  W['mina86_skip_ga'] || addScript('://www.google-analytics.com/ga.js');
+  addScript('://www.google-analytics.com/ga.js');
 
   /* Social */
   addScript('s://apis.google.com/js/plusone.js');
@@ -130,36 +127,4 @@
 
   /* AJAX */
   W.opera || prepareMoreLinks(D.links);
-
-  /* Comment's body textarea resize */
-  commentTextarea && (commentTextarea.onkeydown = W.onload = function() {
-    for (xml = commentTextarea.cols,
-         nodes = commentTextarea.value.split('\n'),
-         node = i = getLength(nodes); i--;) {
-      node += Math.floor(getLength(nodes[i]) / xml);
-    }
-    commentTextarea.rows = ++node > 5 ? node > 60 ? 60 : node : 6;
-    return TRUE;
-  });
-
-  /* Alter archive */
-  nodes = byTag(byTag(byId(str_a), 'ul')[i = 0], str_a);
-  while (node = nodes[i++]) {
-    T = (node.innerText || node.textContent).replace(/^\s+|\s*$/g, '')
-                                            .split(/\s+/);
-    if (getLength(T) === 2) {
-      getter = T[1];
-      while (node.firstChild) {
-        node.removeChild(node.firstChild);
-      }
-      xml = createElement(str_span);
-      xml.appendChild(document.createTextNode(getter));
-      if (addScript === getter) {
-        xml.style.color = '#FFF';
-      }
-      node.appendChild(xml);
-      node.appendChild(D.createTextNode(' ' + T[0]));
-      addScript = getter;
-    }
-  }
 })(document, window);
