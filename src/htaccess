@@ -9,6 +9,9 @@ RewriteCond "%{DOCUMENT_ROOT}/c/$1" -d
 RewriteRule "^kategoria/([a-z-]*)/?$" \
             "c/$1/"          [END,R=permanent]
 
+RewriteRule "^2010/12/12/prime-numbers-less-than-a-hundread(?:/)?$" \
+            "c/prime-numbers-less-than-a-hundred/" [END,R=permanent]
+
 # Atom and RSS feeds.  Current code doesn’t have as much configuration as the
 # old site so this flattens all of the feeds to a single format.  This very long
 # prefix is because mod_negotiate comes before mod_rewrite so any requests to
