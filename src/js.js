@@ -122,6 +122,9 @@
   addScript('apis.google.com/js/plusone.js');
   addScript('platform.twitter.com/widgets.js');
 
+  /* Google Custom Search */
+  addScript('cse.google.com/cse.js?cx=005697715059674104273:zluc68s5jow');
+
   /* AJAX */
   W.opera || prepareMoreLinks(D.links);
 })(document, window);
