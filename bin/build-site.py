@@ -51,7 +51,7 @@ class _Addresable(object):
 
     @property
     def url(self):
-        return '%s/%s' % (BASE_HREF, self.href)
+        return '%s%s' % (BASE_HREF, self.href)
 
     @property
     def href(self):
@@ -140,8 +140,6 @@ class Post(_Addresable):
         self.tags = tags
 
         self.body = Body(excerpt, body)
-
-    url = property(lambda self: '%s/p/%s' % (BASE_HREF, self.permalink))
 
 
 class Page(Post):
