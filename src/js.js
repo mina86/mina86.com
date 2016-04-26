@@ -104,7 +104,6 @@
 
       addScript = function(src) {
         node = createElement('script');
-        node.async = TRUE;
         node.src = 'https://' + src;
         i.appendChild(node);
       },
