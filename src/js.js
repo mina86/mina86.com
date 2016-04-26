@@ -1,14 +1,7 @@
 (function(D, W) {
-  W['_gaq'] = [
-    ['_setAccount', 'UA-240278-1'],
-    ['_trackPageview'],
-  ];
-
-  W['___gcfg'] = { lang: 'en-GB' };
-
   var TRUE = !0,
 
-      T, xml, nodes,
+      T, nodes,
 
       getter = function(prop) {
         return function(x) { return x[prop]; };
@@ -114,10 +107,18 @@
       node,
       i = D.head;
 
+  /* Spot.IM Comments */
+  addScript('www.spot.im/launcher/bundle.js');
+
   /* Google Analytics */
+  W['_gaq'] = [
+    ['_setAccount', 'UA-240278-1'],
+    ['_trackPageview'],
+  ];
   addScript('www.google-analytics.com/ga.js');
 
   /* Social */
+  W['___gcfg'] = { lang: 'en-GB' };
   addScript('apis.google.com/js/plusone.js');
   addScript('platform.twitter.com/widgets.js');
 
