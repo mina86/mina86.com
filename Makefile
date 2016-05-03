@@ -47,7 +47,8 @@ public/%: .tmp/%
 
 public/%.gz: public/%
 	@echo " GZ   $(notdir $<)"
-	@exec gzip -9 <$< >$@
+#	@exec gzip -9 <$< >$@
+	@exec zopfli -c $< >$@
 
 public/.htaccess: src/htaccess
 	@echo " CP   $(notdir $<)"
