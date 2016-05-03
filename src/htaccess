@@ -20,7 +20,7 @@ RewriteRule "^2010/12/12/prime-numbers-less-than-a-hundread(?:/)?$" \
 RewriteCond "%{DOCUMENT_ROOT}/c/$1" -d
 RewriteRule "^(?:atom(?:\.xml(?:\.gz)?)?|rss)/cat/([a-z-]*)/.*" \
             "c/$1/atom"      [END,R=permanent]
-RewriteRule "^(?:atom(?:\.xml(?:\.gz)?)?|rss)/(?:content|short)/(?:html/)?(?:\d*/)?" \
+RewriteRule "^(?:atom(?:\.xml(?:\.gz)?)?|rss)/(?:(?:content|short)/(?:html/)?(?:\d*/)?)?" \
             "atom"           [END,R=permanent]
 
 # In retrospect, I’m not sure if it was worth renaming from ‘files’ to ‘d’.
