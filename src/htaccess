@@ -2,15 +2,15 @@ RewriteEngine On
 RewriteBase "/"
 
 # Old paths for post URLs and category indexes:
-RewriteCond "%{DOCUMENT_ROOT}/p/$1" -d
-RewriteRule "^20[01][0-9]/[0-1][0-9]/[0-3][0-9]/([^/]+)/?$" \
-            "p/$1/"          [END,R=permanent]
+RewriteCond "%{DOCUMENT_ROOT}/$1/$2" -d
+RewriteRule "^(20[01][0-9])/[0-1][0-9]/[0-3][0-9]/([^/]+)/?$" \
+            "$1/$2/"          [END,R=permanent]
 RewriteCond "%{DOCUMENT_ROOT}/c/$1" -d
 RewriteRule "^kategoria/([a-z-]*)(?:/\d*)?$" \
             "c/$1/"          [END,R=permanent]
 
 RewriteRule "^2010/12/12/prime-numbers-less-than-a-hundread(?:/)?$" \
-            "c/prime-numbers-less-than-a-hundred/" [END,R=permanent]
+            "2010/prime-numbers-less-than-a-hundred/" [END,R=permanent]
 
 # Atom and RSS feeds.  Current code doesn’t have as much configuration as the
 # old site so this flattens all of the feeds to a single format.  This very long

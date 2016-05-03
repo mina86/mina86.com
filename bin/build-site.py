@@ -47,7 +47,7 @@ OUT_SUBDIR = '.tmp'
 
 
 class _Addresable(object):
-    _SUBDIR = None  # must be set by subclass
+    _subdir = None
 
     @property
     def url(self):
@@ -55,23 +55,22 @@ class _Addresable(object):
 
     @property
     def href(self):
-        if self._SUBDIR:
-            return '/%s/%s/' % (self._SUBDIR, self.permalink)
+        if self._subdir:
+            return '/%s/%s/' % (self._subdir, self.permalink)
         else:
             return '/%s/' % self.permalink
 
     @property
     def filename(self):
         args = []
-        if self._SUBDIR:
-            args.append(self._SUBDIR)
+        if self._subdir:
+            args.append(self._subdir)
         args.append(self.permalink)
         args.append('index.html')
         return os.path.join(*args)
 
 
 class _Group(_Addresable, unicode):
-    _SUBDIR = None
 
     def __new__(cls, val, date=None):
         self = unicode.__new__(cls, val.strip())
@@ -89,11 +88,11 @@ class _Group(_Addresable, unicode):
 
 
 class Category(_Group):
-    _SUBDIR = 'c'
+    _subdir = 'c'
 
 
 class Tag(_Group):
-    _SUBDIR = 't'
+    _subdir = 't'
 
 
 class Body(object):
@@ -114,7 +113,6 @@ class Body(object):
 
 
 class Post(_Addresable):
-    _SUBDIR = 'p'
 
     def __init__(self, filename, d, excerpt, body):
         if filename.endswith('.html'):
@@ -141,9 +139,11 @@ class Post(_Addresable):
 
         self.body = Body(excerpt, body)
 
+    _subdir = property(lambda self: self.date.strftime('%Y'))
+
 
 class Page(Post):
-    _SUBDIR = None
+    _subdir = None
 
 
 class Site(object):
@@ -447,6 +447,8 @@ def generate(writer, site):
                       href='/', feed_id='http://mina86.com/atom/content/html/')
 
     # Generate posts pages
+    redirs = collections.defaultdict(list)
+    redirs_cutoff = datetime.datetime(2016, 5, 1)
     for i in range(len(posts)):
         # next and prev are swapped because posts is reversed
         cur = posts[i]
@@ -460,6 +462,23 @@ def generate(writer, site):
             'categories': categories,
         })
         sitemap.add(cur.url, cur.date, priority='1.0')
+        if cur.date < redirs_cutoff:
+            redirs[cur.date.year].append(cur.permalink)
+
+    # Generate rewrites in /p directory which for a short while was where all
+    # files lived.
+    content = ['RewriteEngine On']
+    for year in sorted(redirs):
+        links = redirs[year]
+        if len(links) == 1:
+            links = links[0]
+        else:
+            links.sort()
+            links = '(?:%s)' % '|'.join(links)
+        content.append(
+            'RewriteRule "^(%s(?:/.*|$))" "/%s/$1" [END,R=permanent]' % (
+                links, year))
+    writer.write_file('p/.htaccess', '\n'.join(content))
 
     # Generate pages pages
     for entry in site.pages:
