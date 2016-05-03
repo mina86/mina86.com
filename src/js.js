@@ -1,7 +1,5 @@
 (function(D, W) {
-  var TRUE = !0,
-
-      T, nodes,
+  var T, nodes,
 
       getter = function(prop) {
         return function(x) { return x[prop]; };
@@ -42,14 +40,14 @@
             request = new ActiveXObject("Msxml2.XMLHTTP");
           }
           catch (e) {
-            return TRUE;
+            return !0;
           }
         }
         request.onreadystatechange = function() {
           T = this;
           T.readyState === 4 && T.status === 200 && callback();
         };
-        request.open('GET', url, TRUE);
+        request.open('GET', url, 1);
         request.responseType = 'document';
         request.send();
       },
