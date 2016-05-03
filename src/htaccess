@@ -42,8 +42,8 @@ RewriteRule "^(?:apple-)?touch-icon.png$"                  \
 
 # Some morons don’t know how to scrape Yahoo search.  Help them out so that logs
 # don’t get filled with 404s.
-RewriteRule "/RK=0/$" \
-            "/"              [R=permanent]
+RewriteRule "^(.*)/RK=0/" \
+            "/$1"            [END,R=permanent]
 
 
 # If browser supports gzip and we have compressed file, send it.
