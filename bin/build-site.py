@@ -281,6 +281,7 @@ class Writer(object):
                 <entry>
                   <title>%(subject)s</title>
                   <id>%(id)s</id>
+                  <link rel="self" href="%(url)s"/>
                   <published>%(date)s</published>
                   <updated>%(date)s</updated>
                   %(author)s
