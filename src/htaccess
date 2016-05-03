@@ -6,7 +6,7 @@ RewriteCond "%{DOCUMENT_ROOT}/p/$1" -d
 RewriteRule "^20[01][0-9]/[0-1][0-9]/[0-3][0-9]/([^/]+)/?$" \
             "p/$1/"          [END,R=permanent]
 RewriteCond "%{DOCUMENT_ROOT}/c/$1" -d
-RewriteRule "^kategoria/([a-z-]*)/?$" \
+RewriteRule "^kategoria/([a-z-]*)(?:/\d*)?$" \
             "c/$1/"          [END,R=permanent]
 
 RewriteRule "^2010/12/12/prime-numbers-less-than-a-hundread(?:/)?$" \
