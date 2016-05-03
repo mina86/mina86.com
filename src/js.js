@@ -106,6 +106,9 @@
       i = D.head;
 
   /* Spot.IM Comments */
+  W['SPOTIM'] = {
+    'spotId': 'sp_LFi1N2pZ'
+  };
   addScript('www.spot.im/launcher/bundle.js');
 
   /* Google Analytics */
