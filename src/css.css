@@ -626,14 +626,14 @@ tt, code, pre {
 
 @media screen, projection, tv  {
 	main {
-		line-height: 2em;
+		line-height: 1.5em;
 		text-shadow: 0.05rem 0.05rem 0 #D9D9E6;
 	}
 	main .m {
-		line-height: 1.5em;
+		line-height: 1.2em;
 	}
 	pre {
-		line-height: 1.5em;
+		line-height: 1.2em;
 		text-shadow: none;
 	}
 	h2, h3 {
