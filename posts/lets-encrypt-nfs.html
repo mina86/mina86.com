@@ -24,14 +24,15 @@ put the code into.  It may be <code>$HOME</code> for example.  Once
 the package is installed, the following command is sufficient to
 install certificates on an NFS-hosted site:
 
-<pre><i>${some_directory?}</i>/lets-encrypt-nfs/pull-and-run ./remote \
+<pre><i>${some_directory?}</i>/lets-encrypt-nfs/pull-and-run \
+    ./remote --setup \
     <i>${username?}_${sitename?}</i>@ssh.phx.nearlyfreespeech.net</pre>
 
 <p>It will log into your NFS site, fetch all necessary repositories
-from GitHub, run Let’s Encrypt client and enable TLS on the site.
-Renewal is performed with the very same command.  The script will get
-new certificates only if the old one is about to expire which means
-that it can be run as a, say, weekly cron job.
+from GitHub, run Let’s Encrypt client, enable TLS on the site and
+finally describe how to set up a scheduled task which will renew the
+certificate automatically.  Simply follow the instruction and you
+should be all set.
 
 <!-- EXCERPT -->
 
