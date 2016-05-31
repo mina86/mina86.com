@@ -1,0 +1,185 @@
+
+##
+## Slackware build script for Microsoft's corefonts 1.0
+## Copyright (c) 2008 by Michal Nazarewicz (mina86/AT/tlen.pl)
+## Licensed under the Academic Free License version 3.0
+##
+## Based on msttcorefonts-2.0-1.spec
+## available from http://corefonts.sourceforge.net/
+##
+
+##
+## Usage:
+##
+## corefonts.SlackBuild
+##                      Downloads files from random mirror and builds package.
+## corefonts.SlackBuild skip-download
+##                      Skips downloading files (but still checks
+##                      their integrity) and builds package.
+## corefonts.SlackBuild <word>
+##                      Downloads files from
+##                      http://<word>.dl.sourceforge.net/sourceforge/corefonts
+##                      and builts package.
+## corefonts.SlackBuild <url>
+##                      Downloads files from <url> and builts package.
+##
+
+
+PKG_NAME=corefonts
+PKG_VERSION=1.0
+PKG_BUILD=${BUILD-1}
+
+
+if [ -z "$TMP" ]; then
+	TMP=/tmp
+fi
+PKG_DIR=$TMP/$PKG_NAME-$PKG_VERSION-noarch-$PKG_BUILD
+PKG_FILE=$PKG_DIR.tgz
+DL_DIR=$TMP/$PKG_NAME-$PKG_VERSION-DOWNLOAD-DATA
+
+set -e
+
+
+## Check required tools
+if ! which md5sum >/dev/null 2>&1; then
+	echo This script requires md5sum to be installed. >&2
+	exit 1
+fi
+
+if ! which wget >/dev/null 2>&1 && ! which curl >/dev/null 2>&1; then
+	echo This script requires either wget or curl to be installed. >&2
+	exit 1
+fi
+
+
+if [ x"$1" = xskip-download ]; then
+	cd "$DL_DIR"
+else
+	## Choose mirror
+	if [ $# -eq 0 ]; then
+		set -- easynews heanet superb-west internap switch ufpr \
+			surfnet umn kent mesh superb-east jaist
+	fi
+	if [ $# -ne 1 ]; then
+		mirror=$(( $(printf %d\\n 0x$(head -c 4 /dev/urandom | md5sum | cut -c1-4)) % $# ))
+		shift $mirror
+	fi
+
+	case "$1" in
+		*://*) mirror=$1 ;;
+		*) mirror="http://$1.dl.sourceforge.net/sourceforge/corefonts"
+	esac
+	echo
+	echo "Downloading files from $mirror..."
+	echo "Downloaded files will be left in $DL_DIR"
+	echo
+
+
+	## Prepare URLs list
+	set --
+	for file in andale32.exe arial32.exe arialb32.exe comic32.exe \
+		courie32.exe georgi32.exe impact32.exe times32.exe trebuc32.exe \
+		webdin32.exe verdan32.exe wd97vwr32.exe; do
+		set -- "$@" "$mirror/$file"
+	done
+
+
+	## Download files
+	mkdir -p "$DL_DIR"
+	cd "$DL_DIR"
+	if which wget >/dev/null 2>&1; then
+		wget -c -- "$@"
+	else
+		curl -O -C - -- "$@"
+	fi
+fi
+
+
+## Check files
+echo 'Verifying integrity...'
+cat <<EOF | md5sum -c
+cbdc2fdd7d2ed0832795e86a8b9ee19a  andale32.exe
+9637df0e91703179f0723ec095a36cb5  arial32.exe
+c9089ae0c3b3d0d8c4b0a95979bb9ff0  arialb32.exe
+2b30de40bb5e803a0452c7715fc835d1  comic32.exe
+4e412c772294403ab62fb2d247d85c60  courie32.exe
+4d90016026e2da447593b41a8d8fa8bd  georgi32.exe
+7907c7dd6684e9bade91cff82683d9d7  impact32.exe
+ed39c8ef91b9fb80f76f702568291bd5  times32.exe
+0d7ea16cac6261f8513a061fbfcdb2b5  trebuc32.exe
+230a1d13a365b22815f502eb24d9149b  webdin32.exe
+12d2a75f8156e10607be1eaa8e8ef120  verdan32.exe
+efa72d3ed0120a07326ce02f051e9b42  wd97vwr32.exe
+EOF
+
+
+## Extract fonts
+echo
+echo "Extracting fonts..."
+echo
+rm -rf cab-contents "$PKG_DIR"
+mkdir -p cab-contents "$PKG_DIR/usr/share/fonts/TTF"
+
+for file in andale32.exe arial32.exe arialb32.exe comic32.exe courie32.exe \
+	georgi32.exe impact32.exe times32.exe trebuc32.exe webdin32.exe \
+	verdan32.exe; do
+
+	cabextract --lowercase --directory=cab-contents "$file"
+	mv cab-contents/*.ttf "$PKG_DIR/usr/share/fonts/TTF"
+	rm -f cab-contents/*
+done
+
+cabextract --lowercase --directory=cab-contents wd97vwr32.exe
+cabextract --lowercase --directory=cab-contents cab-contents/viewer1.cab
+mv cab-contents/*.ttf "$PKG_DIR/usr/share/fonts/TTF"
+
+rm -rf cab-contents
+
+
+## Create install directory content
+cd "$PKG_DIR"
+mkdir -p install
+
+cat <<EOF >install/slack-desc
+corefonts: corefonts (Microsoft's TrueType fonts)
+corefonts:
+corefonts: The TrueType core fonts for the web that was once available from
+corefonts: Microsoft's web page.  They are commonly used on the Web and thus
+corefonts: having them may help viewing web pages.
+corefonts:
+corefonts: Note, that it is not legal to redistribute this package.  Instead one
+corefonts: should redistribute SlackBuild script used to generate it.  The
+corefonts: SlackBuild script is based on RPM SRC package provided at
+corefonts: http://corefonts.sourceforge.net/.
+EOF
+
+cat <<EOF >install/doinst.sh
+if [ -x /usr/bin/mkfontdir ] || [ -x /usr/X11R6/bin/mkfontdir ]; then
+    cd /usr/share/fonts/TTF
+    mkfontscale .
+    mkfontdir -e /usr/share/fonts/encodings -e /usr/share/fonts/encodings/large .
+fi
+
+if [ -x /usr/bin/fc-cache ]; then
+  /usr/bin/fc-cache -f
+fi
+EOF
+
+chmod 755 install/doinst.sh
+
+
+## And finally create package
+echo
+echo Creating package
+echo
+/sbin/makepkg -l y -c n "$PKG_FILE"
+
+
+## And we're done
+cat <<EOF
+
+=== Package ready at $PKG_FILE.
+=== Package content available in $PKG_DIR.
+=== Downloaded files available in $DL_DIR.
+
+EOF

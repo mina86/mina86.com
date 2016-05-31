@@ -84,7 +84,14 @@ upload: public
 	       --chmod=Du=rwx,Dgo=rw,Fu=rw,Fgo=r \
 	       --progress $^ nfs:/home/
 
-.PHONY: .tmp tmp-to-public compress-public generate public upload
+upload-files:
+	@echo " UP"
+	@rsync -mrltvze ssh --delete-after \
+	       --chmod=Du=rwx,Dgo=rw,Fu=rw,Fgo=r \
+	       --progress files/ files86:/home/public
+
+
+.PHONY: .tmp tmp-to-public compress-public generate public upload upload-files
 
 
 $(YUICOMPRESSOR):
