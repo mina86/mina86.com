@@ -1,0 +1,62 @@
+<!-- subject: Let’s Encrypt NearlyFreeSpeech -->
+<!-- date: 2016-05-31 22:22:22 -->
+<!-- tags: lets encrypt, tls, nearlyfreespeech -->
+<!-- categories: Articles, English, Techblog, Files -->
+
+<p>To make <a href=/2016/tls-is-a-yes/>TLS the default</a>, I needed
+to automate certificate renewal process.  In doing so, I’ve came up
+with a script which may be handy to anyone who uses
+<a href="https://www.nearlyfreespeech.net/">NearlyFreeSpeech</a> as
+their hosting provider.
+
+<p><a href="https://github.com/mina86/lets-encrypt-nfs">Let’s Encrypt
+NearlyFreeSpeech</a> uses Lukas
+Schauer’s <a href="https://github.com/lukas2511/letsencrypt.sh">letsencrypt.sh</a>
+<a href="https://en.wikipedia.org/wiki/Automated_Certificate_Management_Environment">ACME</a>
+client and requires <em>no</em> configuration.
+
+<p>To start using it, first get the code onto your <em>local</em>
+machine by running:
+
+<pre>cd <i>${some_directory?}</i>
+git clone https://github.com/mina86/lets-encrypt-nfs</pre>
+
+<p><code><i>${some_directory?}</i></code> is an arbitrary directory to
+put the code into.  It may be <code>$HOME</code> for example.  From
+that point forward, the following command is sufficient to install
+certificates on a NFS-hosted site:
+
+<pre><i>${some_directory?}</i>/lets-encrypt-nfs/pull-and-run ./remote \
+    <i>${username?}_${sitename?}</i>@ssh.phx.nearlyfreespeech.net</pre>
+
+<p>It will log into your NFS site, pull all necessary repositories
+from GitHub, run Let’s Encrypt client and enable TLS on the site.
+Certificate renewal is performed with the very same command.  The
+script will get new certificates only if the old one is about to
+expire which means that it can be run as a, say, weekly cron job.
+
+<p><strong>N.B.</strong>: Enabling encryption for the first time turns
+HTTP→HTTPS redirection for the site.  This can be disabled in
+NearlyFreeSpeech site settings under Canonical URL option.
+
+<!-- EXCERPT -->
+
+<h3>Running on NFS host</h3>
+
+<p>The script does not need to be run from local machine; it can be
+executed on NFS host directly.  Getting the code on the host is as
+simple as running:
+
+<pre>git clone https://github.com/mina86/lets-encrypt-nfs \
+          /home/private/lets-encrypt-nfs</pre>
+
+<p>Once the repository is cloned, installing and renewing certificates
+is done with the following command:
+
+<pre>/home/private/lets-encrypt-nfs/pull-and-run ./renew</pre>
+
+
+<h3>Per-Alias Site Root</h3>
+
+<p>At the moment, per-alias site roots are not supported by the
+  script.
