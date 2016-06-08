@@ -87,8 +87,9 @@ upload: public
 upload-files:
 	@echo " UP"
 	@rsync -mrltvze ssh --delete-after \
-	       --chmod=Du=rwx,Dgo=rw,Fu=rw,Fgo=r \
-	       --progress files/ files86:/home/public
+	       --chmod=Du=rwx,Dgo=rw,Fu=rw,Fgo=r --progress \
+	       files/ static/favicon.ico static/robots.txt \
+	       files86:/home/public
 
 
 .PHONY: .tmp tmp-to-public compress-public generate public upload upload-files
