@@ -81,13 +81,13 @@ public: static generate
 upload: public
 	@echo " UP"
 	@rsync -mrltvze ssh --delete-after \
-	       --chmod=Du=rwx,Dgo=rw,Fu=rw,Fgo=r \
+	       --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r \
 	       --progress $^ nfs:/home/
 
 upload-files:
 	@echo " UP"
 	@rsync -mrltvze ssh --delete-after \
-	       --chmod=Du=rwx,Dgo=rw,Fu=rw,Fgo=r --progress \
+	       --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r --progress \
 	       files/ static/favicon.ico static/robots.txt \
 	       files86:/home/public
 
