@@ -114,6 +114,12 @@ body > footer {
 	text-align: center;
 }
 
+.c {
+	margin: 0.5em;
+	padding: 1em 2em;
+	overflow: auto;
+}
+
 @media screen, projection, tv, handheld {
 	a, #j a:visited {
 		text-decoration: none;
@@ -358,7 +364,7 @@ body > footer {
 			padding: 0 0.5em;
 		}
 		#b {
-			/* display: none; */
+			top: 0;
 			background-size: cover;
 		}
 		#r {
@@ -553,12 +559,6 @@ textarea {
 	padding-left: 40px;
 }
 
-
-.c {
-	margin: 0.5em 0;
-	padding: 1em 2.5em;
-	overflow: auto;
-}
 
 q:before, q:after {
 	content: '';
