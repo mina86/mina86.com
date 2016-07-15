@@ -27,9 +27,13 @@
 
 <p>By now everyone should know that the <tt>--aggressive</tt> flag of <tt>git gc</tt> is not to be used. In general git should handle pack file effectively, but what if you <em>really</em> want to try and squeeze every byte out of it?
 
-<pre>git repack -a -d --depth=10000 --window=10000</pre>
+<pre>git repack -a -d --depth=1000 --window=1000</pre>
 
-<p><a href=http://gcc.gnu.org/ml/gcc/2007-12/msg00165.html>Torvalds suggested</a> smaller numbers but his message is from 2007 and I found that today's machines handle high numbers quickly enough even on big repositories.
+<p>The numbers are arguably an overkill (and back in 2007
+    <a href=http://gcc.gnu.org/ml/gcc/2007-12/msg00165.html>Linus
+    Torvalds suggested</a> 250 for both instead) but today’s machines
+    are usually fast enough to handle them.  The flip side is that
+    past few hundreds you’re reaching diminishing returns.
 
 <h3 id=author>Changing commit author</h3>
 
