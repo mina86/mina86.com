@@ -107,7 +107,7 @@
 
   /* Spot.IM Comments */
   W['SPOTIM'] = {
-    'spotId': 'sp_LFi1N2pZ'
+    'spotId': 'sp_yH01UA8B'
   };
   addScript('www.spot.im/launcher/bundle.js');
 
