@@ -50,35 +50,6 @@ case $in in
 	run java -jar "$jar" -v --type css "$in" | \
 		perl ./bin/data-uri.pl "$@" >>$tmp
 	;;
-*.html)
-	run java -jar "$jar" -t html \
-		--remove-quotes \
-		--simple-doctype \
-		--remove-style-attr \
-		--remove-link-attr \
-		--remove-script-attr \
-		--remove-form-attr \
-		--remove-input-attr \
-		--simple-bool-attr \
-		"$in" >$tmp
-	#echo "     sed -n -e ... -i $tmp" >&2
-	block='\(body\|br\|col\|div\|form\|h[1-6]\|head\|html\|link\|meta\|p\|script\|table\|t[dhr]\|textarea\|title\|[ou]l\|[A-Z_][A-Z_]*\|section\|header\|aside\|article\|nav\|footer\)'
-	sp='[[:space:]][[:space:]]*'
-	sed -n -e "
-		H
-		\$ {
-			x
-		#	s/$sp/ /g
-			s/^$sp\\|$sp\$//g
-			s~$sp\\(</\\?$block\\)~\\1~g
-			s~\\(<$block\\($sp[^>]*\\)\\?>\\)$sp~\\1~g
-			s~$sp\\?<li~ <li~g
-			s~$sp<link~<link~g
-			s~^<!DOCTYPE[^>]*>~&<!-- github.com/mina86/mina86.com -->~
-			p
-		}
-	" -i "$tmp"
-	;;
 *)
 	echo "Don't know what to do with $in" >&2
 	exit 1

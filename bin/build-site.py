@@ -34,6 +34,10 @@ import subprocess
 import sys
 import tempfile
 
+sys.path.insert(1, os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                                '..', '..', 'htmlmin')))
+import htmlmin.parser
+
 
 HOST = 'mina86.com'
 BASE_HREF = 'http://' + HOST
@@ -43,7 +47,7 @@ NOW = datetime.datetime.utcnow()
 POSTS_SUBDIR = 'posts'
 PAGES_SUBDIR = 'pages'
 TPL_SUBDIR = 'src/tpl'
-OUT_SUBDIR = '.tmp'
+OUT_SUBDIR = 'public'
 
 
 class _Addresable(object):
@@ -206,6 +210,53 @@ class Sitemap(object):
         return output.getvalue()
 
 
+class HTMLMinParser(htmlmin.parser.HTMLMinParser):
+
+    def handle_starttag(self, tag, attrs):
+        self._transform_attrs(tag, attrs)
+        return htmlmin.parser.HTMLMinParser.handle_starttag(self, tag, attrs)
+
+    def handle_startendtag(self, tag, attrs):
+        self._transform_attrs(tag, attrs)
+        return htmlmin.parser.HTMLMinParser.handle_startendtag(self, tag, attrs)
+
+    def _transform_attrs(self, tag, attrs):
+        for i, (k, v) in enumerate(attrs):
+            if v:
+                attrs[i] = k, re.sub(r'\s+', ' ', v.strip())
+
+    def handle_decl(self, decl):
+        htmlmin.parser.HTMLMinParser.handle_decl(self, decl)
+        if decl.startswith('DOCTYPE'):
+            htmlmin.parser.HTMLMinParser.handle_comment(
+                self, '!github.com/mina86/mina86.com')
+
+
+def minify_html(data):
+    block = ('body', 'br', 'col', 'div', 'form', 'h[1-6]', 'head', 'html',
+             'link', 'meta', 'p', 'script', 'table', 't[dhr]', 'textarea',
+             'title', '[ou]l', '[A-Z_][A-Z_]*', 'section', 'header', 'aside',
+             'article', 'nav', 'footer')
+    block = '(?:%s)' % '|'.join(block)
+
+    data = htmlmin.minify(data,
+                          remove_comments=True,
+                          remove_empty_space=True,
+                          remove_all_empty_space=False,
+                          reduce_empty_attributes=True,
+                          reduce_boolean_attributes=True,
+                          remove_optional_attribute_quotes=True,
+                          cls=HTMLMinParser).strip()
+
+    data = re.sub('/ >', '/>', data)
+    data = re.sub(r'\s+(</?%s\b)' % block, r'\1', data)
+    data = re.sub(r'(<%s(?:\s[^>]*)>)\s+' % block, r'\1', data)
+    data = re.sub(r'\s{2,}<li', ' <li', data)
+    data = re.sub(r'\s+(</?pre\b)', r'\1', data)
+
+    return data
+
+
 class Writer(object):
 
     def __init__(self, tpl_dir, out_dir):
@@ -215,6 +266,7 @@ class Writer(object):
 
     def write_html(self, filename, tpl_name, data):
         data = self._env.get_template(tpl_name + '.html').render(data)
+        data = minify_html(data)
         self.write_file(filename, data)
 
     def write_atom(self, filename, entries, href, feed_id, title=None):
