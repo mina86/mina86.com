@@ -206,22 +206,6 @@ class Sitemap(object):
         return output.getvalue()
 
 
-def write_file(filename, content):
-    if isinstance(content, unicode):
-        content = content.encode('utf-8')
-
-    # If file already exists and has the same content, do not overwrite it so
-    # that modification date is not affected.
-    if os.path.isfile(filename):
-        with open(filename) as fd:
-            old_content = fd.read()
-        if content == old_content:
-            return
-
-    with open(filename, 'w') as fd:
-        fd.write(content)
-
-
 class Writer(object):
 
     def __init__(self, tpl_dir, out_dir):
@@ -229,16 +213,9 @@ class Writer(object):
                                        autoescape=True)
         self._out_dir = out_dir
 
-    def _out_path(self, *args):
-        filename = os.path.join(self._out_dir, *args)
-        dirname = os.path.dirname(filename)
-        if not os.path.isdir(dirname):
-            os.makedirs(dirname)
-        return filename
-
     def write_html(self, filename, tpl_name, data):
         data = self._env.get_template(tpl_name + '.html').render(data)
-        write_file(self._out_path(filename), data)
+        self.write_file(filename, data)
 
     def write_atom(self, filename, entries, href, feed_id, title=None):
         author = (u'<author><name>Michał ‘mina86’ Nazarewicz</name>'
@@ -298,10 +275,27 @@ class Writer(object):
                   body=e(entry.body.full))
         write('</feed>')
 
-        write_file(self._out_path(filename), fd.getvalue())
+        self.write_file(filename, fd.getvalue())
 
     def write_file(self, filename, content):
-        write_file(self._out_path(filename), content)
+        print ' GEN  ' + filename
+        filename = os.path.join(self._out_dir, filename)
+        if isinstance(content, unicode):
+            content = content.encode('utf-8')
+
+        # If file already exists and has the same content, do not overwrite it
+        # so that modification date is not affected.
+        if os.path.isfile(filename):
+            with open(filename) as fd:
+                if content == fd.read():
+                    return
+        else:
+            dirname = os.path.dirname(filename)
+            if not os.path.isdir(dirname):
+                os.makedirs(dirname)
+
+        with open(filename, 'w') as fd:
+            fd.write(content)
 
 
 _KW_LINE_RE = re.compile(r'^<!-- ([a-z]+): (.*) -->')

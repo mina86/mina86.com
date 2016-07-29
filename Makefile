@@ -60,7 +60,6 @@ static: $(STATIC)
 
 
 .tmp:
-	@echo " GEN"
 	@exec python bin/build-site.py
 
 tmp-to-public: $(patsubst .tmp/%, public/%, $(shell find .tmp -type f))
