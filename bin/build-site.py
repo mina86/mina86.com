@@ -238,7 +238,7 @@ class Writer(object):
 
     def write_html(self, filename, tpl_name, data):
         data = self._env.get_template(tpl_name + '.html').render(data)
-        write_file(self._out_path(self._out_dir, filename), data)
+        write_file(self._out_path(filename), data)
 
     def write_atom(self, filename, entries, href, feed_id, title=None):
         author = (u'<author><name>Michał ‘mina86’ Nazarewicz</name>'
