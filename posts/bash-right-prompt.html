@@ -37,27 +37,27 @@ PROMPT_COMMAND=__command_rprompt</pre>
 
 <h3>Clearing the line on execution</h3>
 
-<p>The above has one annoying issue though: the right text reminds on
-  screen even after executing a user command.  Usually this is
-  a matter of aesthetic but it also makes copying and pasting session
-  history a little bit trickier.
+<p>It has one annoying issue.  The right text reminds on screen even
+  after executing a command.  Typically this is a matter of aesthetic
+  but it also makes copying and pasting session history more
+  convoluted.
 
 <p>A manual solution is to use <code>redraw-current-line</code>
-  readline function (e.g. by binding it to <kbd>C-l</kbd>).  When
-  called, it clears the whole line and outputs the primary prompt and
-  whatever input has been entered thus far.  Since it’s unaware of the
-  right prompt (and <code>PROMPT_COMMAND</code> is <em>not</em>
-  executed), the right text does not reappear.
+  readline function (e.g. often bound to <kbd>C-l</kbd>).  It clears
+  the line and prints the prompt and whatever input has been entered
+  thus far.  <code>PROMPT_COMMAND</code> is <em>not</em> executed so
+  the right text does not reappear.
 
-<p>Fortunately, lack of automation can be addressed quite simply with
-  a tiny bit of readline magic and a <code>~/.inputrc</code> file
-  which receives much more fame than what it usually gets.
+<p>Lack of automation can be addressed with a tiny bit of readline
+  magic and a <code>~/.inputrc</code> file which deserves much more
+  fame than what it usually gets.
 
-<p>Tricky part is bindind <kbd>C-m</kbd> and <kbd>C-j</kbd> to two
-  readline functions, <code>redraw-current-line</code> followed by
-  <code>accept-line</code>, which is normally not possible.  This
-  limitation can be overcome by binding the key sequences to
-  a different sequence which will be interpreted recursively.
+<p>Tricky part is bindind <kbd>C-m</kbd> and <kbd>C-j</kbd>
+  to <em>two</em> readline functions, <code>redraw-current-line</code>
+  followed by <code>accept-line</code>, which is normally not
+  possible.  This limitation can be overcome by binding the key
+  sequences to a different sequence which will be interpreted
+  recursively.
 
 <p>To test that idea it’s enough to execute:
 
@@ -65,7 +65,7 @@ PROMPT_COMMAND=__command_rprompt</pre>
 bind '\M-\C-j:accept-line'
 bind '\C-j:"\C-l\M-\C-j"' '\C-m:"\C-j"'</pre>
 
-<p>And making this permanent is as easy as adding the following lines
+<p>Making this permanent is as easy as adding the following lines
   to <code>~/.inputrc</code>:
 
 <pre>$if Bash
@@ -83,12 +83,11 @@ $endif</pre>
 
 <h3>Caveats</h3>
 
-<p>Even though improvement over straight <code>PROMPT_COMMAND</code>
-  solution, the aforementioned method still has some minor downsides.
-  Most importantly, the standard prompt and entered text may at some
-  point clash with the text on the right.  Furthermore, deleting
-  characters from the middle of the entered line might lead to right
-  prompt being shifted by one character.
+<p>Even though improvement over naïve <code>PROMPT_COMMAND</code>
+  solution, the aforementioned method has minor downsides.  Most
+  noticeably, the standard prompt and entered text may clash with the
+  text on the right.  Furthermore, deleting characters from the middle
+  of the entered line shifts the right prompt by one character.
 
 <p>The latter can be addressed with similar way
   as <code>accept-line</code> but even without a solution the two
