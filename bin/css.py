@@ -61,10 +61,19 @@ def _insart_data(src_dir, m):
     return encodings[0]
 
 
-def handle(data, src_dir):
-    return re.sub(r'DATA<([^<>]+)>',
+def _map_static(mappings, m):
+    path = m.group(0)
+    return mappings.get(path, path)
+
+
+def handle(data, src_dir, mappings):
+    data = re.sub(r'DATA<([^<>]+)>',
                   lambda m: _insart_data(src_dir, m),
                   data)
+    data = re.sub(r'/d/[-_a-zA-Z0-9.]*',
+                  lambda m: _map_static(mappings, m),
+                  data)
+    return data
 
 
 if __name__ == '__main__':

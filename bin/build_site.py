@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # Static blog generator.                           -*- coding: utf-8 -*-
 # Copyright 2016 by Michał Nazarewicz <mina86@mina86.com>
 #
@@ -38,16 +37,19 @@ sys.path.insert(1, os.path.abspath(os.path.join(os.path.dirname(__file__),
                                                 '..', '..', 'htmlmin')))
 import htmlmin.parser
 
+import paths
+
 
 HOST = 'mina86.com'
 BASE_HREF = 'http://' + HOST
 
 NOW = datetime.datetime.utcnow()
 
-POSTS_SUBDIR = 'posts'
-PAGES_SUBDIR = 'pages'
-TPL_SUBDIR = 'src/tpl'
-OUT_SUBDIR = 'public'
+POSTS_SUBDIR = paths.POSTS_SUBDIR
+PAGES_SUBDIR = paths.PAGES_SUBDIR
+TPL_SUBDIR = paths.TPL_SUBDIR
+
+REPO_URL = paths.REPO_URL
 
 
 class _Addresable(object):
@@ -212,6 +214,10 @@ class Sitemap(object):
 
 class HTMLMinParser(htmlmin.parser.HTMLMinParser):
 
+    def __init__(self, *args, **kw):
+        self._static_mappings = kw.pop('static_mappings', None)
+        htmlmin.parser.HTMLMinParser.__init__(self, *args, **kw)
+
     def handle_starttag(self, tag, attrs):
         self._transform_attrs(tag, attrs)
         return htmlmin.parser.HTMLMinParser.handle_starttag(self, tag, attrs)
@@ -223,21 +229,35 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
     def _transform_attrs(self, tag, attrs):
         for i, (k, v) in enumerate(attrs):
             if v:
-                attrs[i] = k, re.sub(r'\s+', ' ', v.strip())
+                v = re.sub(r'\s+', ' ', v.strip())
+                v = self._static_mappings.get(v, v)
+                attrs[i] = k, v
 
     def handle_decl(self, decl):
         htmlmin.parser.HTMLMinParser.handle_decl(self, decl)
         if decl.startswith('DOCTYPE'):
             htmlmin.parser.HTMLMinParser.handle_comment(
-                self, '!github.com/mina86/mina86.com')
+                self, '!' + REPO_URL)
+
+    def handle_comment(self, comment):
+        if comment.startswith('[if '):
+            comment = re.sub(
+                r'"(/d/[^"]*)"',
+                lambda m: self._static_mappings.get(m.group(1), m.group(1)),
+                comment)
+        htmlmin.parser.HTMLMinParser.handle_comment(self, comment)
 
 
-def minify_html(data):
+
+def minify_html(data, static_mappings):
     block = ('body', 'br', 'col', 'div', 'form', 'h[1-6]', 'head', 'html',
              'link', 'meta', 'p', 'script', 'table', 't[dhr]', 'textarea',
              'title', '[ou]l', '[A-Z_][A-Z_]*', 'section', 'header', 'aside',
              'article', 'nav', 'footer')
     block = '(?:%s)' % '|'.join(block)
+
+    def make_parser(*args, **kw):
+        return HTMLMinParser(*args, static_mappings=static_mappings, **kw)
 
     data = htmlmin.minify(data,
                           remove_comments=True,
@@ -246,7 +266,7 @@ def minify_html(data):
                           reduce_empty_attributes=True,
                           reduce_boolean_attributes=True,
                           remove_optional_attribute_quotes=True,
-                          cls=HTMLMinParser).strip()
+                          cls=make_parser).strip()
 
     data = re.sub('/ >', '/>', data)
     data = re.sub(r'\s+(</?%s\b)' % block, r'\1', data)
@@ -259,14 +279,16 @@ def minify_html(data):
 
 class Writer(object):
 
-    def __init__(self, tpl_dir, out_dir):
+    def __init__(self, writer, tpl_dir, static_mappings):
         self._env = jinja2.Environment(loader=jinja2.FileSystemLoader(tpl_dir),
                                        autoescape=True)
-        self._out_dir = out_dir
+        self._writer = writer
+        self._tpl_dir = tpl_dir
+        self._static_mappings = static_mappings
 
     def write_html(self, filename, tpl_name, data):
         data = self._env.get_template(tpl_name + '.html').render(data)
-        data = minify_html(data)
+        data = minify_html(data, self._static_mappings)
         self.write_file(filename, data)
 
     def write_atom(self, filename, entries, href, feed_id, title=None):
@@ -330,24 +352,7 @@ class Writer(object):
         self.write_file(filename, fd.getvalue())
 
     def write_file(self, filename, content):
-        print ' GEN  ' + filename
-        filename = os.path.join(self._out_dir, filename)
-        if isinstance(content, unicode):
-            content = content.encode('utf-8')
-
-        # If file already exists and has the same content, do not overwrite it
-        # so that modification date is not affected.
-        if os.path.isfile(filename):
-            with open(filename) as fd:
-                if content == fd.read():
-                    return
-        else:
-            dirname = os.path.dirname(filename)
-            if not os.path.isdir(dirname):
-                os.makedirs(dirname)
-
-        with open(filename, 'w') as fd:
-            fd.write(content)
+        self._writer.write_file(filename, content)
 
 
 _KW_LINE_RE = re.compile(r'^<!-- ([a-z]+): (.*) -->')
@@ -542,17 +547,10 @@ def generate(writer, site):
     writer.write_file('sitemap.xml', sitemap)
 
 
-def main():
-    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    out_dir = os.path.join(root_dir, OUT_SUBDIR)
-
-    posts = list(read_entries(os.path.join(root_dir, POSTS_SUBDIR)))
-    pages = list(read_entries(os.path.join(root_dir, PAGES_SUBDIR), cls=Page))
+def build(writer, static_mappings):
+    posts = list(read_entries(POSTS_SUBDIR))
+    pages = list(read_entries(PAGES_SUBDIR, cls=Page))
     site = Site(posts, pages)
 
-    writer = Writer(os.path.join(root_dir, TPL_SUBDIR), out_dir)
+    writer = Writer(writer, TPL_SUBDIR, static_mappings)
     generate(writer, site)
-
-
-if __name__ == '__main__':
-    main()
