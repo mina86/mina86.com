@@ -26,7 +26,7 @@ public/d/%.js: src/%.js $(YUICOMPRESSOR)
 	@exec sh bin/compressor.sh $@ $^
 
 public/d/%.css: src/%.css $(YUICOMPRESSOR) $(wildcard src/data/*.*)
-	@exec sh bin/compressor.sh $@ $^
+	@exec sh bin/compressor.sh $@ $< $(YUICOMPRESSOR) src/data
 
 public/%: static/%
 	@exec mkdir -p $(dir $@)

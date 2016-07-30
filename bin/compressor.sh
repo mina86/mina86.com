@@ -48,7 +48,7 @@ case $in in
 *.css)
 	echo -n '/* github.com/mina86/mina86.com */' >$tmp
 	run java -jar "$jar" -v --type css "$in" | \
-		perl ./bin/data-uri.pl "$@" >>$tmp
+		python ./bin/css.py "$@" >>$tmp
 	;;
 *)
 	echo "Don't know what to do with $in" >&2
