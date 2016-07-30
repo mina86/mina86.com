@@ -47,10 +47,6 @@
  * .g  wrapper around g+ button
  */
 
-header, aside, section, article, nav, footer, main {
-	display: block;
-}
-
 html {
 	height: 100%;
 }
