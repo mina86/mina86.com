@@ -1,6 +1,3 @@
-YUICOMPRESSOR_VERSION = 2.4.8
-YUICOMPRESSOR = bin/yuicompressor-$(YUICOMPRESSOR_VERSION).jar
-
 all: public
 
 public:
@@ -15,15 +12,17 @@ clean:
 distclean:
 	-rm -r .tmp public
 
-.tmp/%.js: src/%.js $(YUICOMPRESSOR)
+.tmp/%.js: src/%.js
 	@echo " MIN  $@"
-	exec mkdir -p $(dir $@)
-	exec java -jar $(YUICOMPRESSOR) -v --type js $< >$@
+	@exec mkdir -p $(dir $@)
+	exec curl -X POST -s --data-urlencode "input@$<" \
+		https://javascript-minifier.com/raw >$@
 
-.tmp/%.css: src/%.css $(YUICOMPRESSOR) $(wildcard src/data/*.*)
+.tmp/%.css: src/%.css
 	@echo " MIN  $@"
-	exec mkdir -p $(dir $@)
-	exec java -jar $(YUICOMPRESSOR) -v --type css $< >$@
+	@exec mkdir -p $(dir $@)
+	exec curl -X POST -s --data-urlencode "input@$<" \
+		https://cssminifier.com/raw >$@
 
 %.gz: %
 	@echo " GZ   $@"
@@ -41,9 +40,6 @@ upload-files:
 	       --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r --progress \
 	       files/ static/favicon.ico static/robots.txt \
 	       files86:/home/public
-
-$(YUICOMPRESSOR):
-	wget -O $@ https://github.com/yui/yuicompressor/releases/download/v$(YUICOMPRESSOR_VERSION)/$(notdir $@)
 
 .DELETE_ON_ERROR:
 .PHONY: all public touch clean distclean upload upload-files
