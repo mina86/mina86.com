@@ -101,9 +101,6 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
                 v = self._static_mappings.get(v, v)
                 attrs[i] = k, v
 
-    def handle_decl(self, decl):
-        htmlmin.parser.HTMLMinParser.handle_decl(self, decl)
-
     def handle_comment(self, comment):
         if comment.startswith('[if '):
             comment = re.sub(
@@ -126,17 +123,16 @@ def minify_html(data, static_mappings):
 
     data = htmlmin.minify(data,
                           remove_comments=True,
-                          remove_empty_space=True,
+                          remove_empty_space=False,
                           remove_all_empty_space=False,
                           reduce_empty_attributes=True,
                           reduce_boolean_attributes=True,
                           remove_optional_attribute_quotes=True,
                           cls=make_parser).strip()
 
-    data = re.sub('/ >', '/>', data)
-    data = re.sub(r'\s+(</?%s\b)' % block, r'\1', data)
-    data = re.sub(r'(<%s(?:\s[^>]*)>)\s+' % block, r'\1', data)
-    data = re.sub(r'\s{2,}<li', ' <li', data)
-    data = re.sub(r'\s+(</?pre\b)', r'\1', data)
+    data = re.sub(r'\s+(</?(?:%s|pre)\b)' % block, r'\1', data)
+    data = re.sub(r'(</pre>)\s+', r'\1', data)
+    data = re.sub(r'(<pre>)(?:[[:blank:]]*\n)+', r'\1', data)
+    data = re.sub(r'(</?%s\b[^>]*>)\s+' % block, r'\1', data)
 
     return data
