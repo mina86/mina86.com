@@ -30,7 +30,7 @@ import subprocess
 import sys
 
 import build_site
-import css
+import compilers
 import paths
 
 SRC_SUBDIR = paths.SRC_SUBDIR
@@ -156,7 +156,7 @@ def build_no_expiry(writer):
     # Copy files from .tmp to static/D with their new names.
     handlers = {
         '.css': lambda data: '/*%s*/%s' % (
-            REPO_URL, css.handle(data, SRC_DATA_SUBDIR, mappings)),
+            REPO_URL, compilers.process_css(data, SRC_DATA_SUBDIR, mappings)),
         '.js': lambda data: '//%s\n%s' % (REPO_URL, data)
     }
 
