@@ -3,7 +3,7 @@
 <!-- tags: apache, ssl, mod_rewrite, www -->
 <!-- categories: Articles, English, Techblog -->
 
-<p>Surprisingly I couldn't find any HTTPS-aware examples how to drop the <tt>www.</tt> prefix from web hosts in Apache,
+<p>Surprisingly I couldn’t find any HTTPS-aware examples how to drop the <tt>www.</tt> prefix from web hosts in Apache,
 so I had to come up with one myself.  Firstly, the following lines
 need to find their way to the end of Apache configuration file
 (<tt>/etc/httpd/conf/httpd.conf</tt> or something):</p>
@@ -21,7 +21,7 @@ like so:</p>
 <pre>&lt;VirtualHost _default_:443&gt;
 	<i># … various directives …</i>
 
-	<i># Here's what needs to be added:</i>
+	<i># Here’s what needs to be added:</i>
 	RewriteEngine on
 	RewriteCond %{HTTP_HOST} ^www\.(.*)$
 	RewriteRule ^(.*)$ https://%1$1 [L,R=301]
@@ -54,8 +54,8 @@ RewriteCond %{HTTP_HOST} ^www\.(.*)$
 RewriteRule ^(.*)$ http://%1$1 [L,R=301]</pre>
 
 
-<p>mod_rewrite has also a <tt>REQUEST_SCHEME</tt> variable and it's
-tempting to use it, but it seems that it's value is not what is
+<p>mod_rewrite has also a <tt>REQUEST_SCHEME</tt> variable and it’s
+tempting to use it, but it seems that it’s value is not what is
 advertised and instead it contains scheme and host name which is not
 that useful.</p>
 
@@ -66,7 +66,7 @@ href="http://no-www.org/">check out this site</a>.</p>
 <!-- date: 2014-05-21 19:46:50 -->
 <!-- nick: todds -->
 
-<p>THANK YOU NICK!!!! THANK YOU THANK YOU THANK YOU!!!! I don't know why this was so hard to find. I doubt you and I are the only ones on the planet that want to do this or that we are the only two clueless people on the planet. Thanks again!</p>
+<p>THANK YOU NICK!!!! THANK YOU THANK YOU THANK YOU!!!! I don’t know why this was so hard to find. I doubt you and I are the only ones on the planet that want to do this or that we are the only two clueless people on the planet. Thanks again!</p>
 
 <!-- COMMENT -->
 <!-- date: 2015-04-15 14:13:59 -->

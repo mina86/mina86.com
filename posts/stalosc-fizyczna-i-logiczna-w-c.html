@@ -47,7 +47,7 @@ const int *const *const ptrA;  /* Stały wskaźnik na stały wskaźnik
                                   na stały int. */</pre>
 
 <p>Możnaby tak w nieskończoność, szczególnie, że mamy jeszcze
-  wskaźniki do funkcji...  No ale, powstrzymam się. ;)
+  wskaźniki do funkcji…  No ale, powstrzymam się. ;)
   Przypominam, że w C oraz C++ typy czyta się "od prawej do
   lewej".</p>
 
@@ -117,8 +117,8 @@ const_cast&lt;char*&gt;("bar")[2] = 'z'; /* niezdefiniowane zachowanie */</pre>
     return ret;
 }
 
-static const int nums[] = { /* ... */ };
-/* ... */
+static const int nums[] = { /* … */ };
+/* … */
 sum(sizeof nums / sizeof *nums, nums);   /* gdyby w prototypie funkcja
        miała typ `int*`, a nie `const int*` ta linijka spowodowałaby
        błąd kompilacji. */</pre>
@@ -198,10 +198,10 @@ void baz(const Foo *const *arr);
 
 int main(void) {
     Foo **arr;
-    /* ... */
+    /* … */
     bar(arr); /* Błąd kompilacji. */
     baz(arr); /* Poprawny kod. */
-    /* ... */
+    /* … */
 }</pre>
 
 <p>Aby zrozumieć czemu tak jest należy przeanalizować poniższy
@@ -276,23 +276,23 @@ private:
   zastosować rzutowanie, <abbr title="na przykład">np.</abbr>:</p>
 
 <pre>struct Foo {
-    /* ... */
+    /* … */
     const int *find(int arg) const;
     int *find(int arg) {
         return const_cast&lt;int*&gt;(const_cast&lt;const Foo*&gt;(this)-&gt;find(arg));
     }
-    /* ... */
+    /* … */
 };</pre>
 
 <p>lub</p>
 
 <pre>struct Foo {
-    /* ... */
+    /* … */
     const int *find(int arg) const {
         return const_cast&lt;Foo*&gt;(this)-&gt;find(arg);
     }
     int *find(int arg);
-    /* ... */
+    /* … */
 };</pre>
 
 <p>Rzutowanie słówka <tt>this</tt> wymusza wołanie stałej lub
@@ -326,7 +326,7 @@ foo.baz = 666;  /* Kod poprawny. */</pre>
 
 <pre>struct Foo {
 
-    /* ... */
+    /* … */
 
     const int *find(int arg) const {
         if (last_arg == arg) {
@@ -339,7 +339,7 @@ foo.baz = 666;  /* Kod poprawny. */</pre>
         }
     }
 
-    /* ... */
+    /* … */
 
 private:
     mutable int *last_found;

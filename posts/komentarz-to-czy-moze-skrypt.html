@@ -41,13 +41,15 @@ header('content-type: ' . $type . '; charset=iso-8859-2');
 <li>zastosowanie negocjacji i sprytnego mechanizmu po stronie serwera, który będzie stosował odpowiednie sekwencje otwierające i zamykające skrypt albo</li>
 <li>zastosowanie negocjacji i trzymanie wszystkich skryptów w plikach, dołączanych do strony za pomocą elementu <tt>script</tt> z atrybutem <tt>src</tt>.</li>
 </ul>
-<p>Cóż rzec... takie uroki <acronym xml:lang="en" title="Extensible Hypertext Markup Language">XHTML</acronym>-a.</p>
+<p>Cóż rzec… takie uroki <acronym xml:lang="en" title="Extensible Hypertext Markup Language">XHTML</acronym>-a.</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-02-12 23:03:11 -->
 <!-- nick: Michał Górny -->
 
-<p>Jeszcze była jakaś metoda z zastosowaniem jednocześnie <span class="caps">CDATA</span> i komentarza. O ile dobrze pamiętam, to chyba otwarcie i zamknięcie komentarza się pakowało w <span class="caps">CDATA</span> ( ;.</p>
+<p>Jeszcze była jakaś metoda z zastosowaniem jednocześnie CDATA
+i komentarza. O ile dobrze pamiętam, to chyba otwarcie i zamknięcie
+komentarza się pakowało w CDATA. (;</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 07:36:06 -->
@@ -85,7 +87,10 @@ header('content-type: ' . $type . '; charset=iso-8859-2');
 <!-- nick: D4rky -->
 <!-- nick_url: http://nerdblog.jogger.pl -->
 
-<p>mina86 – tak, po to masz zmuszac przegladarke, aby bezsensownie wysylala kolejne zapytania do serwera. Tak samo powinenes <span class="caps">CSS</span> trzymac w osobnym pliku i to nie ma znaczenia czy plik ma 1, 2 czy 50 KB. Rules are rules ;)</p>
+<p>mina86 – tak, po to masz zmuszac przegladarke, aby bezsensownie
+wysylala kolejne zapytania do serwera. Tak samo powinenes CSS trzymac
+w osobnym pliku i to nie ma znaczenia czy plik ma 1, 2 czy 50
+KB. Rules are rules ;)</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 21:04:08 -->
@@ -98,27 +103,32 @@ header('content-type: ' . $type . '; charset=iso-8859-2');
 <!-- date: 2008-02-13 21:06:39 -->
 <!-- nick: Michał Górny -->
 
-<p>D4rky: Patrz: <span class="caps">MTU</span>.</p>
+<p>D4rky: Patrz: MTU.</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-02-19 20:47:47 -->
 <!-- nick: mcv -->
 <!-- nick_url: http://mcv.jogger.pl -->
 
-<p>Przeglądarki poprawnie interpretują kod, wycinając to co jest w komentarzu <span class="caps">XML</span> &lt;!— … —&gt;, czyli skrypt. ;-)</p>
+<p>Przeglądarki poprawnie interpretują kod, wycinając to co jest
+w komentarzu XML &lt;!— … —&gt;, czyli skrypt. ;-)</p>
 
 <p>Poprawne rozwiązanie to:<br />
 &lt;script …&gt; // &lt;![CDATA[
  …<br />
 // ]]&gt;&lt;/script&gt;</p>
 
-<p>Przeglądarki nie rozumiejące XHTML-a (XML-a) zignorują tagi sekcji <span class="caps">CDATA</span>, bo są one zakomentowane (a raczej zinterpretują jako kod JS, który jest… zakomentowany). Te rozumiejące najpierw przepuszczą stronę przez parser <span class="caps">XML</span>, który już zadba o to by sekcje <span class="caps">CDATA</span> były zrozumiane jako tekst.</p>
+<p>Przeglądarki nie rozumiejące XHTML-a (XML-a) zignorują tagi sekcji
+CDATA, bo są one zakomentowane (a raczej zinterpretują jako kod JS,
+który jest… zakomentowany). Te rozumiejące najpierw przepuszczą stronę
+przez parser XML, który już zadba o to by sekcje CDATA były zrozumiane
+jako tekst.</p>
 
 <!-- COMMENT -->
 <!-- date: 2009-02-26 16:31:34 -->
 <!-- nick: BLACK CAT -->
 
-<p>Zastosowanie wprowadzenia w pierwszym wpisie pisanej (pierwszej linijce kodu) strony html czy htm oznaczenia skryptu php i jego forma jest zalezna od specyfikacji <span class="caps">DTD</span>, do której się odwołujesz za pomocą &lt;<span class="caps">DOCTYPE</span> ......&gt; w następnej lini kodu i do ich przeczytania odsyłam. Ogólnie jeżeli skrypt pojawia się jako załączony plik zewnętrzny to tylko strony xhtml wymagaja wpisu, którego użyłeś w przykładowej stronie testowej i dlatego jest to częściej stosowana metoda. Jeżeli wprowadzasz kod za pomocą pliku zewnętrznego, to większość przeglądarek świetnie sobie z tym poradzi bez wspomnianej pierwszej linijki – parser „przeskoczy” na obsługę php bezproblemowo. Warto pamiętać, że jeżeli chodzi o instrukcję przetwarzania kodu &lt;script&gt;&lt;/script&gt; to w przypadku php nawala na maxa i lepiej tego nie stosować. Nadmienię jedynie, że w przyszłości XHTML/<span class="caps">XML</span> całkowicie ma zostać wyłączona wspomniana tu instrukcja przetwarzania kodu &lt;script&gt; oraz jakakolwiek możliwość załączania skryptów bezpośrednio do kodu html czy htm. Więc już polecam zewnętrzne pliki i jeszcze raz odsyłam do specyfikacji.</p>
+<p>Zastosowanie wprowadzenia w pierwszym wpisie pisanej (pierwszej linijce kodu) strony html czy htm oznaczenia skryptu php i jego forma jest zalezna od specyfikacji <span class="caps">DTD</span>, do której się odwołujesz za pomocą &lt;<span class="caps">DOCTYPE</span> …&gt; w następnej lini kodu i do ich przeczytania odsyłam. Ogólnie jeżeli skrypt pojawia się jako załączony plik zewnętrzny to tylko strony xhtml wymagaja wpisu, którego użyłeś w przykładowej stronie testowej i dlatego jest to częściej stosowana metoda. Jeżeli wprowadzasz kod za pomocą pliku zewnętrznego, to większość przeglądarek świetnie sobie z tym poradzi bez wspomnianej pierwszej linijki – parser „przeskoczy” na obsługę php bezproblemowo. Warto pamiętać, że jeżeli chodzi o instrukcję przetwarzania kodu &lt;script&gt;&lt;/script&gt; to w przypadku php nawala na maxa i lepiej tego nie stosować. Nadmienię jedynie, że w przyszłości XHTML/<span class="caps">XML</span> całkowicie ma zostać wyłączona wspomniana tu instrukcja przetwarzania kodu &lt;script&gt; oraz jakakolwiek możliwość załączania skryptów bezpośrednio do kodu html czy htm. Więc już polecam zewnętrzne pliki i jeszcze raz odsyłam do specyfikacji.</p>
 
 <!-- COMMENT -->
 <!-- date: 2013-07-17 07:42:53 -->
@@ -128,4 +138,4 @@ header('content-type: ' . $type . '; charset=iso-8859-2');
 <p>Standard-agnostic HTML code<br /><br />HTML has gone quite a long way since its inception.  This means<br />
   a lot of new features but also some small incompatibilities which<br />
   may pose issues in certain situations.  For instance, when posting<br />
-  a code snippet for others to include on [...]</p>
+  a code snippet for others to include on […]</p>

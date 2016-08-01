@@ -9,7 +9,7 @@
 
 <p>Żeby nie motać za bardzo (i nie udawać, że wiem o czym piszę) ograniczę się na początek do sygnałów przesyłanych przez zwykły kabel miedziany.  Prąd w nim płynący ma zasadniczo dwa parametry--natężenie oraz napięcie--które mają wartości ciągłe przeto są wartościami analogowymi.  Umówmy się na początek, iż sygnał będziemy kodować za pomocą napięcia i załóżmy jednocześnie, że wszystko jest tak zrobione, iż w kablu naszym występują napięcia od 0 do 5 woltów.  Teraz wystarczy jedno proste założenie: Niech wszystko poniżej 1,5 wolta oznacza stan niski, a wszystko powyżej 3,5 woltów oznacza stan wysoki i gotowe!</p>
 
-<p>A co z takim razie z wartościami pomiędzy 1,5 a 3,5 wolta? Są to poziomy niedozwolone i sygnalizujące błąd transmisji.  Podejście takie ukazuje w czym tak naprawdę transmisja cyfrowa jest lepsza od analogowej.  Otóż, w realnym świecie, jeżeli po jednej stronie kabla nadamy sygnał <tt>u(t)</tt> to po drugiej stronie odczytamy <tt>u'(t) = u(t) + delta(t)</tt> gdzie <tt>delta(t)</tt> to jakieś losowe zakłócenia.  W przypadku sygnału analogowego nie mamy żadnej możliwości odfiltrować tych zakłóceń--nie wiadomo wszak czy są to zakłócenia czy prawidłowy sygnał.  Przy transmisji cyfrowej możemy, bo wszak, wystarczy, aby nadawca wysyłał stan niski jako pół, a stan wysoki jako 4,5 wolta i wówczas nawet zakłócenia o wartości jednego wolta nie będą w stanie zaburzyć transmisji, a zakłócenia o wartości do 3 woltów będzie można wykryć.  To czy stan wysoki oznacza jedynkę, a stan niski zero czy na odwrót jest już kwestią wtórną.</p>
+<p>A co z takim razie z wartościami pomiędzy 1,5 a 3,5 wolta? Są to poziomy niedozwolone i sygnalizujące błąd transmisji.  Podejście takie ukazuje w czym tak naprawdę transmisja cyfrowa jest lepsza od analogowej.  Otóż, w realnym świecie, jeżeli po jednej stronie kabla nadamy sygnał <tt>u(t)</tt> to po drugiej stronie odczytamy <tt>u′(t) = u(t) + delta(t)</tt> gdzie <tt>delta(t)</tt> to jakieś losowe zakłócenia.  W przypadku sygnału analogowego nie mamy żadnej możliwości odfiltrować tych zakłóceń--nie wiadomo wszak czy są to zakłócenia czy prawidłowy sygnał.  Przy transmisji cyfrowej możemy, bo wszak, wystarczy, aby nadawca wysyłał stan niski jako pół, a stan wysoki jako 4,5 wolta i wówczas nawet zakłócenia o wartości jednego wolta nie będą w stanie zaburzyć transmisji, a zakłócenia o wartości do 3 woltów będzie można wykryć.  To czy stan wysoki oznacza jedynkę, a stan niski zero czy na odwrót jest już kwestią wtórną.</p>
 
 <p>A czy możnaby ustalić więcej niż dwa zakresy? Np. wysoki, niski i średni? Oczywiście można.  Wówczas transmisja przebiegałaby szybciej, ale za to byłaby bardziej podatna na zakłócenia.</p>
 
@@ -26,7 +26,7 @@
 <!-- nick: radmen -->
 <!-- nick_url: http://radmen.jogger.pl -->
 
-<p>Masz błąd: „<span class="caps">XML</span> Parsing Error: mismatched tag. Expected: &lt;/p&gt;.<br />
+<p>Masz błąd: „XML Parsing Error: mismatched tag. Expected: &lt;/p&gt;.<br />
 Location: http://mina86.jogger.pl/2008/02/13/transmisja-cyfrowa/<br />
 Line Number 67, Column 323:” </p>
 
@@ -63,24 +63,24 @@ Line Number 67, Column 323:” </p>
 <!-- nick: GiM -->
 <!-- nick_url: http://gim.jogger.pl -->
 
-<p>„Dodatkowo sygnał cyfrowy, w przeciwieństwie do analogowego, umożliwia zastosowanie kodów wykrywających błędy. [...] Innymi sposobami są kody <span class="caps">CRC</span> czy nawet MD5.” </p>
+<p>„Dodatkowo sygnał cyfrowy, w przeciwieństwie do analogowego, umożliwia zastosowanie kodów wykrywających błędy. […] Innymi sposobami są kody CRC czy nawet MD5.” </p>
 
-<p>może mi się wydaje, ale wychodzi jakbyś traktował MD5 jako EDC/<span class="caps">ECC</span>, a on takowym kodem nie jest. Zresztą sam wspominałeś ostatnio o hash-ach.</p>
+<p>może mi się wydaje, ale wychodzi jakbyś traktował MD5 jako EDC/ECC, a on takowym kodem nie jest. Zresztą sam wspominałeś ostatnio o hash-ach.</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-02-18 14:49:56 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com/ -->
 
-<p>Gdyż MD5 może być (i jest) stosowany jako <span class="caps">EDC</span> (jako <span class="caps">ECC</span> raczej nie). Skoro <span class="caps">CRC</span> jest to czemu nie MD5? Zarówno różne wersje <span class="caps">CRC</span> jak i MD5 to funkcje mieszające i mogą być wykorzystywane do detekcji błędów.</p>
+<p>Gdyż MD5 może być (i jest) stosowany jako EDC (jako ECC raczej nie). Skoro CRC jest to czemu nie MD5? Zarówno różne wersje CRC jak i MD5 to funkcje mieszające i mogą być wykorzystywane do detekcji błędów.</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-02-18 15:18:12 -->
 <!-- nick: GiM -->
 <!-- nick_url: http://gim.jogger.pl -->
 
-<p>raczej średnio. <span class="caps">CRC</span> byl projektowany jako kod wykrywający błędy i ma dość mocne podstawy matematyczne. Właściwości <span class="caps">CRC</span> są dokładnie znane, wiadomo jakie rodzaje błędów jest w stanie wykryć a jakie nie, jakie wielomiany dobierać i w jaki sposób stopień wielomianu ma wpływ na możliwości detekcji błędów.<br />
-MD5 natomiast jest funkcją hashującą, które opisałeś ogólnie w pierwszym z tej serii artykułów. MD5 jest zaprojektowana by ‘mieszać’ bity i tyle. Za <span class="caps">EDC</span> stoi całkiem spora teoria kodów (polecam wykłady Madhu Sudana) MD5 ma się nijak do tej teorii :)<br />
+<p>raczej średnio. CRC byl projektowany jako kod wykrywający błędy i ma dość mocne podstawy matematyczne. Właściwości CRC są dokładnie znane, wiadomo jakie rodzaje błędów jest w stanie wykryć a jakie nie, jakie wielomiany dobierać i w jaki sposób stopień wielomianu ma wpływ na możliwości detekcji błędów.<br />
+MD5 natomiast jest funkcją hashującą, które opisałeś ogólnie w pierwszym z tej serii artykułów. MD5 jest zaprojektowana by ‘mieszać’ bity i tyle. Za EDC stoi całkiem spora teoria kodów (polecam wykłady Madhu Sudana) MD5 ma się nijak do tej teorii :)<br />
 Moim skromnym zdaniem funkcje hashujące a kody wykrywające i korygujące błędy to dwie różne rzeczy i raczej nie należy tych pojęć mieszać.</p>
 
 <!-- COMMENT -->

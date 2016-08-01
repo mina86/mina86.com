@@ -3,16 +3,18 @@
 <!-- tags: linux, gentoo -->
 <!-- categories: Articles, Reviews -->
 
-<p id="prologue">Ostatnio, przy okazji zmiany systemu plików z <a
- href="http://www.namesys.com/">Reiser4</a> na <a
- href="http://en.wikipedia.org/wiki/Ext3">ext3</a> postanowiłem
+<p id="prologue">Ostatnio, przy okazji zmiany systemu plików
+ z <a href="http://www.namesys.com/">Reiser4</a>
+ na <a href="http://en.wikipedia.org/wiki/Ext3">ext3</a> postanowiłem
  zainstalować <a href="http://www.gentoo.org/">Gentoo</a>.  Głównym
  motywem był jednak nie system plików, a fakt posiadania 64 bitowego
- procesora, który nie jest wspierany przez <a
- href="http://www.slackware.org/">Slackware</a> - dystrybucję, którą
- używam.  Tak, wiem o istnieniu <a
- href="http://www.slamd64.com/">Slamd64</a>, ale od tej dystrybucji
- wolę trzymać się z daleka... (Update: Na chwilę obecną, gdy dodaję ten wpis do Joggera, mogę powiedzieć, że Slamd64 12.0 nie jest wcale takie złe i działa całkiem stabilnie i przyjemnie.)</p>
+ procesora, który nie jest wspierany
+ przez <a href="http://www.slackware.org/">Slackware</a> -
+ dystrybucję, którą używam.  Tak, wiem
+ o istnieniu <a href="http://www.slamd64.com/">Slamd64</a>, ale od tej
+ dystrybucji wolę trzymać się z daleka… (Update: Na chwilę obecną, gdy
+ dodaję ten wpis do Joggera, mogę powiedzieć, że Slamd64 12.0 nie jest
+ wcale takie złe i działa całkiem stabilnie i przyjemnie.)</p>
 
 <!-- EXCERPT -->
 
@@ -22,7 +24,7 @@
 
 <p>Chciałbym również zaznaczyć, że początkowo nie byłem do Gentoo
  nastawiony negatywnie.  Owszem, żałowałem trochę, że odchodzę od
- Slackware'a, ale mimo wszystko cieszyłem się z myśli, że w końcu
+ Slackware’a, ale mimo wszystko cieszyłem się z myśli, że w końcu
  wykorzystam pełen potencjał swojej 64 bitowej maszyny.</p>
 
 <h3 id="compilation">Kompilacja</h3>
@@ -41,7 +43,7 @@
 
  <p>Właściwie, jest bardzo prawdopodobne że nie potrzebujesz.</p>
 
- <p>Kilka powodów dlaczego NIE budować ze źródeł: [...]</p>
+ <p>Kilka powodów dlaczego NIE budować ze źródeł: […]</p>
  <ul>
   <li>NIE uzyskasz lepszej wydajności systemu poprzez zbudowanie go ze
    źródeł.</li>
@@ -53,7 +55,7 @@
 <p>Można się zastanawiać czy stwierdzenia powyższe dotyczą jedynie <a
  href="http://www.openbsd.org/">OpenBSD</a> czy też przenoszą się do
  świata GNU/Linuksa.  Z pobieżnych testów dozziego wynika, że
- istotnie -- flagi kompilatora nieznacznie wpływają na szybkość
+ istotnie — flagi kompilatora nieznacznie wpływają na szybkość
  działania aplikacji toteż aplikacja skompilowana dla procesora i486
  z optymalizacją dla i686 będzie działać praktycznie tak samo szybko
  jak ta sama aplikacja skompilowana dla procesora i686.</p>
@@ -73,7 +75,7 @@
 <p>Oczywiście można edytować <i>ebuild</i>y, ale w takim razie po co
  ten cały <tt>emerge</tt> i <tt>portage</tt>, skoro i tak będzie
  trzeba ręcznie konfigurować programy?  W tym momencie czym to się
- różni od ściągnięcia źródeł paczki Slackware'a i edycji
+ różni od ściągnięcia źródeł paczki Slackware’a i edycji
  <i>SlackBuild</i>a? Moim zdaniem niczym.</p>
 
 <p>Mogę jeszcze dodać, że w moim przypadku Gentoo, w którym wszystko
@@ -141,7 +143,7 @@
  dysku, a przecież wydanie komendy do aktualizacji wszystkich pakietów
  na pewno nie zaszkodzi.</p>
 
-<p>Tak właśnie myślałem... i grubo się myliłem.</p>
+<p>Tak właśnie myślałem.  I grubo się myliłem.</p>
 
 <p>Po jakimś czasie <tt>emerge</tt> przerwał pracę z jakimś błędem.
  Nie byłem w stanie uruchomić żadnego programu - w większości próby
@@ -156,7 +158,7 @@
 <h3 id="epilogue">Epilog</h3>
 
 <p>Niektórzy twierdzą, że Gentoo jest dla osób, które chcą wszystko
- dopieścić w swoim systemie, ale sorry...  Moim zdaniem nie opłaca się
+ dopieścić w swoim systemie, ale sorry…  Moim zdaniem nie opłaca się
  kompilować jakiejś aplikacji przez dzień czy dwa, żeby uruchamiała
  się o milisekundę krócej.  Największy problem polega na tym, że
  kompilacja ma sens tam gdzie stawianie Gentoo trwałoby miesiące,
@@ -165,7 +167,7 @@
 
 <p>Nie twierdze, że ręczna kompilacja to coś złego.  Sam kompiluje
  niektóre aplikacje pomimo, że są one dostępne spaczkowane dla
- Slackware'a.  Zauważam jedynie, że gdzieś trzeba postawić granicę
+ Slackware’a.  Zauważam jedynie, że gdzieś trzeba postawić granicę
  i Gentoo moim zdaniem tą granicę przekroczył.  Wiele osób mówi
  o mnie, że jestem maniakiem, bo potrafię siedzieć godzinami
  i konfigurować jakiś program

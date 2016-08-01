@@ -17,7 +17,7 @@
 <p>chciałbym odnieść się do poruszonego przeze mnie problemu
   poprawności efektywnego wzorca singletonu dla programów
   wielowątkowych zwanego również <i xml:lang="en">double-checked
-  locking pattern</i><sup><a href="#f1" id="fl1">[1]</a></sup>.  W tym
+  locking pattern</i><sup><a href="#f1" id="fl1">1</a></sup>.  W tym
   celu, na początku przywołam trochę teorii.</p>
 
 <p>Standard C++ definiuje pojęcie <i xml:lang="en">sequence point</i>,
@@ -40,7 +40,7 @@ foo = bar++;
   może powyższy kod zaimplementować najpierw przypisując
   zmiennej <var>foo</var> wartość zmiennej <var>bar</var>, a potem
   dopiero inkrementując tą drugą<sup><a href="#f2"
-  id="fl2">[2]</a></sup>:</p>
+  id="fl2">2</a></sup>:</p>
 
 <pre>foo = bar;
 ++bar;</pre>
@@ -51,15 +51,15 @@ foo = bar++;
   przydzielonej pamięci do zmiennej.  Muszę się jednak przyznać, iż
   standardu C++ nie studiowałem tak dogłębnie jak standardu C i nie
   wiem, czy przez przypadek operator new nie wprowadza kolejnego
-  punktu sekwencyjnego<sup><a href="#f3" id="fl3">[3]</a></sup>.
+  punktu sekwencyjnego<sup><a href="#f3" id="fl3">3</a></sup>.
   Gdyby tak było, to kod ten należałoby traktować jak:</p>
 
 <pre>Foo *new_foo() { return new Foo(); }
-/* ... */
+/* … */
 instance = new_Foo();</pre>
 
 <p>w którym problem nie powinien<sup><a href="#f4"
-  id="fl4">[4]</a></sup> już występować, gdyż wszystkie efekty uboczne
+  id="fl4">4</a></sup> już występować, gdyż wszystkie efekty uboczne
   funkcji muszą zostać wykonane zanim zwróci ona swoją wartość, a więc
   konstruktor musi być wywołany zanim funkcja zwróci adres
   przydzielonej pamięci.</p>
@@ -107,15 +107,15 @@ int main(void) {
   bardzo prostym przykładem: 16-bitowy procesor Intel 8086 (do 80286
   włącznie), w którym dalekie wskaźniki są 32-bitowe, a procesor
   potrafi wykonywać atomowe operacje jedynie na 16-bitowych porcjach
-  danych<sup><a href="#f5" id="fl5">[5]</a></sup>.  Jeżeli ktoś mi
+  danych<sup><a href="#f5" id="fl5">5</a></sup>.  Jeżeli ktoś mi
   zarzuci, iż to jakieś przedpotopowe procesory, to z chęcią podam
   drugi przykład: zapis do 32-bitowej zmiennej leżącej na granicy
-  linii cache'u<sup><a href="#f6" id="fl6">[6]</a></sup> powoduje
+  linii cache’u<sup><a href="#f6" id="fl6">6</a></sup> powoduje
   w procesorach i386 dwa zapisy przy równoczesnym braku blokowania
-  magistrali<sup><a href="#f7" id="fl7">[7]</a></sup>.</p>
+  magistrali<sup><a href="#f7" id="fl7">7</a></sup>.</p>
 
 <p>Poza tym artykuł na stronie IBM uświadomił mi<sup><a href="#f8"
-  id="fl8">[8]</a></sup>, iż w grę wchodzi jeszcze kolejność
+  id="fl8">8</a></sup>, iż w grę wchodzi jeszcze kolejność
   wykonywania operacji przez procesor, która wcale nie musi być
   tożsama z kolejnością instrukcji w kodzie maszynowym.  Procesor może
   stwierdzić, iż lepiej będzie najpierw zapisać wskaźnik, a dopiero
@@ -126,7 +126,7 @@ int main(void) {
 
 
 <h3>Przypisy</h3>
-<p><sup><a href="#fl1" id="f1">[1]</a></sup> Dla osób nieobecnych na
+<p><sup><a href="#fl1" id="f1">1</a></sup> Dla osób nieobecnych na
 wykładzie, chodzi o:</p>
 
 <pre>class Foo {
@@ -144,7 +144,7 @@ wykładzie, chodzi o:</p>
 
 <p>Twierdzę, iż wzorzec ten jest niepoprawny.</p>
 
-<p><sup><a href="#fl2" id="f2">[2]</a></sup> Szczerze mówiąc tak
+<p><sup><a href="#fl2" id="f2">2</a></sup> Szczerze mówiąc tak
   właśnie bym się spodziewał, że ta instrukcja zostanie
   zaimplementowana, gdyż alternatywą wobec tego jest tworzenie
   niepotrzebnych zmiennych tymczasowych (np. niepotrzebne zużywanie
@@ -201,28 +201,28 @@ main:
 <p>Wyróżnione przeze mnie linie wskazują, iż kompilator zachowuje się
   tak jak przewidziałem.</p>
 
-<p><sup><a href="#fl3" id="f3">[3]</a></sup> Wydaje się, iż
+<p><sup><a href="#fl3" id="f3">3</a></sup> Wydaje się, iż
   w przypadku przeciążania tego operatora sequence point faktycznie
   jest dodawany, z racji faktu, iż jego użycie jest wówczas
   zamaskowanym wywołaniem funkcji, a wywołania funkcji dodają sequence
   point.</p>
 
-<p><sup><a href="#fl4" id="f4">[4]</a></sup> Nadal jakiś kompilator
+<p><sup><a href="#fl4" id="f4">4</a></sup> Nadal jakiś kompilator
   mógłby próbować to optymalizować, ale wówczas nie byłby to
   kompilator zgodny ze standardem C++.</p>
 
-<p><sup><a href="#fl5" id="f5">[5]</a></sup> Takie samo zachowanie
+<p><sup><a href="#fl5" id="f5">5</a></sup> Takie samo zachowanie
   występuje rzecz jasna na nowszych generacjach tego procesora
   działających w trybie real.</p>
 
-<p><sup><a href="#fl6" id="f6">[6]</a></sup> Chyba wystarczy, żeby nie
+<p><sup><a href="#fl6" id="f6">6</a></sup> Chyba wystarczy, żeby nie
   była wyrównana do jakiejś mniejszej jednostki.</p>
 
-<p><sup><a href="#fl7" id="f7">[7]</a></sup> Przynajmniej nie
+<p><sup><a href="#fl7" id="f7">7</a></sup> Przynajmniej nie
   znalazłem wzmianki o tym, aby instrukcja mov blokowała magistralę
-  w intelowskim Software Developer's Manual.</p>
+  w intelowskim Software Developer’s Manual.</p>
 
-<p><sup><a href="#fl8" id="f8">[8]</a></sup> Link do artykułu, na
+<p><sup><a href="#fl8" id="f8">8</a></sup> Link do artykułu, na
   który się powoływałem, gdzieś mi niestety zaginął.</p>
 
 <!-- COMMENT -->

@@ -1,10 +1,10 @@
-<!-- subject: Pierwsze kroki po zainstalowaniu Slackware'a -->
+<!-- subject: Pierwsze kroki po zainstalowaniu Slackware’a -->
 <!-- date: 2008-02-12 05:36:26 -->
 <!-- tags: slackware, linux, harening, zabezpieczenia, konfiguracja -->
 <!-- categories: Articles, Techblog -->
 
 <p>W niniejszym artykule opiszę czynności, jakie zazwyczaj wykonuję
-zaraz po zainstalowaniu Slackware'a.  Nie są to rzeczy, które
+zaraz po zainstalowaniu Slackware’a.  Nie są to rzeczy, które
 doprowadzają do idealnego zabezpieczenia, olbrzymiego wzrostu
 wydajności, czu użyteczności systemu, ale raczej kroki wyważone
 pomiędzy tymi aspektami.  Oczywiście, jest to opis tego co <em>ja</em>
@@ -194,7 +194,7 @@ z <tt>acpid</tt>, <tt>alsa</tt> oraz <tt>gpm</tt>.</p>
 przed linijkami:</p>
 
 <pre class="code"># Initialize the networking hardware.  If your network driver is a module
-# and you haven't loaded it manually, this will be deferred until after
+# and you haven’t loaded it manually, this will be deferred until after
 # the hotplug system loads the module below.
 if [ -x /etc/rc.d/rc.inet1 ]; then
   . /etc/rc.d/rc.inet1
@@ -205,7 +205,7 @@ fi</pre>
 <pre class="code">(
 
 # Initialize the networking hardware.  If your network driver is a module
-# and you haven't loaded it manually, this will be deferred until after
+# and you haven’t loaded it manually, this will be deferred until after
 # the hotplug system loads the module below.
 if [ -x /etc/rc.d/rc.inet1 ]; then
   . /etc/rc.d/rc.inet1

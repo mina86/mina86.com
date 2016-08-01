@@ -8,7 +8,7 @@ long, that this condition has already been <a
 href="http://zboczuch.jogger.pl/2010/10/20/moje-wpisy-sa-wieksze-od-twoich/">pointed
 out</a> pushing me into finally writing something.  Inspired by <a
 href=http://blogs.fsfe.org/adridg/?p=1014>Adriaan de
-Groot's entry</a>, I decided to write something about <tt>0</tt>,
+Groot’s entry</a>, I decided to write something about <tt>0</tt>,
 <tt>NULL</tt> and upcoming <tt>nullptr</tt>.
 
 <p>I will try to be informative and explain what the whole buzz is
@@ -21,7 +21,7 @@ pointer</a> can be donated in C and C++.
 
 <h3>The confusing <tt>0</tt></h3>
 
-<p>In C and C++, the literal <tt>0</tt> has two meanings: it's either
+<p>In C and C++, the literal <tt>0</tt> has two meanings: it’s either
 an octal (yes, octal) literal representing number zero or a null
 pointer.  Which meaning is used depends on context, which compiler can
 usually figure out.  For instance:
@@ -113,8 +113,8 @@ test.c:5: warning: NULL used in arithmetic
 test.c:6: warning: NULL used in arithmetic
 $</pre>
 
-<p>So, whenever you use <tt>NULL</tt>, you have to keep in mind that
-you never know what it really is.  This in particular means, that the
+<p>Whenever you use <tt>NULL</tt>, you have to keep in mind that you
+never know what it really is.  This in particular means, that the
 following code, after pre-processing, may or may not be valid:
 
 <pre>#include &lt;stdio.h&gt;
@@ -131,7 +131,7 @@ following code, after pre-processing, may or may not be valid:
 biggest issue.  As you may already know, C++ allows function
 overloading, so that several functions with the same name can exist so
 long as they have different arguments.  As a consequence, function
-name is not enough to figure out function's prototype.  Let us
+name is not enough to figure out function’s prototype.  Let us
 consider the following simple code:
 
 <pre><b>void</b> print(<b>int</b> num);
@@ -182,8 +182,8 @@ which might be used without polluting keyword name space (which is
 a problem since adding a keyword to the language may break existing
 code).
 
-<p>So my recommendation is not to bother with it.  Just ignore this
-thing and stick to <tt>NULL</tt> where context is clear and
+<p>My recommendation is not to bother with it.  Just ignore this thing
+and stick to <tt>NULL</tt> where context is clear and
 <tt>(<i>foo</i> *)0</tt> when calling function.
 
 <p>UPDATE: It has been pointed out to me that <tt>nullptr</tt> in fact
@@ -198,7 +198,7 @@ pointer.
 
 <h3>Null pointer representation</h3>
 
-<p>The last thing I want to talk about is a null pointer's
+<p>The last thing I want to talk about is a null pointer’s
 representation.  There are two misconceptions that came from the fact
 that <tt>0</tt> is used to mean a null pointer.  The first one is that
 a null pointer is in fact represented by a “zero value” (ie. all bits
@@ -209,7 +209,7 @@ pointer.
 <p>Both of those are incorrect.  In some implementations
 (microcontrollers, x86 real mode, …) a “zero pointer” is perfectly
 fine and using (for instance) all bits set representation to mean
-a null pointer may make more sense.  At the same time, it's compiler
+a null pointer may make more sense.  At the same time, it’s compiler
 responsibility to use correct representation whenever <tt>0</tt> is
 used to mean a <tt>null pointer</tt>.
 
@@ -217,7 +217,7 @@ used to mean a <tt>null pointer</tt>.
 pointed to one of <tt>comp.lang.c</tt> FAQs</a> which gives examples
 of machines where null pointers that are not represented by all bits
 clear as well as machines with different representation of pointers of
-different types (which I haven't mentioned in this article). Also, the
+different types (which I haven’t mentioned in this article). Also, the
 recurring issue of not being able to comment has been fixed (hopefully
 for good this time).
 
@@ -255,7 +255,7 @@ mind while programming in C or C++:
 
 <p>In the end, however, anyone should use what works for them.  The above is a nice class indeed and if anyone feels like it, they should use it.</p>
 
-<p>This also shows that compilers and the committee do something wrong.  Why on Earth, compilers don't define NULL in terms of such an object?  This is really beyond me.  It would partially solve the problem (at least the part that nullptr tries to solve) without the need for standard to be changed at all.</p>
+<p>This also shows that compilers and the committee do something wrong.  Why on Earth, compilers don’t define NULL in terms of such an object?  This is really beyond me.  It would partially solve the problem (at least the part that nullptr tries to solve) without the need for standard to be changed at all.</p>
 
 <!-- COMMENT -->
 <!-- date: 2013-03-03 15:14:40 -->
@@ -267,4 +267,4 @@ pointer but my recent discovery knocked my socks off.<br />
 <br />
 By now, it should come with no surprise to anyone that 0<br />
 in pointer context acts as a null pointer (no matter of its<br />
-actual re[...]</p>
+actual […]</p>

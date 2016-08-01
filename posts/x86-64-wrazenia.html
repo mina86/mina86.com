@@ -70,7 +70,7 @@
 <!-- date: 2008-07-18 10:38:18 -->
 <!-- nick: (s)zymon -->
 
-<p>mam wrażenie że <span class="caps">GCC</span> ma opcję -msse3 ;&gt;</p>
+<p>mam wrażenie że GCC ma opcję -msse3 ;&gt;</p>
 
 <p>mógłbyś rozwinąć i doprecyzować stwierdzenie: „z SSE3 gcc pewnie i tak nie umie skorzystać” ?</p>
 
@@ -88,11 +88,11 @@
 
 <p>x86 (z włączonym <acronym title="Page Size Extensions">PSE</acronym>) potrzebuje dwóch (jednego) odczytów (odczytu), aby przetłumaczyć adres logiczny na fizyczny.  Z włączonym <acronym title="Physical Address Extensions">PAE</acronym> mamy trzy (dwa) odczyty.  x86_64 natomiast, wymaga czterech (trzech) odczytów. (Źródło: „Intel® 64 and IA-32 Archtiectures Software Developer’s Manual, volume 3A” listopad 2006, sekcje 3.6.2, 3.10.1 oraz 3.10.2)</p>
 
-<p>Jeśli chodzi o <acronym title="Streaming simd Extensions">SSE</acronym>3 to zwyczajnie, pomimo wielkiej sympatii dla projektu <span class="caps">GNU</span> oraz <span class="caps">GCC</span>, nie wierzę, aby ten kompilator potrafił tak zoptymalizować kod, żeby w pełni wykorzystać potencjał jaki daje to rozszerzenie.</p>
+<p>Jeśli chodzi o <acronym title="Streaming simd Extensions">SSE</acronym>3 to zwyczajnie, pomimo wielkiej sympatii dla projektu GNU oraz GCC, nie wierzę, aby ten kompilator potrafił tak zoptymalizować kod, żeby w pełni wykorzystać potencjał jaki daje to rozszerzenie.</p>
 
 <p>zx: Nie twierdzę, że różne konkretne aplikacje nie będą szybsze. Twierdzę, że <i>per saldo</i>, w większości zastosowań 64 bitowy system nic Ci nie da, a raczej tylko zaszkodzi.  Kiedy ostatnio liczyłeś silnię ze stu tysięcy?</p>
 
-<p>Mam wrażenie, że najwięcej może zyskać obsługa SSL-a, czy <span class="caps">SSH</span>, ale z tego też wcale tak często się nie korzysta (a na pewno rzadko z punktu widzenia procesora, który dostaje prztyczki dwa albo i trzy miliardy razy na sekundę).</p>
+<p>Mam wrażenie, że najwięcej może zyskać obsługa SSL-a, czy SSH, ale z tego też wcale tak często się nie korzysta (a na pewno rzadko z punktu widzenia procesora, który dostaje prztyczki dwa albo i trzy miliardy razy na sekundę).</p>
 
 <p>Wykonaj sobie polecenie <code>awk 'NR == 1 {print $5 * 100 / ($2+$3+$4+$5)}' /proc/stat</code> (chyba, że masz jakiś dziwny system operacyjny) i zobaczysz ile procent czasu Twój procesor nic nie robi — w moim przypadku jest to ponad 97% (jeżeli w tle, z ustawionym nicem masz coś@Home to z polecenia wyrzuć <code>+$4</code>).</p>
 
@@ -116,7 +116,7 @@ Więcej rejestrów wpływa na prędkość wykonania programu, bo więcej zmienny
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Ciekawe, że mój naprędce napisany program korzystający z biblioteki <span class="caps">GMP</span> liczy silnię ze stó tysięcy w niecałe 9 sekund (a procesor mam gorszy niż ten wykorzystywany w pomiarach, do których link dał zx). Oczywiście system 32 bitowy.</p>
+<p>Ciekawe, że mój naprędce napisany program korzystający z biblioteki GMP liczy silnię ze stó tysięcy w niecałe 9 sekund (a procesor mam gorszy niż ten wykorzystywany w pomiarach, do których link dał zx). Oczywiście system 32 bitowy.</p>
 <p><code>int</code> i owszem, ale <code>long</code> ma 64, a teraz przypomnijmy sobie jaka te typy są zdefiniowane? Żeby nie wchodzić w zbytnie szczegóły <code>int</code> ma conajmniej 16, a <code>long</code> conajmniej 32 bity. Zatem, jeżeli jakas aplikacja potrzebowała typu, który ma conajmniej 32 bity (czy nawet conajmniej 17 bitów) to jest duża szansa, że wykorzystała typ <code>long</code>, który nagle staje się 64 bitowy i połowa przestrzeni jest marnowana.</p>
 
 <!-- COMMENT -->
@@ -210,14 +210,14 @@ dziala swietnie!</p>
 <p>No wiesz, x86 jest skrótem określającym całą rodzinę zaczętą przez 8086 (a w sumie nawet 8080). Żeby było śmieszniej,była też rodzina 8032 (bazowana na 8031), więc jeszcze trochę i nie bedzie x86 a x32 i wrócimy do 8bitów ;-)</p>
 
 <p>@Mina86:<br />
-Pomyśl, jak nędznie czuli się ci piszący programy na 286, którzy przesiedli się ze swoimi programami na 386. Boże! Tyle niepotrzebnego miejsca na stosie zmarnowanego, tyle wskaźników za długich! Wtedy <span class="caps">RAM</span> był droższy. <br />
+Pomyśl, jak nędznie czuli się ci piszący programy na 286, którzy przesiedli się ze swoimi programami na 386. Boże! Tyle niepotrzebnego miejsca na stosie zmarnowanego, tyle wskaźników za długich! Wtedy RAM był droższy. <br />
 Przejdź już nad tym do porządku dziennego ;-)</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-07-18 12:19:19 -->
 <!-- nick: moher -->
 
-<p>Jakoś nie widziałem żadnej płyty głównej (pod c2d i wyższe), która obsługuje &lt;4GB <span class="caps">RAM</span> (mówię o standardowych, w formacjie <span class="caps">ATX</span>, bo te mniejsze lubią czasami mieć jakieś dziwne ograniczenia, np. jeden slot pamięci). Standardem raczej jest obsługa do 8GB, czasami do 16.</p>
+<p>Jakoś nie widziałem żadnej płyty głównej (pod c2d i wyższe), która obsługuje &lt;4GB RAM (mówię o standardowych, w formacjie ATX, bo te mniejsze lubią czasami mieć jakieś dziwne ograniczenia, np. jeden slot pamięci). Standardem raczej jest obsługa do 8GB, czasami do 16.</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-07-18 12:25:49 -->
@@ -240,7 +240,7 @@ A tak w ogóle to x86-64, jak i cała wcześniejsza x86 jest do dupy. ;-)</p>
 <!-- date: 2008-07-18 12:28:57 -->
 <!-- nick: moher -->
 
-<p>Mi standardowo widzi 4GB, a dostępne jest 3,5GB (tak jest napisane w informacjach w menu BIOS-a), po włączeniu opcji, nie pamiętam dokładnej nazwy, „Memory Remap Feature” dostępny jest cały <span class="caps">RAM</span>.</p>
+<p>Mi standardowo widzi 4GB, a dostępne jest 3,5GB (tak jest napisane w informacjach w menu BIOS-a), po włączeniu opcji, nie pamiętam dokładnej nazwy, „Memory Remap Feature” dostępny jest cały RAM.</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-07-18 12:58:37 -->
@@ -256,8 +256,11 @@ A tak w ogóle to x86-64, jak i cała wcześniejsza x86 jest do dupy. ;-)</p>
 <!-- nick: konieckropka -->
 <!-- nick_url: http://blog.konieckropka.eu -->
 
-<p>W sumie autor tekstu ma rację... Ja bym nawet się pokusił o stwierdzenie.. po co nam 32 bitowe? Przeciez tyle pamięci zżerają... w sumie moglibyśmy zostać przy 16 bitówkach..hm… albo lepiej przy 8 bitach? Hm..  Mi tam commodore się podobało :D<br />
-//Oczywiscie jest to ironia</p>
+<p>W sumie autor tekstu ma rację… Ja bym nawet się pokusił
+  o stwierdzenie.. po co nam 32 bitowe? Przeciez tyle pamięci zżerają…
+  w sumie moglibyśmy zostać przy 16 bitówkach… hm… albo lepiej przy 8
+  bitach? Hm..  Mi tam commodore się podobało :D<br /> //Oczywiscie
+  jest to ironia</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-07-18 13:50:26 -->
@@ -302,7 +305,7 @@ A tak w ogóle to x86-64, jak i cała wcześniejsza x86 jest do dupy. ;-)</p>
 
 <p>Przy dużej ilości RAM-u (powiedzmy więcej niż 2GiB) negatywne skutki, opisane w tym wpisie, zwiększenia podstawowych typów nie będą raczej zauważalne, zatem z tego punktu widzenia można bez obaw przechodzić na 64-bity.</p>
 
-<p>Co więcej, w komputerach gdzie RAM-u jest więcej niż 4GiB chyba też już nie warto bawić się w <span class="caps">PAE</span>, szczególnie, że Windows tego nie obsługuje.</p>
+<p>Co więcej, w komputerach gdzie RAM-u jest więcej niż 4GiB chyba też już nie warto bawić się w PAE, szczególnie, że Windows tego nie obsługuje.</p>
 
 <p>W zasadzie każdy program skompilowany pod x86_64 będzie przyśpieszał z racji większej liczby rejestrów, ale skoro mówisz o grach to pojawia się pytanie czy będą to gry 64 bitowe czy 32 bitowe, bo jeżeli te drugie to w żadnym stopniu z 64 bitowego systemu nie skorzystają.</p>
 
@@ -314,19 +317,19 @@ A tak w ogóle to x86-64, jak i cała wcześniejsza x86 jest do dupy. ;-)</p>
 <!-- date: 2008-12-29 10:49:44 -->
 <!-- nick: RazoR -->
 
-<p>Przede wszystkim co za idiota instaluje 64 bity na systemie z 512 MB RAM?? 64 bitowe systemy powstały aby rozwiązać problem głównie w serwerach gdzie wielkie ilości <span class="caps">RAM</span> są normalne.</p>
+<p>Przede wszystkim co za idiota instaluje 64 bity na systemie z 512 MB RAM?? 64 bitowe systemy powstały aby rozwiązać problem głównie w serwerach gdzie wielkie ilości RAM są normalne.</p>
 
 <!-- COMMENT -->
 <!-- date: 2009-01-08 18:14:04 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Co nie oznacza, że na wszystkich innych maszynach wszystko popsują. Samochody combi są zaprojektowane do przewozu większego bagażu, a mimo to jedna osoba też takimi może z powodzeniem jeździć. Większa liczba rejestrów i bardziej rozbudowane instrukcje <span class="caps">SIMD</span> dawały pewne nadzieję, że nawet przy 512MiB nie będzie źle — okazało się, że jest tragicznie (w kwestii czego kolega zdaje się zgadzać).</p>
+<p>Co nie oznacza, że na wszystkich innych maszynach wszystko popsują. Samochody combi są zaprojektowane do przewozu większego bagażu, a mimo to jedna osoba też takimi może z powodzeniem jeździć. Większa liczba rejestrów i bardziej rozbudowane instrukcje SIMD dawały pewne nadzieję, że nawet przy 512MiB nie będzie źle — okazało się, że jest tragicznie (w kwestii czego kolega zdaje się zgadzać).</p>
 
 <!-- COMMENT -->
 <!-- date: 2009-02-09 01:16:12 -->
 <!-- nick: morg -->
 
-<p>X86_64 przyda się programiście SQLPlusa piszącego w Oracle. Baza danych nawet taka mała – 1 GB potrafi podczas przetwarzania zakleić prawie cały <span class="caps">RAM</span> (3,50 GB) a zużycie procesora potrafi wskoczyć na 90%. Nie jestem programistą, ale na moim kompie w pracy (Pentium D, 2 × 3400 GHz, Fedora 10 x86_64) widziałem wskaźniki podczas przetwarzania na takiej bazie.</p>
+<p>X86_64 przyda się programiście SQLPlusa piszącego w Oracle. Baza danych nawet taka mała – 1 GB potrafi podczas przetwarzania zakleić prawie cały RAM (3,50 GB) a zużycie procesora potrafi wskoczyć na 90%. Nie jestem programistą, ale na moim kompie w pracy (Pentium D, 2 × 3400 GHz, Fedora 10 x86_64) widziałem wskaźniki podczas przetwarzania na takiej bazie.</p>
 
 <p>W zastosowaniach domowych, nawet podczas przetwarzania grafiki/filmów i innych zasobożernych akcji wysarczy 32-bitowy system. Natomiast w przypadku aplikacji wielowątkowych jakimi są relacyjne bazy danych przestanie nas to zadowalać. Wzrost wydajności może przekroczyć 50%. Tak było w moim przypadku. Zadania na x86_64 średnio były szybsze w zakresie 40-60%.</p>

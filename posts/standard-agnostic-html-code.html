@@ -6,7 +6,7 @@
 <p>HTML has gone quite a long way since its inception.  This means
   a lot of new features but also some small incompatibilities which
   may pose issues in certain situations.  For instance, when posting
-  a code snippet for others to include on their websites, it's best if
+  a code snippet for others to include on their websites, it’s best if
   it works correctly on as many sites as possible which implies being
   compatible with as many versions of HTML as possible.  But how to
   create a snippet that works both in HTML and XHTML?  Here are a few
@@ -20,10 +20,10 @@
     values for the <tt>type</tt> attribute of <tt>input</tt> element),
     but it helps to apply this rule to fragment identifies and class
     names as well (since fragment identifiers and class names are case
-    sensitive in XHTML and therefore it's easy to create a piece of JavaScript
-    code or a style sheet which won't work for XHTML documents).
+    sensitive in XHTML and therefore it’s easy to create a piece of JavaScript
+    code or a style sheet which won’t work for XHTML documents).
   <li><strong>Include and quote attribute values</strong>.  Always put
-    double quotes around attribute values and don't use empty
+    double quotes around attribute values and don’t use empty
     attributes syntax, i.e. always include value for attributes such
     as <tt>compact</tt>, for example <tt>&lt;dl
     compact="compact"&gt;</tt>.
@@ -51,16 +51,16 @@
     escape &lt;, &gt; and &amp; characters. That means inside of <tt>href</tt> too.
   <li><strong>Avoid HTML5 goodness</strong>.  HTML5 defines bunch of
     new elements, attributes and attribute values.  For maximum
-    compatibility, avoid them, unless the fact that it won't work is
+    compatibility, avoid them, unless the fact that it won’t work is
     acceptable (e.g. <tt>placeholder</tt> attribute may be nice to
     have but not required).
-  <li><strong>Avoid deprecated features</strong>.  Here's a few
+  <li><strong>Avoid deprecated features</strong>.  Here’s a few
     elements that are best avoided: <tt>basefont</tt>, <tt>big</tt>,
     <tt>center</tt>, <tt>font</tt>, <tt>strike</tt>, <tt>tt</tt>,
     <tt>iframe</tt>, <tt>frame</tt>, <tt>frameset</tt>, <tt>noframes</tt>,
     <tt>acronym</tt> (use <tt>abbr</tt>), <tt>applet</tt> (use
     <tt>object</tt>), <tt>isindex</tt>, <tt>dir</tt> and <tt>u</tt>.
-    There's also a whole bunch of attributes that HTML5 does not
+    There’s also a whole bunch of attributes that HTML5 does not
     include, but it may be hard to avoid them all.  As a rule of
     thumb, if something is purely presentational use styles instead.
   <li><strong>CDATAify inline JavaScript and CSS</strong>.  If it contains &lt;, &gt; or &amp; characters, either use

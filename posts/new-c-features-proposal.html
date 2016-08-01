@@ -23,7 +23,7 @@ meeting.</p>
 <h3><small>I</small> Default Function Argument</h3>
   <ol>
     <li>
-        The default value of a function's argument has proved to be useful
+        The default value of a function’s argument has proved to be useful
         in C++ programs as well as in other languages which has such
         a notion.  It allows for more condensed function call in the usual
         cases still allowing for a configuration when required.
@@ -72,12 +72,12 @@ struct void *get(struct node *first, int key, const char *def = NULL) {
 <pre>void message(const char *msg,
              enum level .level, enum colour .colour);
 
-/* ... */
+/* … */
 message("A message", .level = LVL_INFO, .colour = WHITE);
 message("An error", .colour = RED, .level = LVL_ERROR);</pre>
     </li>
     <li>
-        The name of the argument would become part of a function's
+        The name of the argument would become part of a function’s
         prototype thus the following would be illegal:
       </p>
 <pre>void f1(int .bar);
@@ -91,7 +91,7 @@ void f2(int .bar); /* unnamed vs. unnamed */</pre>
         order and types of arguments match.
     </li>
     <li>
-        Similarly, when taking function's address or casting between
+        Similarly, when taking function’s address or casting between
         pointers to functions the names of arguments would be ignored,
         hence the following would be still well defined and perfectly
         legal:
@@ -127,10 +127,10 @@ bar(.a = &amp;arr[0], .b = &amp;arr[1]);
       </p>
 <pre>void format(const char *format,
             enum level .level, enum colour .colour,
-            ...) {
+            …) {
     va_list ap;
 
-    /* ... do something with level and colour ... */
+    /* … do something with level and colour … */
 
     va_start(ap, colour);
     vprintf(format, ap);
@@ -159,7 +159,7 @@ format("we are out of %s",
 <pre>void format(const char *format,
             enum level .level = LVL_INFO,
             enum colour .colour = WHITE,
-            ...);</pre>
+            …);</pre>
       <p>
         And then, previous calls could be shortened to:
       </p>
@@ -292,7 +292,7 @@ if (header.type == FOO_HEADER_TYPE) {
 }</pre>
     </li>
     <li>
-        This would not be limited to defining structure's or union's
+        This would not be limited to defining structure’s or union’s
         members but could be used in other scopes.  For instance:
       </p>
 <pre>void do_stuff(int use_double) {
@@ -301,9 +301,9 @@ if (header.type == FOO_HEADER_TYPE) {
         double d;
     } inline;
     if (use_double)
-        /* ... do stuff using "d" */
+        /* … do stuff using "d" */
     else
-        /* ... do stuff using "f" */
+        /* … do stuff using "f" */
 }</pre>
     </li>
     <li>
@@ -361,7 +361,7 @@ moveBy(r, 1.0, 1.0); /* illegal */</pre>
     <li>
         Explicit casting to inlined member would not need to be supported
         by the language as users could name an inlined member and use <tt>&amp;</tt>
-        operator to acquire it's address.  For instance:
+        operator to acquire it’s address.  For instance:
       </p>
 <pre>moveBy(&amp;r-&gt;tl, 1.0, 1.0);
 moveBy(&amp;r-&gt;br, 1.0, 1.0);</pre>
@@ -402,7 +402,7 @@ moveBy(&amp;r-&gt;br, 1.0, 1.0);</pre>
 <pre>type *_Containerof(pointer, type);
 type *_Containerof(pointer, type, auto);</pre>
       <p>
-        (I'll assume the former in the rest of the text.)
+        (I’ll assume the former in the rest of the text.)
     </li>
     <li>
         Since identifiers starting with an underscore followed by an
@@ -413,7 +413,7 @@ type *_Containerof(pointer, type, auto);</pre>
         A C1x specific header (for instance <tt>stdc1x.h</tt>) could be provided
         which would define a <tt>containerof()</tt> macro, as:
       </p>
-<pre>#define containerof(...) _Containerof(__VA_ARGS)</pre>
+<pre>#define containerof(…) _Containerof(__VA_ARGS)</pre>
     </li>
   </ol>
 <h3><small>VI</small> Object Oriented Programming</h3>
@@ -526,7 +526,7 @@ void rectangle_init(struct circle *c, double x = 0.0, double y = 0.0,
         Situation gets even more complicated when one wants to develop
         a code where the type used is dependent on a macro definition or
         a typedef.  This may be even more tricky if the macro/typedef
-        comes from the external library and there's no clear way of
+        comes from the external library and there’s no clear way of
         telling what type it is during prepossessing stage.
     </li>
     <li>
@@ -583,8 +583,8 @@ static "C++" float mysin(long double x) { return sinl(x); }</pre>
 void sort_foo(struct foo *foos, size_t n) {
     static int cmp(const void *_a, const void *_b) {
         const struct foo *a = _a, *b = _b;
-        /* ... */
-        return /* ... */;
+        /* … */
+        return /* … */;
     }
     qsort(foos, n, sizeof *foos, cmp);
 }</pre>
@@ -612,8 +612,8 @@ void sort_foo(struct foo *foos, size_t n) {
     qsort(foos, n, sizeof *foos,
           (int ()(const void *_a, const void *_b)){
         const struct foo *a = _a, *b = _b;
-        /* ... */
-        return /* ... */;
+        /* … */
+        return /* … */;
     });
 }</pre>
     </li>
@@ -641,7 +641,7 @@ void sort_foo(struct foo *foos, size_t n) {
     </li>
     <li>
         However, when the two above combined, warnings about unused
-        arguments are produced when it is user's intend no to use them.
+        arguments are produced when it is user’s intend no to use them.
         Common technique is to cast such an argument to void at the
         beginning of a function to silence the warning.
     </li>
@@ -652,7 +652,7 @@ void sort_foo(struct foo *foos, size_t n) {
     </li>
     <li>
         The current standard requires names to be present for all
-        function's arguments in function definition so this change would
+        function’s arguments in function definition so this change would
         not affect conforming code.  At the same time, many
         C implementations are also capable of compiling C++ code thus
         implementing this feature could be easy and straightforward.
@@ -662,8 +662,8 @@ void sort_foo(struct foo *foos, size_t n) {
   <ol>
     <li>
         The new C standard draft proposes an <tt>alignof</tt> operator that
-        takes type as it's operand.  Why cannot it take an expression as
-        it's operand the same way <tt>sizeof</tt> does?
+        takes type as it’s operand.  Why cannot it take an expression as
+        it’s operand the same way <tt>sizeof</tt> does?
     </li>
     <li>
         The <tt>alignof</tt> operator is added in the new standard thus this

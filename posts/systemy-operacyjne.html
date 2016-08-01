@@ -364,8 +364,8 @@ loop_here:       xchg   eax, [semaphore]
     filozofów.</dt>
 
   <dd><pre>#define N 5
-enum State { THINKING, HUNGRY, EATING } states[N] = { THINKING /* ... * };
-semaphore sem[N] = { 0 /* ... * };
+enum State { THINKING, HUNGRY, EATING } states[N] = { THINKING /* … * };
+semaphore sem[N] = { 0 /* … * };
 semaphore mutex = 1;
 
 #define LEFT(n) (((n) + N - 1) % N)

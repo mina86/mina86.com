@@ -47,7 +47,7 @@ z pewnością, przynajmniej jeden, inny beduin go usłyszy.  Beduini maja na tyl
 
 <p>Na początek wybieramy arbitralnie jakiegoś beduina, który staje się korzeniem. Proces ten można zautomatyzować wybierając  beduina o „najmniejszym” (w sensie jakiegoś przyjętego dobrego porządku) imieniu.</p>
 
-<p>Teraz beduini zapamiętują odległość (którą na początku inicjują nieskończonością) oraz listę dzieci.  Korzeń rozpoczyna wszystko zerując swoją odległość i krzycząc trójkę (<span class="caps">NULL</span>, swoje imię, 1).  Gdy ktoś usłyszy komunikat (rodzic, imię, metryka) robi co następuje:
+<p>Teraz beduini zapamiętują odległość (którą na początku inicjują nieskończonością) oraz listę dzieci.  Korzeń rozpoczyna wszystko zerując swoją odległość i krzycząc trójkę (NULL, swoje imię, 1).  Gdy ktoś usłyszy komunikat (rodzic, imię, metryka) robi co następuje:
 <ol>
 <li>jeśli rodzic to on sam zapamiętuje imię w liście dzieci, chyba że już tam jest;</li>
 <li>jeśli rodzic to ktoś inny oraz imię znajduje się w liście dzieci usuwa je stamtąd;</li>
@@ -81,4 +81,4 @@ Po odpowiednim czasie każdy z wierzchołków zna imiona swoich dzieci w tak zbu
 
 <p>Z beduinami jest tak, że nie ma tutaj żadnych podsieci. Nie można wnioskować, że Abdul jest gdzieś w pobliżu Ahmeda, a na zupełnie innym końcu pustyni niż Zenon. Doszedłem do wniosku, że należy to rozwiązać tworząc takie podsieci i klasy adresowe.</p>
 
-<p>Co do identyfikatorów, to po ich przydzieleniu komunikaty wysyłane są do ziomka o podanym identyfikatorze, a nie imieniu i dlatego najpierw trzeba poznać identyfikator komputera o zadanym imieniu, aby móc do niego wysyłać wiadomości (coś jak <span class="caps">ARP</span>).</p>
+<p>Co do identyfikatorów, to po ich przydzieleniu komunikaty wysyłane są do ziomka o podanym identyfikatorze, a nie imieniu i dlatego najpierw trzeba poznać identyfikator komputera o zadanym imieniu, aby móc do niego wysyłać wiadomości (coś jak ARP).</p>

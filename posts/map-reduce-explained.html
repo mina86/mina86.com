@@ -9,15 +9,15 @@
   can be highly parallelised, which allows for faster processing of
   high volumes of data.
 
-<p>If you've ever wondered how tools such as Apache Hadoop work,
-  you're at the right page.  In this article I'll explain what map and
+<p>If you’ve ever wondered how tools such as Apache Hadoop work,
+  you’re at the right page.  In this article I’ll explain what map and
   reduce are and later also introduce a shuffle phase.
 
 <!-- EXCERPT -->
 
 <p>Even though <a href=/p/python-wrazenia/>Python is
   a terrible language [pl]</a> which <a href=http://dozzie.jogger.pl/2014/04/11/python-tuples-the-useless-thing-in-language/>misuses terms from
-  functional programming world</a>, I'll use it to demonstrate the
+  functional programming world</a>, I’ll use it to demonstrate the
   concepts.  Lisp or Haskell would arguably be better, but people
   knowing those languages are likely familiar with map-reduce anyway.
 
@@ -71,7 +71,7 @@ reduce(function, sequence, initial_state) → final_state
 
 <h3>Analysing logs</h3>
 
-<p>Let's use this approach to find out how many words each user of
+<p>Let’s use this approach to find out how many words each user of
   #slackware.pl FreeNode IRC channel (formerly #forum.slackware.pl at
   QuakeNet) have said over the years.  The map stage will take a line
   from the logs and return user name and number of words in that line:
@@ -93,7 +93,7 @@ for nick, count in map(getWords, sys.stdin):
 <pre>cat temp/logs/* | python code/calc-words.py</pre>
 
 <p>This is a bit wasteful of a multi-core machine though.
-  Fortunately, it's enough to realise the result of the getWords
+  Fortunately, it’s enough to realise the result of the getWords
   function depends on a single line only.  Therefore in the most
   extreme case we could spawn a process for each line in the logs.
   Because of process creation and synchronisation overhead, such
@@ -181,7 +181,7 @@ parallel "$@" --eta '
     into several groups (or shards) such that each job/worker has just
     a few groups to work on.
 
-  <li><p>#slackware.pl's popularity decreased over time so the per-day
+  <li><p>#slackware.pl’s popularity decreased over time so the per-day
     files are very unbalanced (this is in addition to weekly
     variances).  When sharding the files, they should be grouped so
     that size of each group is similar.

@@ -10,7 +10,7 @@ problem” I thought as I started typing
 <em>beloved</em> IT department had blocked most of the Internet.
 Checking the time on a watch or a mobile phone was not an
 option – I have neither – nor was looking
-at GKrellM on another PC – that's just lame.</p>
+at GKrellM on another PC – that’s just lame.</p>
 
 <p>“I wish there was a NTP-over-HTTP protocol”
 I dreamed sighting.  And then, a few curses on the IT
@@ -30,10 +30,10 @@ headers solution becomes clear.</p>
 <p>This has some disadvantages, granted, but works great for
 situations where millisecond accuracy is not required which is the
 case on most personal computers – do you really care if
-it's 10 or 11 seconds after the minute?</p>
+it’s 10 or 11 seconds after the minute?</p>
 
 <p>It also requites GNU coreutils (for
-<tt>date</tt>'s <tt>-s</tt> switch) (but implementing <a
+<tt>date</tt>’s <tt>-s</tt> switch) (but implementing <a
 href="http://gist.github.com/278534">simple RFC1123 date parser</a> is
 not that hard), wget (which can however be replaced by other tools
 including telnet) and sed (which is POSIX utility and also can be
@@ -90,4 +90,5 @@ date -s "$(wget --no-cache -S -O /dev/null google.com 2&gt;&amp;1 | \
   <p>If no connection is reset time at 00:00:00.</p>
 </blockquote>
 
-<p>True. To solve that one would have to check the output. I'll update the entry.</p>
+<p>True. To solve that one would have to check the output. I’ll update
+the entry.</p>

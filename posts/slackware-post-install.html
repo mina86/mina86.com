@@ -37,7 +37,7 @@ echo chown root:root /bin/su &gt;&gt;/etc/rc.d/rc.local
 echo chmod 4750 /bin/su &gt;&gt;/etc/rc.d/rc.local</pre>
 
 <p>It prevents any users not in root and wheel groups from using su.
-Both on command's configuration level and file system level.
+Both on command’s configuration level and file system level.
 Modifying <code>/etc/rc.d/rc.local</code> file makes sure that file system
 permissions will be preserved even if shadow package is upgraded or
 reinstalled.
@@ -159,7 +159,7 @@ chmod 755 /etc/crontab.hourly/ntpsync
     /usr/sbin/klogd -c 3 -x <b>-p</b></pre>
 
 <p>Adding <code>-m 0</code> disables the <code>-- MARK --</code> messages (which are
-arguably useful but I find them noisy) and <code>-p</code> enables klogd's
+arguably useful but I find them noisy) and <code>-p</code> enables klogd’s
 paranoia mode.
 
 <p>Furthermore, to be able to see log messages on TTY 12 run the following:
@@ -195,7 +195,7 @@ option to <code>12</code> (or so) and uncomment <code>compress</code> option.
 
 <h3>Other network security</h3>
 
-<p>To prevent, or at least limit, sniffing on local network, it's beneficial
+<p>To prevent, or at least limit, sniffing on local network, it’s beneficial
 to set up a static hardware addresses for the default gateway and some most
 important hosts the machine is connecting to.  For this to work those hosts
 need to have a static IP as well of course.
@@ -235,8 +235,8 @@ echo 'ALL: ALL' &gt;&gt;/etc/hosts.deny</pre>
 chmod -R go-rwx /etc/rc.d
 chmod -R o-rwx /var/log</pre>
 
-<p>Furthermore, users don't need to be able to list contents of <code>/tmp</code>
-directory, thus it's safe to change <code>/etc/rc.d/rc.M</code> file by modifying
+<p>Furthermore, users don’t need to be able to list contents of <code>/tmp</code>
+directory, thus it’s safe to change <code>/etc/rc.d/rc.M</code> file by modifying
 the lines setting permissions for <code>/tmp</code> and <code>/var/tmp</code>
 directories to:
 
@@ -246,16 +246,16 @@ directories to:
 <h3>Filesystems</h3>
 
 <p>All the file systems mounted during the boot on the system are configured
-in the <code>/etc/fstab</code> file.  There are a few options that's worth adding:
+in the <code>/etc/fstab</code> file.  There are a few options that’s worth adding:
 
 <dl>
   <dt><code>noatime</code>
   <dd>Disables access time tracking which speeds things up by reducing number
-  of IO operations.  Even if it's desired to have accurate access time, it's
+  of IO operations.  Even if it’s desired to have accurate access time, it’s
   best to add <code>relatime</code> option.
   <dt><code>nodev</code>
   <dd>Disables device files.  Should be set up on all file systems except
-  for <code>/</code> (or <code>/dev</code> if it's on separate partition).
+  for <code>/</code> (or <code>/dev</code> if it’s on separate partition).
   <dt><code>noexec</code>
   <dd>Disables executable bit.  The limitation is relatively easy to work
   around, but I still add it to <code>/boot</code> and <code>/var</code>.
@@ -380,9 +380,9 @@ echo "chmod 4750 $cmds" &gt;&gt;/etc/rc.d/rc.local</pre>
 <h3>Final clean ups</h3>
 
 <p>Depending on the way Slackware was installed, it may contain many packages
-that aren't used.  Those should be removed since the fewer packages system has,
-the fewer bugs it contains.  For instance, I haven't used finger or talk for
-ages, and really don't see a need for those as well as some other packages
+that aren’t used.  Those should be removed since the fewer packages system has,
+the fewer bugs it contains.  For instance, I haven’t used finger or talk for
+ages, and really don’t see a need for those as well as some other packages
 to be installed:
 
 <pre>cd /var/log/packages
@@ -417,7 +417,7 @@ care, but for other series my motto is “if in doubt, removepkg”.  This is
 especially true for n series which includes many servers.
 
 <p>Besides packages, Slackware comes with a bunch of user accounts and groups
-that aren't really used for anything.  First make sure that those are really
+that aren’t really used for anything.  First make sure that those are really
 unused by invoking:
 
 <pre>find / -user adm -o -user games -o -user gdm -o -user lp \
@@ -437,20 +437,20 @@ for GRP in adm news pop; do groupdel "$GRP"; done</pre>
 <!-- date: 2014-01-26 16:27:36 -->
 <!-- nick: Jarosław Rzeszótko -->
 
-<p>Could you write something more about your usage patterns? Are you using Slackware for your personal computing, or on servers? How long have you been doing it? I loved Slackware back in the day, but Slackware's package management falled behind at some point, the ease with which you can install almost anything in Debian's apt, Gentoo's portage or FreeBSD ports system is a huge advantage compared to the austerity of Slackware. Has this changed recently? Why would you use Slackware today over Gentoo or Arch?</p>
+<p>Could you write something more about your usage patterns? Are you using Slackware for your personal computing, or on servers? How long have you been doing it? I loved Slackware back in the day, but Slackware’s package management falled behind at some point, the ease with which you can install almost anything in Debian’s apt, Gentoo’s portage or FreeBSD ports system is a huge advantage compared to the austerity of Slackware. Has this changed recently? Why would you use Slackware today over Gentoo or Arch?</p>
 
 <!-- COMMENT -->
 <!-- date: 2014-01-26 17:25:55 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>I've been using Slackware as my main operating system for over ten years both on my desktop and later on <a href="http://mina86.com/p/msi-wind-i-dziewiec-komor/" rel="nofollow">my netbook</a> which recently become a pure server.</p>
+<p>I’ve been using Slackware as my main operating system for over ten years both on my desktop and later on <a href="http://mina86.com/p/msi-wind-i-dziewiec-komor/" rel="nofollow">my netbook</a> which recently become a pure server.</p>
 
-<p><a href="http://mina86.com/p/wrazenia-z-gentoo/" rel="nofollow">I've tried Gentoo a while back</a> but didn't really like it especially as I don't find the idea of compiling everything appealing any more.</p>
+<p><a href="http://mina86.com/p/wrazenia-z-gentoo/" rel="nofollow">I’ve tried Gentoo a while back</a> but didn’t really like it especially as I don’t find the idea of compiling everything appealing any more.</p>
 
 <p>What I like Slackware for is its simplicity. It sticks to simple text files when it comes to configuration without any unnecessary GUIs. Almost all configurations that worked ten years ago, still work.</p>
 
-<p>As for package management I really don't mind lack of dependency resolution. It's usually not a big issue for me, and majority of tools I need Slackware includes, so there's not many packages that I need to compile myself.</p>
+<p>As for package management I really don’t mind lack of dependency resolution. It’s usually not a big issue for me, and majority of tools I need Slackware includes, so there’s not many packages that I need to compile myself.</p>
 
 <!-- COMMENT -->
 <!-- date: 2014-01-26 20:23:04 -->
@@ -463,19 +463,19 @@ for GRP in adm news pop; do groupdel "$GRP"; done</pre>
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>I don't see why it wouldn't. I used LILO on a 1T SATA drive with no problems. Currently I'm using it with a RAID-1 set up on two 40G SSD SATA-3 drives. I have never had a SAS drive, but I really don't see why it would not work. Slackware 14.1 includes ELILO so Slackware works on UEFI systems as well.</p>
+<p>I don’t see why it wouldn’t. I used LILO on a 1T SATA drive with no problems. Currently I’m using it with a RAID-1 set up on two 40G SSD SATA-3 drives. I have never had a SAS drive, but I really don’t see why it would not work. Slackware 14.1 includes ELILO so Slackware works on UEFI systems as well.</p>
 
 <!-- COMMENT -->
 <!-- date: 2014-04-02 04:40:11 -->
 <!-- nick: Deny Dias -->
 
-<p>Hi, mina86! That's a wonderful piece of writing on Slackware's post install and security! Thanks for writing it.</p>
+<p>Hi, mina86! That’s a wonderful piece of writing on Slackware’s post install and security! Thanks for writing it.</p>
 
-<p>I just moved to a new notebook and did a fresh install of Slackware. Most of the working files at ~/ came from backup. But even with a backup, if you don keep track of every single file changed after install, it's easy to get lost on all the minor changes made. For instance: how to remember that we've changed that one single line at /etc/rc.d/rc.local?!?</p>
+<p>I just moved to a new notebook and did a fresh install of Slackware. Most of the working files at ~/ came from backup. But even with a backup, if you don keep track of every single file changed after install, it’s easy to get lost on all the minor changes made. For instance: how to remember that we’ve changed that one single line at /etc/rc.d/rc.local?!?</p>
 
 <p>So, do you have a hint on how to keep track of the changed files after initial install? That would be really useful to backup those files properly, and mainly to rebuild a new system scratch.</p>
 
-<p>I took a look at the wild for info on that (although not that deep) and can't found nothing straight to the matter. On Slackware, I thought that an checksum comparison between the original distribution files (namely CHECKSUMS.md5) and the current filesystem wold get it done. The thing is that process is quite time consuming. I have doubts if this is an elegant approach.</p>
+<p>I took a look at the wild for info on that (although not that deep) and can’t found nothing straight to the matter. On Slackware, I thought that an checksum comparison between the original distribution files (namely CHECKSUMS.md5) and the current filesystem wold get it done. The thing is that process is quite time consuming. I have doubts if this is an elegant approach.</p>
 
 <p>Do you have any ideas on that matter?</p>
 
@@ -486,7 +486,7 @@ for GRP in adm news pop; do groupdel "$GRP"; done</pre>
 
 <p>I do not install Slackware so often to give this problem much thought or try to implement any of my ideas. This time around, I had my previous article and my desktop so I could easily recreate all the configuration I needed.</p>
 
-<p>If you know in advance that you're going to reinstall the system, you can simply <code>tar</code> the <code>/etc/rc.d</code> directory of the old system and extract it after installation is done.  You can do that with the whole <code>/etc</code> but beware of files with user and group information, SSH and SSL keys, etc.</p>
+<p>If you know in advance that you’re going to reinstall the system, you can simply <code>tar</code> the <code>/etc/rc.d</code> directory of the old system and extract it after installation is done.  You can do that with the whole <code>/etc</code> but beware of files with user and group information, SSH and SSL keys, etc.</p>
 
 <p>Yet another option is to keep <code>/etc</code> in a git repository periodically pushed to a safe location. Just initialise a repository in <code>/etc</code> and exclude specific files and directories using <code>.gitignore</code>.</p>
 
@@ -494,17 +494,17 @@ for GRP in adm news pop; do groupdel "$GRP"; done</pre>
 <!-- date: 2014-04-02 16:47:35 -->
 <!-- nick: Deny Dias -->
 
-<p>Hummm! I don't reinstall the system that often too. I did that now because the old machine, a MacBook Pro, required lots of customizations to deal with Apple's craps so Linux became usable in it as the only OS installed (no dual boot). As the new machine is pretty standard, Slackware's generic kernel is more than enough to handle it. So I thought it worth the time to reinstall from scratch to clean lots of the unnecessary stuff rather then just copy the old /etc and some at /lib, /lib64 and /opt.</p>
+<p>Hummm! I don’t reinstall the system that often too. I did that now because the old machine, a MacBook Pro, required lots of customizations to deal with Apple’s craps so Linux became usable in it as the only OS installed (no dual boot). As the new machine is pretty standard, Slackware’s generic kernel is more than enough to handle it. So I thought it worth the time to reinstall from scratch to clean lots of the unnecessary stuff rather then just copy the old /etc and some at /lib, /lib64 and /opt.</p>
 
 <p>Right know, my installation can be migrated to a new pretty standard machine just by moving the SSD itself to the new hardware. But I feel more safe if I can just start from a fresh Slackware install and replace only the changed files. That would be quite quick to accomplish if one keep track of the changed files only.</p>
 
-<p>That git approach might be very useful here. I'll look into it later and report here if I get into something simple to implement. Actually, I already do that with dotfiles at ~/ by using homeshick (I wrote an <a href="http://mexapi.macpress.com.br/2013/10/ordem-nos-dotfiles.html" rel="nofollow">article</a> about this, in Portuguese). Maybe the same approach may apply here too.</p>
+<p>That git approach might be very useful here. I’ll look into it later and report here if I get into something simple to implement. Actually, I already do that with dotfiles at ~/ by using homeshick (I wrote an <a href="http://mexapi.macpress.com.br/2013/10/ordem-nos-dotfiles.html" rel="nofollow">article</a> about this, in Portuguese). Maybe the same approach may apply here too.</p>
 
 <!-- COMMENT -->
 <!-- date: 2015-03-01 08:30:20 -->
 <!-- nick: nick -->
 
-<p>i found this really insightful and it helps immensely with my user configuration. can you link me to any other articles by you or that you find helpful? i'm trying to start from the bottom, get my user account and security set up, update, then configure my login shell (zsh), then my console apps (vim, mc, lynx, the ones i'll use most.) thanks for this.</p>
+<p>i found this really insightful and it helps immensely with my user configuration. can you link me to any other articles by you or that you find helpful? i’m trying to start from the bottom, get my user account and security set up, update, then configure my login shell (zsh), then my console apps (vim, mc, lynx, the ones i’ll use most.) thanks for this.</p>
 
 <!-- COMMENT -->
 <!-- date: 2015-03-11 03:03:59 -->
