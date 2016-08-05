@@ -42,7 +42,7 @@ nie będą mogli się logować do komputera (do grupy tej należy między
 innymi <code>root</code>).  Druga linijka zabrania logować się wszystkim
 oprócz użytkownika o podanym loginie.  Jeżeli więcej osób ma mieć
 możliwość logowania się (nie dotyczy to dostępu zdalnego
-<abbr title="na przykład">np.</abbr> przez <acronym title="Secure Shell" xml:lang="en">SSH</acronym>) to można stworzyć grupę
+<abbr title="na przykład">np.</abbr> przez <acronym title="Secure Shell" lang="en">SSH</acronym>) to można stworzyć grupę
 (<abbr title="na przykład">np.</abbr> <code>ttylogin</code>), a w omawianym pliku drugą
 z podanych linijek zamienić na:</p>
 
@@ -101,10 +101,10 @@ zmian:</p>
  </tr>
 </table>
 
-<h3 id="ssh">Zabezpieczanie <acronym title="Secure Shell" xml:lang="en">SSH</acronym></h3>
+<h3 id="ssh">Zabezpieczanie <acronym title="Secure Shell" lang="en">SSH</acronym></h3>
 
 <p>Logowanie z konsoli jest już zrobione to teraz należy
-zabezpieczyć <acronym title="Secure Shell" xml:lang="en">SSH</acronym>.  Przede wszystkim, jeżeli nie
+zabezpieczyć <acronym title="Secure Shell" lang="en">SSH</acronym>.  Przede wszystkim, jeżeli nie
 używamy <code>sshd</code> to warto ustawić, aby nie włączał się on
 automatycznie przy starcie (generalnie wszelkie nieużywane lub rzadko
 używane daemony nie powinny być uruchamiane przy starcie).  Aby tego
@@ -284,7 +284,7 @@ fi</pre>
 systemowych.  Dzięki nim, użytkownicy z grupy <code>root</code> nie muszą
 korzystać z <code>su</code>, aby móc odpalić polecenia takie jak
 <code>/sbin/halt</code>.  Dalej włączane jest logowanie pakietów
-<acronym title="Internet Control Message Protocol" xml:lang="en">ICMP</acronym>.  Następnie generowane są pliku
+<acronym title="Internet Control Message Protocol" lang="en">ICMP</acronym>.  Następnie generowane są pliku
 <code>/etc/issue</code> oraz <code>/etc/issue.net</code> po czym ustawiane są
 różne parametry dysku - prawdopodobnie będziesz chciał je zmodyfikować.
  Na koniec uruchamiany jest skrypt <code>/etc/cron.hourly/ntpsync</code>
@@ -435,7 +435,7 @@ oraz członkowie grupy <code>vfat</code> będą mogli szperać po i dokonywać
 zmian na partycjach <code>vfat</code>.</p>
 
 <p>Na koniec jeszcze, by być bardziej zgodnym z <a
-href="http://www.pathname.com/fhs/" xml:lang="en">File Hierarchy
+href="http://www.pathname.com/fhs/" lang="en">File Hierarchy
 Standard</a> wykonuję następujące polecenia:</p>
 
 <pre class="code">mv -f -- /mnt /media
@@ -445,11 +445,11 @@ sed -e 's/\/mnt\//\/media\//' -i -- /etc/fstab</pre>
 <p>Co powoduje, że rzeczy takie jak CD-ROM czy dyskietki są montowane
 nie w katalogu <code>/mnt</code>, ale <code>/media</code>.</p>
 
-<h3 id="lilo"><acronym title="LInux LOader" xml:lang="en">LILO</acronym></h3>
+<h3 id="lilo"><acronym title="LInux LOader" lang="en">LILO</acronym></h3>
 
 <p>Zawsze lubiłem, jak system szybko się ładował i zawsze denerwowały
 mnie długie opóźnienia powodowane przez boot loadery.  W związku
-z czym, w swoim <acronym title="LInux LOader" xml:lang="en">LILO</acronym> dokonałem następujących
+z czym, w swoim <acronym title="LInux LOader" lang="en">LILO</acronym> dokonałem następujących
 zmian:</p>
 
 <p>Po pierwsze, dodałem <code>lba32</code> i <code>compact</code>; po drugie,

@@ -3,7 +3,7 @@
 <!-- tags: javascript, xhtml, mime -->
 <!-- categories: Articles, Techblog -->
 
-<p>Przenosząc się na Joggera straciłem sporo czasu na dochodzenie czemu skrypty, które zamieszczałem nie działały tak jak powinny (<abbr title="to znaczy">tzn.</abbr> nie działały w ogóle). Okazało się, że zależnie od typu <acronym title="Multipurpose Internet Mail Extensions" xml:lang="en">MIME</acronym> strony skrypty są różnie interpretowane. A dokładniej mechanizmy <i>ochrony</i> skryptów.</p>
+<p>Przenosząc się na Joggera straciłem sporo czasu na dochodzenie czemu skrypty, które zamieszczałem nie działały tak jak powinny (<abbr title="to znaczy">tzn.</abbr> nie działały w ogóle). Okazało się, że zależnie od typu <acronym title="Multipurpose Internet Mail Extensions" lang="en">MIME</acronym> strony skrypty są różnie interpretowane. A dokładniej mechanizmy <i>ochrony</i> skryptów.</p>
 
 <p>Ze względu na przeglądarki nie rozumiejące tagu <code>script</code> przyjęło się kod skryptu umieszczać w komentarzu. Przeglądarki wspierające skrypty domyślały się, że to tak naprawdę kod skryptu i jakoś sobie z tym radziły. Ku memu lekkiemu zdziwieniu odkryłem, że <a href="http://www.opera.com/">Opera</a> i <a href="http://www.mozilla-europe.org/pl/products/firefox/">Firefox</a> przestają wykonywać kod skryptu, gdy strona jest dostarczona jako <code>application/xhtml+xml</code>. Aby sprawę zbadać bardziej szczegółowo stworzyłem taką oto stronę testową:</p>
 
@@ -35,13 +35,13 @@ header('content-type: ' . $type . '; charset=iso-8859-2');
 &lt;/html&gt;</pre>
 <p>Okazuje się, że wysyłając stronę jako <code>text/html</code> wykonują się dwa pierwsze, a jako <code>application/xhtml+xml</code> dwa ostatnie skrypty. Co to oznacza w praktyce? Otóż, mamy do wyboru:</p>
 <ul>
-<li>wysyłanie typu <code>text/html</code> i wówczas naszemu dokumentowi <acronym xml:lang="en" title="Extensible Hypertext Markup Language">XHTML</acronym> będą towarzyszyły niepoprawne nagłówki,</li>
+<li>wysyłanie typu <code>text/html</code> i wówczas naszemu dokumentowi <acronym lang="en" title="Extensible Hypertext Markup Language">XHTML</acronym> będą towarzyszyły niepoprawne nagłówki,</li>
 <li>wysłanie typu <code>application/xhtml+xml</code> i wówczas niektóre przeglądarki (np. IE) będą miały kłopoty z wyświetleniem strony,</li>
-<li>zastosowanie negocjacji typu <acronym title="Multipurpose Internet Mail Extensions" xml:lang="en">MIME</acronym> i pozostawienie <i>gołych</i> skryptów <del>powodując tym samym, że  strona przestanie się walidować (chyba, że w kodzie skryptu nie będzie używany znak mniejszości, większości ani etka)</del><ins>(update: okazuje się, że coś mi się pomyliło z tym, że walidator <acronym xml:lang="en" title="World Wide Web Consorcium">W3C</acronym> odrzuca takie dokumenty)</ins>,</li>
+<li>zastosowanie negocjacji typu <acronym title="Multipurpose Internet Mail Extensions" lang="en">MIME</acronym> i pozostawienie <i>gołych</i> skryptów <del>powodując tym samym, że  strona przestanie się walidować (chyba, że w kodzie skryptu nie będzie używany znak mniejszości, większości ani etka)</del><ins>(update: okazuje się, że coś mi się pomyliło z tym, że walidator <acronym lang="en" title="World Wide Web Consorcium">W3C</acronym> odrzuca takie dokumenty)</ins>,</li>
 <li>zastosowanie negocjacji i sprytnego mechanizmu po stronie serwera, który będzie stosował odpowiednie sekwencje otwierające i zamykające skrypt albo</li>
 <li>zastosowanie negocjacji i trzymanie wszystkich skryptów w plikach, dołączanych do strony za pomocą elementu <code>script</code> z atrybutem <code>src</code>.</li>
 </ul>
-<p>Cóż rzec… takie uroki <acronym xml:lang="en" title="Extensible Hypertext Markup Language">XHTML</acronym>-a.</p>
+<p>Cóż rzec… takie uroki <acronym lang="en" title="Extensible Hypertext Markup Language">XHTML</acronym>-a.</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-02-12 23:03:11 -->

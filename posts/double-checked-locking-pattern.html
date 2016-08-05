@@ -4,7 +4,7 @@
 <!-- categories: Articles, Techblog, WEiTI -->
 
 <p>Jakiś czas temu w pewnych okolicznościach poruszony został
-  wzorzec <i xml:lang="en">double-checked locking singleton</i>, który
+  wzorzec <i lang="en">double-checked locking singleton</i>, który
   jak powszechnie wiadomo nie jest do końca poprawny.  Wynikła z tego
   krótka dyskusja, której kompilację pozwolę sobie wkleić poniżej
   (gdyż nie jest ona ogólnie dostępna, a nie lubię, gdy informacje się
@@ -16,11 +16,11 @@
 
 <p>chciałbym odnieść się do poruszonego przeze mnie problemu
   poprawności efektywnego wzorca singletonu dla programów
-  wielowątkowych zwanego również <i xml:lang="en">double-checked
+  wielowątkowych zwanego również <i lang="en">double-checked
   locking pattern</i><sup><a href="#f1" id="fl1">1</a></sup>.  W tym
   celu, na początku przywołam trochę teorii.</p>
 
-<p>Standard C++ definiuje pojęcie <i xml:lang="en">sequence point</i>,
+<p>Standard C++ definiuje pojęcie <i lang="en">sequence point</i>,
   na bazie którego określa zachowanie programu.  Konkretnie opisuje
   stan środowiska wykonującego program w konkretnych punktach
   sekwencyjnych.  Co się dzieje pomiędzy nimi nie jest powiedziane.

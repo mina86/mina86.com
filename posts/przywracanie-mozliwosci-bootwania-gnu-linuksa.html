@@ -4,13 +4,13 @@
 <!-- categories: Articles, Techblog -->
 
 <p>W artykule poniższym zamierzam opisać jak przywrócić
-<acronym title="LInux LOader" xml:lang="en">LILO</acronym> jako bootloader w sytuacji, gdy został on
+<acronym title="LInux LOader" lang="en">LILO</acronym> jako bootloader w sytuacji, gdy został on
 zastąpiony loaderem z Windowsów NT, co w efekcie powoduje niemożność
 uruchomienia GNU/Linuksa.  Zakładam, że na dysku zainstalowany jest
 zarówno GNU/Linux (którego nie można uruchomić) oraz Windows z serii
 NT (w szczególności Windows 2000 i Windows XP, przy pozostałych
 Windowsach NT sprawa może wyglądać trochę inaczej).  Co więcej, opis
-dotyczy <acronym title="LInux LOader" xml:lang="en">LILO</acronym>, ale ogólna idea może zostać
+dotyczy <acronym title="LInux LOader" lang="en">LILO</acronym>, ale ogólna idea może zostać
 zastosowana również w przypadku innych bootloaderów (zmieniają się
 jedynie pliki konfiguracyjne i polecenie updatowania
 bootloadera).</p>
@@ -28,7 +28,7 @@ ludzi (nie wiem czemu) jest niezalecany.  <acronym>IMO</acronym> jest
 wygodniejszy, a wcale nie jest gorszy, chyba że ktoś często uruchamia
 Windowsa oraz ma włączone wyświetlanie menu Windowsów.  W takim
 przypadku będzie zmuszony najpierw przejść przez
-<acronym title="LInux LOader" xml:lang="en">LILO</acronym> (czy inny bootloader Linuksa), a potem dopiero
+<acronym title="LInux LOader" lang="en">LILO</acronym> (czy inny bootloader Linuksa), a potem dopiero
 wchodzi do menu Windowsów.  Inny sposób powoduje, że wszystko wygląda
 dokładnie na odwrót.</p>
 
@@ -38,13 +38,13 @@ jakiekolwiek szkody wynikające z korzystania z poniższego opisu.</p>
 <h3 id="livecd">LiveCD</h3>
 
 <p>Jeżeli w naszym posiadaniu istnieje jakaś dystrybucja GNU/Linuksa
-bootowalna bezpośrednio z <acronym title="Compact Disc" xml:lang="en">CD</acronym> (<abbr title="na przykład">np.</abbr>
+bootowalna bezpośrednio z <acronym title="Compact Disc" lang="en">CD</acronym> (<abbr title="na przykład">np.</abbr>
 Knoppix, LiveSlack), bądź przynajmniej płyta instalacyjna GNU/Linuksa
 (<abbr title="na przykład">np.</abbr> Slackware’a) to prawdopodobnie z dużym powodzeniem
 można ją użyć do rozwiązania problemu.</p>
 
-<p>Jeśli przy bootowaniu z <acronym title="Compact Disc" xml:lang="en">CD</acronym> odpala się
-<acronym title="LInux LOader" xml:lang="en">LILO</acronym> i czeka na wpisanie magicznych parametrów lub
+<p>Jeśli przy bootowaniu z <acronym title="Compact Disc" lang="en">CD</acronym> odpala się
+<acronym title="LInux LOader" lang="en">LILO</acronym> i czeka na wpisanie magicznych parametrów lub
 wciśnięcie entera to jest duża szansa, że wystarczy wpisać:
 <code><i>&lt;kernel&gt;</i> root=/dev/<i>&lt;rootdev&gt;</i> ro
 noinitrd</code>, gdzie <i>&lt;kernel&gt;</i> to nazwa jądra (jaka
@@ -69,7 +69,7 @@ wpisem <code>image = <i>&lt;costam&gt;</i></code>, <abbr title="na przykład">np
 
 <p>Jeżeli po wciśnięciu ENTER wszystko będzie działać poprawnie i
 odpali się zainstalowany na dysku GNU/Linux to można przejść do <a
-href="#liloinst">instalacji <acronym title="LInux LOader" xml:lang="en">LILO</acronym></a>.  W przeciwnym
+href="#liloinst">instalacji <acronym title="LInux LOader" lang="en">LILO</acronym></a>.  W przeciwnym
 wypadku należy próbować innych sztuczek:</p>
 
 <h3 id="chroot">LiveCD i chroot</h3>
@@ -89,9 +89,9 @@ systemem).</p>
 <p>Jest pewne niezerowe prawdopodobieństwo (w gruncie rzeczy zawsze
 jest jakieś prawdopodobieństwo), że wszystko zadziała prawidłowo
 i jeśli tak to wystarczy już zainstalować to nieszczęsne
-<acronym title="LInux LOader" xml:lang="en">LILO</acronym>.</p>
+<acronym title="LInux LOader" lang="en">LILO</acronym>.</p>
 
-<h3 id="liloinst">Instalacja <acronym title="LInux LOader" xml:lang="en">LILO</acronym></h3>
+<h3 id="liloinst">Instalacja <acronym title="LInux LOader" lang="en">LILO</acronym></h3>
 
 <p>Czas zmodyfikować plik <code>/etc/lilo.conf</code> (oczywiście wszystko
 należy wykonywać jako root).  Przede wszystkim należy upewnić się co
