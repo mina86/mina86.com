@@ -85,16 +85,16 @@
   w przeglądarkach internetowych, ale teraz dochodzę do wniosku,
   iż o ile hasła te są szyfrowane hasłem głównym, jest to całkiem
   dobry i bezpieczny mechanizm.  Pozwala on na generowanie
-  losowych haseł dla każdej strony (chociażby przez <tt>head -c 20
-  /dev/random | sha1sum</tt>) dzięki temu nawet jeżeli ktoś wykradnie
+  losowych haseł dla każdej strony (chociażby przez <code>head -c 20
+  /dev/random | sha1sum</code>) dzięki temu nawet jeżeli ktoś wykradnie
   hasło do jakiejś strony to wszystkie inne są bezpieczne, a my
   tymczasem musimy znać jedynie hasło główne naszego zarządcy
   haseł.</p>
 
 <p>Innym ciekawym rozwiązaniem jest generowanie za pomocą JavaScript
   haseł na podstawie jakiegoś ciągu specyficznego dla danej strony
-  (np. adresu) oraz naszego hasła głównego (np. <tt>sha1_hmac(adres,
-  haslo)</tt>.  Skrypt do generowania możemy trzymać na naszym dysku
+  (np. adresu) oraz naszego hasła głównego (np. <code>sha1_hmac(adres,
+  haslo)</code>.  Skrypt do generowania możemy trzymać na naszym dysku
   lokalnym.  Ma to tę zaletę nad zarządcą haseł, że jest przenośne
   pomiędzy przeglądarkami.  Problemem jest to, że raz ustawionego
   hasła głównego nie można już zmienić, można to próbować obejść

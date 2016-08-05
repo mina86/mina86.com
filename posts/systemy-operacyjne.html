@@ -66,8 +66,8 @@
 
   <dt>Semafor</dt>
   <dd>Obiekt inicjowany nieujemną liczbą całkowitą, na której
-    zdefiniowane są dwie niepodzielne operacje <tt>up(sem) { ++sem;
-    }</tt> i <tt>down(sem) { while (!sem); --sem; }</tt>.</dd>
+    zdefiniowane są dwie niepodzielne operacje <code>up(sem) { ++sem;
+    }</code> i <code>down(sem) { while (!sem); --sem; }</code>.</dd>
 
   <dt>Pamięć wirtualna</dt>
   <dd>System pamięci złożony z co najmniej dwóch rodzajów
@@ -94,7 +94,7 @@
 <dl>
   <dt>Prawa dostępu do plików, bity SUID, SGID.</dt>
 
-  <dd><tt>rwxrwxrwx</tt>–po trzy bity na właściciela, grupę
+  <dd><code>rwxrwxrwx</code>–po trzy bity na właściciela, grupę
     i „innych” (w tej kolejności patrząc od
     najbardziej znaczących bitów).  Bity dla właściciela określają
     jakie prawa ma właściciel pliku; bity dla grupy określają jakie
@@ -104,11 +104,11 @@
 
   <dd>Patrząc od bitów najbardziej znaczących rzeczone bity określają:
     <ul class="inline">
-      <li><tt>r</tt>–prawo do odczytu (w kontekście katalogu
+      <li><code>r</code>–prawo do odczytu (w kontekście katalogu
         odczytu listy plików),</li>
-      <li><tt>w</tt>–prawo do zapisu (w kontekście katalogu
+      <li><code>w</code>–prawo do zapisu (w kontekście katalogu
         do tworzenia lub usuwania plików) i</li>
-      <li><tt>x</tt>–prawo do wykonywania
+      <li><code>x</code>–prawo do wykonywania
         (a w kontekście katalogu do zmiany katalogu
         bieżącego na dany katalog).</li>
     </ul>
@@ -123,171 +123,171 @@
     te zostaną ustawione do pliku ze skryptem skrypt nie zostanie
     uruchomiony z prawami właściciela.  Wynika to z faktu,
     że tak naprawdę to nie skrypt jest uruchamiany,
-    a interpreter.  Na wyjściu polecenia <tt>ls</tt> bity SUID
-    i SGID widoczne są jako <tt>s</tt> zamiast
-    <tt>x </tt>w prawach użytkownika bądź grupy.</dd>
+    a interpreter.  Na wyjściu polecenia <code>ls</code> bity SUID
+    i SGID widoczne są jako <code>s</code> zamiast
+    <code>x </code>w prawach użytkownika bądź grupy.</dd>
 
-  <dd>Jest jeszcze <i>sticky bit</i> (polecenie <tt>ls</tt> wyświetla to jako
-    <tt>t</tt> zamiast <tt>x</tt> w uprawnieniach dla
+  <dd>Jest jeszcze <i>sticky bit</i> (polecenie <code>ls</code> wyświetla to jako
+    <code>t</code> zamiast <code>x</code> w uprawnieniach dla
     „innych”), który dla katalogu określa, że pliki
     w jego wnętrzu mogą być kasowane lub może być im zmieniana
     nazwa jedynie przez właściciela danego pliku, katalogu lub super
-    użytkownika.  Przydatne w katalogach typu <tt>/tmp</tt>.</dd>
+    użytkownika.  Przydatne w katalogach typu <code>/tmp</code>.</dd>
 
 
   <dt>Główne zmienne powłoki.</dt>
   <dd>
     <ul>
-      <li><tt>0</tt>–komenda uruchamiająca skrypt.</li>
-      <li><tt>#</tt>–liczba argumentów programu lub funkcji.</li>
-      <li><tt>1</tt>..<tt>9</tt>–argumenty skryptu lub funkcji.</li>
-      <li><tt>*</tt>–wszystkie argumenty skryptu/funkcji
+      <li><code>0</code>–komenda uruchamiająca skrypt.</li>
+      <li><code>#</code>–liczba argumentów programu lub funkcji.</li>
+      <li><code>1</code>..<code>9</code>–argumenty skryptu lub funkcji.</li>
+      <li><code>*</code>–wszystkie argumenty skryptu/funkcji
         rozwinięte do pojedynczego ciągu znaków.</li>
-      <li><tt>@</tt>–wszystkie argumenty skryptu/funkcji
+      <li><code>@</code>–wszystkie argumenty skryptu/funkcji
         rozwinięte do wielu ciągów znaków.  <b>Uwaga na użycie
-        cudzysłowów</b>!  Bez nich, <tt>$@</tt> to to samo
-        co <tt>$*</tt>.</li>
-      <li><tt>$</tt>–PID procesu.</li>
-      <li><tt>?</tt>–kod wyjścia ostatnio zakończonego polecenia.</li>
-      <li><tt>!</tt>–PID ostatnio wykonanego procesu w tle.</li>
-      <li><tt>IFS</tt>–internal fields separator; określa jakie
+        cudzysłowów</b>!  Bez nich, <code>$@</code> to to samo
+        co <code>$*</code>.</li>
+      <li><code>$</code>–PID procesu.</li>
+      <li><code>?</code>–kod wyjścia ostatnio zakończonego polecenia.</li>
+      <li><code>!</code>–PID ostatnio wykonanego procesu w tle.</li>
+      <li><code>IFS</code>–internal fields separator; określa jakie
         znaki mogą separować słowa.</li>
-      <li><tt>HOME</tt>–katalog domowy.</li>
-      <li><tt>SHELL</tt>–polecenie wywołujące powłokę.</li>
-      <li><tt>PATH</tt>–lista katalogów oddzielonych
+      <li><code>HOME</code>–katalog domowy.</li>
+      <li><code>SHELL</code>–polecenie wywołujące powłokę.</li>
+      <li><code>PATH</code>–lista katalogów oddzielonych
         dwukropkiem, w których wyszukuje się pliki wykonywalne.</li>
-      <li><tt>PS1</tt>–znak zachęty powłoki, gdy wpisujemy
+      <li><code>PS1</code>–znak zachęty powłoki, gdy wpisujemy
         komendy.</li>
-      <li><tt>PS2</tt>–znak zachęty, gdy kontynuujemy
+      <li><code>PS2</code>–znak zachęty, gdy kontynuujemy
         komendę.</li>
-      <li><tt>TERM</tt>–rodzaj terminala.</li>
-      <li><tt>MAIL</tt>–skrzynka pocztowa, nie musi być wcale
+      <li><code>TERM</code>–rodzaj terminala.</li>
+      <li><code>MAIL</code>–skrzynka pocztowa, nie musi być wcale
         ustawione.</li>
     </ul>
   </dd>
 
-  <dt>Polecenie powłoki <tt>read</tt>.</dt>
+  <dt>Polecenie powłoki <code>read</code>.</dt>
   <dd>Czyta linię ze standardowego wejścia dzieli ją
     na <var>n</var> słów zgodnie z wartością
-    zmiennej <tt>IFS</tt>, gdzie <var>n</var> to liczba
+    zmiennej <code>IFS</code>, gdzie <var>n</var> to liczba
     argumentów i zapisuje te słowa do zmiennych podanych jako
     argumenty.  Ostatnie słowo może de facto nie być pojedynczym
     słowem.</dd>
 
-  <dt>Polecenie powłoki <tt>set</tt>.</dt>
+  <dt>Polecenie powłoki <code>set</code>.</dt>
   <dd>Ustawia argumenty wywołania programu/funkcji, do których
-    odwołujemy się przy pomocy <tt>$&lt;cyferka&gt;</tt>.  Dzięki temu
+    odwołujemy się przy pomocy <code>$&lt;cyferka&gt;</code>.  Dzięki temu
     poleceniu można robić zmienne lokalne w funkcjach, ale nie
     tylko.  W ogóle jest to fajowe polecenie. :P Ponadto, można
     ustawiać różne opcje jeżeli argumenty zaczynają się od myślnika.
-    Jeżeli nie chcemy ustawiać opcji należy jeszcze dodać <tt>--</tt>
+    Jeżeli nie chcemy ustawiać opcji należy jeszcze dodać <code>--</code>
     coby polecenie nie próbowało interpretować tego co podajemy jako
     argumenty.</dd>
 
-  <dt>Polecenie powłoki <tt>export</tt>.</dt>
+  <dt>Polecenie powłoki <code>export</code>.</dt>
   <dd>Powoduje, że zmienna/e którą/e podamy jako argument/y zostanie
     „wyeksportowana” i będzie dostępna
     w wywoływanych poleceniach jako zmienna środowiskowa.
     Zmienne, które były zmiennymi środowiskowymi w momencie
-    włączenia skryptu nadal takimi pozostają (przykładami są <tt>HOME</tt>,
-    <tt>PATH</tt> itp.).</dd>
+    włączenia skryptu nadal takimi pozostają (przykładami są <code>HOME</code>,
+    <code>PATH</code> itp.).</dd>
 
-  <dt>Pętle <tt>for</tt>/<tt>while</tt>/<tt>do</tt>
+  <dt>Pętle <code>for</code>/<code>while</code>/<code>do</code>
     w programowaniu powłoki.</dt>
-  <dd><tt>for &lt;zmienna&gt; in &lt;lista-słów&gt;; do
-      &lt;polecenie&gt;; done</tt> wykonuje to co jest wewnątrz dla
+  <dd><code>for &lt;zmienna&gt; in &lt;lista-słów&gt;; do
+      &lt;polecenie&gt;; done</code> wykonuje to co jest wewnątrz dla
     każdego słowa podanego w liście słów tak, że przy każdym
     przebiegu pętli podana zmienna ma wartość kolejnego słowa.</dd>
-  <dd><tt>for &lt;zmienna&gt;; do &lt;polecenie&gt;; done</tt> tak jak
-    powyżej, gdy za listę słów poda się <tt>"$@"</tt>.</dd>
-  <dd><tt>while &lt;warunek&gt;; do &lt;polecenie&gt;; done</tt>
+  <dd><code>for &lt;zmienna&gt;; do &lt;polecenie&gt;; done</code> tak jak
+    powyżej, gdy za listę słów poda się <code>"$@"</code>.</dd>
+  <dd><code>while &lt;warunek&gt;; do &lt;polecenie&gt;; done</code>
     wykonuje polecenie tak długo jak warunek zwraca kod błędu 0.</dd>
-  <dd><tt>while :; do &lt;polecenie&gt;; done</tt> taka miła pętla
+  <dd><code>while :; do &lt;polecenie&gt;; done</code> taka miła pętla
     nieskończona.</dd>
 
   <dt>Metaznaki powłoki.</dt>
-  <dd>Zapewne chodzi o znaki <tt>*</tt>, <tt>?</tt>, <tt>[</tt>
-    oraz <tt>\</tt>.  Mają one znaczenie przy interpretowaniu poleceń,
+  <dd>Zapewne chodzi o znaki <code>*</code>, <code>?</code>, <code>[</code>
+    oraz <code>\</code>.  Mają one znaczenie przy interpretowaniu poleceń,
     gdyż są rozwijane w nazwę pliku lub nazwy plików.  Gwiazdka
     pasuje do dowolnego ciągu znaków (łącznie z pustym), znak
     zapytania pasuje do dokładnie jednego znaku (ani gwiazdka ani znak
     zapytania nie powodują rozwinięcia nazw zaczynających się od
     kroki), otwierający nawias kwadratowy rozpoczyna grupę, która
     pasuje do jednego z podanych w niej znaków
-    (np. <tt>[a-z]</tt>, <tt>[abc]</tt>, <tt>[a-z123]</tt>) lub pasuje
+    (np. <code>[a-z]</code>, <code>[abc]</code>, <code>[a-z123]</code>) lub pasuje
     do znaków, w niej nie podanych jeżeli opis grupy zaczyna się
     od wykrzyknika (tak, wykrzyknika, to że Twój bash akceptuje
-    znak <tt>^</tt> nie ma tu nic do rzeczy)
-    (np. <tt>[!a-z]</tt>, <tt>[!abc]</tt>, <tt>[!a-z123]</tt>).
+    znak <code>^</code> nie ma tu nic do rzeczy)
+    (np. <code>[!a-z]</code>, <code>[!abc]</code>, <code>[!a-z123]</code>).
     Backslash powoduje, że dany znak traci swoje
     „magiczne” znaczenie.</dd>
 
-  <dt>Odczyt pliku <tt>/etc/passwd</tt>
-  z wykorzystaniem <tt>read</tt>/<tt>set</tt>/<tt>IFS</tt>.</dt>
+  <dt>Odczyt pliku <code>/etc/passwd</code>
+  z wykorzystaniem <code>read</code>/<code>set</code>/<code>IFS</code>.</dt>
   <dd><pre>while IFS=: read nick:pass:uid:gid:info:home:shell; do
     echo "User $nick ($uid/$gid); home directory: $home; shell: $shell"
 done &lt;/etc/passwd</pre></dd>
 
-  <dt>Wykorzystanie polecenia <tt>expr</tt> do operacji arytmetycznych
+  <dt>Wykorzystanie polecenia <code>expr</code> do operacji arytmetycznych
     na zmiennych.</dt>
-  <dd><tt>i=`expr $i + 1`</tt>, <tt>i=`expr $i - 1`</tt>,
-    <tt>i=`expr $a \* $b`</tt>.</dd>
+  <dd><code>i=`expr $i + 1`</code>, <code>i=`expr $i - 1`</code>,
+    <code>i=`expr $a \* $b`</code>.</dd>
 
   <dt>Opisz rezultat wykonania poleceń i grup poleceń:</dt>
-  <dd><tt>x &gt;/dev/null 2&gt;&amp;1</tt>–stdout i stderr
-    przekierowane do tego samego <tt>/dev/null</tt>, tzn. jest jeden
+  <dd><code>x &gt;/dev/null 2&gt;&amp;1</code>–stdout i stderr
+    przekierowane do tego samego <code>/dev/null</code>, tzn. jest jeden
     zduplikowany deskryptor pliku.</dd>
-  <dd><tt>x 2&gt;&amp;1 1&gt;/dev/null</tt>–stderr przekierowane
+  <dd><code>x 2&gt;&amp;1 1&gt;/dev/null</code>–stderr przekierowane
     do stdout, a <b>potem</b> stdout przekierowane
-    do <tt>/dev/null</tt>.</dd>
-  <dd><tt>x 2&gt;/dev/nul 1&gt;/dev/null</tt>–stderr
-    przekierowane do pliku <tt>nul</tt> w katalogu <tt>dev</tt>,
-    a stdout do <tt>/dev/null</tt>.</dd>
-  <dd><tt>x &lt; y &gt; z</tt>–stdin czytane
-    z pliku <tt>y</tt>, stdout pisane do pliku <tt>z</tt>.</dd>
-  <dd><tt>x &amp; y ; z</tt>–<tt>x</tt> zostanie odpalone
-    w tle i zaraz po tym <tt>y</tt>.  <tt>z</tt> zostanie uruchomione,
-    gdy działanie zakończy <tt>y</tt>.</dd>
-  <dd><tt>x || y</tt>–<tt>y</tt> wykonane
-    jeżeli <tt>x</tt> zwróci status różny od 0.</dd>
-  <dd><tt>find / foo.x 2&gt;&amp;1 1&gt;/dev/null</tt>–przeszuka
-    cały dysk, a następnie jeszcze katalog/plik <tt>foo.x</tt>
+    do <code>/dev/null</code>.</dd>
+  <dd><code>x 2&gt;/dev/nul 1&gt;/dev/null</code>–stderr
+    przekierowane do pliku <code>nul</code> w katalogu <code>dev</code>,
+    a stdout do <code>/dev/null</code>.</dd>
+  <dd><code>x &lt; y &gt; z</code>–stdin czytane
+    z pliku <code>y</code>, stdout pisane do pliku <code>z</code>.</dd>
+  <dd><code>x &amp; y ; z</code>–<code>x</code> zostanie odpalone
+    w tle i zaraz po tym <code>y</code>.  <code>z</code> zostanie uruchomione,
+    gdy działanie zakończy <code>y</code>.</dd>
+  <dd><code>x || y</code>–<code>y</code> wykonane
+    jeżeli <code>x</code> zwróci status różny od 0.</dd>
+  <dd><code>find / foo.x 2&gt;&amp;1 1&gt;/dev/null</code>–przeszuka
+    cały dysk, a następnie jeszcze katalog/plik <code>foo.x</code>
     w bieżącym katalogu.  Komunikaty błędów wypisane do stdout
-    a wszystko inne wyrzucone do <tt>/dev/null</tt>.</dd>
-  <dd><tt>find / foo.x &gt;/dev/null 2&gt;&amp;1</tt>–przeszuka
-    cały dysk, a następnie jeszcze katalog/plik <tt>foo.x</tt>
+    a wszystko inne wyrzucone do <code>/dev/null</code>.</dd>
+  <dd><code>find / foo.x &gt;/dev/null 2&gt;&amp;1</code>–przeszuka
+    cały dysk, a następnie jeszcze katalog/plik <code>foo.x</code>
     w bieżącym katalogu.  Standardowe wyjście oraz komunikaty
-    błędów rzucone do <tt>/dev/null</tt>.</dd>
+    błędów rzucone do <code>/dev/null</code>.</dd>
 
 
   <dt>Opisz precyzyjnie działanie poniższych komend:</dt>
-  <dd><tt>x &gt; y</tt>–tworzony bądź zeruje jest
-    plik <tt>y</tt> do którego przekierowane jest standardowe wyjście
-    polecenia <tt>x</tt>.</dd>
-  <dd><tt>x | y</tt>–tworzony jest potok, do którego pisze
-    polecenie <tt>x</tt>, a czyta polecenie <tt>y</tt>.
+  <dd><code>x &gt; y</code>–tworzony bądź zeruje jest
+    plik <code>y</code> do którego przekierowane jest standardowe wyjście
+    polecenia <code>x</code>.</dd>
+  <dd><code>x | y</code>–tworzony jest potok, do którego pisze
+    polecenie <code>x</code>, a czyta polecenie <code>y</code>.
     Tzn. standardowe wyjście x  jest przekierowane do potoku,
     który jest przekierowany jako standardowe wejście polecenia
     y.</dd>
-  <dd><tt>x &lt; y</tt>–otwierany jest plik <tt>y</tt>
+  <dd><code>x &lt; y</code>–otwierany jest plik <code>y</code>
     i jego zawartość jest wczytywana jako standardowe wejście
-    polecenia <tt>x</tt>.</dd>
-  <dd><tt>cat y | x</tt>–efekt taki sam jak powyżej, tyle że
+    polecenia <code>x</code>.</dd>
+  <dd><code>cat y | x</code>–efekt taki sam jak powyżej, tyle że
     zrealizowane to jest przez potok opisany dwa punkty wyżej.</dd>
-  <dd><tt>x &amp; y</tt>–<tt>x</tt> uruchamiany jest w tle
+  <dd><code>x &amp; y</code>–<code>x</code> uruchamiany jest w tle
     i zaraz po uruchomieniu nim (nie musi się on kończyć)
-    uruchamiany jest <tt>y</tt>.</dd>
-  <dd><tt>x &amp;&amp; y</tt>–uruchamiany jest <tt>x</tt>
-    i jeżeli zwraca status 0 to uruchamiany jest <tt>y</tt>.</dd>
-  <dd><tt>x || y</tt>–jak wyżej, tylko <tt>y</tt> uruchamiany
-    jest, gdy <tt>x</tt> zwraca status różny od 0.</dd>
-  <dd><tt>x ; y &amp;</tt>–uruchamiany jest <tt>x</tt>,
-    a gdy się skończy uruchamiany jest <tt>y</tt> w tle.</dd>
-  <dd><tt>cat x &gt; y &lt;</tt>–błąd składni?  Bez
-    tego <tt>&lt;</tt> na końcu to polecenie <tt>cat</tt> wczytuje
-    zawartość pliku <tt>x</tt> i wypisuje je na standardowe
+    uruchamiany jest <code>y</code>.</dd>
+  <dd><code>x &amp;&amp; y</code>–uruchamiany jest <code>x</code>
+    i jeżeli zwraca status 0 to uruchamiany jest <code>y</code>.</dd>
+  <dd><code>x || y</code>–jak wyżej, tylko <code>y</code> uruchamiany
+    jest, gdy <code>x</code> zwraca status różny od 0.</dd>
+  <dd><code>x ; y &amp;</code>–uruchamiany jest <code>x</code>,
+    a gdy się skończy uruchamiany jest <code>y</code> w tle.</dd>
+  <dd><code>cat x &gt; y &lt;</code>–błąd składni?  Bez
+    tego <code>&lt;</code> na końcu to polecenie <code>cat</code> wczytuje
+    zawartość pliku <code>x</code> i wypisuje je na standardowe
     wyjście, które przekierowane jest do utworzonego lub zerowanego
-    pliku <tt>y</tt>.</dd>
+    pliku <code>y</code>.</dd>
 </dl>
 
 <h3>Procesy i wątki:</h3>
@@ -487,14 +487,14 @@ printf '%s\n' "$OUTPUT"</pre></dd>
     }
 };</pre></dd>
 
-  <dd>Implementacja monitora oraz funkcji <tt>wait</tt>
-    i <tt>notify</tt> jest oczywista, konkretnie dla monitora
+  <dd>Implementacja monitora oraz funkcji <code>wait</code>
+    i <code>notify</code> jest oczywista, konkretnie dla monitora
     dajemy jeden semafor mutex inicjowany jedynką i przy wejściu
-    do funkcji robimy na nim <tt>down</tt>, a przy
-    wyjściu <tt>up</tt>.  Zmienne warunkowe natomiast to struktura
+    do funkcji robimy na nim <code>down</code>, a przy
+    wyjściu <code>up</code>.  Zmienne warunkowe natomiast to struktura
     składająca się z licznika count zainicjowanego zerem i semafora
-    <tt>semaphore</tt>, wówczas funkcje <tt>wait</tt>
-    i <tt>notify</tt> wyglądają następująco:</dd>
+    <code>semaphore</code>, wówczas funkcje <code>wait</code>
+    i <code>notify</code> wyglądają następująco:</dd>
 
   <dd><pre>wait(cond condition) {
     ++condition.count;
@@ -758,7 +758,7 @@ void statek() {
     dokonane w pamięci do pliku.</dd>
 
   <dt>system plików w Unix V7 wraz z przykładem rozwiązania nazwy
-    <tt>/home/nowak/soi.txt</tt></dt>
+    <code>/home/nowak/soi.txt</code></dt>
   <dd>Wszystko jest plikiem.  Każdy plik ma iwęzeł.  W iwęźle zapisane
     są takie informacje jak rozmiar, atrybuty, czasy utworzenia,
     modyfikacji itp. oraz wskaźniki na bloki danych.  Katalog to plik,
@@ -766,7 +766,7 @@ void statek() {
     które się w nim znajdują, a dokładniej odwzorowanie
     nazwa pliku&lt;-&gt;numer iwęzła.  W Unix V7 pozycja taka to
     był 16-bitowy numer iwęzła oraz 14-znakowa nazwa pliku.</dd>
-  <dd>Rozwinięcie nazwy <tt>/home/nowak/soi.txt</tt>:</dd>
+  <dd>Rozwinięcie nazwy <code>/home/nowak/soi.txt</code>:</dd>
   <dd><pre>Blok np. 1   Iwęzeł 67     Blok 24      iwęzeł 33      Blok 14
 
    1 .       rozmiar        24 .        rozmiar          14 .

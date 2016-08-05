@@ -28,52 +28,52 @@ wojny (i co za tym idzie, zmniejszyć liczbę ofiar).</p>
 <p>W artykule tym (oraz kolejnych artykułach o kryptografii) będę używał
 następujących oznaczeń:</p>
 <dl>
-  <dt><tt>M</tt></dt>
+  <dt><code>M</code></dt>
   <dd>niezaszyfrowana wiadomość</dd>
 
-  <dt><tt>m<sub>i</sub></tt></dt>
-  <dd><tt>i</tt>ty fragment niezaszyfrowanej wiadomości (niektóre
+  <dt><code>m<sub>i</sub></code></dt>
+  <dd><code>i</code>ty fragment niezaszyfrowanej wiadomości (niektóre
     algorytmy wymagają podzielenia wiadomości na części przed
     zaszyfrowaniem)</dd>
 
-  <dt><tt>C</tt></dt>
+  <dt><code>C</code></dt>
   <dd>zaszyfrowana wiadomość</dd>
 
-  <dt><tt>c<sub>i</sub></tt></dt>
-  <dd><tt>i</tt>ty fragment zaszyfrowanej wiadomości</dd>
+  <dt><code>c<sub>i</sub></code></dt>
+  <dd><code>i</code>ty fragment zaszyfrowanej wiadomości</dd>
 
-  <dt><tt>E()</tt></dt>
+  <dt><code>E()</code></dt>
   <dd>funkcja szyfrująca</dd>
   <dd>jeżeli przyjmuje dwa parametry, to drugim parametrem jest
     klucz</dd>
 
-  <dt><tt>D()</tt></dt>
+  <dt><code>D()</code></dt>
   <dd>funkcja deszyfrująca</dd>
   <dd>jeżeli przyjmuje dwa parametry, to drugim parametrem jest
     klucz</dd>
 
-  <dt><tt>H()</tt></dt>
+  <dt><code>H()</code></dt>
   <dd>funkcja skrótu (<abbr title="tak zwany">tzw.</abbr>
     <span xml:lang="en">hash</span>)</dd>
   <dd>jeżeli przyjmuje dwa parametry, to drugim parametrem jest
     klucz</dd>
 
-  <dt><tt>k</tt></dt>
+  <dt><code>k</code></dt>
   <dd>klucz</dd>
 
-  <dt><tt>k<sub>pub</sub></tt></dt>
+  <dt><code>k<sub>pub</sub></code></dt>
   <dd>klucz publiczny</dd>
 
-  <dt><tt>k<sub>priv</sub></tt></dt>
+  <dt><code>k<sub>priv</sub></code></dt>
   <dd>klucz prywatny</dd>
 </dl>
 
 <h3 id="zasada">Zasada działania</h3>
 
 <p>Zasada działania szyfrowania jest bardzo prosta.  Mamy dwie funkcje
-<tt>E()</tt> i <tt>D()</tt>, które spełniają następujący warunek:
-<tt>dla każdego M zachodzi M = D( E( M ) )</tt>.  W przypadku
-niektórych algorytmów <tt>D = E</tt>, jednakże nie ma to istotnego
+<code>E()</code> i <code>D()</code>, które spełniają następujący warunek:
+<code>dla każdego M zachodzi M = D( E( M ) )</code>.  W przypadku
+niektórych algorytmów <code>D = E</code>, jednakże nie ma to istotnego
 znaczenia dla mocy szyfru.  Jest to jedynie ułatwienie implementacji
 algorytmu, bo zamiast pisać dwie funkcję wystarczy napisać jedną, którą
 będzie można szyfrować i deszyfrować.</p>
@@ -86,10 +86,10 @@ musielibyśmy zmieniać cały algorytm szyfrowania.  Z tego powodu do
 algorytmów wprowadzono klucze, dzięki czemu jednym algorytmem można
 szyfrować na różne sposoby zależnie od klucza i równocześnie nie
 znając klucza nie da się wiadomości rozszyfrować.  Algorytmy z kluczem
-powinny spełniać następujący warunek: <tt>dla każdego M,
+powinny spełniać następujący warunek: <code>dla każdego M,
 k<sub>1</sub>, k<sub>2</sub> zachodzi: jeśli k<sub>1</sub> =
 k<sub>2</sub> to C = E(M, k<sub>1</sub>) = E(M, k<sub>2</sub>) i M =
-D(C, k<sub>1</sub>) = D(C, k<sub>2</sub>)</tt>.  Należy zauważyć, że
+D(C, k<sub>1</sub>) = D(C, k<sub>2</sub>)</code>.  Należy zauważyć, że
 warunkiem jest implikacja, ale kożystnie jest jeżeli zachodzi
 równoważność.</p>
 
@@ -103,15 +103,15 @@ wiadomości nazywamy szyfrowaniem symetrycznym i ma ono pewne wady.</p>
 <p>Problem jest taki, że jeżeli dwie osoby chcą bezpiecznie komunikować się ze sobą, to muszą ustalić jakiś klucz.  Problem w tym, jak to zrobić żeby nikt inny go nie poznał.  Nie dość, że zmniejsza to bezpieczeństwo to jeszcze wydłuża czas przekazywania informacji.  Sytuacji, w których zwykłe szyfrowanie symetryczne nie wystarcza jest oczywiście więcej.</p>
 
 <p>Na pomoc przychodzi nam szyfrowanie asymetryczne, które korzysta
-z pary kluczy, klucza publicznego (<tt>k<sub>pub</sub></tt>), który
+z pary kluczy, klucza publicznego (<code>k<sub>pub</sub></code>), który
 możemy dawać każdemu i da się nim jedynie szyfrować wiadomości; oraz
-z klucza prywatnego (<tt>k<sub>priv</sub></tt>), który służy jedynie
+z klucza prywatnego (<code>k<sub>priv</sub></code>), który służy jedynie
 do rozszyfrowywania wiadomości i powinien być w posiadaniu tylko
 i wyłącznie jednej osoby.  Bardziej matematycznie można zapisać, że
-szyfrowanie asymetryczne musi spełniać następujący warunek: <tt>dla
+szyfrowanie asymetryczne musi spełniać następujący warunek: <code>dla
 każdego M, k<sub>pub</sub>, k<sub>priv</sub> zachodzi jeśli
 k<sub>pub</sub> i k<sub>priv</sub> stanowią parę to M = D( E( M,
-k<sub>pub</sub> ), k<sub>priv</sub>)</tt>.</p>
+k<sub>pub</sub> ), k<sub>priv</sub>)</code>.</p>
 
 <p>Oczywiście algorytm szyfrowania asymetrycznego musi być tak
 obmyślony, żeby nie dało się odtworzyć klucza prywatnego na podstawie
@@ -127,12 +127,12 @@ klucza prywatnego.  Proces logowania z kluczem wygląda
 następująco:</p>
 
 <ol>
-  <li>serwer losuje sobie jakąś liczbę <tt>n</tt>,</li>
-  <li>szyfruje ją kluczem publicznym (<tt>C = E( n, k<sub>pub</sub> )</tt>),</li>
+  <li>serwer losuje sobie jakąś liczbę <code>n</code>,</li>
+  <li>szyfruje ją kluczem publicznym (<code>C = E( n, k<sub>pub</sub> )</code>),</li>
   <li>zaszyfrowaną liczbę wysyła klientowi,</li>
-  <li>klient deszyfruje liczbę kluczem prywatnym (<tt>m = D( C, k<sub>priv</sub> )</tt>),</li>
+  <li>klient deszyfruje liczbę kluczem prywatnym (<code>m = D( C, k<sub>priv</sub> )</code>),</li>
   <li>wysyła otrzymaną liczbę serwerowi,</li>
-  <li>serwer porównuje obie liczby (wysłaną przez klienta i wylosowaną w 1 kroku) (<tt>n =? m</tt>):
+  <li>serwer porównuje obie liczby (wysłaną przez klienta i wylosowaną w 1 kroku) (<code>n =? m</code>):
     <ul>
       <li>jeśli obie liczby są równe, to logowanie się powiodło,</li>
       <li>jeśli są one różne, to logowanie się nie powiodło.</li>
@@ -143,17 +143,17 @@ następująco:</p>
 <h3 id="podpis">Podpis cyfrowy</h3>
 
 <p>Algorytmy szyfrowania asymetrycznego mogą dodatkowo spełniać
-jeszcze jeden warunek.  Mianowicie: <tt>dla każdego M,
+jeszcze jeden warunek.  Mianowicie: <code>dla każdego M,
 k<sub>pub</sub>,k<sub>priv</sub> zachodzi k<sub>pub</sub> i
 k<sub>priv</sub> stanowią parę ⇒ M = D( E( M, k<sub>priv</sub> ),
-k<sub>pub</sub>)</tt>.  Czyli, że szyfrując wiadomość kluczem
+k<sub>pub</sub>)</code>.  Czyli, że szyfrując wiadomość kluczem
 prywatnym będzie można ją rozszyfrować kluczem publicznym.  Własność
 taką posiada algorytm RSA i dzięki temu jest wykorzystywany w podpisie
 cyfrowym (<abbr title="also known as" xml:lang="en">aka</abbr> podpisie elektronicznym, <abbr title="also known as" xml:lang="en">aka</abbr>
 e-podpisie).  Tuż przed wysłaniem wiadomości, zostaje wyliczony jej
 hash (<abbr title="also known as" xml:lang="en">aka</abbr> skrót), który jest następnie szyfrowany przy
-użyciu klucza prywatnego (matematycznie jest to wynik operacji: <tt>ep
-= E( H(M), k<sub>priv</sub> )</tt>).  Osoba, która odbiera wiadomość
+użyciu klucza prywatnego (matematycznie jest to wynik operacji: <code>ep
+= E( H(M), k<sub>priv</sub> )</code>).  Osoba, która odbiera wiadomość
 rozszyfrowuje tenże hash i porównuje go z hashem przez siebie
 wyliczonym.  Jeżeli są one różne, wiadomość została zmodyfikowana po
 podpisaniu.</p>
@@ -171,11 +171,11 @@ dwóch różnych łańcuchów o takim samym hashu.</p>
 <p>Funkcja skróty jest często wykorzystywana w systemach logowania.
 Hasło użytkownika jest hashowane i w takiej postaci zapisywane.  W
 momencie logowania oblicza się hash z podanego hasła i porównuje z
-zapisanym hashem (<tt>zapisany hash = H( podane hasło ) ⇒
-użytkownik podał poprawne hasło</tt>).</p>
+zapisanym hashem (<code>zapisany hash = H( podane hasło ) ⇒
+użytkownik podał poprawne hasło</code>).</p>
 
-<p>Trzeba pamiętać, że nieprawdą jest, iż <tt>dla każdego x, y
-zachodzi H( x ) = H( y ) ⇒ x = y</tt>.  Jednakże nieścisłość tą
+<p>Trzeba pamiętać, że nieprawdą jest, iż <code>dla każdego x, y
+zachodzi H( x ) = H( y ) ⇒ x = y</code>.  Jednakże nieścisłość tą
 można bez żadnych obaw pominąć.  Po prostu jeżeli chcemy mieć większą
 pewność to używamy innego algorytmu, np. zamiast MD5 to SHA1…</p>
 

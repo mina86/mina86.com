@@ -7,10 +7,10 @@
 problems with the null pointer</a> but my recent discovery knocked my
 socks off.</p>
 
-<p>By now, it should come with no surprise to anyone that <tt>0</tt>
+<p>By now, it should come with no surprise to anyone that <code>0</code>
 in pointer context acts as a null pointer (no matter of its
 actual representation).  Moreover, it takes only a tiny bit of
-experimenting to figure out that expressions like <tt>(int)0</tt> do
+experimenting to figure out that expressions like <code>(int)0</code> do
 as well.  The latter is in itself a bit of a pita but it is
 conforming to the C++ standard which says:</p>
 
@@ -25,17 +25,17 @@ conforming to the C++ standard which says:</p>
   can involve only literals, enumerators, const variables or static
   data members of integral or enumeration types initialized with
   constant expressions, non-type template parameters of integral or
-  enumeration types, and <tt>sizeof</tt> expressions. […]</p>
+  enumeration types, and <code>sizeof</code> expressions. […]</p>
 
-  <p>3.9.1.7 Types <tt>bool</tt>, <tt>char</tt>,
-  <tt>wchar_t</tt>, and the signed and unsigned integer types are
+  <p>3.9.1.7 Types <code>bool</code>, <code>char</code>,
+  <code>wchar_t</code>, and the signed and unsigned integer types are
   collectively called <dfn>integral types</dfn>.  A synonym for
   integral type is <dfn>integer type</dfn>.  […]</p>
 </blocquote>
 
-<p>Yes, not only <tt>(int)0</tt> is a perfectly valid null pointer
-constant, but so are <tt>false</tt>, <tt>1 - 1</tt>,
-<tt>sizeof(char) - sizeof(char)</tt>, etc.  Not only that,
+<p>Yes, not only <code>(int)0</code> is a perfectly valid null pointer
+constant, but so are <code>false</code>, <code>1 - 1</code>,
+<code>sizeof(char) - sizeof(char)</code>, etc.  Not only that,
 a const variable of type int with value of zero is also
 a valid null pointer constant.</p>
 
@@ -48,8 +48,8 @@ expression.</p>
 <p>Like I’ve said, this comes to me as a bit of surprise and
 I have real trouble believing that it was C and C++ standard
 committees.  Who could possibly want to represent a null pointer
-in a different way than plain <tt>0</tt> (or <tt>NULL</tt> (or
-<tt>nullptr</tt>)).</p>
+in a different way than plain <code>0</code> (or <code>NULL</code> (or
+<code>nullptr</code>)).</p>
 
 <p>And now, a super important public service announcement: don’t feed
 the yao guai.  Oh wait, wrong one.  Beware of dereferencing a pointer

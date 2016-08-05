@@ -3,13 +3,13 @@
 <!-- tags: const, mutable, c++, c -->
 <!-- categories: Articles, Techblog, WEiTI -->
 
-<p>Chciałbym zaprezentować pewien tekst, który przygotowałem na jeden z przedmiotów na studiach. Traktuje on o modyfikatorze <tt>const</tt> i <tt>mutable</tt> oraz określa pojęcie <i>stałości logicznej</i> czyli niezmienności zachowania obiektu, gdy patrzymy z zewnątrz. Może komuś się to przyda. Czekam również na wszelkie komentarze.</p>
+<p>Chciałbym zaprezentować pewien tekst, który przygotowałem na jeden z przedmiotów na studiach. Traktuje on o modyfikatorze <code>const</code> i <code>mutable</code> oraz określa pojęcie <i>stałości logicznej</i> czyli niezmienności zachowania obiektu, gdy patrzymy z zewnątrz. Może komuś się to przyda. Czekam również na wszelkie komentarze.</p>
 
 <!-- EXCERPT -->
 
 <h3>Deklarowanie stałych</h3>
 
-<p>Stałość fizyczna występuje, gdy w momencie kompilacji określamy przy pomocy modyfikatora <tt>const</tt>, że jakiejś wartości nie należy zmieniać.</p>
+<p>Stałość fizyczna występuje, gdy w momencie kompilacji określamy przy pomocy modyfikatora <code>const</code>, że jakiejś wartości nie należy zmieniać.</p>
 
 <pre>const int foo = 42;  /* Definicja "zmiennej" foo będącej stałą
                         liczbą całkowitą i inicjacja jej wartością 42. */
@@ -70,7 +70,7 @@ const int *baz = &amp;bar;
   wskaźniki do tego samego typu.  Jeżeli tylko jeden ze wskaźników
   wskazuje na typ stały kompilator nie wie, czy ten drugi nie wskazuje
   na (przynajmniej w części) ten sam obszar.  Aby temu zaradzić, w C99
-  (C++ tego nie ma) zostało dodane słówko <tt>restrict</tt>, które
+  (C++ tego nie ma) zostało dodane słówko <code>restrict</code>, które
   odnosi się do wskaźników i określa, że wskazywana wartość nie może
   być osiągalna przez inne wskaźniki.)</p>
 
@@ -152,7 +152,7 @@ int foo(std::vector&lt;int&gt; vec) {
 
 
 <p>Jak można się domyślić, rzutowanie z typu bez
-  modyfikatora <tt>const</tt> na tym z takim modyfikatorem jest
+  modyfikatora <code>const</code> na tym z takim modyfikatorem jest
   automatyczne, np.:</p>
 
 <pre>int foo = 42;
@@ -167,7 +167,7 @@ int *baz = const_cast&lt;int*&gt;(&amp;foo);  /* styl C++ */</pre>
 
 <p>Generalnie zalecany jest styl C++, gdyż w ten sposób jesteśmy
   pewni, że rzutowanie zmieni jedynie stałość typu.  Przykładowo,
-  gdybyśmy zmienili typ zmiennej <tt>foo</tt>, a zapomnieli zmienić typy
+  gdybyśmy zmienili typ zmiennej <code>foo</code>, a zapomnieli zmienić typy
   w operatorach rzutowania kompilator bez żadnych ostrzeżeń
   skompilowałby rzutowanie w stylu C, ale zgłosiłby błąd przy
   rzutowaniu w stylu C++, gdyż zmiana dotyczy nie tylko stałości
@@ -178,20 +178,20 @@ int *bar = (int*)&amp;foo;              /* Skompiluje się. */
 int *baz = const_cast&lt;int*&gt;(&amp;foo);  /* Błąd kompilacji. */</pre>
 
 <p>Pewien wyjątek stanowią literały ciągów znaków, który wywodzi się
-  z czasów, gdy w języku C nie było słówka <tt>const</tt>.  Zasadniczo
-  literały ciągów znaków są typu <tt>const char[]</tt> jednak, aby nie
+  z czasów, gdy w języku C nie było słówka <code>const</code>.  Zasadniczo
+  literały ciągów znaków są typu <code>const char[]</code> jednak, aby nie
   psuć tysięcy istniejących programów, przypisanie literału do zmiennej
-  typu <tt>char*</tt> jest poprawne. <strong>Nie</strong> oznacza
+  typu <code>char*</code> jest poprawne. <strong>Nie</strong> oznacza
   to jednak, iż literały takie można modyfikować!  Następująca
-  instrukcja powoduje niezdefiniowane zachowanie: <tt>char *foo = "foo"; foo[0] =
-  'F';</tt> (problem ten został już poruszony przy
+  instrukcja powoduje niezdefiniowane zachowanie: <code>char *foo = "foo"; foo[0] =
+  'F';</code> (problem ten został już poruszony przy
   omawianiu <a href="#modyfikalności">modyfikowalności</a>)</p>
 
 <p>Kolejnym aspektem, który może wydać się dziwny, jest fakt, iż
-  konwersja <tt>Foo**</tt> do <tt>const Foo**</tt> <em>nie</em> jest
+  konwersja <code>Foo**</code> do <code>const Foo**</code> <em>nie</em> jest
   automatyczna.  Można powiedzieć, że stałość musi być dodana wszędzie
   po prawej stronie (za wyjątkiem samej zmiennej) i konwersja
-  <tt>Foo**</tt> do <tt>const Foo* const *</tt> jest już dozwolona:</p>
+  <code>Foo**</code> do <code>const Foo* const *</code> jest już dozwolona:</p>
 
 <pre>void bar(const Foo **arr);
 void baz(const Foo *const *arr);
@@ -248,7 +248,7 @@ baz.bar = &amp;quux;      /* Błąd kompilacji. */</pre>
 
 <p>Niestatyczne metody klas również mogą być zadeklarowane jako stałe.
   Metody takie nie mogą modyfikować pól klasy (chyba, że posiadają
-  <a href="#mutable">modyfikator <tt>mutable</tt></a>, o którym niżej)
+  <a href="#mutable">modyfikator <code>mutable</code></a>, o którym niżej)
   ani wołać innych metod, które nie są zadeklarowane jako stałe.</p>
 
 <pre>struct Foo {
@@ -295,12 +295,12 @@ private:
     /* … */
 };</pre>
 
-<p>Rzutowanie słówka <tt>this</tt> wymusza wołanie stałej lub
+<p>Rzutowanie słówka <code>this</code> wymusza wołanie stałej lub
    niestałej wersji danej metody.  Bez niego mielibyśmy do czynienia
    z niekończącą się rekurencją.</p>
 
 <p id="mutable">C++ wprowadza jeszcze jedno słowo kluczowe --
-  <tt>mutable</tt>, które oznacza, że dany element struktury może być
+  <code>mutable</code>, które oznacza, że dany element struktury może być
   modyfikowany, w tej klasie nawet jeżeli jest ona stała.
   Przykładowo:</p>
 
@@ -346,7 +346,7 @@ private:
     mutable int last_arg;
 };</pre>
 
-<p>Alternatywą dla słówka <tt>mutable</tt> byłoby rzutowanie, jednak
+<p>Alternatywą dla słówka <code>mutable</code> byłoby rzutowanie, jednak
   w różnych przypadkach może ono spowodować niezdefiniowane
   zachowanie, <a href="#modify_const_objects">co zostało już
   omówione</a>.</p>
@@ -390,7 +390,7 @@ double abs(const Complex &amp;c) {
 
 <p>Powyższy kod oczywiście się nie skompiluje, ale z pomocą przychodzi
   nam już wcześniej
-  opisane <a href="#mutable">słówko <tt>mutable</tt></a>.</p>
+  opisane <a href="#mutable">słówko <code>mutable</code></a>.</p>
 
 <p>O wiele częściej stałość fizyczna jest <i>za mało gorliwa</i>.
   Przykładowo, jeżeli mamy strukturę przechowującą ciągi znaków, to
@@ -422,7 +422,7 @@ private:
 };</pre>
 
 <p>Oczywiście nadal wewnątrz stałej metody obiekty wskazywane przez
-  pole <tt>data</tt> mogą być modyfikowane i dlatego cała
+  pole <code>data</code> mogą być modyfikowane i dlatego cała
   odpowiedzialność, za utrzymanie stałości logicznej spada na
   programiście, który implementuje daną klasę.</p>
 

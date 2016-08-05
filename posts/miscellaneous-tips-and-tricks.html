@@ -25,7 +25,7 @@
 
 <h3 id=gitgc>“Compressing” git repository</h3>
 
-<p>By now everyone should know that the <tt>--aggressive</tt> flag of <tt>git gc</tt> is not to be used. In general git should handle pack file effectively, but what if you <em>really</em> want to try and squeeze every byte out of it?
+<p>By now everyone should know that the <code>--aggressive</code> flag of <code>git gc</code> is not to be used. In general git should handle pack file effectively, but what if you <em>really</em> want to try and squeeze every byte out of it?
 
 <pre>git repack -a -d --depth=1000 --window=1000</pre>
 
@@ -41,7 +41,7 @@
 
 <pre>git commit --amend --author "Jane Doe &lt;jane@doe.com&gt;"</pre>
 
-<p>(Yeah, I know, this is obvious, but I keep forgetting that <tt>--author</tt> option exists).</p>
+<p>(Yeah, I know, this is obvious, but I keep forgetting that <code>--author</code> option exists).</p>
 
 <h3 id=letter>How to start a letter in English</h3>
 
@@ -77,7 +77,7 @@ def call_throw(): throw()
 
 if not run(): call_throw()</pre>
 
-<p>When <tt>throw</tt> rises the exception again, back-trace will contain all frames that led up to having the exception caught in <tt>run</tt>:
+<p>When <code>throw</code> rises the exception again, back-trace will contain all frames that led up to having the exception caught in <code>run</code>:
 
 <pre>$ python exc.py
 Traceback (most recent call last):
@@ -91,7 +91,7 @@ Traceback (most recent call last):
     def fail(): assert False
 AssertionError</pre>
 
-<p>This is a bit like bare <tt>rise</tt> in <tt>except</tt> clause but performing the re-rising at arbitrary later time.
+<p>This is a bit like bare <code>rise</code> in <code>except</code> clause but performing the re-rising at arbitrary later time.
 
 <h3 id=flatten>Flattening a list in Python</h3>
 
@@ -108,7 +108,7 @@ bad – it’s syntax is broken.  The thing to remember is that you write
 a normal nested for-if-for-if-… sequence but then put the final
 statement at the beginning of the line instead of at the end).
 
-<p>If all elements are known to be lists or tuples, using <tt>sum</tt> may be considered easier:
+<p>If all elements are known to be lists or tuples, using <code>sum</code> may be considered easier:
 
 <pre>def flatten(lists):
     return sum(lists, [])
@@ -118,4 +118,4 @@ def flatten(tuples):
 
 <h3 id=sum>Summing numbers in a column in Emacs</h3>
 
-<p>Select column containing the numbers to sum and simply invoke <tt>C-u C-x * :</tt>.
+<p>Select column containing the numbers to sum and simply invoke <code>C-u C-x * :</code>.

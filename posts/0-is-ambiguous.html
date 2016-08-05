@@ -8,20 +8,20 @@ long, that this condition has already been <a
 href="http://zboczuch.jogger.pl/2010/10/20/moje-wpisy-sa-wieksze-od-twoich/">pointed
 out</a> pushing me into finally writing something.  Inspired by <a
 href=http://blogs.fsfe.org/adridg/?p=1014>Adriaan de
-Groot’s entry</a>, I decided to write something about <tt>0</tt>,
-<tt>NULL</tt> and upcoming <tt>nullptr</tt>.
+Groot’s entry</a>, I decided to write something about <code>0</code>,
+<code>NULL</code> and upcoming <code>nullptr</code>.
 
 <p>I will try to be informative and explain what the whole buzz is
-about and then give my opinion about <tt>nullptr</tt>.  Let us first
+about and then give my opinion about <code>nullptr</code>.  Let us first
 inspect how a <a
 href=http://en.wikipedia.org/wiki/Pointer_(computing)#Null_pointer>null
 pointer</a> can be donated in C and C++.
 
 <!-- EXCERPT -->
 
-<h3>The confusing <tt>0</tt></h3>
+<h3>The confusing <code>0</code></h3>
 
-<p>In C and C++, the literal <tt>0</tt> has two meanings: it’s either
+<p>In C and C++, the literal <code>0</code> has two meanings: it’s either
 an octal (yes, octal) literal representing number zero or a null
 pointer.  Which meaning is used depends on context, which compiler can
 usually figure out.  For instance:
@@ -41,7 +41,7 @@ usually figure out.  For instance:
 
 <p>However, if function lacks a prototype or has variable length of
 arguments, there may be too little information to figure out what
-programmer meant.  A good example is <tt>printf()</tt> function from
+programmer meant.  A good example is <code>printf()</code> function from
 standard library:
 
 <pre>#include &lt;stdio.h&gt;
@@ -55,23 +55,23 @@ standard library:
 not so common nowadays it is not such a big issue.  Still there are
 two things to keep in mind: (i) <em>always</em> provide function
 prototypes and (ii) when using functions with variable arguments use
-<tt>(<i>foo</i> *)0</tt> to mean a null pointer.
+<code>(<var>foo</var> *)0</code> to mean a null pointer.
 
 
-<h3>The confusing <tt>NULL</tt></h3>
+<h3>The confusing <code>NULL</code></h3>
 
 <p>Since context is not always obvious some programmers prefer to
 explicitly indicate the intended meaning by using different notations
-for numbers and pointers.  For those purposes, <tt>NULL</tt> macro has
+for numbers and pointers.  For those purposes, <code>NULL</code> macro has
 been introduced.  Standard requires that it is defined in such a way,
 that it can be used in pointer context to mean a null pointer.  In C,
 the macro is often defined as:
 
 <pre>#define NULL ((void *)0)</pre>
 
-<p>This guarantees not only that <tt>NULL</tt> means a null pointer in
+<p>This guarantees not only that <code>NULL</code> means a null pointer in
 pointer context but also that a diagnostic message must be issued when
-one tries to use <tt>NULL</tt> as a number, ie.:
+one tries to use <code>NULL</code> as a number, ie.:
 
 <pre>$ <i>cat test.c</i>
 #include &lt;stddef.h&gt;
@@ -93,10 +93,10 @@ invalid, which renders the following an invalid C++ code:
 	<b>return</b> 0;
 }</pre>
 
-<p>The easiest way around is to define <tt>NULL</tt> as plain
-<tt>0</tt> or <tt>0L</tt>.  This is in fact what often happens.  GCC
-uses <tt>__null</tt> extension but it seems <tt>__null</tt> is treated
-like <tt>0L</tt> in some contexts:
+<p>The easiest way around is to define <code>NULL</code> as plain
+<code>0</code> or <code>0L</code>.  This is in fact what often happens.  GCC
+uses <code>__null</code> extension but it seems <code>__null</code> is treated
+like <code>0L</code> in some contexts:
 
 <pre>$ <i>cat test.c</i>
 #include &lt;stddef.h&gt;
@@ -113,7 +113,7 @@ test.c:5: warning: NULL used in arithmetic
 test.c:6: warning: NULL used in arithmetic
 $</pre>
 
-<p>Whenever you use <tt>NULL</tt>, you have to keep in mind that you
+<p>Whenever you use <code>NULL</code>, you have to keep in mind that you
 never know what it really is.  This in particular means, that the
 following code, after pre-processing, may or may not be valid:
 
@@ -143,7 +143,7 @@ consider the following simple code:
 }</pre>
 
 <p>The above will invoke the first function.  To call the second one,
-we should use a cast, since we know that using <tt>NULL</tt> is not
+we should use a cast, since we know that using <code>NULL</code> is not
 reliable:
 
 <pre><b>int</b> main(<b>void</b>) {
@@ -152,17 +152,17 @@ reliable:
 }</pre>
 
 <p>The lesson here is that in C++ you must always use
-<tt>(<i>foo</i> *)0</tt> when you want to pass a null pointer to
+<code>(<var>foo</var> *)0</code> when you want to pass a null pointer to
 a function.  Even if the call is not ambiguous at this time, someone
 may add an overloaded version of the function which will break the
 code if cast is not used in the first case.
 
 
-<h3>Useless <tt>nullptr</tt></h3>
+<h3>Useless <code>nullptr</code></h3>
 
 <p>Addressing those issues, the C++ working group defined a new
-<tt>nullptr</tt> keyword which evaluates to a null pointer of type
-<tt>std::nullptr_t</tt> which can be implicitly converted to any other
+<code>nullptr</code> keyword which evaluates to a null pointer of type
+<code>std::nullptr_t</code> which can be implicitly converted to any other
 pointer while, at the same time, cannot be converted to a number.
 
 <p>This seems like a good thing, right? Unfortunately, there are two
@@ -177,20 +177,20 @@ problem.  For instance, the following is still ambiguous:
 }</pre>
 
 <p>At the same time, yet another keyword has been introduced which
-serves no purpose.  <tt>NULL</tt> was a perfectly fine identifier
+serves no purpose.  <code>NULL</code> was a perfectly fine identifier
 which might be used without polluting keyword name space (which is
 a problem since adding a keyword to the language may break existing
 code).
 
 <p>My recommendation is not to bother with it.  Just ignore this thing
-and stick to <tt>NULL</tt> where context is clear and
-<tt>(<i>foo</i> *)0</tt> when calling function.
+and stick to <code>NULL</code> where context is clear and
+<code>(<var>foo</var> *)0</code> when calling function.
 
-<p>UPDATE: It has been pointed out to me that <tt>nullptr</tt> in fact
+<p>UPDATE: It has been pointed out to me that <code>nullptr</code> in fact
 fixes a single problem: it prevents an incorrect function from being
 called.  This is true but it does not change much in my reasoning:
-I still recommend ignoring <tt>nullptr</tt> and using <tt>NULL</tt>,
-which is more portable and when <tt>nullptr</tt> comes around,
+I still recommend ignoring <code>nullptr</code> and using <code>NULL</code>,
+which is more portable and when <code>nullptr</code> comes around,
 compilers will define the latter as the former anyway. This is also
 what C++ committee should do instead of adding to the confusion by
 introducing <em>yet another</em> method of representing a null
@@ -200,21 +200,21 @@ pointer.
 
 <p>The last thing I want to talk about is a null pointer’s
 representation.  There are two misconceptions that came from the fact
-that <tt>0</tt> is used to mean a null pointer.  The first one is that
+that <code>0</code> is used to mean a null pointer.  The first one is that
 a null pointer is in fact represented by a “zero value” (ie. all bits
 clear).  The second one is that when implementation uses a different
-representation assigning <tt>0</tt> to a pointer does not yield a null
+representation assigning <code>0</code> to a pointer does not yield a null
 pointer.
 
 <p>Both of those are incorrect.  In some implementations
 (microcontrollers, x86 real mode, …) a “zero pointer” is perfectly
 fine and using (for instance) all bits set representation to mean
 a null pointer may make more sense.  At the same time, it’s compiler
-responsibility to use correct representation whenever <tt>0</tt> is
-used to mean a <tt>null pointer</tt>.
+responsibility to use correct representation whenever <code>0</code> is
+used to mean a <code>null pointer</code>.
 
 <p>UPDATE: Przemoc <a href=http://c-faq.com/null/machexamp.html>has
-pointed to one of <tt>comp.lang.c</tt> FAQs</a> which gives examples
+pointed to one of <code>comp.lang.c</code> FAQs</a> which gives examples
 of machines where null pointers that are not represented by all bits
 clear as well as machines with different representation of pointers of
 different types (which I haven’t mentioned in this article). Also, the
@@ -229,13 +229,13 @@ mind while programming in C or C++:
 <ol>
   <li>Always define function prototypes.  Always.
   <li>When function has variable number of arguments, use
-  <tt>(<i>foo</i> *)0</tt> to mean a null pointer.
+  <code>(<var>foo</var> *)0</code> to mean a null pointer.
   <li>In C++, when specifying function arguments, use
-  <tt>(<i>foo</i> *)0</tt> to mean a null pointer.  This also
+  <code>(<var>foo</var> *)0</code> to mean a null pointer.  This also
   applies to a single argument constructors where no explicit
   function call is made.
   <li>When new C++ standard comes around, just ignore
-  <tt>nullptr</tt>, it solves no problems and only adds to the
+  <code>nullptr</code>, it solves no problems and only adds to the
   confusion.
 </ol>
 

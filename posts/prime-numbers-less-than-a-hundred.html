@@ -17,7 +17,7 @@ href="http://xkcd.com/303/">their code’s compiling</a>.</p>
 <p>Of course, a “C program” needs not to be taken too
 seriously – depending on not too far fetched undefined
 behaviours of given implementation is all right (but please
-do not use <tt>system()</tt> or <tt>exec()</tt> family of calls ;)
+do not use <code>system()</code> or <code>exec()</code> family of calls ;)
 ).</p>
 
 <!-- EXCERPT -->
@@ -47,12 +47,12 @@ a C programmer curious about ins and outs of the
 language.</p>
 
 <p><b>Implicit return type</b>.  Starting from the very beginning, the
-<tt>main()</tt> function has no return type specified.  That is
+<code>main()</code> function has no return type specified.  That is
 actually quite all right since C89 defaults function’s return type to
-<tt>int</tt>.</p>
+<code>int</code>.</p>
 
 <p><b>Old function prototype</b>.  This is not the only “problem” with
-the function though.  <tt>main()</tt>’s prototype lacks also argument
+the function though.  <code>main()</code>’s prototype lacks also argument
 types.  This is also a perfectly valid C syntax.  In
 original design types were not part of function declaration and, not
 to break old code, this (otherwise deprecated syntax) remained in C89.
@@ -67,7 +67,7 @@ The old function definition looks as follows:</p>
 
 <p>Programmers were responsible for guaranteeing correct function
 invocation which lead to many hard to find bugs and thus
-a <tt>sparse</tt> tool was created which, among other things,
+a <code>sparse</code> tool was created which, among other things,
 checked whether all function invocations match function
 definition.</p>
 
@@ -89,56 +89,56 @@ with old compiler, ie.:</p>
 list in function declaration does not mean that the function take no
 argument (which is true in C++).  It means function take unspecified
 number of arguments.  To declare function with no arguments one needs
-to use <tt>void</tt> keyword, ie.: <tt>int foo(void)</tt>.</p>
+to use <code>void</code> keyword, ie.: <code>int foo(void)</code>.</p>
 
 <p><b>Implicit type</b>.  So, what <em>is</em> the type of
-<tt>main()</tt> arguments?  There was none specified anywhere.  This
-is, yet again, quite all right since C89 defaults to <tt>int</tt>.
+<code>main()</code> arguments?  There was none specified anywhere.  This
+is, yet again, quite all right since C89 defaults to <code>int</code>.
 Generally, anything that has been declared but has no type specified
-is of type <tt>int</tt>.  For example <tt>static i;</tt> is the same
-thing as <tt>static int i;</tt>.</p>
+is of type <code>int</code>.  For example <code>static i;</code> is the same
+thing as <code>static int i;</code>.</p>
 
 <p><b>Incorrect argument type</b>.  This brings us to the next issue.
-The two <tt>main()</tt> function prototypes defined by the standard
+The two <code>main()</code> function prototypes defined by the standard
 are:</p>
 
 <pre>int main(int, char **);
 int main(void);</pre>
 
 <p>This stays in conflict with our second argument being (implicitly)
-defined as having type <tt>int</tt>.  This is the first place were
+defined as having type <code>int</code>.  This is the first place were
 undefined behaviour is introduced.  Theoretically, undefined behaviour
 can lead to anything, including daemons coming out of your nose, but
 because in most (for some definitions of “most”) implementations
-<tt>sizeof(int)</tt> is no smaller than <tt>sizeof(char *)</tt>,
-passing convention for the two type is compatible and <tt>int</tt> has
+<code>sizeof(int)</code> is no smaller than <code>sizeof(char *)</code>,
+passing convention for the two type is compatible and <code>int</code> has
 no trap representations, we are in the clear.</p>
 
-<p><b><tt>i</tt>’s initialisation</b>.  Looking carefully at the code
-one notices that <tt>i</tt> is never initialised and instead it uses
-the value passed as first argument to <tt>main()</tt> as its initial
+<p><b><code>i</code>’s initialisation</b>.  Looking carefully at the code
+one notices that <code>i</code> is never initialised and instead it uses
+the value passed as first argument to <code>main()</code> as its initial
 value.  This reveals a quite interesting bug: if one calls the
 program with some arguments, it will skip initial prime numbers.</p>
 
 <p>What I find more fascinating though is situation where
-<tt>main()</tt>’s first argument is zero (which standard
-permits).  In this situation <tt>j</tt> will overflow (which is
+<code>main()</code>’s first argument is zero (which standard
+permits).  In this situation <code>j</code> will overflow (which is
 undefined behaviour for signed integers) and the second loop will
-finish when <tt>j</tt> reaches <tt>-1</tt>.  This is also
-a situation where <tt>b/a</tt> will yield undesired true value
-hence it is better to use <tt>j&lt;i</tt> comparison.</p>
+finish when <code>j</code> reaches <code>-1</code>.  This is also
+a situation where <code>b/a</code> will yield undesired true value
+hence it is better to use <code>j&lt;i</code> comparison.</p>
 
 <p><b>Implicit declaration</b>.  Obviously, to print the prime number
-we have used the <tt>printf()</tt>.  This is a straight forward
+we have used the <code>printf()</code>.  This is a straight forward
 approach, but what is interesting is that there is no
-<tt>printf()</tt> declaration.  And yet another time, this is quite
+<code>printf()</code> declaration.  And yet another time, this is quite
 all right from C89’s point of view.  If function declaration is
 missing an implicit declaration based on types of passed arguments
-with <tt>int</tt> as a return type is assumed.</p>
+with <code>int</code> as a return type is assumed.</p>
 
 <p>Let’s stay here for a second because this is a good
 opportunity to yet again remind everybody not to cast result of
-<tt>malloc()</tt> function.  Consider the following code:</p>
+<code>malloc()</code> function.  Consider the following code:</p>
 
 <pre>int main(void) {
 	int *p = (int *)malloc(sizeof *p); /* incorrect */
@@ -146,12 +146,12 @@ opportunity to yet again remind everybody not to cast result of
 }</pre>
 
 <p>Some compilers will (rightly) accept such code with no complains
-even though one forgot to include the <tt>stdlib.h</tt> header file.
+even though one forgot to include the <code>stdlib.h</code> header file.
 Because of the implicit function declaration rule the compiler will
-assume a <tt>int malloc(size_t)</tt> prototype and then (because
-of cast operator) will obediently convert <tt>int</tt> into
-a pointer to <tt>int</tt>.  Without the cast, compiler will have
-to complain about implicit conversion from <tt>int</tt> to pointer
+assume a <code>int malloc(size_t)</code> prototype and then (because
+of cast operator) will obediently convert <code>int</code> into
+a pointer to <code>int</code>.  Without the cast, compiler will have
+to complain about implicit conversion from <code>int</code> to pointer
 type reminding about the header file:</p>
 
 <pre>int main(void) {
@@ -161,7 +161,7 @@ type reminding about the header file:</p>
 
 <p><b>Lack of return</b>.  The last issue with the prime number
 printing code is the lack of return statement.  C99 specifies that
-“reaching the <tt>}</tt> that terminates the <tt>main()</tt> function
+“reaching the <code>}</code> that terminates the <code>main()</code> function
 returns a value of zero.”  One cannot hide behind C99 though since the
 code uses various C89 only “features” (implicit type, implicit
 function declaration, etc).  Yes, this is another undefined behaviour

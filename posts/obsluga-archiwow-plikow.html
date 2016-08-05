@@ -16,51 +16,51 @@
 
 <dl>
   <dt>gz
-  <dd><tt>gzip -d nazwa-pliku.<i>roz</i></tt><sup>(1)</sup>
-  <dd><tt>gzip -cd &lt;nazwa-pliku.<i>roz</i> &gt;nazwa-pliku</tt>
+  <dd><code>gzip -d nazwa-pliku.<i>roz</i></code><sup>(1)</sup>
+  <dd><code>gzip -cd &lt;nazwa-pliku.<i>roz</i> &gt;nazwa-pliku</code>
 
   <dt>bz2, xz lub lzma
-  <dd><tt>bzip2</tt>/<tt>xz</tt>/<tt>lzma</tt> -d nazwa-pliku.<i>roz</i></tt><sup>(1)</sup>
-  <dd><tt>bzip2</tt>/<tt>xz</tt>/<tt>lzma</tt> -cd &lt;nazwa-pliku.<i>roz</i> &gt;nazwa-pliku</tt>
-  <dd><tt>bzip2</tt>/<tt>xz</tt>/<tt>lzma</tt> -kd nazwa-pliku.<i>roz</i></tt>
+  <dd><code>bzip2</code>/<code>xz</code>/<code>lzma</code> -d nazwa-pliku.<i>roz</i></code><sup>(1)</sup>
+  <dd><code>bzip2</code>/<code>xz</code>/<code>lzma</code> -cd &lt;nazwa-pliku.<i>roz</i> &gt;nazwa-pliku</code>
+  <dd><code>bzip2</code>/<code>xz</code>/<code>lzma</code> -kd nazwa-pliku.<i>roz</i></code>
 
   <dt>tar
-  <dd><tt>tar xvf nazwa-pliku.tar</tt><sup>(2)</sup>
+  <dd><code>tar xvf nazwa-pliku.tar</code><sup>(2)</sup>
 
   <dt>tar.Z
-  <dd><tt>tar Zxvf nazwa-pliku.tar.Z</tt><sup>(2, 4)</sup>
-  <dd><tt>uncompress -c &lt;nazwa-pliku.tar.Z | tar vx</tt><sup>(2)</sup>
+  <dd><code>tar Zxvf nazwa-pliku.tar.Z</code><sup>(2, 4)</sup>
+  <dd><code>uncompress -c &lt;nazwa-pliku.tar.Z | tar vx</code><sup>(2)</sup>
 
   <dt>tar.gz lub tgz<sup>(3)</sup>
-  <dd><tt>tar zxvf nazwa-pliku.<i>roz</i></tt><sup>(2, 4)</sup>
-  <dd><tt>gzip -d &lt;nazwa-pliku.<i>roz</i> | tar vx</tt><sup>(2)</sup>
+  <dd><code>tar zxvf nazwa-pliku.<i>roz</i></code><sup>(2, 4)</sup>
+  <dd><code>gzip -d &lt;nazwa-pliku.<i>roz</i> | tar vx</code><sup>(2)</sup>
 
   <dt>tar.bz2 lub tbz<sup>(3)</sup>
-  <dd><tt>tar jxvf nazwa-pliku.<i>roz</i></tt><sup>(2, 4)</sup>
-  <dd><tt>bzip2 -d &lt;nazwa-pliku.<i>roz</i> | tar vx</tt><sup>(2)</sup>
+  <dd><code>tar jxvf nazwa-pliku.<i>roz</i></code><sup>(2, 4)</sup>
+  <dd><code>bzip2 -d &lt;nazwa-pliku.<i>roz</i> | tar vx</code><sup>(2)</sup>
 
   <dt>tar.xz lub txz<sup>(3)</sup>
-  <dd><tt>tar Jxvf nazwa-pliku.<i>roz</i></tt><sup>(2, 4)</sup>
-  <dd><tt>xz -d &lt;nazwa-pliku.<i>roz</i> | tar vx</tt><sup>(2)</sup>
+  <dd><code>tar Jxvf nazwa-pliku.<i>roz</i></code><sup>(2, 4)</sup>
+  <dd><code>xz -d &lt;nazwa-pliku.<i>roz</i> | tar vx</code><sup>(2)</sup>
 
   <dt>tar.lzma
-  <dd><tt>xz -d &lt;nazwa-pliku.tar.lzma | tar vx</tt><sup>(2)</sup>
+  <dd><code>xz -d &lt;nazwa-pliku.tar.lzma | tar vx</code><sup>(2)</sup>
 
   <dt>Z
-  <dd><tt>uncompress nazwa-pliku.Z</tt><sup>(1)</sup>
-  <dd><tt>uncompress -c &lt;nazwa-pliku.Z &gt;nazwa-pliku</tt>
+  <dd><code>uncompress nazwa-pliku.Z</code><sup>(1)</sup>
+  <dd><code>uncompress -c &lt;nazwa-pliku.Z &gt;nazwa-pliku</code>
 
   <dt>arj
-  <dd><tt>unarj nazwa-pliku</tt>
+  <dd><code>unarj nazwa-pliku</code>
 
   <dt>zip
-  <dd><tt>unarj/unzip nazwa-pliku</tt>
+  <dd><code>unarj/unzip nazwa-pliku</code>
 
   <dt>rar
-  <dd><tt>unrar nazwa-pliku.rar</tt>
+  <dd><code>unrar nazwa-pliku.rar</code>
 
   <dt>ace
-  <dd><tt>unace x nazwa-pliku.ace</tt>
+  <dd><code>unace x nazwa-pliku.ace</code>
 
   <dt>7z
   <dd>7zr x nazwa-pliku.7z</dd>
@@ -81,22 +81,22 @@
         przypadku <a href=#pakowanie>tworzenia archiwum TAR</a>
         zapisz) dane z (do) pliku podanego jako kolejny argument,
       <li><b>Z</b>, <b>z</b>, <b>j</b>, <b>J</b> – „filtruj” dane
-        przez odpowiednio <tt>uncompress</tt>, <tt>gzip -d</tt>,
-        <tt>bzip2 -d</tt> lub <tt>xz -d</tt>, dzięki czemu zostaje on
+        przez odpowiednio <code>uncompress</code>, <code>gzip -d</code>,
+        <code>bzip2 -d</code> lub <code>xz -d</code>, dzięki czemu zostaje on
         najpierw dekompresowany (w
         przypadku <a href=#dwakroki>tworzenia skomrpesowanego
         archiwum TAR</a> parametr powoduje kompresje pliku).
     </ul>
-  <li><tt>tgz</tt> to skrót od <tt>tar.gz</tt>, <tt>tbz</tt> od
-    <tt>tar.bz2</tt> (rzadko spotykane), a <tt>txz</tt> od
-    <tt>tar.xz</tt>.
+  <li><code>tgz</code> to skrót od <code>tar.gz</code>, <code>tbz</code> od
+    <code>tar.bz2</code> (rzadko spotykane), a <code>txz</code> od
+    <code>tar.xz</code>.
   <li>Na niektórych systemach opcje <b>Z</b>, <b>z</b>, <b>j</b>
-    lub <b>J</b> programu <tt>tar</tt> mogą nie działać.  Wówczas
+    lub <b>J</b> programu <code>tar</code> mogą nie działać.  Wówczas
     należy użyć alternatywnej wersji z potokiem.
 </ol>
 
 <h3 id=pakowanie>Pakowanie</h3>
-<p>W przypadku pakowania plików opiszę jedynie archiwa <tt>tar</tt>,
+<p>W przypadku pakowania plików opiszę jedynie archiwa <code>tar</code>,
   gdyż (o ile mi wiadomo) inne popularne archiwa wymagają korzystania
   z programów nie będących wolnym oprogramowaniem. Aby spakować kilka
   plików lub katalog do archiwum należy użyć polecenia:
@@ -104,17 +104,17 @@
 <p>i po sprawie, przy czym pliki są jedynie
   spakowane, a nie skompresowane. Jak je skompresować opiszę <a
   href=#kompresia>niżej</a>.
-<p>Jako ciekawostkę można powiedzieć, że archiwum <tt>tar</tt> zostało
+<p>Jako ciekawostkę można powiedzieć, że archiwum <code>tar</code> zostało
   pierwotnie zaprojektowane jako system plików do zapisu danych na
   kasetach magnetofonowych, z których najłatwiej było odczytywać bloki
-  po 512 bajtów przez co wewnętrzna struktura pliku <tt>tar</tt>
+  po 512 bajtów przez co wewnętrzna struktura pliku <code>tar</code>
   charakteryzuje się użyciem takich właśnie bloków. Każdy plik ma
   nagłówek zajmujący 512 bajtów i jest przechowywany w blokach po 512
   bajtów każdy. Jeżeli ostatniego bloku nie zapełnia do końca to jest
   on wypełniany zerami.
-<p>Należy również zauważyć, że program <tt>tar</tt> używa filozofii
+<p>Należy również zauważyć, że program <code>tar</code> używa filozofii
   blokowej także w stosunku do samego pliku archiwum. Przejawia się to
-  parametrem <tt>-N</tt>, dzięki któremu można określić wielkość
+  parametrem <code>-N</code>, dzięki któremu można określić wielkość
   takiego bloku. Domyślnie jest to 20*512 czyli 10KiB. Warto mieć to
   na uwadze, żeby później się nie zdziwić, że dwa czy trzy pliki,
   które sumarycznie mają rozmiar 1KiB w rezultacie są pakowane do
@@ -122,35 +122,35 @@
 
 <h3 id=kompresja>Kompresja</h3>
 <p>By skompresować jakiś plik (np. wcześniej utworzone
-  archiwum <tt>tar</tt>) należy użyć jednej z komend:
+  archiwum <code>tar</code>) należy użyć jednej z komend:
 
 <dl>
  <dt>Z
- <dd><tt>compress nazwa-pliku</tt>
- <dd><tt>compress &lt;nazwa-pliku &gt;nazwa-pliku.Z</tt>
+ <dd><code>compress nazwa-pliku</code>
+ <dd><code>compress &lt;nazwa-pliku &gt;nazwa-pliku.Z</code>
 
  <dt>gz
- <dd><tt>gzip -9 nazwa-pliku</tt>
- <dd><tt>gzip -9 &lt;nazwa-pliku &gt;nazwa-pliku.gz</tt>
+ <dd><code>gzip -9 nazwa-pliku</code>
+ <dd><code>gzip -9 &lt;nazwa-pliku &gt;nazwa-pliku.gz</code>
 
  <dt>bz2, xz lub lzma
- <dd><tt>bzip2</tt>/<tt>xz</tt>/<tt>lzma -9 nazwa-pliku</tt>
- <dd><tt>bzip2</tt>/<tt>xz</tt>/<tt>lzma -9 &lt;nazwa-pliku &gt;nazwa-pliku.<i>roz</i></tt>
- <dd><tt>bzip2</tt>/<tt>xz</tt>/<tt>lzma -9k nazwa-pliku</tt>
+ <dd><code>bzip2</code>/<code>xz</code>/<code>lzma -9 nazwa-pliku</code>
+ <dd><code>bzip2</code>/<code>xz</code>/<code>lzma -9 &lt;nazwa-pliku &gt;nazwa-pliku.<i>roz</i></code>
+ <dd><code>bzip2</code>/<code>xz</code>/<code>lzma -9k nazwa-pliku</code>
 </dl>
 
 <p>Pierwsze polecenie z serii powoduje, że nieskompresowany plik
   zostaje skasowany.
 
-<p>Format <tt>Z</tt> jest już starym, zapomnianym formatem i w
+<p>Format <code>Z</code> jest już starym, zapomnianym formatem i w
   zasadzie jedyne jego wykorzystanie to trzymanie źródeł Linuksa 0.01
   coby były w takiej formie w jakiej były udostępnione przez Linusa
   Torvaldsa. Zdecydowanie nie zaleca się używania tegoż formatu.
 
-<p>Format <tt>bz2</tt> daje zazwyczaj lepszą kompresję niż <tt>gz</tt>
+<p>Format <code>bz2</code> daje zazwyczaj lepszą kompresję niż <code>gz</code>
   (choć nie musi to być prawdą dla małych plików) przy czym działa
   wolniej, co jest w szczególnie odczuwalne w przypadku dużych plików.
-  Idąc dalej, <tt>xz</tt> kompresują zazwyczaj jeszcze lepiej.
+  Idąc dalej, <code>xz</code> kompresują zazwyczaj jeszcze lepiej.
 
 <h3 id=dwakroki>Pakowanie i kompresja razem</h3>
 <p>Pakowanie i kompresje można wykonać w jednym kroku. Oto jak tego
@@ -158,27 +158,27 @@
 
 <dl>
  <dt>tar.Z
- <dd><tt>tar Zcf nazwa-pliku.tar.Z lista-plików</tt>
- <dd><tt>tar Zc lista-plików &gt;nazwa-pliku.tar.Z</tt>
- <dd><tt>tar c lista-plików | compress &gt;nazwa-pliku.tar.Z</tt>
+ <dd><code>tar Zcf nazwa-pliku.tar.Z lista-plików</code>
+ <dd><code>tar Zc lista-plików &gt;nazwa-pliku.tar.Z</code>
+ <dd><code>tar c lista-plików | compress &gt;nazwa-pliku.tar.Z</code>
 
  <dt>tar.gz
- <dd><tt>tar zcf nazwa-pliku.tar.gz lista-plików</tt>
- <dd><tt>tar zc lista-plików &gt;nazwa-pliku.tar.gz</tt>
- <dd><tt>tar c lista-plików | gzip -9 &gt;nazwa-pliku.tar.gz</tt>
+ <dd><code>tar zcf nazwa-pliku.tar.gz lista-plików</code>
+ <dd><code>tar zc lista-plików &gt;nazwa-pliku.tar.gz</code>
+ <dd><code>tar c lista-plików | gzip -9 &gt;nazwa-pliku.tar.gz</code>
 
  <dt>tar.bz2
- <dd><tt>tar jcf nazwa-pliku.tar.bz2 lista-plików</tt>
- <dd><tt>tar jc lista-plików &gt;nazwa-pliku.tar.bz2</tt>
- <dd><tt>tar c lista-plików | bzip2 -9 &gt;nazwa-pliku.tar.bz</tt>
+ <dd><code>tar jcf nazwa-pliku.tar.bz2 lista-plików</code>
+ <dd><code>tar jc lista-plików &gt;nazwa-pliku.tar.bz2</code>
+ <dd><code>tar c lista-plików | bzip2 -9 &gt;nazwa-pliku.tar.bz</code>
 
  <dt>tar.xz
- <dd><tt>tar Jcf nazwa-pliku.tar.xz lista-plików</tt>
- <dd><tt>tar Jc lista-plików &gt;nazwa-pliku.tar.xz</tt>
- <dd><tt>tar c lista-plików | xz -9 &gt;nazwa-pliku.tar.xz</tt>
+ <dd><code>tar Jcf nazwa-pliku.tar.xz lista-plików</code>
+ <dd><code>tar Jc lista-plików &gt;nazwa-pliku.tar.xz</code>
+ <dd><code>tar c lista-plików | xz -9 &gt;nazwa-pliku.tar.xz</code>
 
  <dt>tar.lzma
- <dd><tt>tar c lista-plików | lzma -9 &gt;nazwa-pliku.tar.lzma</tt>
+ <dd><code>tar c lista-plików | lzma -9 &gt;nazwa-pliku.tar.lzma</code>
 </dl>
 
 <p>Osobiście preferuję ostatnią metodę, gdyż daje ona największą
@@ -188,7 +188,7 @@
 
 <h3 id=mc>Midnight Commander</h3>
 <p>Jeżeli ktoś nie lubi bawić się czystą linią komend to może też
-  skorzystać z Midnight Commandera (<tt>mc</tt>). Obsługuje on część
+  skorzystać z Midnight Commandera (<code>mc</code>). Obsługuje on część
   z wymienionych formatów.  W przypadku rozpakowywania wystarczy do
   archiwum „wejść” tak jak do zwykłego katalogu i można z niego
   przegrywać pliki gdzie tylko się chce. W przypadku pakowania

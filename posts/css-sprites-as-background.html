@@ -122,7 +122,7 @@ id=&quot;sprite5&quot;&gt;5&lt;/span&gt;&lt;/div&gt;</pre>
 
   <p>To solve this issue browser has to be told to start drawing the
     image from a different offset—that’s exactly
-    what <tt>background-position</tt> property does.  With a bit more
+    what <code>background-position</code> property does.  With a bit more
     styling, the code is almost complete:
 
 <pre>#spritet { background-position:  -74px 0; }
@@ -138,10 +138,10 @@ id=&quot;sprite5&quot;&gt;5&lt;/span&gt;&lt;/div&gt;</pre>
 
   <div><img src=/d/html5-sprite-expl.jpg alt=""/></div>
 
-  <p><tt>background-position</tt> property instructs it to shift the
+  <p><code>background-position</code> property instructs it to shift the
     abstract background by given length and only <em>than</em> cut
     whatever overlaps with the element.  By setting position
-    to <tt>-126px</tt>, the 127th pixel of the background image will
+    to <code>-126px</code>, the 127th pixel of the background image will
     be aligned with top-left corner of the element.
 
   <p>With that knowledge, getting roll-over effect is now trivial:
@@ -210,7 +210,7 @@ id=&quot;sprite5&quot;&gt;5&lt;/span&gt;&lt;/div&gt;</pre>
   min-height: 20px;
 }</pre>
 
-  <p>The trick here is the <tt>no-repeat</tt> value which causes the
+  <p>The trick here is the <code>no-repeat</code> value which causes the
     background image to be painted only once.  This is contrary to the
     way sprites work where interesting part of the image is cropped
     thanks to the limited size of the element.  Trying to use an image

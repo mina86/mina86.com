@@ -81,8 +81,8 @@ option to configure modifiers map.</p>
 
 <p>Should you not find an option you’ll have to change some files by
 hand.  As mentioned above I advocate using Caps Lock as another Ctrl
-and so examples will feature <tt>ctrl:nocaps</tt> option – if you’d
-rather swap the two keys use <tt>ctrl:swapcaps</tt> instead.  You can
+and so examples will feature <code>ctrl:nocaps</code> option – if you’d
+rather swap the two keys use <code>ctrl:swapcaps</code> instead.  You can
 of course specify several options if you have some already by
 separating them with colons.</p>
 
@@ -91,7 +91,7 @@ separating them with colons.</p>
 
 <p>If you are using Debian or Debian-based Linux distribution (such as
 Ubuntu) and you are lucky all you need to do is to edit
-<tt>/etc/default/console-setup</tt> file.  It has a line that
+<code>/etc/default/console-setup</code> file.  It has a line that
 says</p>
 
 <pre>XKBOPTIONS=""</pre>
@@ -113,11 +113,11 @@ invoking as root:</p>
 failed you might try fidling with X11 configuration.</p>
 
 <p>First of, check if your system contains
-<tt>/usr/share/X11/xorg.conf.d</tt> and <tt>/etc/X11/xorg.conf.d</tt>
+<code>/usr/share/X11/xorg.conf.d</code> and <code>/etc/X11/xorg.conf.d</code>
 directories (this is the case with Slackware starting with
 version 13.37).  If it does, the former will most likely contain
 a file with “keyboard” or “layout” in its name such as
-<tt>90-keyboard-layout.conf</tt>.  If it does all you need to do is
+<code>90-keyboard-layout.conf</code>.  If it does all you need to do is
 copy it to the latter directory:</p>
 
 <pre>cp -i \
@@ -139,8 +139,8 @@ something like this:</p>
 EndSection</pre>
 
 <p>If this does not work or the files are missing, you may need to
-edit X configuration file located at<tt>/etc/X11/xorg.conf</tt> or
-<tt>/etc/X11/XF86Config</tt> on older systems.  Like before, if there’s an
+edit X configuration file located at<code>/etc/X11/xorg.conf</code> or
+<code>/etc/X11/XF86Config</code> on older systems.  Like before, if there’s an
 <i>InputDevice</i> section for your keyboard it’s enough to add/modify
 the “XkbOptions” option.</p>
 
@@ -150,9 +150,9 @@ the “XkbOptions” option.</p>
 keyboard – that’s actually all right.  Newer versions of XOrg may use
 HAL to determine available input devices in which case you need to
 instruct it to pass proper options.  First find proper policy file
-somewhere in <tt>/etc/hal/policy</tt> directory (under Slackware it’s
-<tt>10-keymap.fdi</tt>).  Inside change <tt>merge</tt> element with
-<i>input.xkb.options</i> key by adding <tt>ctrl:nocaps</tt> to the
+somewhere in <code>/etc/hal/policy</code> directory (under Slackware it’s
+<code>10-keymap.fdi</code>).  Inside change <code>merge</code> element with
+<i>input.xkb.options</i> key by adding <code>ctrl:nocaps</code> to the
 value.  For instance here’s my file:</p>
 
 <pre>&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
@@ -178,7 +178,7 @@ value.  For instance here’s my file:</p>
 
 <p>If all of that fails or you don’t have super user privileges
 you may need to use xmodmap.  Usually it’ll be enough to create
-a <tt>.Xmodmap</tt> file in your home directory with the
+a <code>.Xmodmap</code> file in your home directory with the
 following content:</p>
 
 <pre>remove Lock = Caps_Lock
@@ -189,12 +189,12 @@ add Control = Caps_Lock</pre>
 <pre>remove Control = Control_L
 add Lock = Control_L</pre>
 
-<p>To test if the file works simply invoke <tt>xmodmap
-~/.Xmodmap</tt>.  If you got your desired effect then everything
-should work next time you restart X session.  If <tt>~/.Xmodmap</tt>
+<p>To test if the file works simply invoke <code>xmodmap
+~/.Xmodmap</code>.  If you got your desired effect then everything
+should work next time you restart X session.  If <code>~/.Xmodmap</code>
 does not get applied automatically you should consult your
 distribution’s documentation – it’s possible you’ll need to edit (or
-even creat) an <tt>~/.xinit</tt> file (you might <a
+even creat) an <code>~/.xinit</code> file (you might <a
 href="http://github.com/mina86/dot-files/blob/master/xinitrc">take
 a look at mine</a> if you want).</p>
 
@@ -204,14 +204,14 @@ a look at mine</a> if you want).</p>
 <h3>Unix Console</h3>
 
 <p>If you never use console or use it to merely log in and invoke
-<tt>startx</tt> you may skip this section but otherwise read on.
+<code>startx</code> you may skip this section but otherwise read on.
 First of all, however, I must admit that even thought I’m
 reffering to "Unix Console" I’m not sure if what I’m going to
 write here is going to work for all kinds of *nix systems.</p>
 
 <p>To avoid confusion I need to make it clear that console (or virtual
 terminal or vtt) is not what you get in graphical interface
-(<tt><i>?</i>term</tt>, <tt>konsole</tt>, <tt>gnome-terminal</tt>,
+(<code><i>?</i>term</code>, <code>konsole</code>, <code>gnome-terminal</code>,
 etc.).  On some GNU/Linux distributions users may not even see it –
 a funky bootsplash can hide it pretty well.  If you don’t know what it
 is just skip this section – you probably don’t need that
@@ -223,7 +223,7 @@ knowledge.</p>
 <p>According to <a
 href="http://www.emacswiki.org/emacs/MovingTheCtrlKey">Moving the Ctrl
 Key</a> under Debian and Debian based distributions it’s enough to add
-the following line to <tt>/etc/console-tools/remap</tt>:</p>
+the following line to <code>/etc/console-tools/remap</code>:</p>
 
 <pre>s/keycode[[:space:]][[:space:]]*58[[:space:]][[:space:]]*=[[:space:]][[:space:]]*Caps_Lock/keycode  58 = Control/</pre>
 
@@ -239,51 +239,51 @@ line as well:</p>
 
 <h4 id="us_layout">US Layout</h4>
 
-<p>If you are using an US layout you might give <tt>emacs</tt> or
-<tt>emacs2</tt> layouts a try.  Personally I’ve never tried those
+<p>If you are using an US layout you might give <code>emacs</code> or
+<code>emacs2</code> layouts a try.  Personally I’ve never tried those
 but they may be what makes the trick for you.</p>
 
-<p>To test them invoke <tt>loadkeys emacs</tt> or <tt>loadkeys
-emacs2</tt> command in the console.  If either of the two is what you
+<p>To test them invoke <code>loadkeys emacs</code> or <code>loadkeys
+emacs2</code> command in the console.  If either of the two is what you
 want configure your system to use it by default.</p>
 
-<p>Under Slackware you need to edit <tt>/etc/rc.d/rc.keymap</tt> file.
-Under Gentoo try <tt>/etc/conf.d/keymaps</tt>.  On other systems –
+<p>Under Slackware you need to edit <code>/etc/rc.d/rc.keymap</code> file.
+Under Gentoo try <code>/etc/conf.d/keymaps</code>.  On other systems –
 sorry, your on your own but it shouldn’t be hard.</p>
 
 
 <h4>setkeycodes</h4>
 
 <p>If all of the above fails, you have a non-USB kayboard and you
-need a quick and dirty solution try <tt>setkeycodes 0x3a 29</tt>
-(plus <tt>setkeycodes 0x1d 58</tt> if you want to swap).</p>
+need a quick and dirty solution try <code>setkeycodes 0x3a 29</code>
+(plus <code>setkeycodes 0x1d 58</code> if you want to swap).</p>
 
 <p>If it does not work try to verify the numbers.  To do that run
-<tt>showkey</tt> command in the console.  Pressing Caps Lock and
+<code>showkey</code> command in the console.  Pressing Caps Lock and
 Ctrl will give you their keycodes (58 and 29).  Then invoke
-<tt>showkey -s</tt>.  Now you’ll be given scancodes (0x3a and 0x1d).
-If the numbers were different change the <tt>setkeycodes</tt> command
+<code>showkey -s</code>.  Now you’ll be given scancodes (0x3a and 0x1d).
+If the numbers were different change the <code>setkeycodes</code> command
 accordingly.</p>
 
 <p>If you have found command which works for you it’ll be enough to
 put that somewhere in start scripts.  Under Slackware logical choice
-would be the end of <tt>/etc/rc.d/rc.keymap</tt> file.  Other systems
+would be the end of <code>/etc/rc.d/rc.keymap</code> file.  Other systems
 usually have a “local” start script which one can edit – try
-<tt>/etc/rc.d/rc.local</tt> or <tt>/etc/rc.local</tt> (you should
+<code>/etc/rc.d/rc.local</code> or <code>/etc/rc.local</code> (you should
 refer to distribution’s documentation).</p>
 
 
 <h4>Keymap</h4>
 
 <p>If the above method fails or you prefer a “cleaner” solution you
-will need to edit your keymap.  First consult <tt>loadkeys</tt> man
+will need to edit your keymap.  First consult <code>loadkeys</code> man
 page to find you where keymaps are saved on your systems
-(<tt>/usr/share/kbd/keymaps</tt>, <tt>/usr/share/keymaps</tt> and
-<tt>/use/lib/kbd/keymaps</tt> are usual choices).  Inside you’re find
+(<code>/usr/share/kbd/keymaps</code>, <code>/usr/share/keymaps</code> and
+<code>/use/lib/kbd/keymaps</code> are usual choices).  Inside you’re find
 directories for various architectures in which there are directories
-for keyboard types and finally there are <tt>.map.gz</tt> files
+for keyboard types and finally there are <code>.map.gz</code> files
 describing keymap.  For instance, I use
-<tt>/usr/share/kbd/keymaps/i386/qwerty/pl2.map.gz</tt> keymap.</p>
+<code>/usr/share/kbd/keymaps/i386/qwerty/pl2.map.gz</code> keymap.</p>
 
 <p>After you have located your keymap all you have to do is:</p>
 
@@ -295,17 +295,17 @@ sed \
 	| \
 gzip -9 &gt;<i>kaymap</i>-my.map.gz</pre>
 
-<p>You can use a bit more descriptive suffix instead of <tt>-my</tt> –
-for instance <tt>-nocaps</tt> or <tt>-swapcaps</tt>.  Also this will
+<p>You can use a bit more descriptive suffix instead of <code>-my</code> –
+for instance <code>-nocaps</code> or <code>-swapcaps</code>.  Also this will
 swap the Caps Lock and Ctrl key – if you’d rather use two Ctrls skip
-the second <tt>-e</tt> line.</p>
+the second <code>-e</code> line.</p>
 
-<p>If you can’t seem to find proper map file invoke <tt>dumpkeys</tt>
-instead of <tt>gzip -d &lt;<i>kaymap</i>.map.gz</tt> in the above
+<p>If you can’t seem to find proper map file invoke <code>dumpkeys</code>
+instead of <code>gzip -d &lt;<i>kaymap</i>.map.gz</code> in the above
 command.</p>
 
-<p>After you’ve created your new keymap test it with <tt>loadkeys
-<i>keymap</i>-my</tt> command.  If that’s what you want instruct your
+<p>After you’ve created your new keymap test it with <code>loadkeys
+<i>keymap</i>-my</code> command.  If that’s what you want instruct your
 system to use it permanently – refer to <a href="#us_layout">US
 layout</a> section.</p>
 
@@ -315,10 +315,10 @@ layout</a> section.</p>
 <p>All of the above methods were tested on various Linuxes so
 I don’t know if they’ll work on other *nix systems.  However,
 I found out that under NetBSD creating
-a <tt>/usr/share/wscons/keymaps/pckbd.c2c</tt> file with
-a single <tt>keysym Caps_Lock = Control_L</tt> entry and adding
-<tt>mapfile /usr/share/wscons/keymaps/pckbd.c2c</tt> to
-<tt>/etc/wscons.conf</tt> should do the trick.</p>
+a <code>/usr/share/wscons/keymaps/pckbd.c2c</code> file with
+a single <code>keysym Caps_Lock = Control_L</code> entry and adding
+<code>mapfile /usr/share/wscons/keymaps/pckbd.c2c</code> to
+<code>/etc/wscons.conf</code> should do the trick.</p>
 
 
 <h4>Man Pages</h4>
@@ -388,15 +388,15 @@ utility a try.  Unzip <a
 href="http://doc.sch130.nsc.ru/www.sysinternals.com/files/ctrl2cap.zip">it</a>
 (<a
 href="http://download.sysinternals.com/Files/Ctrl2Cap.zip">mirror</a>)
-and run <tt>ctrl2cap /install</tt> to install the driver.</p>
+and run <code>ctrl2cap /install</code> to install the driver.</p>
 
 <p>There’s also <a
 href="http://doc.sch130.nsc.ru/www.sysinternals.com/win9x/utilities/ctrl2cap95.shtml">Ctrl2Cap95</a>
 for Windows 9x/Me.  Installation is a bit more difficult but
 still easy.  Again unzip <a
 href="http://doc.sch130.nsc.ru/www.sysinternals.com/files/c2cap95.zip">it</a>
-and add the following line in the <tt>[386enh]</tt> section of
-<tt>System.ini</tt> file:</p>
+and add the following line in the <code>[386enh]</code> section of
+<code>System.ini</code> file:</p>
 
 <pre>device=&lt;path&gt;\ctrl2cap.vxd</pre>
 

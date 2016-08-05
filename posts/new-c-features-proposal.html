@@ -115,7 +115,7 @@ bar(.a = &amp;arr[0], .b = &amp;arr[1]);
     </li>
     <li>
         Named arguments would have to be specified using their name, thus,
-        with earlier <tt>message()</tt> declaration, the following would be
+        with earlier <code>message()</code> declaration, the following would be
         invalid:
       </p>
 <pre>message("A message", LVL_INFO, WHITE);</pre>
@@ -154,7 +154,7 @@ format("we are out of %s",
     </li>
     <li>
         Named arguments would be especially powerful with conjunction with
-        default value.  In particular, <tt>format()</tt> could be defined as:
+        default value.  In particular, <code>format()</code> could be defined as:
       </p>
 <pre>void format(const char *format,
             enum level .level = LVL_INFO,
@@ -195,7 +195,7 @@ a.c;</pre>
     <li>
         This technique is used already by some C implementations and has
         proved useful however is limited to a simple case.  A syntax where
-        by using <tt>inline</tt> keyword one could achieve similar effect for
+        by using <code>inline</code> keyword one could achieve similar effect for
         named structures (especially defined elsewhere) or fields that
         otherwise have name could be handy.
     </li>
@@ -216,7 +216,7 @@ a.c;</pre>
       </dl>
     </li>
     <li>
-        The <tt>inline</tt> keyword would mean that all the members of the
+        The <code>inline</code> keyword would mean that all the members of the
         structure or union are accessible from namespace the declaration
         is in.
     </li>
@@ -360,7 +360,7 @@ moveBy(r, 1.0, 1.0); /* illegal */</pre>
     </li>
     <li>
         Explicit casting to inlined member would not need to be supported
-        by the language as users could name an inlined member and use <tt>&amp;</tt>
+        by the language as users could name an inlined member and use <code>&amp;</code>
         operator to acquire it’s address.  For instance:
       </p>
 <pre>moveBy(&amp;r-&gt;tl, 1.0, 1.0);
@@ -372,7 +372,7 @@ moveBy(&amp;r-&gt;br, 1.0, 1.0);</pre>
         change would not affect exiting code.
     </li>
   </ol>
-<h3><small>V</small> The <tt>_Containerof</tt> operator</h3>
+<h3><small>V</small> The <code>_Containerof</code> operator</h3>
   <ol>
     <li>
         User may sometimes face the following problem: Having pointer to
@@ -410,8 +410,8 @@ type *_Containerof(pointer, type, auto);</pre>
         this change would not affect conforming programs.
     </li>
     <li>
-        A C1x specific header (for instance <tt>stdc1x.h</tt>) could be provided
-        which would define a <tt>containerof()</tt> macro, as:
+        A C1x specific header (for instance <code>stdc1x.h</code>) could be provided
+        which would define a <code>containerof()</code> macro, as:
       </p>
 <pre>#define containerof(…) _Containerof(__VA_ARGS)</pre>
     </li>
@@ -511,9 +511,9 @@ void rectangle_init(struct circle *c, double x = 0.0, double y = 0.0,
         used.
     </li>
     <li>
-        Function declared in <tt>math.h</tt> are perfect example of such
-        situation.  Existence of functions such as <tt>sin`, `sinf</tt> and
-        <tt>sinl</tt> force programmer to think about underlying type whereas it
+        Function declared in <code>math.h</code> are perfect example of such
+        situation.  Existence of functions such as <code>sin`, `sinf</code> and
+        <code>sinl</code> force programmer to think about underlying type whereas it
         may not be that important.
     </li>
     <li>
@@ -557,10 +557,10 @@ static "C++" float mysin(long double x) { return sinl(x); }</pre>
 <h3><small>VIII</small> Type Agnostic Limits Functions</h3>
   <ol>
     <li>
-        Macros defined in the <tt>limits.h</tt> header suffer from the same
+        Macros defined in the <code>limits.h</code> header suffer from the same
         problems described above.  It would be nice to have constructs
-        such as <tt>_Type_min`, `_Type_max</tt>, etc. which, the same as
-        <tt>sizeof</tt>, take an expression or type as an argument and return the
+        such as <code>_Type_min`, `_Type_max</code>, etc. which, the same as
+        <code>sizeof</code>, take an expression or type as an argument and return the
         smallest, biggest, etc. value representable by the type.
     </li>
     <li>
@@ -658,22 +658,22 @@ void sort_foo(struct foo *foos, size_t n) {
         implementing this feature could be easy and straightforward.
     </li>
   </ol>
-<h3><small>XII</small> The <tt>alignof</tt> operator</h3>
+<h3><small>XII</small> The <code>alignof</code> operator</h3>
   <ol>
     <li>
-        The new C standard draft proposes an <tt>alignof</tt> operator that
+        The new C standard draft proposes an <code>alignof</code> operator that
         takes type as it’s operand.  Why cannot it take an expression as
-        it’s operand the same way <tt>sizeof</tt> does?
+        it’s operand the same way <code>sizeof</code> does?
     </li>
     <li>
-        The <tt>alignof</tt> operator is added in the new standard thus this
+        The <code>alignof</code> operator is added in the new standard thus this
         change would not impact existing code any further then adding the
-        <tt>alignof</tt> did itself.
+        <code>alignof</code> did itself.
     </li>
     <li>
-        Since in the current standard, <tt>alignof</tt> is perfectly valid
-        identifier, why not define an <tt>_Alignof</tt> operator and add
-        a <tt>stdc1x.h</tt> header with the following macro:
+        Since in the current standard, <code>alignof</code> is perfectly valid
+        identifier, why not define an <code>_Alignof</code> operator and add
+        a <code>stdc1x.h</code> header with the following macro:
       </p>
 <pre>#define alignof _Alignof</pre>
     </li>

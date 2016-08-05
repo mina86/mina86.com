@@ -3,10 +3,10 @@
 <!-- tags: apache, ssl, mod_rewrite, www -->
 <!-- categories: Articles, English, Techblog -->
 
-<p>Surprisingly I couldn’t find any HTTPS-aware examples how to drop the <tt>www.</tt> prefix from web hosts in Apache,
+<p>Surprisingly I couldn’t find any HTTPS-aware examples how to drop the <code>www.</code> prefix from web hosts in Apache,
 so I had to come up with one myself.  Firstly, the following lines
 need to find their way to the end of Apache configuration file
-(<tt>/etc/httpd/conf/httpd.conf</tt> or something):</p>
+(<code>/etc/httpd/conf/httpd.conf</code> or something):</p>
 
 <pre>RewriteEngine on
 RewriteCond %{HTTPS} off
@@ -14,8 +14,8 @@ RewriteCond %{HTTP_HOST} ^www\.(.*)$
 RewriteRule ^(.*)$ http://%1$1 [L,R=301]</pre>
 
 <p>Secondly, analogous lines need to be added <em>inside</em> of the
-<tt>&lt;VirtualHost _default_:443&gt;</tt> directive of mod_ssl
-configuration file (<tt>/etc/httpd/conf.d/ssl.conf</tt> or similar),
+<code>&lt;VirtualHost _default_:443&gt;</code> directive of mod_ssl
+configuration file (<code>/etc/httpd/conf.d/ssl.conf</code> or similar),
 like so:</p>
 
 <pre>&lt;VirtualHost _default_:443&gt;
@@ -27,7 +27,7 @@ like so:</p>
 	RewriteRule ^(.*)$ https://%1$1 [L,R=301]
 &lt;/VirtualHost&gt;</pre>
 
-<p>Now, after a restart, Apache will drop the <tt>www.</tt> prefix for
+<p>Now, after a restart, Apache will drop the <code>www.</code> prefix for
 both secure and insecure connections.</p>
 
 <!-- EXCERPT -->
@@ -41,7 +41,7 @@ RewriteCond %{HTTP_HOST} ^(www\.)?(.*)$
 RewriteRule ^(.*)$ https://%2$1 [L,R=301]</pre>
 
 <p>To force secure connection only for one domain, say
-<tt>example.com</tt>:</p>
+<code>example.com</code>:</p>
 
 <pre>RewriteEngine on
 
@@ -54,7 +54,7 @@ RewriteCond %{HTTP_HOST} ^www\.(.*)$
 RewriteRule ^(.*)$ http://%1$1 [L,R=301]</pre>
 
 
-<p>mod_rewrite has also a <tt>REQUEST_SCHEME</tt> variable and it’s
+<p>mod_rewrite has also a <code>REQUEST_SCHEME</code> variable and it’s
 tempting to use it, but it seems that it’s value is not what is
 advertised and instead it contains scheme and host name which is not
 that useful.</p>

@@ -30,7 +30,7 @@ there are different things to be done and look for.
 
 <p>From device driver author’s point of view, nothing should change.
 CMA is integrated with DMA subsystem, so the usual calls to the DMA
-API (such as <tt>dma_alloc_coherent</tt>) should work as usual.
+API (such as <code>dma_alloc_coherent</code>) should work as usual.
 
 <p>In fact, device drivers should never need to call the CMA API
 directly.  Most importantly, device drivers operate on kernel mappings
@@ -48,8 +48,8 @@ void *virt_addr =
 if (!virt_addr)
 	return -ENOMEM;</pre>
 
-<p>Provided that <tt>dev</tt> is a pointer to a valid <tt>struct
-device</tt>, the above code will allocate 100 MiBs of memory.  It may
+<p>Provided that <code>dev</code> is a pointer to a valid <code>struct
+device</code>, the above code will allocate 100 MiBs of memory.  It may
 or may not be a CMA memory, but it is a portable way to get buffers.
 The following can be used to free it:
 
@@ -60,9 +60,9 @@ Song has posted a very simple test driver</a> which uses those two to
 allocate DMA memory.
 
 <p>More information about the DMA API can be found in <a
-href="http://git.kernel.org/?p=linux/kernel/git/torvalds/linux.git;a=blob;f=Documentation/DMA-API.txt"><tt>Documentation/DMA-API.txt</tt></a>
+href="http://git.kernel.org/?p=linux/kernel/git/torvalds/linux.git;a=blob;f=Documentation/DMA-API.txt"><code>Documentation/DMA-API.txt</code></a>
 and <a
-href="http://git.kernel.org/?p=linux/kernel/git/torvalds/linux.git;a=blob;f=Documentation/DMA-API-HOWTO.txt"><tt>Documentation/DMA-API-HOWTO.txt</tt></a>.
+href="http://git.kernel.org/?p=linux/kernel/git/torvalds/linux.git;a=blob;f=Documentation/DMA-API-HOWTO.txt"><code>Documentation/DMA-API-HOWTO.txt</code></a>.
 Those two documents describe provided functions and give
 usage examples.
 
@@ -91,14 +91,14 @@ applications.  To make reservation happen, one needs to call:
 <p>just after memblock is initialised but prior to the buddy allocator
 setup.
 
-<p>The <tt>limit</tt> argument, if not zero, specifies physical
+<p>The <code>limit</code> argument, if not zero, specifies physical
 address above which no memory will be prepared for CMA.  Intention is
 to allow limiting CMA contexts to addresses that DMA can handle.  The
 only real constraint that CMA imposes is that reserved memory must
 belong to the same zone.
 
-<p>In case of ARM the limit is set to <tt>arm_dma_limit</tt> or
-<tt>arm_lowmem_limit</tt>, whichever is smallest:
+<p>In case of ARM the limit is set to <code>arm_dma_limit</code> or
+<code>arm_lowmem_limit</code>, whichever is smallest:
 
 <pre>diff --git a/arch/arm/mm/init.c b/arch/arm/mm/init.c
 @@ -364,6 +373,12 @@ void __init arm_memblock_init(struct meminfo *mi, struct machine_desc *mdesc)
@@ -116,7 +116,7 @@ belong to the same zone.
  	memblock_dump_all();</pre>
 
 <p>On x86 it is called just after memblock is set up in
-<tt>setup_arch</tt> function with no limit specified:
+<code>setup_arch</code> function with no limit specified:
 
 <pre>diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
 @@ -934,6 +935,7 @@ void __init setup_arch(char **cmdline_p)
@@ -129,12 +129,12 @@ belong to the same zone.
  	 * NOTE: On x86-32, only from this point on, fixmaps are ready for use.</pre>
 
 <p>The amount of reserved memory depends on a few Kconfig options and
-a <tt>cma</tt> kernel parameters which will be <a href=#size>describe
+a <code>cma</code> kernel parameters which will be <a href=#size>describe
 later on</a>.
 
 <h4>Architecture specific memory preparations</h4>
 
-<p><tt>dma_contiguous_reserve</tt> function will reserve memory and
+<p><code>dma_contiguous_reserve</code> function will reserve memory and
 prepare it to be used with CMA.  On some architectures
 architecture-specific work may need to be performed as well.  To allow
 that, CMA will call the following function:
@@ -144,11 +144,11 @@ that, CMA will call the following function:
 	unsigned long size);</pre>
 
 <p>It is architecture’s responsibility to provide it along with its
-declaration in <tt>asm/dma-contiguous.h</tt> header file.  The
+declaration in <code>asm/dma-contiguous.h</code> header file.  The
 function will be called quite early, so some of the kernel
-subsystems – ike <tt>kmalloc</tt> – will not be available.
+subsystems – ike <code>kmalloc</code> – will not be available.
 Furthermore, it may be called several times, but no more than
-<tt>MAX_CMA_AREAS</tt> times.
+<code>MAX_CMA_AREAS</code> times.
 
 <p>If an architecture does not need any special handling, the header
 file may just say:
@@ -223,13 +223,13 @@ order) to allocate.
 
 <p>The third argument is the alignment expressed as a page order.  It
 enables allocation of buffers which are aligned to at least
-2<sup><tt>align</tt></sup> pages.  To avoid fragmentation, if at all
+2<sup><code>align</code></sup> pages.  To avoid fragmentation, if at all
 possible, pass zero here.  It is worth noting that there is a Kconfig
-option (<tt>CONFIG_CMA_ALIGNMENT</tt>) which specifies maximal
+option (<code>CONFIG_CMA_ALIGNMENT</code>) which specifies maximal
 alignment accepted by the function.  By default, its value is 8
 meaning an alignment of 256 pages.
 
-<p>The return value is the first of a sequence of <tt>count</tt>
+<p>The return value is the first of a sequence of <code>count</code>
 allocated pages.
 
 <p>Here’s how allocation looks on x86:
@@ -255,13 +255,13 @@ allocated pages.
 	struct page *pages,
 	int count);</pre>
 
-<p><tt>dev</tt> and <tt>count</tt> arguments are the same as before,
-whereas <tt>pages</tt> is what
-<tt>dma_alloc_from_contiguous</tt> has returned.
+<p><code>dev</code> and <code>count</code> arguments are the same as before,
+whereas <code>pages</code> is what
+<code>dma_alloc_from_contiguous</code> has returned.
 
 <p>If region passed to the function did not come from CMA, the
-function will return <tt>false</tt>.  Otherwise, it will return
-<tt>true</tt>.  This removes the need for higher-level functions to
+function will return <code>false</code>.  Otherwise, it will return
+<code>true</code>.  This removes the need for higher-level functions to
 track which allocations were made with CMA and which were made using
 some other method.
 
@@ -288,11 +288,11 @@ some other method.
 
 <h4>Atomic allocations</h4>
 
-<p>Beware that <tt>dma_alloc_from_contiguous</tt> may not be called
+<p>Beware that <code>dma_alloc_from_contiguous</code> may not be called
 from atomic context (e.g. when spin lock is hold or in an interrupt).
 It performs some “heavy” operations such as page migration, direct
 reclaim, etc., which may take a while.  Because of that, to
-make <tt>dma_alloc_coherent</tt> and co. work as advertised,
+make <code>dma_alloc_coherent</code> and co. work as advertised,
 architecture needs to have a different method of allocating memory in
 atomic context.
 
@@ -317,11 +317,11 @@ of system memory to allocate buffers from.  One global area is created
 to be used by devices by default, but if a device needs to use
 a different area, it can easily be done.
 
-<p>There is a many-to-one mapping between <tt>struct device</tt>
-and <tt>struct cma</tt> (ie. CMA context).  This means, that if
+<p>There is a many-to-one mapping between <code>struct device</code>
+and <code>struct cma</code> (ie. CMA context).  This means, that if
 a single device driver needs to use more than one CMA area, it has to
-have separate <tt>struct device</tt> objects.  At the same time,
-several <tt>struct device</tt> objects may point to the same CMA
+have separate <code>struct device</code> objects.  At the same time,
+several <code>struct device</code> objects may point to the same CMA
 context.
 
 <h4>Assigning CMA area to a single device</h4>
@@ -335,21 +335,21 @@ context.
 	phys_addr_t limit);</pre>
 
 <p><a href=#reserve_mem>As with
-<tt>dma_contiguous_reserve</tt></a>, this needs to be called after
+<code>dma_contiguous_reserve</code></a>, this needs to be called after
 memblock initializes but before too much memory gets grabbed from it.
 For ARM platforms, a convenient place to put invocation of this
-function is machine’s <tt>reserve</tt> callback.
+function is machine’s <code>reserve</code> callback.
 
 <p>The first argument of the function is the device that the new
 context is to be assigned to.  The second is its <em>size in
 bytes</em> (not in pages).  The third is physical address of the area
-or zero.  The last one has the same meaning as <tt>limit</tt> argument
-to <tt>dma_contiguous_reserve</tt>.  The return value is either zero
+or zero.  The last one has the same meaning as <code>limit</code> argument
+to <code>dma_contiguous_reserve</code>.  The return value is either zero
 (on success) or a negative error code.
 
 <p>For an example, one can take a look at the code called from
 <a href=http://article.gmane.org/gmane.linux.kernel.mm/76246>Samsung’s
-S5P platform’s <tt>reserve</tt> callback</a>.  It creates two CMA
+S5P platform’s <code>reserve</code> callback</a>.  It creates two CMA
 contexts for the MFC driver:
 
 <pre>diff --git a/arch/arm/plat-s5p/dev-mfc.c b/arch/arm/plat-s5p/dev-mfc.c
@@ -372,20 +372,20 @@ contexts for the MFC driver:
  }</pre>
 
 <p>There is a limit to how many “private” areas can be declared,
-namely <tt>CONFIG_CMA_AREAS</tt>.  Its default value is seven but it
+namely <code>CONFIG_CMA_AREAS</code>.  Its default value is seven but it
 can be safely increased if need arises.  Called more times,
-<tt>dma_declare_contiguous</tt> function will print an error
-message and return <tt>-ENOSPC</tt>.
+<code>dma_declare_contiguous</code> function will print an error
+message and return <code>-ENOSPC</code>.
 
 <h4>Assigning CMA area to multiple devices</h4>
 
 <p>Things get a bit more complicated if the same (not default) CMA
 context needs to be used by two or more devices.  The current API does
 not provide a trivial way to do that.  What can be done is
-use <tt>dev_get_cma_area</tt> to figure out CMA area one device is
-using, and <tt>dev_set_cma_area</tt> to set the same context to
+use <code>dev_get_cma_area</code> to figure out CMA area one device is
+using, and <code>dev_set_cma_area</code> to set the same context to
 another device.  This sequence must be called no sooner than
-in <tt>postcore_initcall</tt>.  Here is how it could look like:
+in <code>postcore_initcall</code>.  Here is how it could look like:
 
 <pre>static int __init foo_set_up_cma_areas(void)
 {
@@ -397,8 +397,8 @@ in <tt>postcore_initcall</tt>.  Here is how it could look like:
 }
 postcore_initcall(foo_set_up_cma_areas);</pre>
 
-<p>Of course, <tt>device1</tt>’s area must be set up with
-<tt>dma_declare_contiguous</tt> as described in previous
+<p>Of course, <code>device1</code>’s area must be set up with
+<code>dma_declare_contiguous</code> as described in previous
 subsection.
 
 <p>Device’s CMA context may be changed any time as long as the device
@@ -408,12 +408,12 @@ allocation after area change.
 <h3>No default context</h3>
 
 <p>As a matter of fact, there is nothing special about the default
-context that is created by <tt>dma_contiguous_reserve</tt> function.
+context that is created by <code>dma_contiguous_reserve</code> function.
 It is in no way required and system may work without it.
 
 <p>If there is no default context, for devices without assigned
-areas <tt>dma_alloc_from_contiguous</tt> will return
-<tt>NULL</tt>.  <tt>dev_get_cma_area</tt> can be used
+areas <code>dma_alloc_from_contiguous</code> will return
+<code>NULL</code>.  <code>dev_get_cma_area</code> can be used
 distinguish this situation and allocation failure.
 
 <p>Of course, if there is no default area, architecture should provide
@@ -422,7 +422,7 @@ context.
 
 <h3 id=size>Size of the default context</h3>
 
-<p><tt>dma_contiguous_reserve</tt> does not take a size as an
+<p><code>dma_contiguous_reserve</code> does not take a size as an
 argument, which brings a question of how does it know how much memory
 should be reserved.  There are two sources this information comes
 from.
@@ -435,7 +435,7 @@ possible ways of calculating the size: it can be an absolute size in
 megabytes, a percentage of total memory, the lower of the two, or the
 larger of the two.  By default is to allocate 16 MiBs of memory.
 
-<p>Second of all, there is a <tt>cma</tt> kernel command line option.
+<p>Second of all, there is a <code>cma</code> kernel command line option.
 It lets one specify the size of the area at boot time without the need
 to recompile the kernel.  This option specifies the size in bytes and
 accepts the usual suffixes.
