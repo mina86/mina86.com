@@ -220,8 +220,10 @@ except for a single user:
 <p>In <code>/etc/inetd.conf</code> comment out <code>auth</code> which turn all lines
 in that files to comments.</p>
 
-<p>Finally, configure <a href=http://en.wikipedia.org/wiki/TCP_Wrapper><abbr title="Transmission Control Protocol">TCP</abbr> Wrapper</a> to prevent any services using them from
-accepting connections:
+<p>Finally, configure
+<a href=https://en.wikipedia.org/wiki/TCP_Wrapper><abbr title="Transmission
+Control Protocol">TCP</abbr> Wrapper</a> to prevent any services using
+them from accepting connections:
 
 <pre>echo 'sshd: ALL: ALLOW' &gt;&gt;/etc/hosts.allow
 echo 'ALL: ALL' &gt;&gt;/etc/hosts.deny</pre>
@@ -357,7 +359,7 @@ MOTD_FILE       /etc/motd</pre>
      ./ /| |\ \.    /  ___  \  |  |  /  ___  \  |  |\  \  |  |
      |./ :_: \.|   /__/   \__\ |__| /__/   \__\ |__| \__\ |__|</pre>
 
-<p>Of course any other <a href="http://mina86.com/p/linux-console-is-sexy/"><abbr title="American Standard Code for Information Interchange">ASCII</abbr> art</a> will do, and with <a href=http://en.wikipedia.org/wiki/ANSI_escape_code><abbr title="American National Standards Institute">ANSI</abbr> escape codes</a> even colours can be added!
+<p>Of course any other <a href="http://mina86.com/p/linux-console-is-sexy/"><abbr title="American Standard Code for Information Interchange">ASCII</abbr> art</a> will do, and with <a href=https://en.wikipedia.org/wiki/ANSI_escape_code><abbr title="American National Standards Institute">ANSI</abbr> escape codes</a> even colours can be added!
 
 <p>While on the topic of colours, I find blue to be too dark on my terminals
 (since I prefer black backgrounds), so the next thing I do is change colour of
@@ -498,7 +500,13 @@ for GRP in adm news pop; do groupdel "$GRP"; done</pre>
 
 <p>Right know, my installation can be migrated to a new pretty standard machine just by moving the SSD itself to the new hardware. But I feel more safe if I can just start from a fresh Slackware install and replace only the changed files. That would be quite quick to accomplish if one keep track of the changed files only.</p>
 
-<p>That git approach might be very useful here. I’ll look into it later and report here if I get into something simple to implement. Actually, I already do that with dotfiles at ~/ by using homeshick (I wrote an <a href="http://mexapi.macpress.com.br/2013/10/ordem-nos-dotfiles.html" rel="nofollow">article</a> about this, in Portuguese). Maybe the same approach may apply here too.</p>
+<p>That git approach might be very useful here. I’ll look into it
+later and report here if I get into something simple to
+implement. Actually, I already do that with dotfiles at ~/ by using
+homeshick (I wrote
+an <a href="https://mexapi.macpress.com.br/2013/10/ordem-nos-dotfiles.html"
+rel="nofollow">article</a> about this, in Portuguese). Maybe the same
+approach may apply here too.</p>
 
 <!-- COMMENT -->
 <!-- date: 2015-03-01 08:30:20 -->

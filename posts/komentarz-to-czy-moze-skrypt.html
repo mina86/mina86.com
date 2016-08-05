@@ -5,7 +5,14 @@
 
 <p>Przenosząc się na Joggera straciłem sporo czasu na dochodzenie czemu skrypty, które zamieszczałem nie działały tak jak powinny (<abbr title="to znaczy">tzn.</abbr> nie działały w ogóle). Okazało się, że zależnie od typu <acronym title="Multipurpose Internet Mail Extensions" lang="en">MIME</acronym> strony skrypty są różnie interpretowane. A dokładniej mechanizmy <i>ochrony</i> skryptów.</p>
 
-<p>Ze względu na przeglądarki nie rozumiejące tagu <code>script</code> przyjęło się kod skryptu umieszczać w komentarzu. Przeglądarki wspierające skrypty domyślały się, że to tak naprawdę kod skryptu i jakoś sobie z tym radziły. Ku memu lekkiemu zdziwieniu odkryłem, że <a href="http://www.opera.com/">Opera</a> i <a href="http://www.mozilla-europe.org/pl/products/firefox/">Firefox</a> przestają wykonywać kod skryptu, gdy strona jest dostarczona jako <code>application/xhtml+xml</code>. Aby sprawę zbadać bardziej szczegółowo stworzyłem taką oto stronę testową:</p>
+<p>Ze względu na przeglądarki nie rozumiejące tagu <code>script</code>
+przyjęło się kod skryptu umieszczać w komentarzu. Przeglądarki
+wspierające skrypty domyślały się, że to tak naprawdę kod skryptu
+i jakoś sobie z tym radziły. Ku memu lekkiemu zdziwieniu odkryłem, że
+Opera i <a href="https://www.mozilla.org/firefox/">Firefox</a>
+przestają wykonywać kod skryptu, gdy strona jest dostarczona
+jako <code>application/xhtml+xml</code>. Aby sprawę zbadać bardziej
+szczegółowo stworzyłem taką oto stronę testową:</p>
 
 <!-- EXCERPT -->
 
