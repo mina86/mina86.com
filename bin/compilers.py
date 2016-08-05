@@ -95,11 +95,25 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
         return htmlmin.parser.HTMLMinParser.handle_startendtag(self, tag, attrs)
 
     def _transform_attrs(self, tag, attrs):
-        for i, (k, v) in enumerate(attrs):
-            if v:
-                v = re.sub(r'\s+', ' ', v.strip())
-                v = self._static_mappings.get(v, v)
-                attrs[i] = k, v
+        for i, (attr, value) in enumerate(attrs):
+            if value:
+                attrs[i] = attr, self._transform_attr(tag, attr, value)
+
+    def _transform_attr(self, tag, attr, value):
+        ret = self._static_mappings.get(value)
+        if ret:
+            return ret
+
+        value = re.sub(r'\s+', ' ', value.strip())
+        if attr == 'style':
+            # CSS style, remove unnecessary spaces after punctuation marks.
+            # This is very likely to break non-trivial rules.
+            value = re.sub(' ?([:;,]) ', '\\1', value)
+        elif '%s %s' % (tag, attr) in ('link media', 'area coords',
+                                     'meta content'):
+            # Comma separated lists, remove unnecessary spaces around commas.
+            value = re.sub(r' ?, ?', ',', value)
+        return value
 
     def handle_comment(self, comment):
         if comment.startswith('[if '):
