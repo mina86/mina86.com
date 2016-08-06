@@ -15,7 +15,7 @@ będzie <em>Ci</em> odpowiadać.</p>
 
 <!-- EXCERPT -->
 
-<h3 id="adduser">Dodawanie użytkownika</h3>
+<h2 id="adduser">Dodawanie użytkownika</h2>
 
 <p>Z całą pewnością pierwszą czynnością jaką należy wykonać jest
 stworzenie nowego użytkownika.  Aby to zrobić wystarczy uruchomić
@@ -29,7 +29,7 @@ dalsze modyfikacje plików konfiguracyjnych uniemożliwią Ci zalogowanie
 się do komputera).  Na pozostałe pytania wystarczy odpowiedzieć
 wciskając enter.</p>
 
-<h3 id="loginaccess">Ustawienia logowania</h3>
+<h2 id="loginaccess">Ustawienia logowania</h2>
 
 <p>W drugim kroku należy wyedytować plik <code>/etc/login.access</code>,
 aby miał następującą zawartość:</p>
@@ -102,7 +102,7 @@ zmian:</p>
  </tr>
 </table>
 
-<h3 id="ssh">Zabezpieczanie <acronym title="Secure Shell" lang="en">SSH</acronym></h3>
+<h2 id="ssh">Zabezpieczanie <acronym title="Secure Shell" lang="en">SSH</acronym></h2>
 
 <p>Logowanie z konsoli jest już zrobione to teraz należy
 zabezpieczyć <acronym title="Secure Shell" lang="en">SSH</acronym>.  Przede wszystkim, jeżeli nie
@@ -137,7 +137,7 @@ grupę, <abbr title="na przykład">np.</abbr> <code>sshlogin</code>, do
 pliku <code>sshd_config</code> dodać opcję <code>AllowGroups sshlogin</code>
 i dodawać użytkowników do tej grupy.</p>
 
-<h3 id="su">Zabezpieczanie <code>su</code></h3>
+<h2 id="su">Zabezpieczanie <code>su</code></h2>
 
 <p>Teraz jeszcze pozostaje zabezpieczyć trochę polecenie <code>su</code>.
 Po pierwsze, do pliku <code>/etc/suauth</code> (w razie potrzeby należy
@@ -161,12 +161,12 @@ chmod 4750 /bin/su</pre>
 <code>root</code> będzie się odbywało również na poziomie systemu plików
 i jądra.</p>
 
-<h3 id="rc">Skrypty startowe</h3>
+<h2 id="rc">Skrypty startowe</h2>
 
 <p>Tutaj będzie trochę zmian.  Zarówno zwiększających bezpieczeństwo
 jak i przyśpieszających start systemu.</p>
 
-<h4 id="rcm"><code>rc.M</code></h4>
+<h3 id="rcm"><code>rc.M</code></h3>
 
 <p>Zacznijmy od pliku <code>/etc/rc.d/rc.M</code>.  Po pierwsze należy
 w nim zakomentować linijki uruchamiające polecenia <code>ldconfig</code>
@@ -252,7 +252,7 @@ if [ -x /usr/bin/loadkeys ]; then
   /usr/bin/loadkeys pl2.map &amp;
 fi</pre>
 
-<h4 id="rcs"><code>rc.S</code></h4>
+<h3 id="rcs"><code>rc.S</code></h3>
 
 <p>Tutaj jedynie zmieniłem kilka uprawnień:</p>
 
@@ -260,7 +260,7 @@ fi</pre>
 
 Dodatkowo, można jeszcze zmienić uprawnienia do pliku <code>/var/run/utmp</code> modyfikując odpowiednią linijkę, tak aby przybrała postać: <code>chmod 600 /var/run/utmp</code>, ale należy wziąć pod uwagę, fakt, że zpowoduje to, iż polecenia takie jak <code>uptime</code> będą jako liczbę zalogowanych użytkowników podawać 0 (słownie zero).
 
-<h4 id="rclocal"><code>rc.local</code></h4>
+<h3 id="rclocal"><code>rc.local</code></h3>
 
 <p>Nie rozwodząc się długo, do pliku <code>/etc/rc.d/rc.local</code>
 proponuję wpisać co następuje:</p>
@@ -299,7 +299,7 @@ różne parametry dysku - prawdopodobnie będziesz chciał je zmodyfikować.
  Na koniec uruchamiany jest skrypt <code>/etc/cron.hourly/ntpsync</code>
 o ile takowy istnieje.</p>
 
-<h4 id="rclasa"><code>rc.alsa</code></h4>
+<h3 id="rclasa"><code>rc.alsa</code></h3>
 
 <p>Ponieważ stosunkowo szybko przekompilowuję jądro i wkompilowuję
 w nim emulację <acronym>OSS</acronym> to nie ma potrzeby wczytywania
@@ -311,7 +311,7 @@ load_alsa_oss_modules () {
   : Compiled in
 }</pre>
 
-<h4 id="rcsyslog"><code>rc.syslog</code></h4>
+<h3 id="rcsyslog"><code>rc.syslog</code></h3>
 
 <p>Tutaj można minimalnie zmienić parametry wywoływania
 <code>syslogd</code> oraz <code>klogd</code>:</p>
@@ -320,7 +320,7 @@ load_alsa_oss_modules () {
 /usr/sbin/syslogd -m 0
 /usr/sbin/klogd -c 3 -x -p</pre>
 
-<h3>Crontab</h3>
+<h2>Crontab</h2>
 
 <p>Po pierwsze, tworzymy plik <code>/etc/cron.hourly/ntpsync</code>
 o następującej treści:</p>
@@ -358,7 +358,7 @@ wykonywania, <abbr title="na przykład">np.</abbr>:</p>
 
 <pre>chmod 700 /etc/cron.hourly/ntpsync /etc/cron.daily/cleanup</pre>
 
-<h3 id="x">Zabezpieczanie Xów</h3>
+<h2 id="x">Zabezpieczanie Xów</h2>
 
 <p>Kilka szybkich zmian zamykających różne dziwne porty:</p>
 
@@ -381,7 +381,7 @@ wykonywania, <abbr title="na przykład">np.</abbr>:</p>
  </tr>
 </table>
 
-<h3 id="del">Kasowanie zbędny userów i grup</h3>
+<h2 id="del">Kasowanie zbędny userów i grup</h2>
 
 <p>Generalnie uruchamiamy następujące polecenia:</p>
 
@@ -407,7 +407,7 @@ wykorzystywane (<abbr title="to jest">tj.</abbr> istniały pliki należące do t
 użytkowników/grup) i z tego powodu tych użytkowników/grup nie usunąłem
 (co widać brakiem odpowiedniej pozycji w pętli for).</p>
 
-<h3 id="hostconf"><code>host.conf</code></h3>
+<h2 id="hostconf"><code>host.conf</code></h2>
 
 <p>Do pliku <code>/etc/host.conf</code> dodajemy:</p>
 
@@ -416,14 +416,14 @@ nospoof on
 spoofalert on
 spoof warn</pre>
 
-<h3 id="chmod">Prawa dostępu</h3>
+<h2 id="chmod">Prawa dostępu</h2>
 
 <pre>
 chmod -R go-rwx /etc/cron.*
 chmod -R go-rwx /etc/rc.d
 chmod -R o-rwx /var/log</pre>
 
-<h3 id="profile"><code>profile</code></h3>
+<h2 id="profile"><code>profile</code></h2>
 
 <p>Na początek pliku <code>/etc/profile</code> dodajemy:</p>
 
@@ -433,7 +433,7 @@ chmod -R o-rwx /var/log</pre>
 : ${LOGNAME:?Who are you?}
 : ${HOME:?The homeless need help}</pre>
 
-<h3 id="fstab">Partycje</h3>
+<h2 id="fstab">Partycje</h2>
 
 <p>Jeżeli mamy jakieś partycje <code>vfat</code> to warto zmienić w pliku
 <code>/etc/fstab</code> opcje z jakimi są montowane na
@@ -463,7 +463,7 @@ sed -e 's/\/mnt\//\/media\//' -i -- /etc/fstab</pre>
 <p>Co powoduje, że rzeczy takie jak CD-ROM czy dyskietki są montowane
 nie w katalogu <code>/mnt</code>, ale <code>/media</code>.</p>
 
-<h3 id="lilo"><acronym title="LInux LOader" lang="en">LILO</acronym></h3>
+<h2 id="lilo"><acronym title="LInux LOader" lang="en">LILO</acronym></h2>
 
 <p>Zawsze lubiłem, jak system szybko się ładował i zawsze denerwowały
 mnie długie opóźnienia powodowane przez boot loadery.  W związku
@@ -510,7 +510,7 @@ other = /dev/hda1
   label = w
   table = /dev/hda</pre>
 
-<h3 id="other">Inne</h3>
+<h2 id="other">Inne</h2>
 
 <p>Jeszcze jedna mała sztuczka.  Otóż czasami zdarza mi
 się, że zamiast <code>ls nazwa_katalogu</code> wpisuje <code>less
@@ -529,14 +529,14 @@ fi</pre>
 
 <p>Oczywiście można też skorzystać z <code>lesspipe</code> dostępnego w pakiecie <a href="http://tinyapps.sf.net">Tiny Applications</a>, który ma też różne inne ciekawe funkcje (np. ściąganie plików). Instalacja sprowadza się do dodania linijki <code>$(eval $(/sciezka/do/lesspipe --install-lesspipe)</code> do pliku profilu.</p>
 
-<h3>umask</h3>
+<h2>umask</h2>
 <p>Ponieważ wyznaję zasadę, iż lepiej domyślnie nie dawać jakichś uprawnień i w razie konieczności to zmienić, w skryptach startowych na swoim koncie mam ustawione <code>umask 077</code>, przez co  tworzone przeze mnie pliki mają ustawione zerowe uprawnienia dla grupy i innych użytkowników. Jednakże instalowanie jakichkolwiek programów jako root czy tworzenie paczek z taką maską może naprawdę zaboleć, a zwykłe polecenie <code>su</code> pozostawia umask taki jaki był. Z tego powodu, warto, na wszelki wypadek, do skryptów startowych roota dodać wpisy zmieniające umask na domyślny. Uruchamiamy jako root (niektóre linijki zapewne można pominąć):</p>
 <pre>
   for f in shell bash zsh csh ksh; do
     echo umask 022 >>~/.${f}rc
 done</pre>
 
-<h3>TMOUT</h3>
+<h2>TMOUT</h2>
 <p>Ciekawym pomysłem jest również ustawienie zmiennej <code>TMOUT</code>, w niektórych lub wszystkich skryptach startowych powłoki. Zasadniczo, jeżeli po czasie (w sekundach) określonym przez tą zmienną użytkownik nic nie wpisze do powłoki zostanie on automatycznie wylogowany. Osobiście używam tej opcji w dwóch miejscach: w powłoce super użytkownika oraz powłoce logowania zwykłego użytkownika (jako root, <i>mina86</i> podmieniamy na nazwę naszego użytkownika):</p>
 <pre>
   for f in '' bash_ z; do

@@ -22,7 +22,7 @@ do not use <code>system()</code> or <code>exec()</code> family of calls ;)
 
 <!-- EXCERPT -->
 
-<h3>The solution</h3>
+<h2>The solution</h2>
 
 <p>I have managed to came up with two 61-character (this excludes new
 line at the end of the file) solutions – one uses two loops
@@ -38,7 +38,7 @@ necessary and thus a 60-character solution can be created:</p>
 
 <pre>main(i,j){for(;j=++i&lt;99;j&lt;i||printf("%d\n",i))for(;i%++j;);}</pre>
 
-<h3>Analysis</h3>
+<h2>Analysis</h2>
 
 <p>Let’s look at the code to see how much does it bend the
 C language rules.  I will look through some of the surprising

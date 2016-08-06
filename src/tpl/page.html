@@ -1,22 +1,18 @@
-{%- extends 'base.html' -%}
+{%- extends 'post.html' -%}
 
-{%- block jumpto -%}
-  <li><a href="#m">the article</a>
-  {# <li><a href="#k">comments</a> #}
-{%- endblock -%}
+{%- block article -%}
 
-{%- block main -%}
-  <article id=m>
-    <h2><a href="{{ entry.href }}" title="Permanent link to the entry.">{{
-        entry.subject }}</a></h2>
+<article>
+  <h1><a href="{{ entry.href }}" title="Permanent link to the entry.">{{
+      entry.subject }}</a></h2>
 
-    <p class="t"><a href="#j">Get back to “Jump to”</a>
+  <div class=t>
+    {{ entry.body | safe }}
+  </div>
 
-    <div class=c>
-      {{ entry.body | safe }}
-      <footer class="g">
-        {{ social(entry.href) }}
-      </footer>
-    </div>
-  </article>
+  <footer class="g">
+    {{ social(entry.href, entry.subject) }}
+  </footer>
+</article>
+
 {%- endblock -%}

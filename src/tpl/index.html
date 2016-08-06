@@ -1,40 +1,9 @@
 {%- extends 'base.html' -%}
 
-{%- block jumpto -%}
-  <li><a href="#i">entries</a>
-{%- endblock -%}
-
 {%- block main -%}
-
+  {{ prev_next('posts') }}
   {% for entry in entries %}
-    <article>
-
-      <h2><a href="{{ entry.href }}"
-             title="Permanent link to the entry.">{{ entry.subject }}</a></h2>
-      <p class="t"><a href="#j">Get back to “Jump to”</a>
-
-      <div class="c">
-        {{ entry.body.short | safe }}
-
-        <footer>
-          <div class="g">
-            {{ social(entry.href, entry.title) }}
-          </div>
-
-          {% if entry.body.excerpt %}
-            <a href="{{ entry.href }}">Read more…</a>
-          {% endif %}
-          <a href="{{ entry.href }}#c"><span class="spot-im-replies-count"
-                                             data-post-id="{{ entry.permalink
-                                             }}"></span> comment(s)</a>
-        </footer>
-      </div>
-
-      <footer class="m">
-        {{ post_meta(entry) }}
-      </footer>
-
-    </article>  <!-- end entry text -->
+    {{ post(entry, false) }}
   {% endfor %}
-
+  {{ prev_next('posts') }}
 {%- endblock -%}

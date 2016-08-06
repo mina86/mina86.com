@@ -18,9 +18,9 @@ meeting.</p>
 
 <!-- EXCERPT -->
 
-<p>(This post has also <a href="https://groups.google.com/group/comp.std.c/browse_thread/thread/8a637cf658cb0005">been sent</a> to <a href="https://groups.google.com/group/comp.std.c/topics">comp.std.c</a> newsgroup.)</p>
+<p class=ng>This post has also <a href="https://groups.google.com/group/comp.std.c/browse_thread/thread/8a637cf658cb0005">been sent</a> to <a href="https://groups.google.com/group/comp.std.c/topics">comp.std.c</a> newsgroup.</p>
 
-<h3><small>I</small> Default Function Argument</h3>
+<h2>I Default Function Argument</h2>
   <ol>
     <li>
         The default value of a function’s argument has proved to be useful
@@ -55,7 +55,7 @@ struct void *get(struct node *first, int key, const char *def = NULL) {
         would be an easy task in many such cases.
     </li>
   </ol>
-<h3><small>II</small> Named Arguments</h3>
+<h2>II Named Arguments</h2>
   <ol>
     <li>
         It has been observed that calls to functions with many arguments
@@ -178,7 +178,7 @@ format("we are out of %s",
        resource_name);</pre>
     </li>
   </ol>
-<h3><small>III</small> Inlined Structures and Unions</h3>
+<h2>III Inlined Structures and Unions</h2>
   <ol>
     <li>
         The new standard draft allow declaration of anonymous structures
@@ -322,7 +322,7 @@ void do_stuff(int use_double) {
         existing code.
     </li>
   </ol>
-<h3><small>IV</small> Casting to Inlined Members</h3>
+<h2>IV Casting to Inlined Members</h2>
   <ol>
     <li>
         Inlined structures and unions would be especially powerful if
@@ -386,7 +386,8 @@ moveBy(&amp;r-&gt;br, 1.0, 1.0);</pre>
         change would not affect exiting code.
     </li>
   </ol>
-<h3><small>V</small> The <code>_Containerof</code> operator</h3>
+
+<h2>V The <code>_Containerof</code> operator</h2>
   <ol>
     <li>
         User may sometimes face the following problem: Having pointer to
@@ -431,7 +432,7 @@ type *_Containerof(pointer, type, auto);</pre>
 <pre>#define containerof(…) _Containerof(__VA_ARGS)</pre>
     </li>
   </ol>
-<h3><small>VI</small> Object Oriented Programming</h3>
+<h2>VI Object Oriented Programming</h2>
   <ol>
     <li>
         All of the above features would allow for an object oriented
@@ -518,7 +519,7 @@ void rectangle_init(struct circle *c, double x = 0.0, double y = 0.0,
 }</pre>
     </li>
   </ol>
-<h3><small>VII</small> Function Overloading</h3>
+<h2>VII Function Overloading</h2>
   <ol>
     <li>
         Function overloading is a feature that may help programmer
@@ -572,7 +573,7 @@ static "C++" float mysin(long double x) { return sinl(x); }</pre>
         feature would be an easy task in many such cases.
     </li>
   </ol>
-<h3><small>VIII</small> Type Agnostic Limits Functions</h3>
+<h2>VIII Type Agnostic Limits Functions</h2>
   <ol>
     <li>
         Macros defined in the <code>limits.h</code> header suffer from the same
@@ -586,7 +587,7 @@ static "C++" float mysin(long double x) { return sinl(x); }</pre>
         are reserved thus this feature would not affect existing code.
     </li>
   </ol>
-<h3><small>IX</small> Nested Static Functions</h3>
+<h2>IX Nested Static Functions</h2>
   <ol>
     <li>
         It is often desirable to limit a scope of an identifier both to
@@ -619,7 +620,7 @@ void sort_foo(struct foo *foos, size_t n) {
         would have no effect on existing code.
     </li>
   </ol>
-<h3><small>X</small> Compound Functions</h3>
+<h2>X Compound Functions</h2>
   <ol>
     <li>
         The current standard have introduced compound literals for
@@ -647,7 +648,7 @@ void sort_foo(struct foo *foos, size_t n) {
         would not affect existing code.
     </li>
   </ol>
-<h3><small>XI</small> Unnamed Arguments</h3>
+<h2>XI Unnamed Arguments</h2>
   <ol>
     <li>
         It sometimes happens that a function takes an argument but does
@@ -678,7 +679,8 @@ void sort_foo(struct foo *foos, size_t n) {
         implementing this feature could be easy and straightforward.
     </li>
   </ol>
-<h3><small>XII</small> The <code>alignof</code> operator</h3>
+
+<h2>XII The <code>alignof</code> operator</h3>
   <ol>
     <li>
         The new C standard draft proposes an <code>alignof</code> operator that
@@ -698,7 +700,7 @@ void sort_foo(struct foo *foos, size_t n) {
 <pre>#define alignof _Alignof</pre>
     </li>
   </ol>
-<h3><small>XIII</small> The Tags</h3>
+<h2>XIII The Tags</h2>
   <ol>
     <li>
         Even though structures, unions and enumerations use different word

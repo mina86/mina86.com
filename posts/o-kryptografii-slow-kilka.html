@@ -23,7 +23,7 @@ wojny (i co za tym idzie, zmniejszyć liczbę ofiar).</p>
 
 <!-- EXCERPT -->
 
-<h3 id="oznaczenia">Oznaczenia</h3>
+<h2 id="oznaczenia">Oznaczenia</h2>
 
 <p>W artykule tym (oraz kolejnych artykułach o kryptografii) będę używał
 następujących oznaczeń:</p>
@@ -68,7 +68,7 @@ następujących oznaczeń:</p>
   <dd>klucz prywatny</dd>
 </dl>
 
-<h3 id="zasada">Zasada działania</h3>
+<h2 id="zasada">Zasada działania</h2>
 
 <p>Zasada działania szyfrowania jest bardzo prosta.  Mamy dwie funkcje
 <code>E()</code> i <code>D()</code>, które spełniają następujący warunek:
@@ -78,7 +78,7 @@ znaczenia dla mocy szyfru.  Jest to jedynie ułatwienie implementacji
 algorytmu, bo zamiast pisać dwie funkcję wystarczy napisać jedną, którą
 będzie można szyfrować i deszyfrować.</p>
 
-<h3 id="sym">Szyfrowanie symetryczne</h3>
+<h2 id="sym">Szyfrowanie symetryczne</h2>
 
 <p>Przy takim zapisie widać, że wystarczy poznać funkcje deszyfrującą,
 żeby móc rozszyfrowywać zaszyfrowane wiadomości i żeby uniemożliwić to
@@ -98,7 +98,7 @@ jedynie klucz jest rzeczą, która nie może się dostać w niepowołane ręce.
 Szyfrowaniem, w którym ten sam klucz służy do szyfrowania i deszyfrowania
 wiadomości nazywamy szyfrowaniem symetrycznym i ma ono pewne wady.</p>
 
-<h3 id="asym">Szyfrowanie asymetryczne</h3>
+<h2 id="asym">Szyfrowanie asymetryczne</h2>
 
 <p>Problem jest taki, że jeżeli dwie osoby chcą bezpiecznie komunikować się ze sobą, to muszą ustalić jakiś klucz.  Problem w tym, jak to zrobić żeby nikt inny go nie poznał.  Nie dość, że zmniejsza to bezpieczeństwo to jeszcze wydłuża czas przekazywania informacji.  Sytuacji, w których zwykłe szyfrowanie symetryczne nie wystarcza jest oczywiście więcej.</p>
 
@@ -118,7 +118,7 @@ obmyślony, żeby nie dało się odtworzyć klucza prywatnego na podstawie
 klucza publicznego.  Gdyby było to możliwe, to algorytm straciłby cały
 swój sens.</p>
 
-<h3 id="logowanie">Logowanie z kluczem</h3>
+<h2 id="logowanie">Logowanie z kluczem</h2>
 
 <p>Algorytmy szyfrowania asymetrycznego mogą zostać wykorzystane w
 systemie logowania.  Zapobiega to przesyłaniu hasła pomiędzy
@@ -140,7 +140,7 @@ następująco:</p>
   </li>
 </ol>
 
-<h3 id="podpis">Podpis cyfrowy</h3>
+<h2 id="podpis">Podpis cyfrowy</h2>
 
 <p>Algorytmy szyfrowania asymetrycznego mogą dodatkowo spełniać
 jeszcze jeden warunek.  Mianowicie: <code>dla każdego M,
@@ -158,7 +158,7 @@ rozszyfrowuje tenże hash i porównuje go z hashem przez siebie
 wyliczonym.  Jeżeli są one różne, wiadomość została zmodyfikowana po
 podpisaniu.</p>
 
-<h3 id="hash">Hash</h3>
+<h2 id="hash">Hash</h2>
 
 <p>Przybliżmy więc pojęcie hasha.  Jest to taka funkcja, która
 z łańcucha o dowolnej długości generuje łańcuch o określonej długości.

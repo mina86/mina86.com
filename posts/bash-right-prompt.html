@@ -9,7 +9,7 @@
   on the right of the input line.  In this article I’ll try to address
   that shortcoming.
 
-<h3>Getting text on the right</h3>
+<h2>Getting text on the right</h2>
 
 <p>The typical approach is using <code>PROMPT_COMMAND</code> to output
   desired content.  The variable specifies a shell code Bash executes
@@ -34,9 +34,11 @@ __command_rprompt() {
 }
 PROMPT_COMMAND=__command_rprompt</pre>
 
-<a href=/d/rprompt.png><img src=/d/rprompt.png width=480 height=240 alt="Terminal window presenting right prompt behaviour." style="max-width: 100%; height: auto"></a>
+<figure><a href=/d/rprompt.png><img src=/d/rprompt.png width=480 height=240
+                                    alt="Terminal window presenting right
+                                         prompt behaviour."></a></figure>
 
-<h3>Clearing the line on execution</h3>
+<h2>Clearing the line on execution</h2>
 
 <p>It has one annoying issue.  The right text reminds on screen even
   after executing a command.  Typically this is a matter of aesthetic
@@ -84,7 +86,7 @@ $endif</pre>
 
 <!-- EXCERPT -->
 
-<h3>Caveats</h3>
+<h2>Caveats</h2>
 
 <p>Even though improvement over naïve <code>PROMPT_COMMAND</code>
   solution, the aforementioned method has minor downsides.  Most
@@ -96,7 +98,7 @@ $endif</pre>
   as <code>accept-line</code> but even without a solution the two
   issues are rather minor and should bother only the most pedantic.
 
-<h3>Post Scriptum</h3>
+<h2>Post Scriptum</h2>
 
 <p>Dear Zed Shell users.  I know zsh
   has <code>RPROMPT</code>.  I’ve tried this shell and didn’t like it.

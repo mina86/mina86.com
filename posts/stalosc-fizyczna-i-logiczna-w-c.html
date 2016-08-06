@@ -7,7 +7,7 @@
 
 <!-- EXCERPT -->
 
-<h3>Deklarowanie stałych</h3>
+<h2>Deklarowanie stałych</h2>
 
 <p>Stałość fizyczna występuje, gdy w momencie kompilacji określamy przy pomocy modyfikatora <code>const</code>, że jakiejś wartości nie należy zmieniać.</p>
 
@@ -55,7 +55,7 @@ const int *const *const ptrA;  /* Stały wskaźnik na stały wskaźnik
   lewej".</p>
 
 
-<h3>Stałość a modyfikowalność</h3>
+<h2>Stałość a modyfikowalność</h2>
 
 
 <p>Należy zwrócić uwagę, iż z faktu, że wskaźnik jest stałego typ nie
@@ -92,7 +92,7 @@ const int foo = 42;
 const_cast&lt;char*&gt;("bar")[2] = 'z'; /* niezdefiniowane zachowanie */</pre>
 
 
-<h3>Stałość argumentów funkcji</h3>
+<h2>Stałość argumentów funkcji</h2>
 
 <p>Deklarowanie argumentów (chodzi o sam argument, a nie ewentualne
   wskazywane typy, a więc referencje odpadają z rozważań) funkcji jako
@@ -156,7 +156,7 @@ int foo(std::vector&lt;int&gt; vec) {
   (publicznego) konstruktora kopiującego.</p>
 
 
-<h3>Rzutowanie</h3>
+<h2>Rzutowanie</h2>
 
 
 <p>Jak można się domyślić, rzutowanie z typu bez
@@ -231,7 +231,7 @@ const int **pp = &amp;p;  /* konwersja `int**` do `const int**`*/
 
 
 
-<h3>Stałość w strukturach</h3>
+<h2>Stałość w strukturach</h2>
 
 <p>Stałe struktury (klasy) nie umożliwiają zmiany pól w ich wnętrzu.
   Przykładowo, poniższy kod się nie kompiluje:</p>
@@ -372,7 +372,7 @@ private:
   omówione</a>.</p>
 
 
-<h3 id="logic_const">Stałość logiczna</h3>
+<h2 id="logic_const">Stałość logiczna</h2>
 
 <p>Stałość logiczna to oczekiwanie, że zewnętrzne zachowanie i wygląd
   jakiegoś obiektu nie ulegnie zmianie.  Dla przykładu weźmy strukturę

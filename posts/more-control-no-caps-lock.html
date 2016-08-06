@@ -16,7 +16,7 @@ propaganda.</p>
 
 <!-- EXCERPT -->
 
-<h3>Why bother?</h3>
+<h2>Why bother?</h2>
 
 <p>First of all, if you don’t use Caps Lock at all why waste space on
 the keyboard?  Honestly!  Personally I don’t even remember when I used
@@ -40,7 +40,7 @@ I wanted to press Ctrl so I’ve made the change) who was not
 pleased at first but then seemed to like it.</p>
 
 
-<h4>Swap?</h4>
+<h3>Swap?</h3>
 
 <p>If you made a decision to give it a try you’ll probably wondering
 that swapping Caps Lock and left Ctrl is better idea then using both
@@ -55,7 +55,7 @@ Ctrl+Shift+whatever bindings.</p>
 if you’d place Caps Lock where you’re used to have Ctrl.</p>
 
 
-<h4>Other Systems</h4>
+<h3>Other Systems</h3>
 
 <p>Usually, with modifications like that an argument of other people’s
 computers comes in mind – what if I have to do something on some
@@ -72,7 +72,7 @@ it’s up to you.</p>
 
 
 
-<h3>X-Window</h3>
+<h2>X-Window</h2>
 
 <p>Lets start with widely used in *nix word X-Window system.  First of
 all, if you are using KDE or Gnome you might try looking into
@@ -87,7 +87,7 @@ of course specify several options if you have some already by
 separating them with colons.</p>
 
 
-<h4>Xkb, Debian &amp; Debian-based (like Ubuntu)</h4>
+<h3>Xkb, Debian &amp; Debian-based (like Ubuntu)</h3>
 
 <p>If you are using Debian or Debian-based Linux distribution (such as
 Ubuntu) and you are lucky all you need to do is to edit
@@ -107,7 +107,7 @@ invoking as root:</p>
 
 <p>I’ve been told it should work (ie. that’s what console-setup package is for) but if it does not for you (didn’t for me) just move to the next section.</p>
 
-<h4>XKb, Configuration file</h4>
+<h3>XKb, Configuration file</h3>
 
 <p>If you’re not on Debian-based distribution or the above method
 failed you might try fidling with X11 configuration.</p>
@@ -146,7 +146,7 @@ edit X configuration file located at<code>/etc/X11/xorg.conf</code> or
 <i>InputDevice</i> section for your keyboard it’s enough to add/modify
 the “XkbOptions” option.</p>
 
-<h4>Xkb, HAL</h4>
+<h3>Xkb, HAL</h3>
 
 <p>It may happen that there is no <i>InputDevice</i> section for your
 keyboard – that’s actually all right.  Newer versions of XOrg may use
@@ -177,7 +177,7 @@ value.  For instance here’s my file:</p>
 &lt;/deviceinfo&gt;</pre>
 
 
-<h4>xmodmap</h4>
+<h3>xmodmap</h3>
 
 <p>If all of that fails or you don’t have super user privileges
 you may need to use xmodmap.  Usually it’ll be enough to create
@@ -206,7 +206,7 @@ a look at mine</a> if you want).</p>
 
 
 
-<h3>Unix Console</h3>
+<h2>Unix Console</h2>
 
 <p>If you never use console or use it to merely log in and invoke
 <code>startx</code> you may skip this section but otherwise read on.
@@ -223,7 +223,7 @@ is just skip this section – you probably don’t need that
 knowledge.</p>
 
 
-<h4>Debian &amp; Debian-based (like Ubuntu)</h4>
+<h3>Debian &amp; Debian-based (like Ubuntu)</h3>
 
 <p>According to <a
 href="https://www.emacswiki.org/emacs/MovingTheCtrlKey">Moving the Ctrl
@@ -242,7 +242,7 @@ line as well:</p>
 <pre>s/keycode[[:space:]][[:space:]]*29[[:space:]][[:space:]]*=[[:space:]][[:space:]]*Control/keycode  29 = Caps_Lock/</pre>
 
 
-<h4 id="us_layout">US Layout</h4>
+<h3 id="us_layout">US Layout</h3>
 
 <p>If you are using an US layout you might give <code>emacs</code> or
 <code>emacs2</code> layouts a try.  Personally I’ve never tried those
@@ -257,7 +257,7 @@ Under Gentoo try <code>/etc/conf.d/keymaps</code>.  On other systems –
 sorry, your on your own but it shouldn’t be hard.</p>
 
 
-<h4>setkeycodes</h4>
+<h3>setkeycodes</h3>
 
 <p>If all of the above fails, you have a non-USB kayboard and you
 need a quick and dirty solution try <code>setkeycodes 0x3a 29</code>
@@ -278,7 +278,7 @@ usually have a “local” start script which one can edit – try
 refer to distribution’s documentation).</p>
 
 
-<h4>Keymap</h4>
+<h3>Keymap</h3>
 
 <p>If the above method fails or you prefer a “cleaner” solution you
 will need to edit your keymap.  First consult <code>loadkeys</code> man
@@ -316,7 +316,7 @@ system to use it permanently – refer to <a href="#us_layout">US
 layout</a> section.</p>
 
 
-<h4>NetBSD console</h4>
+<h3>NetBSD console</h3>
 
 <p>All of the above methods were tested on various Linuxes so
 I don’t know if they’ll work on other *nix systems.  However,
@@ -327,7 +327,7 @@ a single <code>keysym Caps_Lock = Control_L</code> entry and adding
 <code>/etc/wscons.conf</code> should do the trick.</p>
 
 
-<h4>Man Pages</h4>
+<h3>Man Pages</h3>
 
 <p>In case you’d like to find out more about Unix and
 X applications mentioned try man pages:</p>
@@ -346,13 +346,13 @@ X applications mentioned try man pages:</p>
 
 
 
-<h3>MS Windows</h3>
+<h2>MS Windows</h2>
 
 <p>Unfortunately, the world is not all Unix but even Microsoft Windows
 users can help their little finger.</p>
 
 
-<h4>Windows NT, Scancode Map</h4>
+<h3>Windows NT, Scancode Map</h3>
 
 <p>Under Windows NT an entry in the registry should suffice.  Simply
 create or download certain .reg file, apply it by double clicking and
@@ -386,7 +386,7 @@ href="https://www.microsoft.com/">microsoft.com</a> which describes how
 
 
 
-<h4>Ctrl2Cap</h4>
+<h3>Ctrl2Cap</h3>
 
 <p>On Windows NT you may also give <a
 href="http://doc.sch130.nsc.ru/www.sysinternals.com/ntw2k/source/ctrl2cap.shtml">Ctrl2Cap</a>
@@ -412,7 +412,7 @@ Ctrl2Cap.</p>
 
 
 
-<h3>MacOS X</h3>
+<h2>MacOS X</h2>
 
 <p>If you happen to use MacOS X and want to configure your Caps
 Lock key you shall go to <i>Keyboard &amp; Mouse</i> panel in
@@ -425,7 +425,7 @@ make the changes.</p>
 
 
 
-<h3>What else?</h3>
+<h2>What else?</h2>
 
 <p>Using Caps Lock as another Ctrl key is not the only thing you can
 do.  <a href="https://colemak.com/">Colemak</a>’s authors decided it’s

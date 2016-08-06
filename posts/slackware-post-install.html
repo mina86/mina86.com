@@ -12,7 +12,7 @@ for everyone.  You have been warned.
 
 <!-- EXCERPT -->
 
-<h3>New user</h3>
+<h2>New user</h2>
 
 <p>The very first step is creation of a new user account.  Since I have recently
 discovered benefits of having a group for each user I now do it with the
@@ -25,7 +25,7 @@ useradd -U -G users,root,wheel -m <var>username</var>
 passwd <var>username</var></pre>
 
 
-<h3>root access</h3>
+<h2>root access</h2>
 
 <p>Having the user in root and wheel groups makes it easy to restrict access
 to su command:
@@ -50,7 +50,7 @@ executable to protect is <code>/bin/sudo</code>.  Since I do not use
 an exercises for the reader.
 
 
-<h3>Local login restrictions</h3>
+<h2>Local login restrictions</h2>
 
 <p>Another thing to block is letting root log in directly to the system.
 I recommend that change since having a single path of gaining super user
@@ -71,7 +71,7 @@ creating a new group, say <code>ttylogin</code>, is also an option.
 logging in to the machine still works.
 
 
-<h3>Remote login restrictions</h3>
+<h2>Remote login restrictions</h2>
 
 <p>With local logins taken care of, <abbr title="Secure Shell">SSH</abbr> is
 all that is left.  Its configuration is stored in
@@ -105,7 +105,7 @@ result.  It should keep log files slightly cleaner by avoiding some brute
 force attacks, but it is not a bullet proof solution of course.
 
 
-<h3>X11 security</h3>
+<h2>X11 security</h2>
 
 <p><code>/tmp/.ICE-unix</code> and <code>/tmp/.X11-unix</code> directories are used by
 X server but they do not need to be writable only by users who are supposed to
@@ -138,7 +138,7 @@ the following changes should be applied:
 </ul>
 
 
-<h3>NTP</h3>
+<h2>NTP</h2>
 
 <p>I usually do not set up <abbr title="Network Time Protocol">NTP</abbr>
 daemon to run, but still want to have my clock synchronised, so instead I am
@@ -157,7 +157,7 @@ chmod 755 /etc/crontab.hourly/ntpsync
 /etc/crontab.hourly/ntpsync</pre>
 
 
-<h3>Logging</h3>
+<h2>Logging</h2>
 
 <p>In <code>/etc/rc.d/rc.syslog</code> modify syslogd and klogd invocations:
 
@@ -202,7 +202,7 @@ increasing disk usage much, it may be good idea to change <code>rotate</code>
 option to <code>12</code> (or so) and uncomment <code>compress</code> option.
 
 
-<h3>Other network security</h3>
+<h2>Other network security</h2>
 
 <p>To prevent, or at least limit, sniffing on local network, it’s beneficial
 to set up a static hardware addresses for the default gateway and some most
@@ -241,7 +241,7 @@ echo 'sshd: ALL: ALLOW' &gt;&gt;/etc/hosts.allow
 echo 'ALL: ALL' &gt;&gt;/etc/hosts.deny</pre>
 
 
-<h3>Other miscellaneous security</h3>
+<h2>Other miscellaneous security</h2>
 
 <p>There is a bunch of files normal users do not need access to:
 
@@ -258,7 +258,7 @@ directories to:
 <pre>chmod 1733 /tmp /var/tmp</pre>
 
 
-<h3>Filesystems</h3>
+<h2>Filesystems</h2>
 
 <p>All the file systems mounted during the boot on the system are configured
 in the <code>/etc/fstab</code> file.  There are a few options that’s worth adding:
@@ -281,7 +281,7 @@ in the <code>/etc/fstab</code> file.  There are a few options that’s worth ad
 </dl>
 
 
-<h3>LILO</h3>
+<h2>LILO</h2>
 
 <p>Slackware comes with a splash screen used in <abbr title="Linux Loader">LILO</abbr> and a 30-second prompt timeout.  For me both are just
 annoyances.  To improve the situation, note down value of the <code>boot</code>
@@ -337,7 +337,7 @@ enabled.  Password can be enabled for all systems by
 choosing <code>mandatory</code> as opposed to <code>restricted</code>.
 
 
-<h3>Miscellaneous customisations</h3>
+<h2>Miscellaneous customisations</h2>
 
 <p>Back in <code>/etc/login.defs</code> file, some eye-candy can be achieved by
 changing the following options:
@@ -397,7 +397,7 @@ echo "chown root:root $cmds" &gt;&gt;/etc/rc.d/rc.local
 echo "chmod 4750 $cmds" &gt;&gt;/etc/rc.d/rc.local</pre>
 
 
-<h3>Final clean ups</h3>
+<h2>Final clean ups</h2>
 
 <p>Depending on the way Slackware was installed, it may contain many packages
 that aren’t used.  Those should be removed since the fewer packages system has,

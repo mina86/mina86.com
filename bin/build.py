@@ -149,7 +149,12 @@ def build_no_expiry(writer):
     # Build files from src, put them into .tmp
     paths = []
     for name in os.listdir(SRC_SUBDIR):
-        if name[0] != '.' and (name.endswith('.css') or name.endswith('.js')):
+        if name[0] == '.':
+            continue
+        _, ext = os.path.splitext(name)
+        if ext in ('.css', '.js', '.less'):
+            if ext == '.less':
+                name = name[:-4] + 'css'
             paths.append(os.path.join(writer.tmp_dir, name))
     make(paths)
 

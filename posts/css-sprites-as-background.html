@@ -30,7 +30,7 @@
 
 <!-- EXCERPT -->
 
-<h3>Basics</h3>
+<h2>Basics</h2>
 
   <p>Let’s start with the basics.  Like I’ve alluded above,
     sprites incorporate many images into a bigger one and use CSS to
@@ -139,7 +139,7 @@ id=&quot;sprite5&quot;&gt;5&lt;/span&gt;&lt;/div&gt;</pre>
     When rendering the page, browser takes the part of background that
     overlaps and uses it.
 
-  <div><img src=/d/html5-sprite-expl.jpg alt=""/></div>
+  <figure><img src=/d/html5-sprite-expl alt=""></figure>
 
   <p><code>background-position</code> property instructs it to shift the
     abstract background by given length and only <em>than</em> cut
@@ -160,7 +160,7 @@ id=&quot;sprite5&quot;&gt;5&lt;/span&gt;&lt;/div&gt;</pre>
     sprites.  It prevents pixels from adjacent sprites
     ‘bleeding’ over to the other images.
 
-  <h3>A bit simpler method</h3>
+  <h2>A bit simpler method</h2>
 
   <p>The above method is the ‘normal’ one to use sprites, but in the
     case of the image presented here, there’s an easier way.  Instead
@@ -204,7 +204,7 @@ id=&quot;sprite5&quot;&gt;5&lt;/span&gt;&lt;/div&gt;</pre>
   background-image: url('html5-sprite.jpg');
 }</pre>
 
-  <h3>Using sprites for background</h3>
+  <h2>Using sprites for background</h2>
 
   <p>Let’s compare the above with a way to implement an icon in
     a top-left corner of an element:
@@ -230,7 +230,7 @@ blockquote {
     background below the diagonal, sprites <em>on</em> the diagonal
     can be used as a top-left no-repeat background icon.
 
-  <div><img src=/d/icon-sprites.png alt="" id=iconsprites></div>
+  <figure><img src=/d/icon-sprites.png alt="" id=iconsprites></figure>
   <script src=/d/icon-sprites.js></script>
 
   <p>With that knowledge, the following styles can be constructed:

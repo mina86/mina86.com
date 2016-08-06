@@ -211,9 +211,21 @@ class Sitemap(object):
 
 class Writer(object):
 
+    @staticmethod
+    def format_date(dt):
+        day = dt.day
+        th = 'th'
+        if day < 10 or day > 20:
+            th = {1: 'st', 2: 'nd', 3: 'rd'}.get(day % 10, 'th')
+        # month = unichr(0x215F + dt.month)
+        month = dt.strftime('%B')
+        year = dt.year
+        return '%d%s %s %d' % (day, th, month, year)
+
     def __init__(self, writer, tpl_dir, static_mappings):
         self._env = jinja2.Environment(loader=jinja2.FileSystemLoader(tpl_dir),
                                        autoescape=True)
+        self._env.filters['date'] = self.format_date
         self._writer = writer
         self._tpl_dir = tpl_dir
         self._static_mappings = static_mappings

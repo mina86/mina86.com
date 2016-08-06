@@ -26,7 +26,7 @@
   git repository</a>.
 
 
-<h3>Map and reduce functions</h3>
+<h2>Map and reduce functions</h2>
 
 <pre>
 map(function, sequence) → list
@@ -71,7 +71,7 @@ reduce(function, sequence, initial_state) → final_state
 9</pre>
 
 
-<h3>Analysing logs</h3>
+<h2>Analysing logs</h2>
 
 <p>Let’s use this approach to find out how many words each user of
   #slackware.pl FreeNode IRC channel (formerly #forum.slackware.pl at
@@ -174,7 +174,7 @@ parallel "$@" --eta '
 	python code/reduce.py >temp/reduced/{#}' \
 	::: temp/shuffled/*</pre>
 
-<h3>Real world</h3>
+<h2>Real world</h2>
 
 <p>In real deployments more care is taken to make the pipeline run
   efficient.  For example, shards should be balanced and there should

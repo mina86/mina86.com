@@ -3,7 +3,7 @@
 <!-- tags: linux, cma, contiguous, memory, allocator -->
 <!-- categories: Articles, English, Techblog -->
 
-<p class=i>This is the first part of an extended version
+<p class=ng>This is the first part of an extended version
 of <a href="https://lwn.net/Articles/486301/">an LWN article on
 CMA</a>.  It contains much more detail on how to use CMA, and a lot of
 boring code samples.  Should you be more interested in an overview,
@@ -26,7 +26,7 @@ there are different things to be done and look for.
 
 <!-- EXCERPT -->
 
-<h3>Using CMA in device drivers</h3>
+<h2>Using CMA in device drivers</h2>
 
 <p>From device driver author’s point of view, nothing should change.
 CMA is integrated with DMA subsystem, so the usual calls to the DMA
@@ -67,7 +67,7 @@ href="https://git.kernel.org/?p=linux/kernel/git/torvalds/linux.git;a=blob;f=Doc
 Those two documents describe provided functions and give
 usage examples.
 
-<h3>Integration with architecture code</h3>
+<h2>Integration with architecture code</h2>
 
 <p>Obviously, CMA has to be integrated with given architecture’s DMA
 subsystem beforehand.  This is performed in a few, fairly easy steps.
@@ -79,7 +79,7 @@ and
 architectures.  This section will refer to both patches as well as
 quote their relevant portions.
 
-<h4 id=reserve_mem>Reserving memory</h4>
+<h3 id=reserve_mem>Reserving memory</h3>
 
 <p>CMA works by reserving memory early at boot time.  This memory,
 called <dfn>CMA area</dfn> or <dfn>CMA context</dfn>, is later
@@ -136,7 +136,7 @@ diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
 a <code>cma</code> kernel parameters which will be <a href=#size>describe
 later on</a>.
 
-<h4>Architecture specific memory preparations</h4>
+<h3>Architecture specific memory preparations</h3>
 
 <p><code>dma_contiguous_reserve</code> function will reserve memory and
 prepare it to be used with CMA.  On some architectures
@@ -215,7 +215,7 @@ diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
  	devicemaps_init(mdesc);
  	kmap_init();</pre>
 
-<h4>DMA subsystem integration</h4>
+<h3>DMA subsystem integration</h3>
 
 <p>Second thing to do is to change architecture’s DMA API to use the
 whole machinery.  To allocate memory from CMA one uses:
@@ -298,7 +298,7 @@ diff --git a/arch/x86/kernel/pci-dma.c b/arch/x86/kernel/pci-dma.c
   * See &lt;Documentation/x86/x86_64/boot-options.txt&gt; for the iommu kernel
   * parameter documentation.</pre>
 
-<h4>Atomic allocations</h4>
+<h3>Atomic allocations</h3>
 
 <p>Beware that <code>dma_alloc_from_contiguous</code> may not be called
 from atomic context (e.g. when spin lock is hold or in an interrupt).
@@ -313,7 +313,7 @@ and perform atomic allocations from it.  This is in fact what ARM is
 doing.  Existing architectures most likely have a special path for
 atomic allocations already.
 
-<h4>Special memory requirements</h4>
+<h3>Special memory requirements</h3>
 
 <p>At this point, most of the drivers should “just work”.  They use
 the DMA API which calls CMA.  Life is beautiful.  Except some devices
@@ -336,7 +336,7 @@ have separate <code>struct device</code> objects.  At the same time,
 several <code>struct device</code> objects may point to the same CMA
 context.
 
-<h4>Assigning CMA area to a single device</h4>
+<h3>Assigning CMA area to a single device</h3>
 
 <p>To assign a CMA area to a device, all one needs to do is call:
 
@@ -391,7 +391,7 @@ can be safely increased if need arises.  Called more times,
 <code>dma_declare_contiguous</code> function will print an error
 message and return <code>-ENOSPC</code>.
 
-<h4>Assigning CMA area to multiple devices</h4>
+<h3>Assigning CMA area to multiple devices</h3>
 
 <p>Things get a bit more complicated if the same (not default) CMA
 context needs to be used by two or more devices.  The current API does
@@ -420,7 +420,7 @@ subsection.
 hold no CMA memory – it will be rather tricky to release any
 allocation after area change.
 
-<h3>No default context</h3>
+<h2>No default context</h2>
 
 <p>As a matter of fact, there is nothing special about the default
 context that is created by <code>dma_contiguous_reserve</code> function.
@@ -435,7 +435,7 @@ distinguish this situation and allocation failure.
 other means to allocate memory, for devices without assigned CMA
 context.
 
-<h3 id=size>Size of the default context</h3>
+<h2 id=size>Size of the default context</h2>
 
 <p><code>dma_contiguous_reserve</code> does not take a size as an
 argument, which brings a question of how does it know how much memory
@@ -455,9 +455,9 @@ It lets one specify the size of the area at boot time without the need
 to recompile the kernel.  This option specifies the size in bytes and
 accepts the usual suffixes.
 
-<p><small><i>Code samples in this article are taken from the public
+<p class=nt>Code samples in this article are taken from the public
 Linux kernel mailing list. For copyright and licensing information
-refer to the original email.</i></small>
+refer to the original email.
 
 <!-- COMMENT -->
 <!-- date: 2012-10-15 11:46:50 -->

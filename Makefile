@@ -18,11 +18,10 @@ distclean:
 	exec curl -X POST -s --data-urlencode "input@$<" \
 		https://javascript-minifier.com/raw >$@
 
-.tmp/%.css: src/%.css
-	@echo " MIN  $@"
+.tmp/%.css: src/%.less
+	@echo " LESS $@"
 	@exec mkdir -p $(dir $@)
-	exec curl -X POST -s --data-urlencode "input@$<" \
-		https://cssminifier.com/raw >$@
+	exec lessc -su=on  $< | cleancss --semantic-merging >$@
 
 static/mina86.gpg:
 	@echo " GPG  $@"

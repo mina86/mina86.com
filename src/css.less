@@ -1,0 +1,767 @@
+/*!github.com/mina86/mina86.com*/
+
+/*
+ * Classes:
+ * - table.tb – add top and bottom border to each of table’s TBODY.
+ * - .rht – align text in element right.
+ * - .nb – no break
+ * - .np – no print
+ * - p.nt – a note with some meta information (special licensing information,
+ *   note about series, etc.)  Set with smaller font.
+ * - p.ig – an image at the top of some posts (most notably news articles) and
+ *   attribution that follows it (two separate paragraphs which *must* follow
+ *   each other).
+ */
+
+/* I need something which will automatically choose IDs and classes. */
+/* id:        d e   g     j k       o p q r   t u v w x y z */
+/* cls: a   c   e     h   j k l m   o     r     u v   x y z */
+
+@head-id: #h;  /* Page header. */
+@body-id: #b;  /* Page body (article text, comments, sidebar etc). */
+@foot-id: #f;  /* Page footer. */
+
+@main-id: #m;  /* Article, comments etc.  In other words, body sans sidebar. */
+@side-id: #s;  /* Sidebar. */
+
+@wrap-cls: .w;  /* Wrapper DIV inside @head-id and @body-id elements which exists
+                  to limit the ‘usable’ width. */
+
+/* Header elements: */
+/* Last links in header which are hidden when side bar is on the side. */
+@hidden-links-cls: .d;
+
+/* Main content elements: */
+@pagination-cls: .p;  /* Pagination table. */
+@pagination-next-cls: .n;  /* Right-hand side link in pagination table. */
+@qed-cls: .q;  /* Article is shown in its entirety. */
+@byline-cls: .b;  /* Byline paragraph. */
+@article-text-cls: .t;  /* Text of the article. */
+@comments-id: #c;  /* Comments  (on pages which have comments). */
+
+@meta-cls: .g;
+@social-cls: .s;
+@cats-and-tags-cls: .i;
+
+/* Sidebar sections: */
+@contact-id: #n;  /* Contact section in the sidebar. */
+@categories-id: #l;  /* Categories section in the sidebar. */
+@archive-id: #a;  /* Archive section in the sidebar. */
+@feed-icon-cls: .f;  /* Class for the feed icon */
+@icons-id: #i;  /* Icons section at the bottom of the sidebar. */
+
+/* http://spencermortensen.com/articles/typographic-scale/ */
+@small:    0.80rem;
+@normal:   1.00rem;
+@large:    1.26rem;
+@x-large:  1.59rem;
+@xx-large: 2.00rem;
+
+@cosmic-latte: #fff8e7;  /* https://en.wikipedia.org/wiki/Cosmic_latte */
+@milky-way: #f9f1ff;  /* http://www.news.pitt.edu/milkywaycolor */
+
+// @header-bg: #0844a2;  /* Average of /d/top-img.jpg */
+// @bg: @cosmic-latte;
+// @even-bg: @milky-way;
+// @sidebar-bg: #fff;
+// @footer-bg: @header-bg;
+// @pre-bg: desaturate(@bg, 100%);
+
+/* http://davidjohnstone.net/pages/lch-lab-colour-gradient-picker is quite
+   useful. */
+
+@head-bg: #0844a2;  /* Average colour of /d/top-img.jpg */
+@body-bg: #e4f0ff;  /* L* = 95, same a* and b* as @head-bg */
+@side-bg: #b6ccee;
+@pre-bg:  #f1f1f1;  /* c = 0, same L* and h as @body-bg */
+
+@text-color: #333333;  /* L* = 20 */
+@code-color: #004a17;  /* L* = 20 */
+
+
+@body-font: Verdana, "Trebuchet MS", Tahoma, Helvetica, sans-serif;
+@code-font: "Input Sans", @body-font;
+/* @code-font: "Input Sans", "DejaVu Sans Mono", "Liberation Mono", */
+/*             "Ubuntu Mono", "Courier New", monospace;  */
+@serif-font: Georgia, @body-font;
+
+@sidebar-width: 14em;
+@content-width: 50em;
+@wrap-width: (@sidebar-width + @content-width);
+
+
+.text-off-screen() {
+	text-indent: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+
+html, body {
+	@media screen, projection, tv, handheld {
+		color: @text-color;
+		/* Yes, I’m setting background of BODY to header’s background
+		   colour which is also what I want for footer background
+		   colour.  This is so that even on short pages, where footer
+		   does not reach the end of the viewport, the whole bottom of
+		   the window uses this colour as a background.  @body-bg is set
+		   on @main-id element instead. */
+		background: @head-bg;
+	}
+	font-family: @body-font;
+	text-rendering: optimizelegibility;
+}
+
+
+/**** Page layout ****/
+
+@media screen, projection, tv, handheld {
+	@{head-id} {
+		height: 14em;
+	}
+	@{head-id} @{wrap-cls} {
+		height: 100%;
+	}
+
+	@{main-id}, @{side-id} section {
+		padding: 1em;
+		max-width: @content-width;
+		margin: 0 auto;
+	}
+	@{side-id} {
+		padding-top: 1em;
+		padding-bottom: 5em;
+	}
+
+	/* Annoyingly, this rule has to be specified here because if it goes
+	   below where other sidebar rules are, the ‘background: none’ property
+	   in @media just below won’t clear it. */
+
+	@{side-id} {
+		background: @side-bg;
+	}
+
+	@media (min-width: @wrap-width) {
+		@{wrap-cls} {
+			min-width: @wrap-width;
+			width: 90%;
+			max-width: @wrap-width + 5em;
+			margin: 0 auto;
+		}
+
+		@{main-id} {
+			float: left;
+			width: @content-width;
+			max-width: @content-width;
+		}
+
+		@{main-id} @{wrap-cls} {
+			padding: 0;
+		}
+
+		@{side-id} {
+			float: right;
+			width: @sidebar-width;
+			background: none;
+			padding: 0;
+		}
+
+		@{side-id} section {
+			padding: 1em 0.5em;
+		}
+
+		@{body-id} {
+			overflow: auto;
+			padding-bottom: 5em;
+		}
+
+		/* Sticking those here helps with minification: */
+		@{contact-id} li:first-child span { display: block; }
+		@{head-id} li@{hidden-links-cls} { display: none; }
+	}
+}
+
+/**** Links ****/
+
+h1, h2, h3 {
+	page-break-after: avoid;
+	a, a:link, a:hover, a:active, a:focus, a:visited {
+		color: inherit;
+	}
+}
+
+a {
+	text-decoration: none;
+	color: #00f;
+}
+a:visited {
+	color: #63c;
+}
+a:hover, a:focus, a:active {
+	color: #09f;
+	text-decoration: underline;
+}
+
+
+/**** Page header ****/
+
+@{head-id} {
+	h1 {
+		font-size: 2em;
+	}
+	h1 span {
+		font-variant: small-caps;
+	}
+
+	@media screen, projection, tv, handheld {
+		background: @head-bg url(/d/top-img.jpg) no-repeat;
+		background-size: cover;
+		/* filter: brightness(1.2) blur(5px); */
+
+		@{wrap-cls} {
+			position: relative;
+		}
+
+		h1 {
+			position: absolute;
+			color: @body-bg;
+			top: 20%;
+			left: 2%;
+		}
+
+		nav {
+			position: absolute;
+			bottom: 20%;
+			left: 2%;
+		}
+
+		li {
+			display: inline-block;
+			margin: 0.2em;
+		}
+
+		ul a, ul a:link, ul a:visited {
+			display: inline-block;
+			padding: 0.5em 1em;
+			color: #333;
+			font-weight: 700;
+			white-space: nowrap;
+			background: #fff;
+			background: rgba(255, 255, 255, 0.5);
+			text-decoration: none;
+			border-radius: 0.3em;
+		}
+
+		ul a:hover, ul a:active, ul a:focus {
+			color: #00f;
+			background: rgba(255, 255, 255, 0.4);
+			background: -o-linear-gradient(bottom, #cff, rgba(255, 255, 255, 0.4));
+			background: -moz-linear-gradient(bottom, #cff, rgba(255, 255, 255, 0.4));
+			background: -webkit-linear-gradient(bottom, #cff, rgba(255, 255, 255, 0.4));
+			text-shadow: #000 0.5em 0.5em 1em;
+		}
+
+		/* Google Search */
+		#___gcse_0 {
+			position: absolute;
+			top: 1em;
+			right: 0;
+			width: 50%;
+			* {
+				box-sizing: content-box;
+			}
+		}
+		.cse .gsc-control-cse,
+		.gsc-control-cse,
+		form.gsc-search-box,
+		table.gsc-search-box {
+			background: transparent;
+			border: none;
+			padding: 0;
+			margin: 0;
+		}
+	}
+
+	nav, #___gcse_0 {
+		&:extend(.np);
+	}
+}
+
+
+/**** Main content, text of the article and such ****/
+
+@media screen, projection, tv, handheld {
+	@{body-id} {
+		background: @body-bg;
+	}
+}
+
+article {
+	margin: 2em 0 3em;
+
+	p, dd, li {
+		text-align: justify;
+		text-justify: distribute;
+		text-justify: newspaper;
+		hanging-punctuation: first allow-end last;
+		hyphens: auto;
+	}
+
+	p {
+		margin: 1rem 0;
+	}
+
+	@media screen, projection, tv, handheld {
+		text-shadow: 1px 1px 0 #D9D9E6;;
+	}
+}
+
+/* Links */
+@{article-text-cls} {
+	a {
+		border-bottom: 1px dotted #99f;
+	}
+
+	a:hover, a:focus, a:active {
+		text-decoration: none;
+		border-bottom-style: solid;
+		borter-bottom-color: #09f;
+	}
+}
+
+/* Headers */
+article {
+	h1, h2, h3 {
+		margin: 2rem 0 1rem;
+		a, a:hover, a:focus, a:active {
+			border: none;
+		}
+	}
+	h1 {
+		font-family: @serif-font;
+		font-size: 1.59em;
+		margin-top: 0;
+	}
+	h2 {
+		font-size: 1.26em;
+		border-bottom: 1px dotted #999;
+	}
+	h3 {
+		font-size: 1em;
+	}
+}
+
+/* Byline etc */
+p@{byline-cls} {
+	font-family: @serif-font;
+	font-style: italic;
+	color: #666;
+	page-break-before: avoid;
+	page-break-after: avoid;
+
+	em {
+		font-weight: bold;
+		color: #888;
+	}
+}
+
+p.nt {
+	font-size: @small;
+	margin-left: 30%;
+	text-align: left;
+	hyphens: manual;
+	font-style: italic;
+}
+
+p.ig, figure {
+	text-align: center;
+	img {
+		max-width: 100%;
+	}
+}
+p.ig + p.ig {
+	text-align: right;
+	margin-top: -1em;
+	font-size: @small;
+	page-break-before: avoid;
+}
+
+/* Code */
+pre, code {
+	font-family: @code-font;
+	color: @code-color;
+	text-shadow: none;
+	page-break-inside: avoid;
+}
+pre {
+	@media screen, projection, tv, handheld {
+		background: @pre-bg;
+	}
+	margin: 1em 0;
+	padding: .5em 1em;
+	border-top: 1px dotted #363;
+	border-bottom: 1px dotted #363;
+	overflow-x: auto;
+}
+code, var {
+	hyphens: manual;
+}
+
+@media screen, projection, tv, handheld {
+	pre b, pre var {
+		text-shadow: 1px 1px 0 #cec;
+	}
+
+	@{qed-cls} @{article-text-cls} p:last-child:after {
+		color: #999;
+		font-family: @serif-font;
+		font-size: @small;
+		content: ' -30-';
+	}
+}
+
+/* Lists */
+@{article-text-cls} {
+	ul, ol, dl {
+		margin: 1em 0;
+	}
+	li {
+		margin: 0 0 0 2em;
+		/* Less' data-uri is way over-zealous when URL encoding data
+		   URIs which is why I’m sticking to my own. */
+		list-style: url(DATA<dot.svg>);
+	}
+	dt, dd {
+		padding: 0;
+		margin-top: .25em;
+	}
+	dd {
+		margin-left: 1.59em;
+	}
+	dd + dt {
+		margin-top: 1em;
+	}
+}
+
+/* Tables */
+/* Putting this outside of @{article-text-cls} breaks Google custom search
+   whose layout is based on tables.  *sighs* */
+@{article-text-cls} {
+	table, tr, th, td {
+		border-collapse: collapse;
+	}
+	th, td {
+		padding: 0.5em;
+	}
+	thead th, thead td {
+		padding: 0.2em 0.5em;
+	}
+	table {
+		margin: 1em auto;
+	}
+	thead, .tb tbody, tfoot {
+		border-top: 1px solid #000;
+		border-bottom: 1px solid #000;
+	}
+	.tb tbody:last-child {
+		border: none;
+	}
+}
+
+/* Misc */
+blockquote {
+	background: url(/d/t.png) no-repeat;
+	background-position: -125px 0;
+	min-height: 20px;
+	padding: 0 26px;
+	margin: 1em 0;
+}
+
+.plFlag, .enFlag {
+	background: url(/d/t.png) no-repeat;
+	/* That’s for .enFlag, .plFlag will override it below.  Sticking it here helps
+	   with minification. */
+	background-position: -100px -25px;
+	text-indent: 22px;
+}
+
+.plFlag {
+	background-position: -75px -50px;
+}
+
+/* Meta information, social etc. */
+@{meta-cls} {
+	overflow: auto;
+	page-break-inside: avoid;
+	margin: 1em 0;
+	font-style: italic;
+}
+@{meta-cls} > ul {
+	margin: 1em 0;
+	float: left;
+}
+@{meta-cls} > div {
+	font-size: @small;
+	text-align: right;
+}
+@{social-cls} {
+	margin-top: 1em;
+	min-height: 20px;  /* Height of G+ and Twitter buttons */
+	&:extend(.np);
+}
+@{cats-and-tags-cls} {
+	font-size: @small;
+	text-align: right;
+	&:extend(.np);
+
+	ul {
+		display: block;
+		list-style: none;
+	}
+	li {
+		display: inline;
+		list-style: none;
+		margin: 0.5em;
+		margin-right: 0;
+	}
+	li:before {
+		content: '» ';
+	}
+	li:after {
+		content: ' ';
+	}
+	@media screen, projection, tv, handheld {
+		p {
+			/* Hide ‘In categories’ and ‘Tagged with:’
+			   introductions. */
+			display: none;
+		}
+		ul:first-child {
+			/* Hide permlink */
+			display: none;
+		}
+	}
+}
+
+/* Pagination table */
+@{pagination-cls} {
+	width: 100%;
+	box-sizing: border-box;
+	display: table;
+	table-layout: fixed;
+	margin: 1em 0;
+	&:extend(.np);
+
+	ul {
+		display: table-row;
+	}
+	li {
+		display: table-cell;
+	}
+}
+@{pagination-next-cls} {
+	text-align: right;
+}
+
+
+/**** Sidebar ****/
+
+@{side-id} {
+	a, a:link, a:visited {
+		color: #009;
+	}
+	a:hover, a:focus, a:active {
+		color: #069;
+	}
+
+	h1 {
+		display: none;
+	}
+
+	h2 {
+		font-size: 1.26em;
+		text-align: center;
+		margin-bottom: 1em;
+	}
+
+	ul, li {
+		list-style: none;
+	}
+}
+
+/* Contact */
+@{contact-id} {
+	margin-top: 0;
+
+	h2 {
+		display: none;
+	}
+	ul {
+		display: block;
+	}
+	li {
+		display: block;
+		text-align: center;
+		margin: .5em 0;
+		line-height: 1.2;
+	}
+	li:first-child {
+		font-weight: bold;
+		margin: 1em 0;
+	}
+}
+
+/* Categories and archive */
+@{categories-id}, @{archive-id} {
+	ul {
+		display: table;
+		width: 100%;
+	}
+	li {
+		display: table-row;
+	}
+	a {
+		display: table-cell;
+		padding: 0.2em 0;
+	}
+	small {
+		display: table-cell;
+		text-align: right;
+		font-size: @small;
+		padding: 0 0.5em;
+		color: #555;
+	}
+	&:extend(.np);
+}
+@{feed-icon-cls} {
+	width: 16px;
+}
+@{feed-icon-cls} span {
+	background: url(/d/t.png) no-repeat;
+	display: block;
+	background-position: -25px -50px;
+	width: 16px;
+	height: 16px;
+	.text-off-screen();
+}
+
+/* Icons */
+@{icons-id} {
+	ul, li {
+		display: block;
+		margin: 0 auto;
+		text-align: center;
+		white-space: nowrap;
+	}
+	li {
+		display: inline-block;
+		margin: 0 2px;
+	}
+	a {
+		display: inline-block;
+		width: 24px;
+		height: 24px;
+	}
+
+	a {
+		background: url(/d/t.png) no-repeat;
+		.text-off-screen();
+	}
+
+	/* FSF */
+	li:nth-child(1) a       { background-position: -100px  0px; }
+	li:nth-child(1) a:hover { background-position: -50px -50px; }
+	/* FSFE */
+	li:nth-child(2) a       { background-position: -50px   0px; }
+	li:nth-child(2) a:hover { background-position: -50px -25px; }
+	/* FSFE Fellowship */
+	li:nth-child(3) a       { background-position: -25px   0px; }
+	li:nth-child(3) a:hover { background-position: -25px -25px; }
+	/* Conservancy */
+	li:nth-child(4) a       { background-position:   0px   0px; }
+	li:nth-child(4) a:hover { background-position:   0px -25px; }
+	/* Slackware */
+	li:nth-child(5) a       { background-position: -75px   0px; }
+	li:nth-child(5) a:hover { background-position: -75px -25px; }
+
+	&:extend(.np);
+}
+
+
+/**** Footer ****/
+
+@{foot-id} {
+	color: #999;
+	border-top: 1px dotted #ddf;
+	font-size: .8em;
+	padding: 1em 0;
+	text-align: center;
+
+	a, a:link, a:visited, a:hover, a:active, a:focus {
+		color: #9bc;
+	}
+
+	@media print {
+		margin-top: 4em;
+	}
+}
+
+
+/**** Print ****/
+
+@media print {
+	body, html {
+		color: #000;
+		background: #fff;
+	}
+
+	a, a:link, a:visited, a:hover, a:focus, a:active {
+		text-decoration: none !important;
+		border: none !important;
+		color: inherit !important;
+	}
+
+	a:after {
+		color: #333 !important;
+		font-weight: normal;
+		font-size: @small;
+	}
+
+	@{article-text-cls}, @{meta-cls} {
+		a[href^="http://"]:after, a[href^="https://"]:after {
+			content: " 〈" attr(href) "〉";
+		}
+		a[href^="/"]:after {
+			content: " 〈mina86.com" attr(href) "〉";
+		}
+	}
+
+	article h1 a[href^="/"]:after {
+		content: "\a〈mina86.com" attr(href) "〉";
+		white-space: pre-wrap;
+	}
+}
+
+@{meta-cls} > ul li + li, .np {
+	@media print {
+		display: none !important;
+	}
+}
+
+
+/**** Generic stuff ****/
+
+.rht {
+	text-align: right;
+}
+
+.nb {
+	white-space: nowrap;
+}

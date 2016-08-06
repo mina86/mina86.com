@@ -19,7 +19,7 @@ pointer</a> can be donated in C and C++.
 
 <!-- EXCERPT -->
 
-<h3>The confusing <code>0</code></h3>
+<h2>The confusing <code>0</code></h2>
 
 <p>In C and C++, the literal <code>0</code> has two meanings: it’s either
 an octal (yes, octal) literal representing number zero or a null
@@ -60,7 +60,7 @@ prototypes and (ii) when using functions with variable arguments use
 <code>(<var>foo</var> *)0</code> to mean a null pointer.
 
 
-<h3>The confusing <code>NULL</code></h3>
+<h2>The confusing <code>NULL</code></h2>
 
 <p>Since context is not always obvious some programmers prefer to
 explicitly indicate the intended meaning by using different notations
@@ -131,7 +131,7 @@ following code, after pre-processing, may or may not be valid:
 }</pre>
 
 
-<h3>Function overloading</h3>
+<h2>Function overloading</h2>
 
 <p>And since we are in the realm of C++ we can now deal with the
 biggest issue.  As you may already know, C++ allows function
@@ -166,7 +166,7 @@ may add an overloaded version of the function which will break the
 code if cast is not used in the first case.
 
 
-<h3>Useless <code>nullptr</code></h3>
+<h2>Useless <code>nullptr</code></h2>
 
 <p>Addressing those issues, the C++ working group defined a new
 <code>nullptr</code> keyword which evaluates to a null pointer of type
@@ -205,7 +205,7 @@ what C++ committee should do instead of adding to the confusion by
 introducing <em>yet another</em> method of representing a null
 pointer.
 
-<h3>Null pointer representation</h3>
+<h2>Null pointer representation</h2>
 
 <p>The last thing I want to talk about is a null pointer’s
 representation.  There are two misconceptions that came from the fact
@@ -230,7 +230,7 @@ different types (which I haven’t mentioned in this article). Also, the
 recurring issue of not being able to comment has been fixed (hopefully
 for good this time).
 
-<h3>Summary</h3>
+<h2>Summary</h2>
 
 <p>To sum things up, here are all the tips that you should keep in
 mind while programming in C or C++:
