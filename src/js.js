@@ -52,47 +52,6 @@
         request.send();
       },
 
-      /* Load contents of article when “more” link is clicked. */
-      prepareMoreLinks = function(links) {
-        for (i = getLength(links); i--; ) {
-          var node = links[i], url = node.href, node2;
-          if (node.getAttribute('href') != '#m' &&
-              url.substring(getLength(url) - 2) == '#m') {
-            node2 = createElement(str_a);
-            node2.href = url;
-            setHTMLAndClass(node2, 'load the rest', str_load_more);
-            node2.onclick = function() {
-              T = this;
-              i = T.href;
-              node2 = createElement('span');
-              return makeRequest(url = i.substring(0, getLength(i) - 2),
-                                 function() {
-                try {
-                  for (nodes = byTag(getResponseDocumentElement(T)), i = 0;
-                       (node = nodes[i++]).id != 'm';
-                       /* nop */) {
-                    /* nop */
-                  }
-                  removeId(node);
-                  setHTMLAndClass(node2.previousSibling, 'Comment…');
-                  url = getParent(node2);
-                  removeElement(node2);
-                  getParent(url).insertBefore(node, url);
-                }
-                catch (e) {
-                  W.location = url;
-                }
-              }) || (
-                setHTMLAndClass(node2, 'loading…', str_load_more),
-                T = this,
-                !getParent(T).replaceChild(node2, T)
-              );
-            };
-            getParent(node).insertBefore(node2, node.nextSibling);
-          }
-        }
-      },
-
       addScript = function(src) {
         node = createElement('script');
         node.src = 'https://' + src;
@@ -125,7 +84,4 @@
 
   /* Google Custom Search */
   addScript('cse.google.com/cse.js?cx=005697715059674104273:zluc68s5jow');
-
-  /* AJAX */
-  W.opera || prepareMoreLinks(D.links);
 })(document, window);
