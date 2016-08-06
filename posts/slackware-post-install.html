@@ -18,7 +18,8 @@ for everyone.  You have been warned.
 discovered benefits of having a group for each user I now do it with the
 following commands:
 
-<pre>sed -i 's/^ENCRYPT_METHOD.*/ENCRYPT_METHOD SHA512/' \
+<pre>
+sed -i 's/^ENCRYPT_METHOD.*/ENCRYPT_METHOD SHA512/' \
     /etc/login.defs
 useradd -U -G users,root,wheel -m <var>username</var>
 passwd <var>username</var></pre>
@@ -29,7 +30,8 @@ passwd <var>username</var></pre>
 <p>Having the user in root and wheel groups makes it easy to restrict access
 to su command:
 
-<pre>echo 'ALL:ALL EXCEPT GROUP root:DENY' &gt;&gt;/etc/suauth
+<pre>
+echo 'ALL:ALL EXCEPT GROUP root:DENY' &gt;&gt;/etc/suauth
 sed -i 's/^SU_WHEEL_ONLY.*/SU_WHEEL_ONLY yes/' /etc/login.defs
 chown root:root /bin/su
 chmod 4750 /bin/su
@@ -76,7 +78,8 @@ all that is left.  Its configuration is stored in
 <code>/etc/ssh/sshd_config</code> file.  To limit who can ssh in and
 increase security of SSH the following options need to be set:
 
-<pre>Protocol 2
+<pre>
+Protocol 2
 
 PermitRootLogin no
 DenyUsers root
@@ -109,13 +112,15 @@ X server but they do not need to be writable only by users who are supposed to
 have access to X window system.  The directories are initialised
 in <code>/etc/rc.d/rc.S</code> file in the following way:
 
-<pre>  mkdir -p /tmp/.ICE-unix
+<pre>
+  mkdir -p /tmp/.ICE-unix
   chmod 1777 /tmp/.ICE-unix</pre>
 
 <p>with the same code for the other directory.  To achieve greater security,
 this should be changed to:
 
-<pre>  mkdir -p /tmp/.ICE-unix
+<pre>
+  mkdir -p /tmp/.ICE-unix
   chgrp users /tmp/.ICE-unix
   chmod 1730 /tmp/.ICE-unix</pre>
 
@@ -140,7 +145,8 @@ daemon to run, but still want to have my clock synchronised, so instead I am
 using ntpdate to query for the time every hour.  This can be set up by
 invoking:
 
-<pre>cat &gt;/etc/crontab.hourly/ntpsync &lt;&lt;EOF
+<pre>
+cat &gt;/etc/crontab.hourly/ntpsync &lt;&lt;EOF
 #!/bin/sh
 # Change to two-letter code of the country the machine is in.
 country=<var>us</var>
@@ -155,7 +161,8 @@ chmod 755 /etc/crontab.hourly/ntpsync
 
 <p>In <code>/etc/rc.d/rc.syslog</code> modify syslogd and klogd invocations:
 
-<pre>    /usr/sbin/syslogd <b>-m 0</b>
+<pre>
+    /usr/sbin/syslogd <b>-m 0</b>
     /usr/sbin/klogd -c 3 -x <b>-p</b></pre>
 
 <p>Adding <code>-m 0</code> disables the <code>-- MARK --</code> messages (which are
@@ -164,13 +171,15 @@ paranoia mode.
 
 <p>Furthermore, to be able to see log messages on TTY 12 run the following:
 
-<pre>echo '*.* -/dev/tty12' &gt;&gt;/etc/syslog.conf
+<pre>
+echo '*.* -/dev/tty12' &gt;&gt;/etc/syslog.conf
 kill -SIGHUP $(cat /var/run/syslogd.pid)</pre>
 
 <p>With one more addition to <code>/etc/rc.d/rc.local</code> the 12th TTY can also
 include a convenient clock:
 
-<pre>## Clock on TTY12
+<pre>
+## Clock on TTY12
 (
 	renice -n 20 $$
 	cd /
@@ -200,7 +209,8 @@ to set up a static hardware addresses for the default gateway and some most
 important hosts the machine is connecting to.  For this to work those hosts
 need to have a static IP as well of course.
 
-<pre>arp -n |awk 'FNR > 1 &amp;&amp; NF == 5 {print $3, $1}' &gt;&gt;/etc/ethers
+<pre>
+arp -n |awk 'FNR > 1 &amp;&amp; NF == 5 {print $3, $1}' &gt;&gt;/etc/ethers
 # Remove entries that should not have static entries
 nano /etc/ethers
 arp -f
@@ -210,7 +220,8 @@ echo 'arf -f' &gt;&gt;/etc/rc.d/rc.local</pre>
 <p>Block <abbr title="File Transfer Protocol">FTP</abbr> access to everyone
 except for a single user:
 
-<pre>cut -d: -f1 /etc/passwd |\
+<pre>
+cut -d: -f1 /etc/passwd |\
     grep -v '^<var>username</var>$' &gt;&gt;/etc/ftpusers</pre>
 
 <p>Or just block it to everyone if FTP is not used with:
@@ -225,7 +236,8 @@ in that files to comments.</p>
 Control Protocol">TCP</abbr> Wrapper</a> to prevent any services using
 them from accepting connections:
 
-<pre>echo 'sshd: ALL: ALLOW' &gt;&gt;/etc/hosts.allow
+<pre>
+echo 'sshd: ALL: ALLOW' &gt;&gt;/etc/hosts.allow
 echo 'ALL: ALL' &gt;&gt;/etc/hosts.deny</pre>
 
 
@@ -233,7 +245,8 @@ echo 'ALL: ALL' &gt;&gt;/etc/hosts.deny</pre>
 
 <p>There is a bunch of files normal users do not need access to:
 
-<pre>chmod -R go-rwx /etc/cron.*
+<pre>
+chmod -R go-rwx /etc/cron.*
 chmod -R go-rwx /etc/rc.d
 chmod -R o-rwx /var/log</pre>
 
@@ -275,7 +288,8 @@ annoyances.  To improve the situation, note down value of the <code>boot</code>
 option as well as <code>root</code> options for all the images, run <code>chmod 600
 /etc/lilo.conf</code>, and finally edit it to have the following content:
 
-<pre># Enter a password only when a boot time parameter is used
+<pre>
+# Enter a password only when a boot time parameter is used
 restricted
 # Enter a password with every boot
 # mandatory
@@ -328,14 +342,16 @@ choosing <code>mandatory</code> as opposed to <code>restricted</code>.
 <p>Back in <code>/etc/login.defs</code> file, some eye-candy can be achieved by
 changing the following options:
 
-<pre>MAIL_CHECK_ENAB no
+<pre>
+MAIL_CHECK_ENAB no
 LOGIN_STRING    "%s's password:"
 ISSUE_FILE      /etc/issue
 MOTD_FILE       /etc/motd</pre>
 
 <p>and then edit <code>/etc/issue</code> file to contain:
 
-<pre>                 __
+<pre>
+                 __
             ,-~¨^  ^¨-,           _,
            /          / ;^-._...,¨/
           /          / /         /
@@ -352,7 +368,8 @@ MOTD_FILE       /etc/motd</pre>
 
 <p>Or if you prefer something with not so many lines:</p>
 
-<pre>       ._,-,_.          _    ________    _       ______    __
+<pre>
+       ._,-,_.          _    ________    _       ______    __
        ||| |||         / \  |__    __|  / \     |   _  \  |  |
        ||| |||        / . \    |  |    / . \    |  |_) /  |  |
        ;|| ||:       / /_\ \   |  |   / /_\ \   |     (   |  |
@@ -374,7 +391,8 @@ directories to white, by editing <code>/etc/DIR_COLORS</code>:
 <p>And since I reboot and halt the machine from command line without switching
 to root account, I also do this:
 
-<pre>cmds='/sbin/shutdown /sbin/halt /sbin/reboot /sbin/poweroff'
+<pre>
+cmds='/sbin/shutdown /sbin/halt /sbin/reboot /sbin/poweroff'
 echo "chown root:root $cmds" &gt;&gt;/etc/rc.d/rc.local
 echo "chmod 4750 $cmds" &gt;&gt;/etc/rc.d/rc.local</pre>
 
@@ -387,7 +405,8 @@ the fewer bugs it contains.  For instance, I haven’t used finger or talk for
 ages, and really don’t see a need for those as well as some other packages
 to be installed:
 
-<pre>cd /var/log/packages
+<pre>
+cd /var/log/packages
 removepkg biff+comsat bsd-finger netkit-* netwrite pidentd
 removepkg inetd ytalk uucp NetworkManager trn yptools
 removepkg slrn sendmail-* procmail</pre>
@@ -397,7 +416,8 @@ X packages were installed by mistake (for example because full installation
 has been chosen), but the machine will not run X window system, this will
 remove all packages from x, xap, kde and kdei series:
 
-<pre>cd /var/log/packages
+<pre>
+cd /var/log/packages
 removepkg $(grep -l \
     -e 'PACKAGE LOCATION:.*/slackware/xap/' \
     -e 'PACKAGE LOCATION:.*/slackware/x/' \
@@ -408,7 +428,8 @@ removepkg $(grep -l \
 <p>Choice of which packages should be removed and which should be kept needs
   to be made individually.  What may help is this command:
 
-<pre>cd /var/log/packages
+<pre>
+cd /var/log/packages
 grep 'PACKAGE LOCATION.*/slackware/.*/' * | \
     sed 's~^\([^:]*\):.*/slackware/\([^/]*\)/.*~\2 \1~' | \
     sort</pre>
@@ -422,7 +443,8 @@ especially true for n series which includes many servers.
 that aren’t really used for anything.  First make sure that those are really
 unused by invoking:
 
-<pre>find / -user adm -o -user games -o -user gdm -o -user lp \
+<pre>
+find / -user adm -o -user games -o -user gdm -o -user lp \
     -o -user news -o -user operator -o -user pop -o -user rpc \
     -o -user uucp -o -group adm -o -group lp -o -group news \
     -o -group pop -o -group uucp -ls</pre>
@@ -431,7 +453,8 @@ unused by invoking:
 can be ignored) it should then be safe to run the following commands to remove
 unnecessary users and groups:
 
-<pre>for USR in adm gdm lp news operator pop rpc uucp halt \
+<pre>
+for USR in adm gdm lp news operator pop rpc uucp halt \
                 shutdown sync; do userdel "$USR"; done
 for GRP in adm news pop; do groupdel "$GRP"; done</pre>
 

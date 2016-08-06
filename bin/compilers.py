@@ -146,7 +146,7 @@ def minify_html(data, static_mappings):
 
     data = re.sub(r'\s+(</?(?:%s|pre)\b)' % block, r'\1', data)
     data = re.sub(r'(</pre>)\s+', r'\1', data)
-    data = re.sub(r'(<pre>)(?:[[:blank:]]*\n)+', r'\1', data)
+    data = re.sub('(<pre>)(?:[ \t]*\n)+', r'\1', data)
     data = re.sub(r'(</?%s\b[^>]*>)\s+' % block, r'\1', data)
 
     return data

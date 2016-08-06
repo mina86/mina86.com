@@ -16,7 +16,8 @@ Schauer’s <a href="https://github.com/lukas2511/letsencrypt.sh">letsencrypt.sh
 client and requires <em>no</em> configuration.  To start using it,
 first get the code onto your <em>local</em> machine by running:
 
-<pre>cd <i>${some_directory?}</i>
+<pre>
+cd <i>${some_directory?}</i>
 git clone https://github.com/mina86/lets-encrypt-nfs</pre>
 
 <p><code><i>${some_directory?}</i></code> is an arbitrary directory to
@@ -24,7 +25,8 @@ put the code into.  It may be <code>$HOME</code> for example.  Once
 the package is installed, the following command is sufficient to
 install certificates on an NFS-hosted site:
 
-<pre><i>${some_directory?}</i>/lets-encrypt-nfs/pull-and-run \
+<pre>
+<i>${some_directory?}</i>/lets-encrypt-nfs/pull-and-run \
     ./remote --setup \
     <i>${username?}_${sitename?}</i>@ssh.phx.nearlyfreespeech.net</pre>
 
@@ -47,7 +49,8 @@ site settings under Canonical URL option.
 executed on NFS host directly.  Getting the code on the machine is
 analogous to its local installation, i.e.:
 
-<pre>git clone https://github.com/mina86/lets-encrypt-nfs \
+<pre>
+git clone https://github.com/mina86/lets-encrypt-nfs \
           /home/private/lets-encrypt-nfs</pre>
 
 <p>Once cloning is done, getting certificates is done with the

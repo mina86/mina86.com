@@ -20,7 +20,8 @@
   will start rendering its prompt.  Let’s look at an example of
   showing time in various locations:
 
-<pre>__command_rprompt() {
+<pre>
+__command_rprompt() {
 	local times= n=$COLUMNS tz
 	for tz in ZRH:Europe/Zurich PIT:US/Eastern \
 	          MTV:US/Pacific TOK:Asia/Tokyo; do
@@ -61,14 +62,16 @@ PROMPT_COMMAND=__command_rprompt</pre>
 
 <p>To test that idea it’s enough to execute:
 
-<pre>bind '\C-l:redraw-current-line'
+<pre>
+bind '\C-l:redraw-current-line'
 bind '\M-\C-j:accept-line'
 bind '\C-j:"\C-l\M-\C-j"' '\C-m:"\C-j"'</pre>
 
 <p>Making this permanent is as easy as adding the following lines
   to <code>~/.inputrc</code>:
 
-<pre>$if Bash
+<pre>
+$if Bash
     "\C-l": redraw-current-line
     "\e\C-j": accept-line
     "\C-j": "\C-l\e\C-j"

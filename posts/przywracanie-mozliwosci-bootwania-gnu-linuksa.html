@@ -64,7 +64,8 @@ potem odczytać prawidłowy plik (<abbr title="to jest">tj.</abbr> ten z dysku))
 znajdziesz opcje root z odpowiednim wpisem.  Będzie ona poprzedzona
 wpisem <code>image = <i>&lt;costam&gt;</i></code>, <abbr title="na przykład">np.</abbr>:</p>
 
-<pre>image = /boot/bzImage
+<pre>
+image = /boot/bzImage
   root = /dev/hda1</pre>
 
 <p>Jeżeli po wciśnięciu ENTER wszystko będzie działać poprawnie i
@@ -99,7 +100,8 @@ do wartości opcji <code>boot</code>, należy podać: <code>boot =
 /dev/hda</code> .  Następnie dodać wpis z Windowsami - będzie on
 wyglądał mniej więcej tak:</p>
 
-<pre>other = /dev/<i>&lt;windev&gt;</i>
+<pre>
+other = /dev/<i>&lt;windev&gt;</i>
   label = windows</pre>
 
 <p>gdzie <i>&lt;windev&gt;</i> to partycja z dyskiem C Windowsów
@@ -109,7 +111,8 @@ pierwszą partycję, która w kolumnie System ma „Win95” lub „FAT16”.
 Dodatkowo, partycja ta powinna być oznaczona gwiazdką w kolumnie Boot.
 Jeżeli nie jest to może być lipnie. ;) Ja mam coś takiego:</p>
 
-<pre>Disk /dev/hda: 120.0 GB, 120034123776 bytes
+<pre>
+Disk /dev/hda: 120.0 GB, 120034123776 bytes
 255 heads, 63 sectors/track, 14593 cylinders
 Units = cylinders of 16065 * 512 = 8225280 bytes
 
@@ -128,7 +131,8 @@ podmontowane) powinna być gdzieś szukana informacja.  Dla przykładu, u
 mnie jedna z linijek wygląda następująco (przełamanie linii dodane
 ręcznie):</p>
 
-<pre>/dev/hda2 on /C type vfat (rw,umask=0,shortname=winnt,codepage=852,
+<pre>
+/dev/hda2 on /C type vfat (rw,umask=0,shortname=winnt,codepage=852,
                            quiet,iocharset=iso8859-2)</pre>
 
 <p>Warto również sprawdzić, czy w pliczku <code>/etc/lilo.conf</code> jest

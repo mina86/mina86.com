@@ -78,7 +78,8 @@ w składni Pythona to „magiczny przecinek” jak go
 zacząłem nazywać.  Otóż poniższe dwie linijki są jak najbardziej
 poprawnym kodem Pythona i znaczą coś zupełnie innego:</p>
 
-<pre>[ "a", "b" ]
+<pre>
+[ "a", "b" ]
 [ "a"  "b" ]</pre>
 
 <p>Fajnie, nie? Żeby połączyć ze sobą dwa literały znakowe wystarczy
@@ -110,7 +111,8 @@ musisz je jawnie skleić), ale dodaje na końcu znak przejścia do nowej
 linii.  Co zrobić, jeżeli go nie chcemy?  Magiczny przecinek przybywa
 na ratunek:</p>
 
-<pre>print "hello,",
+<pre>
+print "hello,",
 print "world"</pre>
 
 
@@ -159,7 +161,8 @@ w ogromną wadę.  Wystarczy porównać te dwa skrypty, jeden
 napisany w Pythonie, a drugi w, tak przez wszystkich
 znienawidzonym, Perlu:</p>
 
-<pre>import random
+<pre>
+import random
 
 name = "Jane Doe"
 if random.randint(0, 99) == 0:
@@ -167,7 +170,8 @@ if random.randint(0, 99) == 0:
 else:
     print "Hi!"</pre>
 
-<pre>use warnings;
+<pre>
+use warnings;
 use strict;
 
 my $name = "Jane Doe";
@@ -185,7 +189,8 @@ literówkę.  Tymczasem perl wyłoży się w momencie kompilacji
 <p>Zupełnie analogiczny przykład można stworzyć na wadę dynamicznego
 typowania:</p>
 
-<pre>import random
+<pre>
+import random
 
 if random.randint(0, 99) == 0:
     foo = "10"
@@ -245,7 +250,8 @@ Typowanie dynamiczne: jeśli się nie pilnujesz, to oczywiście że się wali. W
 
 <p>Fluxid, i czy poprawnie skompilowany vim automagicznie zgadnie poziom wcięcia dla kolejnej linijki kodu w tym przykładzie:</p>
 
-<pre><code>if foo:
+<pre>
+<code>if foo:
     bar()
     if baz:
         qux()
@@ -373,7 +379,8 @@ Typowanie dynamiczne: jeśli się nie pilnujesz, to oczywiście że się wali. W
 
 <p>Odnośnie pętli do-while to bardzo prosty przykład:</p>
 
-<pre><code>do {
+<pre>
+<code>do {
     print "Podaj cyfrę dziesiętną: ";
     $_ = &lt;&gt;;
 } while (!/^\s*\d\s*$/);
@@ -482,7 +489,8 @@ Do takich wyznaczników dobrego smaku należą też wcięcia. Skoro są to czemu
 Jeśli teraz zbierzemy to wszystko razem - otrzymamy czytelny i prosty kod. Natomiast jeśli ktoś robi powyżej 3 wcięć i szeroko długie funkcje to ja dziękuję za jakość takiego kodu.<br />
 Równie dobrze można napisać, że w C++ można stworzyć takiego potwora:</p>
 
-<pre><code>costam.costaminnego.cosjeszczeinnego.jeszczecos();
+<pre>
+<code>costam.costaminnego.cosjeszczeinnego.jeszczecos();
 </code></pre>
 
 <p>W takim przypadku nawet Smalltalk wygląda ładniej.</p>
@@ -613,7 +621,8 @@ W tak dużych zespołach testy języków dynamicznych pożarłyby dość duże k
 
 <p>Dodek: Nie lubie tego wyrażenia ale</p>
 
-<pre><code>&gt;&gt;&gt; b = 10
+<pre>
+<code>&gt;&gt;&gt; b = 10
 &gt;&gt;&gt; a = 0 if b &lt; 10 else 1
 &gt;&gt;&gt; a
 1

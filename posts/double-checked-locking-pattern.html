@@ -28,7 +28,8 @@
   operatora przypisania musi być wykonane zanim nastąpi przypisanie.
   Bardzo prostym przykładem jest kod:</p>
 
-<pre>int foo = 0x42;
+<pre>
+int foo = 0x42;
 int bar = 42;
 /* 1 */
 foo = bar++;
@@ -42,7 +43,8 @@ foo = bar++;
   dopiero inkrementując tą drugą<sup><a href="#f2"
   id="fl2">2</a></sup>:</p>
 
-<pre>foo = bar;
+<pre>
+foo = bar;
 ++bar;</pre>
 
 <p>Sugerowałoby to, iż miałem rację twierdząc, iż
@@ -54,7 +56,8 @@ foo = bar++;
   punktu sekwencyjnego<sup><a href="#f3" id="fl3">3</a></sup>.
   Gdyby tak było, to kod ten należałoby traktować jak:</p>
 
-<pre>Foo *new_foo() { return new Foo(); }
+<pre>
+Foo *new_foo() { return new Foo(); }
 /* … */
 instance = new_Foo();</pre>
 
@@ -67,7 +70,8 @@ instance = new_Foo();</pre>
 <p>Po tych wszystkich przemyśleniach postanowiłem sprawdzić jak to
   wygląda w praktyce i faktycznie, kompilacja kodu:</p>
 
-<pre>struct Foo {
+<pre>
+struct Foo {
     static Foo *instance() {
         static Foo *inst = 0;
         if (!inst) inst = new Foo(0);
@@ -129,7 +133,8 @@ int main(void) {
 <p><sup><a href="#fl1" id="f1">1</a></sup> Dla osób nieobecnych na
 wykładzie, chodzi o:</p>
 
-<pre>class Foo {
+<pre>
+class Foo {
     Foo *getInstance() {
         static Foo *instance = 0;
         if (!instance) {
@@ -151,7 +156,8 @@ wykładzie, chodzi o:</p>
   rejestru).  Aby sprawdzić swoją intuicję postanowiłem zrobić pewien
   test:</p>
 
-<pre>[mina86@tuptus ~/code]$ cat foo.c
+<pre>
+[mina86@tuptus ~/code]$ cat foo.c
 int main(void) {
     int foo = 42;
     int bar = 0x42;

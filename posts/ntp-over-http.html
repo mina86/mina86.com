@@ -21,7 +21,8 @@ department later, I came up with an idea…</p>
 <p>If you recall that web servers return their time in response
 headers solution becomes clear.</p>
 
-<pre>httpdate="$(wget --no-cache -S -O /dev/null google.com 2&gt;&amp;1 |
+<pre>
+httpdate="$(wget --no-cache -S -O /dev/null google.com 2&gt;&amp;1 |
 	sed -n -e 's/  *Date: *//p' -eT -eq)"
 [ -n "$httpdate" ] && date -s "$httpdate"</pre>
 
@@ -50,7 +51,8 @@ limit themselves to some scripting language with regexpes). :)</p>
 
 <p>Improved version to ignore proxy cache servers:</p>
 
-<pre>date -s "$(wget --no-cache -S -O /dev/null google.com 2&gt;&amp;1 | \
+<pre>
+date -s "$(wget --no-cache -S -O /dev/null google.com 2&gt;&amp;1 | \
     sed -n -e '/  *Date: */ {' -e s///p -e q -e '}')"</pre>
 
 <p>And set http_proxy env. variable if you have a proxy server in your way, as:</p>
@@ -59,7 +61,8 @@ limit themselves to some scripting language with regexpes). :)</p>
 
 <p>For instance the whole thing could be:</p>
 
-<pre>http_proxy=http://user:password@192.168.1.5:3128
+<pre>
+http_proxy=http://user:password@192.168.1.5:3128
 export http_proxy
 date -s "$(wget --no-cache -S -O /dev/null google.com 2&gt;&amp;1 | \
     sed -n -e '/  *Date: */ {' -e s///p -e q -e '}')"</pre>
@@ -70,7 +73,8 @@ date -s "$(wget --no-cache -S -O /dev/null google.com 2&gt;&amp;1 | \
 <!-- nick_url: http://mina86.com -->
 
 <p>Looks good, thanks, even thought I'd get rid of the export not to pollute the environment as so:</p>
-<pre>date -s "$(
+<pre>
+date -s "$(
     http_proxy=http://youruser:yourpassword@proxyip:proxyport \
     wget --no-cache -S -O /dev/null google.com 2&gt;&amp;1 | \
     sed -n -e '/  *Date: */ {' -ep -eq -e '}')"</pre>

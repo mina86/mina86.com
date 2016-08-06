@@ -87,7 +87,8 @@
     CSS one is enough.  HTML code is rather simple and
     unimpressive:
 
-  <pre>&lt;div id=&quot;html5&quot;&gt;&lt;span
+  <pre>
+&lt;div id=&quot;html5&quot;&gt;&lt;span
 id=&quot;spriteh&quot;&gt;H&lt;/span&gt;&lt;span
 id=&quot;spritet&quot;&gt;T&lt;/span&gt;&lt;span
 id=&quot;spritem&quot;&gt;M&lt;/span&gt;&lt;span
@@ -98,7 +99,8 @@ id=&quot;sprite5&quot;&gt;5&lt;/span&gt;&lt;/div&gt;</pre>
     excellent.  To make an image out of those spans their dimension
     must be set, text content hidden, and background image added:
 
-<pre>#html5 { width: 500px; }
+<pre>
+#html5 { width: 500px; }
 #html5, #html5 span { height: 100px; }
 
 #html5 span {
@@ -125,7 +127,8 @@ id=&quot;sprite5&quot;&gt;5&lt;/span&gt;&lt;/div&gt;</pre>
     what <code>background-position</code> property does.  With a bit more
     styling, the code is almost complete:
 
-<pre>#spritet { background-position:  -74px 0; }
+<pre>
+#spritet { background-position:  -74px 0; }
 #spritem { background-position: -126px 0; }
 #spritel { background-position: -216px 0; }
 #sprite5 { background-position: -312px 0; }</pre>
@@ -146,7 +149,8 @@ id=&quot;sprite5&quot;&gt;5&lt;/span&gt;&lt;/div&gt;</pre>
 
   <p>With that knowledge, getting roll-over effect is now trivial:
 
-<pre>#spriteh:hover { background-position:    0   -110px; }
+<pre>
+#spriteh:hover { background-position:    0   -110px; }
 #spritet:hover { background-position:  -74px -110px; }
 #spritem:hover { background-position: -126px -110px; }
 #spritel:hover { background-position: -216px -110px; }
@@ -165,7 +169,8 @@ id=&quot;sprite5&quot;&gt;5&lt;/span&gt;&lt;/div&gt;</pre>
     cover with span’s only when they are hovered.  CSS code
     for that looks as follows:
 
-<pre>#html5, #html5 span { height: 100px; }
+<pre>
+#html5, #html5 span { height: 100px; }
 #html5 {
   width: 500px;
   background-image: url('html5-sprite.jpg');
@@ -204,7 +209,8 @@ id=&quot;sprite5&quot;&gt;5&lt;/span&gt;&lt;/div&gt;</pre>
   <p>Let’s compare the above with a way to implement an icon in
     a top-left corner of an element:
 
-<pre>blockquote {
+<pre>
+blockquote {
   background: url('…') no-repeat;
   padding: 0 26px;
   min-height: 20px;
@@ -229,7 +235,8 @@ id=&quot;sprite5&quot;&gt;5&lt;/span&gt;&lt;/div&gt;</pre>
 
   <p>With that knowledge, the following styles can be constructed:
 
-<pre>blockquote, .plFlag, .enFlag {
+<pre>
+blockquote, .plFlag, .enFlag {
   background: url('/d/s.png') no-repeat;
 }
 blockquote {

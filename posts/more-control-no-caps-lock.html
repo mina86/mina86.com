@@ -120,7 +120,8 @@ a file with “keyboard” or “layout” in its name such as
 <code>90-keyboard-layout.conf</code>.  If it does all you need to do is
 copy it to the latter directory:</p>
 
-<pre>cp -i \
+<pre>
+cp -i \
 	/usr/share/X11/xorg.conf.d/90-keyboard-layout.conf \
 	/etc/X11/xorg.conf.d/</pre>
 
@@ -128,7 +129,8 @@ copy it to the latter directory:</p>
 option by adding “ctrl:nocaps”.  For instance, the file could look
 something like this:</p>
 
-<pre>Section "InputClass"
+<pre>
+Section "InputClass"
 	Identifier "keyboard-all"
 	MatchIsKeyboard "on"
 	MatchDevicePath "/dev/input/event*"
@@ -155,7 +157,8 @@ somewhere in <code>/etc/hal/policy</code> directory (under Slackware it’s
 <i>input.xkb.options</i> key by adding <code>ctrl:nocaps</code> to the
 value.  For instance here’s my file:</p>
 
-<pre>&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+<pre>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
 &lt;deviceinfo version=&quot;0.2&quot;&gt;
   &lt;device&gt;
     &lt;match key=&quot;info.capabilities&quot; contains=&quot;input.keymap&quot;&gt;
@@ -181,12 +184,14 @@ you may need to use xmodmap.  Usually it’ll be enough to create
 a <code>.Xmodmap</code> file in your home directory with the
 following content:</p>
 
-<pre>remove Lock = Caps_Lock
+<pre>
+remove Lock = Caps_Lock
 add Control = Caps_Lock</pre>
 
 <p>And to further turn left Ctrl to Caps Lock:</p>
 
-<pre>remove Control = Control_L
+<pre>
+remove Control = Control_L
 add Lock = Control_L</pre>
 
 <p>To test if the file works simply invoke <code>xmodmap
@@ -287,7 +292,8 @@ describing keymap.  For instance, I use
 
 <p>After you have located your keymap all you have to do is:</p>
 
-<pre>cd /path/to/keymap/directory  # eg. cd /usr/share/kbd/keymaps/i386/qwerty
+<pre>
+cd /path/to/keymap/directory  # eg. cd /usr/share/kbd/keymaps/i386/qwerty
 gzip -d &lt;<i>kaymap</i>.map.gz | \
 sed \
 	-e 's/keycode[[:space:]][[:space:]]*58[[:space:]][[:space:]]*=[[:space:]][[:space:]]*Caps_Lock/keycode  58 = Control' \
@@ -355,14 +361,16 @@ finally restart the system for changes to take effect.</p>
 <p>The files are <a
 href="https://ftp.gnu.org/old-gnu/emacs/windows/docs/ntemacs/contrib/caps-as-ctrl.reg">caps-as-ctrl.reg</a>:</p>
 
-<pre>REGEDIT4
+<pre>
+REGEDIT4
 
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]
 "Scancode Map"=hex:00,00,00,00,00,00,00,00,02,00,00,00,1d,00,3a,00,00,00,00,00</pre>
 
 <p>and <a href="https://ftp.gnu.org/old-gnu/emacs/windows/docs/ntemacs/contrib/caps-ctrl-swap.reg">caps-ctrl-swap.reg</a>:</p>
 
-<pre>REGEDIT4
+<pre>
+REGEDIT4
 
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]
 "Scancode Map"=hex:00,00,00,00,00,00,00,00,03,00,00,00,1d,00,3a,00,3a,00,1d,00,00,00,00,00</pre>

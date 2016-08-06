@@ -61,7 +61,8 @@
 
 <h3 id=rise>Re-rising Python exception preserving back-trace</h3>
 
-<pre>import sys
+<pre>
+import sys
 
 exc_info = []
 
@@ -79,7 +80,8 @@ if not run(): call_throw()</pre>
 
 <p>When <code>throw</code> rises the exception again, back-trace will contain all frames that led up to having the exception caught in <code>run</code>:
 
-<pre>$ python exc.py
+<pre>
+$ python exc.py
 Traceback (most recent call last):
   File "exc.py", line 15, in <module>
     if not run(): call_throw()
@@ -97,7 +99,8 @@ AssertionError</pre>
 
 <p>To turn a list of lists (or in more generic terms, an iterable of iterables) into a single sequence use one of:
 
-<pre>def flatten(sequences):
+<pre>
+def flatten(sequences):
     return itertools.chain.from_iterable(sequences)
 
 def flatten(sequences):
@@ -110,7 +113,8 @@ statement at the beginning of the line instead of at the end).
 
 <p>If all elements are known to be lists or tuples, using <code>sum</code> may be considered easier:
 
-<pre>def flatten(lists):
+<pre>
+def flatten(lists):
     return sum(lists, [])
 
 def flatten(tuples):

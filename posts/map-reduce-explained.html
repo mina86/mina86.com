@@ -28,7 +28,8 @@
 
 <h3>Map and reduce functions</h3>
 
-<pre>map(function, sequence) → list
+<pre>
+map(function, sequence) → list
 
 reduce(function, sequence, initial_state) → final_state
     # function(state, element) → state</pre>
@@ -42,7 +43,8 @@ reduce(function, sequence, initial_state) → final_state
   passed to next invocation of the <var>function</var>.  Here are some
   simple examples:
 
-<pre>>>> <i># Square each element in a list of numbers</i>
+<pre>
+>>> <i># Square each element in a list of numbers</i>
 ... <b>map(lambda x: x*x, [1, 2, 3, 4])</b>
 [1, 4, 9, 16]
 
@@ -76,7 +78,8 @@ reduce(function, sequence, initial_state) → final_state
   QuakeNet) have said over the years.  The map stage will take a line
   from the logs and return user name and number of words in that line:
 
-<pre>import sys, re
+<pre>
+import sys, re
 
 def getWords(line):
     m = re.search(r'^\[\d\d:\d\d\] &lt;([^>]*)> (.*)$', line)
@@ -104,7 +107,8 @@ for nick, count in map(getWords, sys.stdin):
   data is already split into per-day files.  Parallelising the process
   is as simple as running a process for each file:
 
-<pre>mkdir -p temp/words
+<pre>
+mkdir -p temp/words
 parallel "$@" --eta '
 	&lt; {} python code/calc-words.py >temp/words/{#}' \
 	::: temp/logs/*
@@ -112,7 +116,8 @@ cat temp/words/*</pre>
 
 <p>The next step is to aggregate and calculate the sum for each user:
 
-<pre>import sys
+<pre>
+import sys
 
 def aggregate(state, line):
     name, count = line.strip().split(' ')
@@ -139,7 +144,8 @@ for nick, count in reduce(aggregate, sys.stdin, {}).iteritems():
   reduce phase.  For processing IRC logs, shuffle will read output of
   each map process and divide it into per-nick directories.  Like so:
 
-<pre>import errno, os, sys
+<pre>
+import errno, os, sys
 
 _, outdir, shardname = sys.argv
 files = {}
@@ -155,7 +161,8 @@ for line in sys.stdin:
 
 <p>With that script, we can parallelise the reduce phase as well:
 
-<pre>rm -rf -- temp/shuffled
+<pre>
+rm -rf -- temp/shuffled
 mkdir -p temp/shuffled
 parallel "$@" --eta '
 	&lt; {} python code/shuffle.py temp/shuffled {#}' \

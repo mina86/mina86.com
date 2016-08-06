@@ -42,7 +42,8 @@ of memory pools, which are well suited for small allocations.
 
 <p>For a quick example, this is how allocation might look like:
 
-<pre>dma_addr_t dma_addr;
+<pre>
+dma_addr_t dma_addr;
 void *virt_addr =
 	dma_alloc_coherent(dev, 100 &lt;&lt; 20, &amp;dma_addr, GFP_KERNEL);
 if (!virt_addr)
@@ -85,7 +86,8 @@ called <dfn>CMA area</dfn> or <dfn>CMA context</dfn>, is later
 returned to the buddy system so it can be used by regular
 applications.  To make reservation happen, one needs to call:
 
-<pre>void dma_contiguous_reserve(
+<pre>
+void dma_contiguous_reserve(
 	phys_addr_t limit);</pre>
 
 <p>just after memblock is initialised but prior to the buddy allocator
@@ -100,7 +102,8 @@ belong to the same zone.
 <p>In case of ARM the limit is set to <code>arm_dma_limit</code> or
 <code>arm_lowmem_limit</code>, whichever is smallest:
 
-<pre>diff --git a/arch/arm/mm/init.c b/arch/arm/mm/init.c
+<pre>
+diff --git a/arch/arm/mm/init.c b/arch/arm/mm/init.c
 @@ -364,6 +373,12 @@ void __init arm_memblock_init(struct meminfo *mi, struct machine_desc *mdesc)
     if (mdesc->reserve)
             mdesc->reserve();
@@ -118,7 +121,8 @@ belong to the same zone.
 <p>On x86 it is called just after memblock is set up in
 <code>setup_arch</code> function with no limit specified:
 
-<pre>diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+<pre>
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
 @@ -934,6 +935,7 @@ void __init setup_arch(char **cmdline_p)
  	}
  #endif
@@ -139,7 +143,8 @@ prepare it to be used with CMA.  On some architectures
 architecture-specific work may need to be performed as well.  To allow
 that, CMA will call the following function:
 
-<pre>void dma_contiguous_early_fixup(
+<pre>
+void dma_contiguous_early_fixup(
 	phys_addr_t base,
 	unsigned long size);</pre>
 
@@ -153,7 +158,8 @@ Furthermore, it may be called several times, but no more than
 <p>If an architecture does not need any special handling, the header
 file may just say:
 
-<pre>#ifndef H_ARCH_ASM_DMA_CONTIGUOUS_H
+<pre>
+#ifndef H_ARCH_ASM_DMA_CONTIGUOUS_H
 #define H_ARCH_ASM_DMA_CONTIGUOUS_H
 #ifdef __KERNEL__
 
@@ -171,7 +177,8 @@ dma_contiguous_early_fixup(phys_addr_t base, unsigned long size)
 modifying mappings</a> and so it provides a full definition of this
 function:
 
-<pre>diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
+<pre>
+diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
 <i>[…]</i>
 +static struct dma_contig_early_reserve dma_mmu_remap[MAX_CMA_AREAS] __initdata;
 +
@@ -192,7 +199,8 @@ function:
 +	}
 +}</pre>
 
-<pre>diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
+<pre>
+diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
 @@ -1114,11 +1122,12 @@ void __init paging_init(struct machine_desc *mdesc)
  {
  	void *zero_page;
@@ -212,7 +220,8 @@ function:
 <p>Second thing to do is to change architecture’s DMA API to use the
 whole machinery.  To allocate memory from CMA one uses:
 
-<pre>struct page *dma_alloc_from_contiguous(
+<pre>
+struct page *dma_alloc_from_contiguous(
 	struct device *dev,
 	int count,
 	unsigned int align);</pre>
@@ -234,7 +243,8 @@ allocated pages.
 
 <p>Here’s how allocation looks on x86:
 
-<pre>diff --git a/arch/x86/kernel/pci-dma.c b/arch/x86/kernel/pci-dma.c
+<pre>
+diff --git a/arch/x86/kernel/pci-dma.c b/arch/x86/kernel/pci-dma.c
 @@ -99,14 +99,18 @@ void *dma_generic_alloc_coherent(struct device *dev, size_t size,
  				 dma_addr_t *dma_addr, gfp_t flag)
  {
@@ -250,7 +260,8 @@ allocated pages.
 
 <p>To free allocated buffer, one needs to call:
 
-<pre>bool dma_release_from_contiguous(
+<pre>
+bool dma_release_from_contiguous(
 	struct device *dev,
 	struct page *pages,
 	int count);</pre>
@@ -267,7 +278,8 @@ some other method.
 
 <p>Again, here’s how it is used on x86:
 
-<pre>diff --git a/arch/x86/kernel/pci-dma.c b/arch/x86/kernel/pci-dma.c
+<pre>
+diff --git a/arch/x86/kernel/pci-dma.c b/arch/x86/kernel/pci-dma.c
 @@ -126,6 +130,16 @@ again:
  	return page_address(page);
  }
@@ -328,7 +340,8 @@ context.
 
 <p>To assign a CMA area to a device, all one needs to do is call:
 
-<pre>int dma_declare_contiguous(
+<pre>
+int dma_declare_contiguous(
 	struct device *dev,
 	unsigned long size,
 	phys_addr_t base,
@@ -352,7 +365,8 @@ to <code>dma_contiguous_reserve</code>.  The return value is either zero
 S5P platform’s <code>reserve</code> callback</a>.  It creates two CMA
 contexts for the MFC driver:
 
-<pre>diff --git a/arch/arm/plat-s5p/dev-mfc.c b/arch/arm/plat-s5p/dev-mfc.c
+<pre>
+diff --git a/arch/arm/plat-s5p/dev-mfc.c b/arch/arm/plat-s5p/dev-mfc.c
 @@ -22,52 +23,14 @@
  #include &lt;plat/irqs.h&gt;
  #include &lt;plat/mfc.h&gt;
@@ -387,7 +401,8 @@ using, and <code>dev_set_cma_area</code> to set the same context to
 another device.  This sequence must be called no sooner than
 in <code>postcore_initcall</code>.  Here is how it could look like:
 
-<pre>static int __init foo_set_up_cma_areas(void)
+<pre>
+static int __init foo_set_up_cma_areas(void)
 {
 	struct cma *cma;
 
@@ -497,7 +512,8 @@ Of course, CMA patch was included in kernel and CMA area was reserved successful
 
 <p><code>dma_alloc_coherent()</code> return NULL at this point (dma-mapping.h):</p>
 
-<pre><code>if (!dev)
+<pre>
+<code>if (!dev)
       dev = &amp;x86_dma_fallback_dev;
 
 if (!is_device_dma_capable(dev))

@@ -29,7 +29,8 @@ line at the end of the file) solutions – one uses two loops
 and the other only one:</p>
 
 <pre>main(i,j){for(;j=i++&lt;99;)for(;++j&lt;i||printf("%d\n",i),i%j;);}</pre>
-<pre>main(j,i){for(i=2;i%++j||(i>j||printf("%d\n",i),j=i++&lt;99););}</pre>
+<pre>
+main(j,i){for(i=2;i%++j||(i>j||printf("%d\n",i),j=i++&lt;99););}</pre>
 
 <p>I have used a comma operator to print the prime number
 but <a href="#comm1573336">Wasacz solution</a> shown that it is not
@@ -58,7 +59,8 @@ original design types were not part of function declaration and, not
 to break old code, this (otherwise deprecated syntax) remained in C89.
 The old function definition looks as follows:</p>
 
-<pre><i>rettype</i> foo(<i>arg1</i>, <i>arg2</i>)
+<pre>
+<i>rettype</i> foo(<i>arg1</i>, <i>arg2</i>)
 	<i>type1</i> <i>arg1</i>;
 	<i>type2</i> <i>arg2</i>;
 {
@@ -77,7 +79,8 @@ supported the new function prototypes), which lead programmers to the
 use of a macro that let them omit function prototype when compiling
 with old compiler, ie.:</p>
 
-<pre>#if __STDC__
+<pre>
+#if __STDC__
 #  define P(x) x
 #else
 #  define P(x) ()
@@ -102,7 +105,8 @@ thing as <code>static int i;</code>.</p>
 The two <code>main()</code> function prototypes defined by the standard
 are:</p>
 
-<pre>int main(int, char **);
+<pre>
+int main(int, char **);
 int main(void);</pre>
 
 <p>This stays in conflict with our second argument being (implicitly)
@@ -140,7 +144,8 @@ with <code>int</code> as a return type is assumed.</p>
 opportunity to yet again remind everybody not to cast result of
 <code>malloc()</code> function.  Consider the following code:</p>
 
-<pre>int main(void) {
+<pre>
+int main(void) {
 	int *p = (int *)malloc(sizeof *p); /* incorrect */
 	return p ? 0 : *p;
 }</pre>
@@ -154,7 +159,8 @@ a pointer to <code>int</code>.  Without the cast, compiler will have
 to complain about implicit conversion from <code>int</code> to pointer
 type reminding about the header file:</p>
 
-<pre>int main(void) {
+<pre>
+int main(void) {
 	int *p = malloc(sizeof *p); /* correct */
 	return p ? 0 : *p;
 }</pre>

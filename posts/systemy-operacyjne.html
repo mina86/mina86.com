@@ -224,7 +224,8 @@
 
   <dt>Odczyt pliku <code>/etc/passwd</code>
   z wykorzystaniem <code>read</code>/<code>set</code>/<code>IFS</code>.</dt>
-  <dd><pre>while IFS=: read nick:pass:uid:gid:info:home:shell; do
+  <dd><pre>
+while IFS=: read nick:pass:uid:gid:info:home:shell; do
     echo "User $nick ($uid/$gid); home directory: $home; shell: $shell"
 done &lt;/etc/passwd</pre></dd>
 
@@ -346,16 +347,19 @@ done &lt;/etc/passwd</pre></dd>
 
   <dt>Idea wykorzystania instrukcji Test&amp;SetLock (TSL) do realizacji
     semafora binarnego.</dt>
-  <dd><pre>register r = 1;
+  <dd><pre>
+register r = 1;
 do {
   TSL(r, semaphore)
 } while (r);</pre></dd>
   <dd>Albo jak ktoś woli pseudo-assembler:
-    <pre>                mov     reg, 1
+    <pre>
+                mov     reg, 1
 loop_here:      tsl     reg, [semaphore]
                 jne     reg, 0, loop_here</pre></dd>
   <dd>Albo jak ktoś woli ix86 (w notacji AT&amp;T):
-    <pre>                 mov    eax, 1
+    <pre>
+                 mov    eax, 1
 loop_here:       xchg   eax, [semaphore]
                  or     eax, eax
                  jnz    loop_here</pre></dd>
@@ -363,7 +367,8 @@ loop_here:       xchg   eax, [semaphore]
   <dt>Algorytm i opis idei poprawnego rozwiązania problemu pięciu
     filozofów.</dt>
 
-  <dd><pre>#define N 5
+  <dd><pre>
+#define N 5
 enum State { THINKING, HUNGRY, EATING } states[N] = { THINKING /* … * };
 semaphore sem[N] = { 0 /* … * };
 semaphore mutex = 1;
@@ -430,7 +435,8 @@ void test(int n) {
 <dl>
   <dt>Skrypt, który przyjmuje jako argument id użytkownika
     i wypisuje na stdin nazwę użytkownika,</dt>
-  <dd><pre>#! /bin/sh
+  <dd><pre>
+#! /bin/sh
 while IFS=: read nick pass uid other; do
     if [ X"$1" = X"$uid" ]; then
         echo "$nick"
@@ -441,7 +447,8 @@ exit 1</pre></dd>
 
   <dt>Skrypt zamieniający w nazwach wszystkich plików z bieżącego
     katalogu litery z dużych na małe.</dt>
-  <dd><pre>#! /bin/sh
+  <dd><pre>
+#! /bin/sh
 for i in *; do
     n=`printf '%s\n' "$i" | tr '[A-Z]' '[a-z]'`
     if [ X"$i" != X"$n" ]; then
@@ -451,7 +458,8 @@ done</pre></dd>
 
   <dt> Skrypt wypisujący przyjęte argumenty w odwrotnej
     kolejności.</dt>
-  <dd><pre>#! /bin/sh
+  <dd><pre>
+#! /bin/sh
 OUTPUT=$1
 while [ $# -gt 1 ]; do
     shift
@@ -463,7 +471,8 @@ printf '%s\n' "$OUTPUT"</pre></dd>
   <dt>Algorytm czytelników i pisarzy preferujący
    pisarzy–podać algorytm, opisać synchronizację, wyjaśnić
    przeznaczenie poszczególnych zmiennych.</dt>
-  <dd><pre>monitor {
+  <dd><pre>
+monitor {
     unsigned rc = 0, wc = 0;
     bool occupied_by_writer = false;
     cond rc_zero, wc_zero, available;
@@ -496,7 +505,8 @@ printf '%s\n' "$OUTPUT"</pre></dd>
     <code>semaphore</code>, wówczas funkcje <code>wait</code>
     i <code>notify</code> wyglądają następująco:</dd>
 
-  <dd><pre>wait(cond condition) {
+  <dd><pre>
+wait(cond condition) {
     ++condition.count;
     up(mutex);
     down(condition.semapore);
@@ -531,7 +541,8 @@ notify(cond condition) {
     musi czekać (proces ma zasnąć), aż inny statek płynący
     z przeciwka przejdzie przez śluzę, a przy okazji na
     właściwą stronę przemieści się jeden z holowników.</dt>
-  <dd><pre>sem liczba_holownikow[2] = { 2, 0 };
+  <dd><pre>
+sem liczba_holownikow[2] = { 2, 0 };
 int strona_holownika[2] = { 0, 0 };
 sem mutex = 1;
 
@@ -671,7 +682,8 @@ void statek() {
     w numerze segmentu ma takie znaczenie, a nie odwrotne, czy że
     właśnie w taki sposób szukany jest wpis w GDT/LDT; wszystko
     rozdrobniłem, aby było bardziej czytelne):</dd>
-  <dd><pre>uint32_t translate(uint16_t segment, uint32_t offset) {
+  <dd><pre>
+uint32_t translate(uint16_t segment, uint32_t offset) {
   /* segmentation */
   bool      global     = segment &amp; 4;
   uint32_t *dt         = global ? GDT : LDT;
@@ -767,7 +779,8 @@ void statek() {
     nazwa pliku&lt;-&gt;numer iwęzła.  W Unix V7 pozycja taka to
     był 16-bitowy numer iwęzła oraz 14-znakowa nazwa pliku.</dd>
   <dd>Rozwinięcie nazwy <code>/home/nowak/soi.txt</code>:</dd>
-  <dd><pre>Blok np. 1   Iwęzeł 67     Blok 24      iwęzeł 33      Blok 14
+  <dd><pre>
+Blok np. 1   Iwęzeł 67     Blok 24      iwęzeł 33      Blok 14
 
    1 .       rozmiar        24 .        rozmiar          14 .
    1 ..      atrybutu        1 ..       atrybuty         24 ..

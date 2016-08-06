@@ -34,7 +34,8 @@ meeting.</p>
     <li>
         Example:
       </p>
-<pre>struct node {
+<pre>
+struct node {
     struct node *next;
     int key;
     const char *value;
@@ -69,7 +70,8 @@ struct void *get(struct node *first, int key, const char *def = NULL) {
     <li>
         Example:
       </p>
-<pre>void message(const char *msg,
+<pre>
+void message(const char *msg,
              enum level .level, enum colour .colour);
 
 /* … */
@@ -80,7 +82,8 @@ message("An error", .colour = RED, .level = LVL_ERROR);</pre>
         The name of the argument would become part of a function’s
         prototype thus the following would be illegal:
       </p>
-<pre>void f1(int .bar);
+<pre>
+void f1(int .bar);
 void f1(int .baz); /* different name */
 void f2(int bar);
 void f2(int .bar); /* unnamed vs. unnamed */</pre>
@@ -96,7 +99,8 @@ void f2(int .bar); /* unnamed vs. unnamed */</pre>
         hence the following would be still well defined and perfectly
         legal:
       </p>
-<pre>int cmp(const void *.a, const void *.b)
+<pre>
+int cmp(const void *.a, const void *.b)
 
 int arr[10];
 
@@ -125,7 +129,8 @@ bar(.a = &amp;arr[0], .b = &amp;arr[1]);
         could appear in any order, intermixed with unnamed arguments.  For
         instance:
       </p>
-<pre>void format(const char *format,
+<pre>
+void format(const char *format,
             enum level .level, enum colour .colour,
             …) {
     va_list ap;
@@ -156,14 +161,16 @@ format("we are out of %s",
         Named arguments would be especially powerful with conjunction with
         default value.  In particular, <code>format()</code> could be defined as:
       </p>
-<pre>void format(const char *format,
+<pre>
+void format(const char *format,
             enum level .level = LVL_INFO,
             enum colour .colour = WHITE,
             …);</pre>
       <p>
         And then, previous calls could be shortened to:
       </p>
-<pre>format("%s is ready", dish_name);
+<pre>
+format("%s is ready", dish_name);
 format(.level = LVL_ERROR, .colour = READ,
        "%s is burnt", cake_name);
 format("we are out of %s",
@@ -177,7 +184,8 @@ format("we are out of %s",
         The new standard draft allow declaration of anonymous structures
         and anonymous unions in structures and unions:
       </p>
-<pre>struct {
+<pre>
+struct {
     union {
         int i;
         struct {
@@ -233,7 +241,8 @@ a.c;</pre>
     <li>
         Example:
       </p>
-<pre>struct s1 { int i1, j1; };
+<pre>
+struct s1 { int i1, j1; };
 struct s2 { int i2, j2; };
 struct s3 { int i3, j3; };
 
@@ -258,7 +267,8 @@ s.b.i3;</pre>
         This allows to nicely build structures that share some common
         data.  For instance:
       </p>
-<pre>struct header_head {
+<pre>
+struct header_head {
     unsigned length;
     unsigned type;
 };
@@ -295,7 +305,8 @@ if (header.type == FOO_HEADER_TYPE) {
         This would not be limited to defining structure’s or union’s
         members but could be used in other scopes.  For instance:
       </p>
-<pre>void do_stuff(int use_double) {
+<pre>
+void do_stuff(int use_double) {
     union {
         float f;
         double d;
@@ -322,7 +333,8 @@ if (header.type == FOO_HEADER_TYPE) {
     <li>
         Example:
       </p>
-<pre>struct point {
+<pre>
+struct point {
     double x, y;
 };
 struct circle {
@@ -346,7 +358,8 @@ for (int i = 0; i &lt; 10; ++i) {
     <li>
         Should implicit cast be ambiguous it should be disallowed, ie.:
       </p>
-<pre>struct rectangle {
+<pre>
+struct rectangle {
     struct point tl inline(x, y);
     struct point br inline();
 };
@@ -363,7 +376,8 @@ moveBy(r, 1.0, 1.0); /* illegal */</pre>
         by the language as users could name an inlined member and use <code>&amp;</code>
         operator to acquire it’s address.  For instance:
       </p>
-<pre>moveBy(&amp;r-&gt;tl, 1.0, 1.0);
+<pre>
+moveBy(&amp;r-&gt;tl, 1.0, 1.0);
 moveBy(&amp;r-&gt;br, 1.0, 1.0);</pre>
     </li>
     <li>
@@ -399,7 +413,8 @@ moveBy(&amp;r-&gt;br, 1.0, 1.0);</pre>
         For inlined members, either of the following variants could be
         used:
       </p>
-<pre>type *_Containerof(pointer, type);
+<pre>
+type *_Containerof(pointer, type);
 type *_Containerof(pointer, type, auto);</pre>
       <p>
         (I’ll assume the former in the rest of the text.)
@@ -423,7 +438,8 @@ type *_Containerof(pointer, type, auto);</pre>
         programming with minimal need for explicit casts and/or run-time
         checking:
       </p>
-<pre>struct point {
+<pre>
+struct point {
     double x, y;
 };
 
@@ -537,13 +553,15 @@ void rectangle_init(struct circle *c, double x = 0.0, double y = 0.0,
         To maximise compatibility with older implementations a syntax
         taken from C++ could be used for functions with external linkage:
       </p>
-<pre>extern "C++" float mysin(float x) { return sinf(x); }
+<pre>
+extern "C++" float mysin(float x) { return sinf(x); }
 extern "C++" float mysin(double x) { return sin(x); }
 extern "C++" float mysin(long double x) { return sinl(x); }</pre>
       <p>
         and analogous syntax far functions with internal linkage:
       </p>
-<pre>static "C++" float mysin(float x) { return sinf(x); }
+<pre>
+static "C++" float mysin(float x) { return sinf(x); }
 static "C++" float mysin(double x) { return sin(x); }
 static "C++" float mysin(long double x) { return sinl(x); }</pre>
     </li>
@@ -579,7 +597,8 @@ static "C++" float mysin(long double x) { return sinl(x); }</pre>
         User may define static variables in a local scope so why not let
         them define static functions in local scope.  For instance:
       </p>
-<pre>struct foo;
+<pre>
+struct foo;
 void sort_foo(struct foo *foos, size_t n) {
     static int cmp(const void *_a, const void *_b) {
         const struct foo *a = _a, *b = _b;
@@ -607,7 +626,8 @@ void sort_foo(struct foo *foos, size_t n) {
         defining unnamed static objects.  The same syntax could be used
         to define functions:
       </p>
-<pre>struct foo;
+<pre>
+struct foo;
 void sort_foo(struct foo *foos, size_t n) {
     qsort(foos, n, sizeof *foos,
           (int ()(const void *_a, const void *_b)){
@@ -685,7 +705,8 @@ void sort_foo(struct foo *foos, size_t n) {
         for identifying the type, they still use the same namespace for
         tags.  In particular, the following is invalid:
       </p>
-<pre>struct foo { int a; };
+<pre>
+struct foo { int a; };
 union  foo { int b; char c; };
 enum   foo { A, B, C };</pre>
     </li>

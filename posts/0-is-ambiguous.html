@@ -26,7 +26,8 @@ an octal (yes, octal) literal representing number zero or a null
 pointer.  Which meaning is used depends on context, which compiler can
 usually figure out.  For instance:
 
-<pre><b>void</b> number(<b>int</b>);
+<pre>
+<b>void</b> number(<b>int</b>);
 <b>void</b> pointer(<b>char</b> *);
 
 <b>int</b> main(<b>void</b>) {
@@ -44,7 +45,8 @@ arguments, there may be too little information to figure out what
 programmer meant.  A good example is <code>printf()</code> function from
 standard library:
 
-<pre>#include &lt;stdio.h&gt;
+<pre>
+#include &lt;stdio.h&gt;
 
 <b>int</b> main(<b>void</b>) {
 	printf("%p\n", 0);	/* ??? */
@@ -73,7 +75,8 @@ the macro is often defined as:
 pointer context but also that a diagnostic message must be issued when
 one tries to use <code>NULL</code> as a number, ie.:
 
-<pre>$ <i>cat test.c</i>
+<pre>
+$ <i>cat test.c</i>
 #include &lt;stddef.h&gt;
 
 <b>int</b> main(<b>void</b>) {
@@ -88,7 +91,8 @@ $</pre>
 conversions from pointer to void to any other pointer type are
 invalid, which renders the following an invalid C++ code:
 
-<pre><b>int</b> main(<b>void</b>) {
+<pre>
+<b>int</b> main(<b>void</b>) {
 	<b>char</b> *ptr = (<b>void</b> *)0;
 	<b>return</b> 0;
 }</pre>
@@ -98,7 +102,8 @@ invalid, which renders the following an invalid C++ code:
 uses <code>__null</code> extension but it seems <code>__null</code> is treated
 like <code>0L</code> in some contexts:
 
-<pre>$ <i>cat test.c</i>
+<pre>
+$ <i>cat test.c</i>
 #include &lt;stddef.h&gt;
 
 <b>int</b> main(<b>void</b>) {
@@ -117,7 +122,8 @@ $</pre>
 never know what it really is.  This in particular means, that the
 following code, after pre-processing, may or may not be valid:
 
-<pre>#include &lt;stdio.h&gt;
+<pre>
+#include &lt;stdio.h&gt;
 
 <b>int</b> main(<b>void</b>) {
 	printf("%p\n", NULL);	/* ((void *)0)? 0? 0L? __null? */
@@ -134,7 +140,8 @@ long as they have different arguments.  As a consequence, function
 name is not enough to figure out function’s prototype.  Let us
 consider the following simple code:
 
-<pre><b>void</b> print(<b>int</b> num);
+<pre>
+<b>void</b> print(<b>int</b> num);
 <b>void</b> print(<b>void</b> *ptr);
 
 <b>int</b> main(<b>void</b>) {
@@ -146,7 +153,8 @@ consider the following simple code:
 we should use a cast, since we know that using <code>NULL</code> is not
 reliable:
 
-<pre><b>int</b> main(<b>void</b>) {
+<pre>
+<b>int</b> main(<b>void</b>) {
 	print((<b>void</b> *)0);
 	<b>return</b> 0;
 }</pre>
@@ -169,7 +177,8 @@ pointer while, at the same time, cannot be converted to a number.
 issues with this approach.  First one is that it does not fix the
 problem.  For instance, the following is still ambiguous:
 
-<pre><b>void</b> print(<b>char</b> *);
+<pre>
+<b>void</b> print(<b>char</b> *);
 <b>void</b> foo(wchar_t *);
 
 <b>int</b> main(<b>void</b>) {

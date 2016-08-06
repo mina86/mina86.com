@@ -14,7 +14,8 @@
   <p>What I needed was a generic proxy that would defer initialisation
   of an object to the moment it is first used.  Here is what I came up with:</p>
 
-<pre>class LazyProxy(object):
+<pre>
+class LazyProxy(object):
     __slots__ = '__get'
 
     def __init__(self, cls, *args, **kw):
@@ -38,7 +39,8 @@
 
 <p>Here’s how one can use it:</p>
 
-  <pre>class Foo(object):
+  <pre>
+class Foo(object):
     foo = 'foo'
 
     def __init__(self, bar, baz):

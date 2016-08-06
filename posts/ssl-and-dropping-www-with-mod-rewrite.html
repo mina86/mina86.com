@@ -8,7 +8,8 @@ so I had to come up with one myself.  Firstly, the following lines
 need to find their way to the end of Apache configuration file
 (<code>/etc/httpd/conf/httpd.conf</code> or something):</p>
 
-<pre>RewriteEngine on
+<pre>
+RewriteEngine on
 RewriteCond %{HTTPS} off
 RewriteCond %{HTTP_HOST} ^www\.(.*)$
 RewriteRule ^(.*)$ http://%1$1 [L,R=301]</pre>
@@ -18,7 +19,8 @@ RewriteRule ^(.*)$ http://%1$1 [L,R=301]</pre>
 configuration file (<code>/etc/httpd/conf.d/ssl.conf</code> or similar),
 like so:</p>
 
-<pre>&lt;VirtualHost _default_:443&gt;
+<pre>
+&lt;VirtualHost _default_:443&gt;
 	<i># … various directives …</i>
 
 	<i># Here’s what needs to be added:</i>
@@ -35,7 +37,8 @@ both secure and insecure connections.</p>
 <p>To <em>force</em> secure connection and drop the prefix at the same
 time the part in main configuration file has to become:</p>
 
-<pre>RewriteEngine on
+<pre>
+RewriteEngine on
 RewriteCond %{HTTPS} off
 RewriteCond %{HTTP_HOST} ^(www\.)?(.*)$
 RewriteRule ^(.*)$ https://%2$1 [L,R=301]</pre>
@@ -43,7 +46,8 @@ RewriteRule ^(.*)$ https://%2$1 [L,R=301]</pre>
 <p>To force secure connection only for one domain, say
 <code>example.com</code>:</p>
 
-<pre>RewriteEngine on
+<pre>
+RewriteEngine on
 
 RewriteCond %{HTTPS} off
 RewriteCond %{HTTP_HOST} ^(www\.)?(example\.com)$

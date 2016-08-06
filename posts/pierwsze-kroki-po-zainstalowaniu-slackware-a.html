@@ -34,7 +34,8 @@ wciskając enter.</p>
 <p>W drugim kroku należy wyedytować plik <code>/etc/login.access</code>,
 aby miał następującą zawartość:</p>
 
-<pre>-:wheel:ALL
+<pre>
+-:wheel:ALL
 -:ALL EXCEPT mina86:ALL</pre>
 
 <p>Pierwsza linijka spowoduje, że użytkownicy z grupy <code>wheel</code>
@@ -121,7 +122,8 @@ wykonać polecenie:</p>
 plik <code>/etc/ssh/sshd_config</code> ustawiając w nim następujące
 opcje:</p>
 
-<pre>PermitRootLogin no
+<pre>
+PermitRootLogin no
 AllowUsers mina86
 DenyUsers root
 DenyGroups wheel</pre>
@@ -151,7 +153,8 @@ artykułu.</p>
 <p>Na wszelki wypadek warto jeszcze wykonać następujące dwa
 polecenia:</p>
 
-<pre>chown root:root /bin/su
+<pre>
+chown root:root /bin/su
 chmod 4750 /bin/su</pre>
 
 <p>Dzięki którym, blokowanie użytkowników nienależących do grupy
@@ -193,7 +196,8 @@ z <code>acpid</code>, <code>alsa</code> oraz <code>gpm</code>.</p>
 <p>W przypadku kodu od <code>inet1</code> do <code>inet2</code>, wystarczy
 przed linijkami:</p>
 
-<pre># Initialize the networking hardware.  If your network driver is a module
+<pre>
+# Initialize the networking hardware.  If your network driver is a module
 # and you haven’t loaded it manually, this will be deferred until after
 # the hotplug system loads the module below.
 if [ -x /etc/rc.d/rc.inet1 ]; then
@@ -202,7 +206,8 @@ fi</pre>
 
 <p>dodać okrągły nawias otwierający, <abbr title="to jest">tj.</abbr>:</p>
 
-<pre>(
+<pre>
+(
 
 # Initialize the networking hardware.  If your network driver is a module
 # and you haven’t loaded it manually, this will be deferred until after
@@ -213,14 +218,16 @@ fi</pre>
 
 <p>oraz za linijkami:</p>
 
-<pre># Start networking daemons:
+<pre>
+# Start networking daemons:
 if [ -x /etc/rc.d/rc.inet2 ]; then
   . /etc/rc.d/rc.inet2
 fi</pre>
 
 <p>dodać okrągły nawias zamykający z etką:</p>
 
-<pre># Start networking daemons:
+<pre>
+# Start networking daemons:
 if [ -x /etc/rc.d/rc.inet2 ]; then
   . /etc/rc.d/rc.inet2
 fi
@@ -236,7 +243,8 @@ nie.</p>
 zawartość wstawić bezpośrednio do pliku <code>/etc/rc.d/rc.M</code>
 z jednoczesnym uruchomieniem w tle:</p>
 
-<pre># Load a custom screen font
+<pre>
+# Load a custom screen font
 setfont lat2-16 &amp;
 
 # Load a custom keymap
@@ -257,7 +265,8 @@ Dodatkowo, można jeszcze zmienić uprawnienia do pliku <code>/var/run/utmp</cod
 <p>Nie rozwodząc się długo, do pliku <code>/etc/rc.d/rc.local</code>
 proponuję wpisać co następuje:</p>
 
-<pre>chown root:root /sbin/shutdown /sbin/halt /sbin/reboot /sbin/poweroff /bin/su
+<pre>
+chown root:root /sbin/shutdown /sbin/halt /sbin/reboot /sbin/poweroff /bin/su
 chmod 4750      /sbin/shutdown /sbin/halt /sbin/reboot /sbin/poweroff /bin/su
 
 /usr/sbin/icmpinfo -vvv -s -l
@@ -297,7 +306,8 @@ w nim emulację <acronym>OSS</acronym> to nie ma potrzeby wczytywania
 żadnych modułów, więc w pliku <code>/etc/rc.d/rc.alsa</code> zmieniam
 definicję funkcji <code>load_alsa_oss_modules</code> na następującą:</p>
 
-<pre>load_alsa_oss_modules () {
+<pre>
+load_alsa_oss_modules () {
   : Compiled in
 }</pre>
 
@@ -306,7 +316,8 @@ definicję funkcji <code>load_alsa_oss_modules</code> na następującą:</p>
 <p>Tutaj można minimalnie zmienić parametry wywoływania
 <code>syslogd</code> oraz <code>klogd</code>:</p>
 
-<pre>/usr/sbin/syslogd -m 0
+<pre>
+/usr/sbin/syslogd -m 0
 /usr/sbin/klogd -c 3 -x -p</pre>
 
 <h3>Crontab</h3>
@@ -314,7 +325,8 @@ definicję funkcji <code>load_alsa_oss_modules</code> na następującą:</p>
 <p>Po pierwsze, tworzymy plik <code>/etc/cron.hourly/ntpsync</code>
 o następującej treści:</p>
 
-<pre>#!/bin/sh
+<pre>
+#!/bin/sh
 # Query time
 /usr/sbin/ntpdate -u -s 0.pl.pool.ntp.org 1.pl.pool.ntp.org \
         2.pl.pool.ntp.org || exit $?
@@ -336,7 +348,8 @@ fi</pre>
 <p>Po drugie, tworzymy plik <code>/etc/cron.daily/cleanup</code> nadając
 mu prawa wykonywania o następującej treści:</p>
 
-<pre>#!/bin/sh
+<pre>
+#!/bin/sh
 /usr/bin/find /tmp /var/tmp -atime +7 -exec rm -f -- {} + 2>/dev/null</pre>
 
 <p>I na koniec jeszcze warto odpalić <code>crontab -e</code> i pozmieniać
@@ -372,7 +385,8 @@ wykonywania, <abbr title="na przykład">np.</abbr>:</p>
 
 <p>Generalnie uruchamiamy następujące polecenia:</p>
 
-<pre>find / -user adm -o -user games -o -user gdm -o -user lp -o -user news \
+<pre>
+find / -user adm -o -user games -o -user gdm -o -user lp -o -user news \
     -o -user operator -o -user pop -o -user rpc -o -user uucp \
     -o -group adm -o -group lp -o -group news -o -group pop \
     -o -group uucp -ls
@@ -397,13 +411,15 @@ użytkowników/grup) i z tego powodu tych użytkowników/grup nie usunąłem
 
 <p>Do pliku <code>/etc/host.conf</code> dodajemy:</p>
 
-<pre>nospoof on
+<pre>
+nospoof on
 spoofalert on
 spoof warn</pre>
 
 <h3 id="chmod">Prawa dostępu</h3>
 
-<pre>chmod -R go-rwx /etc/cron.*
+<pre>
+chmod -R go-rwx /etc/cron.*
 chmod -R go-rwx /etc/rc.d
 chmod -R o-rwx /var/log</pre>
 
@@ -411,7 +427,8 @@ chmod -R o-rwx /var/log</pre>
 
 <p>Na początek pliku <code>/etc/profile</code> dodajemy:</p>
 
-<pre># Check required variables
+<pre>
+# Check required variables
 : ${USER:?Who are you?}
 : ${LOGNAME:?Who are you?}
 : ${HOME:?The homeless need help}</pre>
@@ -438,7 +455,8 @@ zmian na partycjach <code>vfat</code>.</p>
 href="http://www.pathname.com/fhs/" lang="en">File Hierarchy
 Standard</a> wykonuję następujące polecenia:</p>
 
-<pre>mv -f -- /mnt /media
+<pre>
+mv -f -- /mnt /media
 mkdir -- /mnt
 sed -e 's/\/mnt\//\/media\//' -i -- /etc/fstab</pre>
 
@@ -463,7 +481,8 @@ wciśnięcie pojedynczego klawisza; i po piąte, pozmieniałem wszędzie
 single, <code>w</code> - windows).  Mój cały plik <code>/etc/lilo.conf</code>
 wygląda następująco:</p>
 
-<pre>boot = /dev/hda
+<pre>
+boot = /dev/hda
 lba32
 compact
 prompt
@@ -501,7 +520,8 @@ podany plik to katalog (jakie odkrywcze :P).  Jednakże jest bardzo
 celu otweiramy plik <code>/usr/bin/lesspipe.sh</code> i jego ostatnia
 linijkę (<abbr title="to jest">tj.</abbr> <code>lesspipe "$1"</code>) zamieniamy na:</p>
 
-<pre>if [ -d "$1" ]; then
+<pre>
+if [ -d "$1" ]; then
   /bin/ls -lT0 --color=no -I '*~' -I '#*' -I '.#*' -- "$1"
 else
   lesspipe "$1"
@@ -511,13 +531,15 @@ fi</pre>
 
 <h3>umask</h3>
 <p>Ponieważ wyznaję zasadę, iż lepiej domyślnie nie dawać jakichś uprawnień i w razie konieczności to zmienić, w skryptach startowych na swoim koncie mam ustawione <code>umask 077</code>, przez co  tworzone przeze mnie pliki mają ustawione zerowe uprawnienia dla grupy i innych użytkowników. Jednakże instalowanie jakichkolwiek programów jako root czy tworzenie paczek z taką maską może naprawdę zaboleć, a zwykłe polecenie <code>su</code> pozostawia umask taki jaki był. Z tego powodu, warto, na wszelki wypadek, do skryptów startowych roota dodać wpisy zmieniające umask na domyślny. Uruchamiamy jako root (niektóre linijki zapewne można pominąć):</p>
-<pre>for f in shell bash zsh csh ksh; do
+<pre>
+  for f in shell bash zsh csh ksh; do
     echo umask 022 >>~/.${f}rc
 done</pre>
 
 <h3>TMOUT</h3>
 <p>Ciekawym pomysłem jest również ustawienie zmiennej <code>TMOUT</code>, w niektórych lub wszystkich skryptach startowych powłoki. Zasadniczo, jeżeli po czasie (w sekundach) określonym przez tą zmienną użytkownik nic nie wpisze do powłoki zostanie on automatycznie wylogowany. Osobiście używam tej opcji w dwóch miejscach: w powłoce super użytkownika oraz powłoce logowania zwykłego użytkownika (jako root, <i>mina86</i> podmieniamy na nazwę naszego użytkownika):</p>
-<pre>for f in '' bash_ z; do
+<pre>
+  for f in '' bash_ z; do
     echo TMOUT=1200 >>~mina86/.${f}profile
 done
 

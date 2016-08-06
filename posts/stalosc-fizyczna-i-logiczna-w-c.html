@@ -11,14 +11,16 @@
 
 <p>Stałość fizyczna występuje, gdy w momencie kompilacji określamy przy pomocy modyfikatora <code>const</code>, że jakiejś wartości nie należy zmieniać.</p>
 
-<pre>const int foo = 42;  /* Definicja "zmiennej" foo będącej stałą
+<pre>
+const int foo = 42;  /* Definicja "zmiennej" foo będącej stałą
                         liczbą całkowitą i inicjacja jej wartością 42. */
 foo = 666;           /* Błąd kompilacji */</pre>
 
 <p>Modyfikator ten odnosi się do typu, co ma szczególne znaczenie przy
   wskaźnikach:</p>
 
-<pre>int bar, baz;
+<pre>
+int bar, baz;
 
 const int *ptr1 = &amp;bar;    /* Wskaźnik na stały int. */
 ptr1 = &amp;baz;               /* Poprawne. */
@@ -35,7 +37,8 @@ ptr3 = &amp;baz;               /* Błąd kompilacji. */
 <p>Rzecz jasna mamy do dyspozycji także większe "zagłębienia"
   wskaźników:</p>
 
-<pre>const int **ptr4;          /* Wskaźnik na wskaźnik na stały int. */
+<pre>
+const int **ptr4;          /* Wskaźnik na wskaźnik na stały int. */
 int *const *ptr5;          /* Wskaźnik na stały wskaźnik na int. */
 int **const ptr6;          /* Stały wskaźnik na wskaźnik na int. */
 
@@ -59,7 +62,8 @@ const int *const *const ptrA;  /* Stały wskaźnik na stały wskaźnik
   wynika, iż wskazywana wartość nie może się zmienić.  Jest to częste,
   a niesłuszne domniemanie.  Najprostrzym przykładem może być kod:</p>
 
-<pre>int foo = 42;
+<pre>
+int foo = 42;
 int *bar = &amp;foo;
 const int *baz = &amp;bar;
 /* baz ma wartość 42 */
@@ -81,7 +85,8 @@ const int *baz = &amp;bar;
   dobrze mogą być umieszczone w zwykłej przestrzeni
   i wówczas sztuczka z rzutowaniem pozwoli na ich zmianę:</p>
 
-<pre>const int foo = 42;
+<pre>
+const int foo = 42;
 *const_cast&lt;int*&gt;(&amp;foo) = 666;     /* niezdefiniowane zachowanie */
 
 const_cast&lt;char*&gt;("bar")[2] = 'z'; /* niezdefiniowane zachowanie */</pre>
@@ -96,7 +101,8 @@ const_cast&lt;char*&gt;("bar")[2] = 'z'; /* niezdefiniowane zachowanie */</pre>
   stosować, aby zapobiec zmianie wartości argumentów, co jest zalecaną
   przez niektórych praktyką, <abbr title="na przyklad">np.</abbr>:</p>
 
-<pre>int add(const int a, const int b) {
+<pre>
+int add(const int a, const int b) {
     a += b;        /* Błąd kompilacji. */
     return a + b;  /* Poprawne. */
 }</pre>
@@ -109,7 +115,8 @@ const_cast&lt;char*&gt;("bar")[2] = 'z'; /* niezdefiniowane zachowanie */</pre>
   modyfikować powinna wskazywany typ zadeklarować jako stały,
   <abbr title="na przyklad">np.</abbr>:</p>
 
-<pre>int sum(unsigned n, const int *nums) {
+<pre>
+int sum(unsigned n, const int *nums) {
     int ret = 0;
     while (n--) {
         ret += *num++;
@@ -127,7 +134,8 @@ sum(sizeof nums / sizeof *nums, nums);   /* gdyby w prototypie funkcja
   referencję zamiast przez wartość, gdyż nie wymaga to kopiowania
   całego obiektu, <abbr title="na przyklad">np.</abbr>:</p>
 
-<pre>int foo(const std::vector&lt;int&gt; &amp;vec) {
+<pre>
+int foo(const std::vector&lt;int&gt; &amp;vec) {
     /* Rób coś na wektorze */
 }
 
@@ -155,13 +163,15 @@ int foo(std::vector&lt;int&gt; vec) {
   modyfikatora <code>const</code> na tym z takim modyfikatorem jest
   automatyczne, np.:</p>
 
-<pre>int foo = 42;
+<pre>
+int foo = 42;
 const int *bar = &amp;foo;</pre>
 
 <p>Rzutowanie w drugą stronę nie jest już automatyczne i wymaga
   zastosowanie operatora rzutowania:</p>
 
-<pre>const int foo = 42;
+<pre>
+const int foo = 42;
 int *bar = (int*)&amp;foo;              /* styl C */
 int *baz = const_cast&lt;int*&gt;(&amp;foo);  /* styl C++ */</pre>
 
@@ -173,7 +183,8 @@ int *baz = const_cast&lt;int*&gt;(&amp;foo);  /* styl C++ */</pre>
   rzutowaniu w stylu C++, gdyż zmiana dotyczy nie tylko stałości
   typu:</p>
 
-<pre>const long foo = 42;
+<pre>
+const long foo = 42;
 int *bar = (int*)&amp;foo;              /* Skompiluje się. */
 int *baz = const_cast&lt;int*&gt;(&amp;foo);  /* Błąd kompilacji. */</pre>
 
@@ -193,7 +204,8 @@ int *baz = const_cast&lt;int*&gt;(&amp;foo);  /* Błąd kompilacji. */</pre>
   po prawej stronie (za wyjątkiem samej zmiennej) i konwersja
   <code>Foo**</code> do <code>const Foo* const *</code> jest już dozwolona:</p>
 
-<pre>void bar(const Foo **arr);
+<pre>
+void bar(const Foo **arr);
 void baz(const Foo *const *arr);
 
 int main(void) {
@@ -207,7 +219,8 @@ int main(void) {
 <p>Aby zrozumieć czemu tak jest należy przeanalizować poniższy
   kod:</p>
 
-<pre>const int x = 42;
+<pre>
+const int x = 42;
 int *p;
 const int **pp = &amp;p;  /* konwersja `int**` do `const int**`*/
 *pp = &amp;x;             /* `*pp` jest typu `const int*`, więc można mu
@@ -223,7 +236,8 @@ const int **pp = &amp;p;  /* konwersja `int**` do `const int**`*/
 <p>Stałe struktury (klasy) nie umożliwiają zmiany pól w ich wnętrzu.
   Przykładowo, poniższy kod się nie kompiluje:</p>
 
-<pre>struct Foo {
+<pre>
+struct Foo {
     int bar;
 };
 
@@ -234,7 +248,8 @@ baz.bar = 666;</pre>
   on sam staje się stały, ale wartość wskazywana nie, <abbr title="na
   przyklad">np.</abbr>:</p>
 
-<pre>struct Foo {
+<pre>
+struct Foo {
     int *bar;
 };
 
@@ -251,7 +266,8 @@ baz.bar = &amp;quux;      /* Błąd kompilacji. */</pre>
   <a href="#mutable">modyfikator <code>mutable</code></a>, o którym niżej)
   ani wołać innych metod, które nie są zadeklarowane jako stałe.</p>
 
-<pre>struct Foo {
+<pre>
+struct Foo {
     int get()       { return bar; }             /* [1] */
     int get() const { return bar; }             /* [2] */
 
@@ -275,7 +291,8 @@ private:
   obiektu.  Aby nie musieć pisać dwa razy tego samego kodu można
   zastosować rzutowanie, <abbr title="na przykład">np.</abbr>:</p>
 
-<pre>struct Foo {
+<pre>
+struct Foo {
     /* … */
     const int *find(int arg) const;
     int *find(int arg) {
@@ -286,7 +303,8 @@ private:
 
 <p>lub</p>
 
-<pre>struct Foo {
+<pre>
+struct Foo {
     /* … */
     const int *find(int arg) const {
         return const_cast&lt;Foo*&gt;(this)-&gt;find(arg);
@@ -304,7 +322,8 @@ private:
   modyfikowany, w tej klasie nawet jeżeli jest ona stała.
   Przykładowo:</p>
 
-<pre>struct Foo {
+<pre>
+struct Foo {
     int bar;
     mutable int baz;
 
@@ -324,7 +343,8 @@ foo.baz = 666;  /* Kod poprawny. */</pre>
   zaimplementować cache, w której przechowywane by były ostatnie
   wyniki jakichś zapytań czy wyszukiwań:</p>
 
-<pre>struct Foo {
+<pre>
+struct Foo {
 
     /* … */
 
@@ -358,7 +378,8 @@ private:
   jakiegoś obiektu nie ulegnie zmianie.  Dla przykładu weźmy strukturę
   do przechowywania liczb zespolonych:</p>
 
-<pre>struct Complex {
+<pre>
+struct Complex {
     double re, im;
 };</pre>
 
@@ -366,7 +387,8 @@ private:
   gwarantuje nam stałość logiczną, <abbr title="na
   przykład">np.</abbr>:</p>
 
-<pre>double abs(const Complex &amp;c) {
+<pre>
+double abs(const Complex &amp;c) {
     return hypot(c.re, c.im);
 }</pre>
 
@@ -374,7 +396,8 @@ private:
   być <i>nadgorliwa</i>, <abbr title="na przykład">np.</abbr> jeżeli
   cacheujemy wyniki:</p>
 
-<pre>struct Complex {
+<pre>
+struct Complex {
     double re, im, abs;
     bool abs_valid;
 }
@@ -398,7 +421,8 @@ double abs(const Complex &amp;c) {
   nie będzie możliwości zmieniać samego napisu, ale niestety tak nie
   jest:</p>
 
-<pre>struct String {
+<pre>
+struct String {
     char *data;
     unsigned length;
 };
@@ -411,7 +435,8 @@ void modify(const String &amp;s) {
   dodając im przeciążone akcesory istniejące zarówno w wersji jako
   metoda stała oraz w wersji jako zwykła metoda.</p>
 
-<pre>struct String {
+<pre>
+struct String {
     char *getData() { return data; }
     const char *getData() const { return data; }
     unsigned getLength() const { return length; }
