@@ -3,3 +3,4 @@ bin/*.jar
 .tmp
 files/index.html
 */*.pyc
+static/mina86.gpg

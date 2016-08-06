@@ -1,6 +1,6 @@
 all: public
 
-public:
+public: static/mina86.gpg
 	@python ./bin/build.py $@
 
 touch:
@@ -23,6 +23,10 @@ distclean:
 	@exec mkdir -p $(dir $@)
 	exec curl -X POST -s --data-urlencode "input@$<" \
 		https://cssminifier.com/raw >$@
+
+static/mina86.gpg:
+	@echo " GPG  $@"
+	gpg --armor --export 0x2060401250751FF4 >$@
 
 %.gz: %
 	@echo " GZ   $@"

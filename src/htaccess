@@ -53,6 +53,9 @@ DirectoryIndex index
 # Serve proper charset information
 AddCharset UTF-8 .html .xml .js .css
 
+# GPG key is ASCII-armored, i.e. it’s text/plain
+AddType text/plain .gpg
+
 # application/javascript is technically correct but HTML5 uses text/javascript
 # as SCRIPT’s default TYPE so let’s stick to that.
 AddType text/javascript .js
