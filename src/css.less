@@ -50,12 +50,14 @@
 @feed-icon-cls: .f;  /* Class for the feed icon */
 @icons-id: #i;  /* Icons section at the bottom of the sidebar. */
 
-/* http://spencermortensen.com/articles/typographic-scale/ */
-@small:    0.80rem;
-@normal:   1.00rem;
-@large:    1.26rem;
-@x-large:  1.59rem;
-@xx-large: 2.00rem;
+/* http://spencermortensen.com/articles/typographic-scale/
+   ratio = 2, notes = 3 */
+@small:    0.8rem;
+@normal:   1.0rem;
+@large:    1.3rem;
+// @huge:     1.6rem;
+@huge:     2.0rem;
+@title:    2.0rem;
 
 @cosmic-latte: #fff8e7;  /* https://en.wikipedia.org/wiki/Cosmic_latte */
 @milky-way: #f9f1ff;  /* http://www.news.pitt.edu/milkywaycolor */
@@ -214,7 +216,7 @@ a:hover, a:focus, a:active {
 
 @{head-id} {
 	h1 {
-		font-size: 2em;
+		font-size: @title;
 	}
 	h1 span {
 		font-variant: small-caps;
@@ -346,15 +348,15 @@ article {
 	}
 	h1 {
 		font-family: @serif-font;
-		font-size: 1.59em;
+		font-size: @huge;
 		margin-top: 0;
 	}
 	h2 {
-		font-size: 1.26em;
+		font-size: @large;
 		border-bottom: 1px dotted #999;
 	}
 	h3 {
-		font-size: 1em;
+		font-size: @normal;
 	}
 }
 
@@ -586,7 +588,7 @@ blockquote {
 	}
 
 	h2 {
-		font-size: 1.26em;
+		font-size: @large;
 		text-align: center;
 		margin-bottom: 1em;
 	}
@@ -700,7 +702,7 @@ blockquote {
 @{foot-id} {
 	color: #999;
 	border-top: 1px dotted #ddf;
-	font-size: .8em;
+	font-size: @small;
 	padding: 1em 0;
 	text-align: center;
 
