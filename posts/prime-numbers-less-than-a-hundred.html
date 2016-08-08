@@ -5,7 +5,7 @@
 
 <p>Anyone working in a big corporation must have been hit by some
 “funny” mail from a coworker that helps everyone gets through the
-day.  No different at my office – at one point all
+day.  No different at my office — at one point all
 engineers have been challenged to write the shortest code in
 C that prints all prime numbers (and only prime numbers) less
 than a hundred each on separate line.</p>
@@ -15,7 +15,7 @@ may choose to think about it while <a
 href="http://xkcd.com/303/">their code’s compiling</a>.</p>
 
 <p>Of course, a “C program” needs not to be taken too
-seriously – depending on not too far fetched undefined
+seriously — depending on not too far fetched undefined
 behaviours of given implementation is all right (but please
 do not use <code>system()</code> or <code>exec()</code> family of calls ;)
 ).</p>
@@ -25,7 +25,7 @@ do not use <code>system()</code> or <code>exec()</code> family of calls ;)
 <h2>The solution</h2>
 
 <p>I have managed to came up with two 61-character (this excludes new
-line at the end of the file) solutions – one uses two loops
+line at the end of the file) solutions — one uses two loops
 and the other only one:</p>
 
 <pre>main(i,j){for(;j=i++&lt;99;)for(;++j&lt;i||printf("%d\n",i),i%j;);}</pre>

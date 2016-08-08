@@ -151,7 +151,7 @@ void dma_contiguous_early_fixup(
 <p>It is architecture’s responsibility to provide it along with its
 declaration in <code>asm/dma-contiguous.h</code> header file.  The
 function will be called quite early, so some of the kernel
-subsystems – ike <code>kmalloc</code> – will not be available.
+subsystems — like <code>kmalloc</code> — will not be available.
 Furthermore, it may be called several times, but no more than
 <code>MAX_CMA_AREAS</code> times.
 
@@ -417,7 +417,7 @@ postcore_initcall(foo_set_up_cma_areas);</pre>
 subsection.
 
 <p>Device’s CMA context may be changed any time as long as the device
-hold no CMA memory – it will be rather tricky to release any
+hold no CMA memory — it will be rather tricky to release any
 allocation after area change.
 
 <h2>No default context</h2>

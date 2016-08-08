@@ -38,12 +38,12 @@ span.udesc { font-variant: all-small-caps }
   has been introduced.  (On unrelated note, is it just me who ﬁnds
   spelling of ‘awkward’ so <em>meta</em>?) Anyway, 2048 code points
   have been carved out to make room for high and low surrogates.  In
-  UTF-16, a high surrogate followed by a low surrogate—four octets
-  total—encodes a single code point outside of BMP.
+  UTF-16, a high surrogate followed by a low surrogate — four octets
+  total — encodes a single code point outside of BMP.
 
 <p>The encoding method is relatively simple.  For example, to
   represent U+1F574: <span class=udesc>man in business suit
-  levitating</span> (🕴 – does your browser support it yet?)
+  levitating</span> (🕴 — does your browser support it yet?)
   one would:
 
 <ol>
@@ -54,7 +54,7 @@ span.udesc { font-variant: all-small-caps }
       = <span class=hisur>0000111101</span><span class=losur>0101110100</span>₂
   <li>
     <p>Add D800₁₆ to the ten most signiﬁcant bits of that
-      number—that’s the high surrogate.
+      number — that’s the high surrogate.
     <p>D800₁₆ + <span class=hisur>0000111101</span>₂
       = <span class=chsur>110110</span><span class=xxsur>0000000000</span>₂
       + <span class=hisur>0000111101</span>₂
@@ -62,7 +62,7 @@ span.udesc { font-variant: all-small-caps }
       = D83D₁₆
   <li>
     <p>Add DC00₁₆ to the ten least signiﬁcant bits of the same
-      number—that’s the low surrogate.
+      number — that’s the low surrogate.
     <p>DC00₁₆ + <span class=losur>0101110100</span>₂
       = <span class=clsur>110111</span><span class=xxsur>0000000000</span>₂
       + <span class=losur>0101110100</span>₂

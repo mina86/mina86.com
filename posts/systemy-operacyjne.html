@@ -94,7 +94,7 @@
 <dl>
   <dt>Prawa dostępu do plików, bity SUID, SGID.</dt>
 
-  <dd><code>rwxrwxrwx</code>–po trzy bity na właściciela, grupę
+  <dd><code>rwxrwxrwx</code> — po trzy bity na właściciela, grupę
     i „innych” (w tej kolejności patrząc od
     najbardziej znaczących bitów).  Bity dla właściciela określają
     jakie prawa ma właściciel pliku; bity dla grupy określają jakie
@@ -104,11 +104,11 @@
 
   <dd>Patrząc od bitów najbardziej znaczących rzeczone bity określają:
     <ul class="inline">
-      <li><code>r</code>–prawo do odczytu (w kontekście katalogu
+      <li><code>r</code> — prawo do odczytu (w kontekście katalogu
         odczytu listy plików),</li>
-      <li><code>w</code>–prawo do zapisu (w kontekście katalogu
+      <li><code>w</code> — prawo do zapisu (w kontekście katalogu
         do tworzenia lub usuwania plików) i</li>
-      <li><code>x</code>–prawo do wykonywania
+      <li><code>x</code> — prawo do wykonywania
         (a w kontekście katalogu do zmiany katalogu
         bieżącego na dany katalog).</li>
     </ul>
@@ -138,30 +138,30 @@
   <dt>Główne zmienne powłoki.</dt>
   <dd>
     <ul>
-      <li><code>0</code>–komenda uruchamiająca skrypt.</li>
-      <li><code>#</code>–liczba argumentów programu lub funkcji.</li>
-      <li><code>1</code>..<code>9</code>–argumenty skryptu lub funkcji.</li>
-      <li><code>*</code>–wszystkie argumenty skryptu/funkcji
+      <li><code>0</code> — komenda uruchamiająca skrypt.</li>
+      <li><code>#</code> — liczba argumentów programu lub funkcji.</li>
+      <li><code>1</code>..<code>9</code> — argumenty skryptu lub funkcji.</li>
+      <li><code>*</code> — wszystkie argumenty skryptu/funkcji
         rozwinięte do pojedynczego ciągu znaków.</li>
-      <li><code>@</code>–wszystkie argumenty skryptu/funkcji
+      <li><code>@</code> — wszystkie argumenty skryptu/funkcji
         rozwinięte do wielu ciągów znaków.  <b>Uwaga na użycie
         cudzysłowów</b>!  Bez nich, <code>$@</code> to to samo
         co <code>$*</code>.</li>
-      <li><code>$</code>–PID procesu.</li>
-      <li><code>?</code>–kod wyjścia ostatnio zakończonego polecenia.</li>
-      <li><code>!</code>–PID ostatnio wykonanego procesu w tle.</li>
-      <li><code>IFS</code>–internal fields separator; określa jakie
+      <li><code>$</code> — PID procesu.</li>
+      <li><code>?</code> — kod wyjścia ostatnio zakończonego polecenia.</li>
+      <li><code>!</code> — PID ostatnio wykonanego procesu w tle.</li>
+      <li><code>IFS</code> — internal fields separator; określa jakie
         znaki mogą separować słowa.</li>
-      <li><code>HOME</code>–katalog domowy.</li>
-      <li><code>SHELL</code>–polecenie wywołujące powłokę.</li>
-      <li><code>PATH</code>–lista katalogów oddzielonych
+      <li><code>HOME</code> — katalog domowy.</li>
+      <li><code>SHELL</code> — polecenie wywołujące powłokę.</li>
+      <li><code>PATH</code> — lista katalogów oddzielonych
         dwukropkiem, w których wyszukuje się pliki wykonywalne.</li>
-      <li><code>PS1</code>–znak zachęty powłoki, gdy wpisujemy
+      <li><code>PS1</code> — znak zachęty powłoki, gdy wpisujemy
         komendy.</li>
-      <li><code>PS2</code>–znak zachęty, gdy kontynuujemy
+      <li><code>PS2</code> — znak zachęty, gdy kontynuujemy
         komendę.</li>
-      <li><code>TERM</code>–rodzaj terminala.</li>
-      <li><code>MAIL</code>–skrzynka pocztowa, nie musi być wcale
+      <li><code>TERM</code> — rodzaj terminala.</li>
+      <li><code>MAIL</code> — skrzynka pocztowa, nie musi być wcale
         ustawione.</li>
     </ul>
   </dd>
@@ -235,56 +235,56 @@ done &lt;/etc/passwd</pre></dd>
     <code>i=`expr $a \* $b`</code>.</dd>
 
   <dt>Opisz rezultat wykonania poleceń i grup poleceń:</dt>
-  <dd><code>x &gt;/dev/null 2&gt;&amp;1</code>–stdout i stderr
+  <dd><code>x &gt;/dev/null 2&gt;&amp;1</code> — stdout i stderr
     przekierowane do tego samego <code>/dev/null</code>, tzn. jest jeden
     zduplikowany deskryptor pliku.</dd>
-  <dd><code>x 2&gt;&amp;1 1&gt;/dev/null</code>–stderr przekierowane
+  <dd><code>x 2&gt;&amp;1 1&gt;/dev/null</code> — stderr przekierowane
     do stdout, a <b>potem</b> stdout przekierowane
     do <code>/dev/null</code>.</dd>
-  <dd><code>x 2&gt;/dev/nul 1&gt;/dev/null</code>–stderr
+  <dd><code>x 2&gt;/dev/nul 1&gt;/dev/null</code> — stderr
     przekierowane do pliku <code>nul</code> w katalogu <code>dev</code>,
     a stdout do <code>/dev/null</code>.</dd>
-  <dd><code>x &lt; y &gt; z</code>–stdin czytane
+  <dd><code>x &lt; y &gt; z</code> — stdin czytane
     z pliku <code>y</code>, stdout pisane do pliku <code>z</code>.</dd>
-  <dd><code>x &amp; y ; z</code>–<code>x</code> zostanie odpalone
+  <dd><code>x &amp; y ; z</code> — <code>x</code> zostanie odpalone
     w tle i zaraz po tym <code>y</code>.  <code>z</code> zostanie uruchomione,
     gdy działanie zakończy <code>y</code>.</dd>
-  <dd><code>x || y</code>–<code>y</code> wykonane
+  <dd><code>x || y</code> — <code>y</code> wykonane
     jeżeli <code>x</code> zwróci status różny od 0.</dd>
-  <dd><code>find / foo.x 2&gt;&amp;1 1&gt;/dev/null</code>–przeszuka
+  <dd><code>find / foo.x 2&gt;&amp;1 1&gt;/dev/null</code> — przeszuka
     cały dysk, a następnie jeszcze katalog/plik <code>foo.x</code>
     w bieżącym katalogu.  Komunikaty błędów wypisane do stdout
     a wszystko inne wyrzucone do <code>/dev/null</code>.</dd>
-  <dd><code>find / foo.x &gt;/dev/null 2&gt;&amp;1</code>–przeszuka
+  <dd><code>find / foo.x &gt;/dev/null 2&gt;&amp;1</code> — przeszuka
     cały dysk, a następnie jeszcze katalog/plik <code>foo.x</code>
     w bieżącym katalogu.  Standardowe wyjście oraz komunikaty
     błędów rzucone do <code>/dev/null</code>.</dd>
 
 
   <dt>Opisz precyzyjnie działanie poniższych komend:</dt>
-  <dd><code>x &gt; y</code>–tworzony bądź zeruje jest
+  <dd><code>x &gt; y</code> — tworzony bądź zeruje jest
     plik <code>y</code> do którego przekierowane jest standardowe wyjście
     polecenia <code>x</code>.</dd>
-  <dd><code>x | y</code>–tworzony jest potok, do którego pisze
+  <dd><code>x | y</code> — tworzony jest potok, do którego pisze
     polecenie <code>x</code>, a czyta polecenie <code>y</code>.
     Tzn. standardowe wyjście x  jest przekierowane do potoku,
     który jest przekierowany jako standardowe wejście polecenia
     y.</dd>
-  <dd><code>x &lt; y</code>–otwierany jest plik <code>y</code>
+  <dd><code>x &lt; y</code> — otwierany jest plik <code>y</code>
     i jego zawartość jest wczytywana jako standardowe wejście
     polecenia <code>x</code>.</dd>
-  <dd><code>cat y | x</code>–efekt taki sam jak powyżej, tyle że
+  <dd><code>cat y | x</code> — efekt taki sam jak powyżej, tyle że
     zrealizowane to jest przez potok opisany dwa punkty wyżej.</dd>
-  <dd><code>x &amp; y</code>–<code>x</code> uruchamiany jest w tle
+  <dd><code>x &amp; y</code> — <code>x</code> uruchamiany jest w tle
     i zaraz po uruchomieniu nim (nie musi się on kończyć)
     uruchamiany jest <code>y</code>.</dd>
-  <dd><code>x &amp;&amp; y</code>–uruchamiany jest <code>x</code>
+  <dd><code>x &amp;&amp; y</code> — uruchamiany jest <code>x</code>
     i jeżeli zwraca status 0 to uruchamiany jest <code>y</code>.</dd>
-  <dd><code>x || y</code>–jak wyżej, tylko <code>y</code> uruchamiany
+  <dd><code>x || y</code> — jak wyżej, tylko <code>y</code> uruchamiany
     jest, gdy <code>x</code> zwraca status różny od 0.</dd>
-  <dd><code>x ; y &amp;</code>–uruchamiany jest <code>x</code>,
+  <dd><code>x ; y &amp;</code> — uruchamiany jest <code>x</code>,
     a gdy się skończy uruchamiany jest <code>y</code> w tle.</dd>
-  <dd><code>cat x &gt; y &lt;</code>–błąd składni?  Bez
+  <dd><code>cat x &gt; y &lt;</code> — błąd składni?  Bez
     tego <code>&lt;</code> na końcu to polecenie <code>cat</code> wczytuje
     zawartość pliku <code>x</code> i wypisuje je na standardowe
     wyjście, które przekierowane jest do utworzonego lub zerowanego
@@ -317,9 +317,9 @@ done &lt;/etc/passwd</pre></dd>
 
   <dt>Architektura wielowątkowa w systemie Solaris.</dt>
   <dd>Procesy.</dd>
-  <dd>Wątki użytkownika–implementowane bibliotecznie
+  <dd>Wątki użytkownika — implementowane bibliotecznie
     nierozróżnialne przez jądro.</dd>
-  <dd>LWP (procesy lekkie)–rozróżniane przez jądro mogą
+  <dd>LWP (procesy lekkie) — rozróżniane przez jądro mogą
     obsługiwać dowolną liczbę wątków poziomu użytkownika.</dd>
   <dd>Wątki jądra--podstawowy elementy szeregowanie rozmieszczane na
     procesorach.</dd>
@@ -469,7 +469,7 @@ printf '%s\n' "$OUTPUT"</pre></dd>
 
 
   <dt>Algorytm czytelników i pisarzy preferujący
-   pisarzy–podać algorytm, opisać synchronizację, wyjaśnić
+   pisarzy — podać algorytm, opisać synchronizację, wyjaśnić
    przeznaczenie poszczególnych zmiennych.</dt>
   <dd><pre>
 monitor {
@@ -586,13 +586,13 @@ void statek() {
   <dt>Metody przydziału pamięci</dt>
   <dd>
     <ul>
-      <li>brak podziału–wolna przestrzeń adresowa w danej
+      <li>brak podziału — wolna przestrzeń adresowa w danej
         chwili przydzielana jednemu procesowi użytkowemu.
         Wieloprogramowanie można realizować przez wymiatanie
         (ang. swapping),</li>
-      <li>podział pamięci–wolna przestrzeń adresowa podzielona na części
+      <li>podział pamięci — wolna przestrzeń adresowa podzielona na części
         przydzielane pojedynczym procesom użytkowym,</li>
-      <li>wykorzystanie pamięci wirtualnej–istnieje jedna lub
+      <li>wykorzystanie pamięci wirtualnej — istnieje jedna lub
         wiele wirtualnych przestrzeni adresowych przydzielanych
         procesom użytkowym, a mających w niewielkim stopniu
         pokrycie w pamięci operacyjnej.</li>
@@ -603,10 +603,10 @@ void statek() {
     przeciwdziałania.</dt>
   <dd>
     <ul>
-      <li>wewnętrzna–zjawisko tworzenia niewykorzystywalnych,
+      <li>wewnętrzna — zjawisko tworzenia niewykorzystywalnych,
         choć przydzielonych w ramach pewnej struktury (partycja,
         ramka), obszarów pamięci,</li>
-      <li>zewnętrzna–zjawisko tworzenia niewykorzystywalnych,
+      <li>zewnętrzna — zjawisko tworzenia niewykorzystywalnych,
         nieprzydzielonych obszarów pamięci, zazwyczaj spowodowane
         niedoskonałością działania organizacji alokacji pamięci
         procesom użytkowym.</li>
@@ -708,7 +708,7 @@ uint32_t translate(uint16_t segment, uint32_t offset) {
 
 <h2>Wejście/wyjście.</h2>
 <dl>
-  <dt>DMA–opis i przeznaczenie.</dt>
+  <dt>DMA — opis i przeznaczenie.</dt>
   <dd>Jest to mechanizm mający na celu umożliwienie transmisji danych
     pomiędzy dwoma urządzeniami (np. dyskiem i pamięcią) bez
     angażowania w to procesora.  W trakcie, gdy DMA działa
@@ -839,7 +839,7 @@ Blok np. 1   Iwęzeł 67     Blok 24      iwęzeł 33      Blok 14
 <!-- nick: Speedy -->
 <!-- nick_url: http://blog.zajc.info -->
 
-<p>Spoko. I dzięki za materiały – na pewno się przydadzą, bo godzinę temu oblałem dopytkę z tego przedmiotu :)  Politechnika Częstochowska</p>
+<p>Spoko. I dzięki za materiały — na pewno się przydadzą, bo godzinę temu oblałem dopytkę z tego przedmiotu :)  Politechnika Częstochowska</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-06-16 18:12:44 -->

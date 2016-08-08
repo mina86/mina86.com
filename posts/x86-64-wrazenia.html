@@ -17,7 +17,7 @@
 
 <p>Rzecz jasna nie ma nic za darmo.  Za te udogodnienia musimy płacić
   i bynajmniej nie chodzi mi o pieniądze, bo to raczej
-  najmniej istotne – istotniejszą kwestią jest większe
+  najmniej istotne — istotniejszą kwestią jest większe
   zużycie pamięci z powodu użycia ośmiobajtowych wskaźników, czy
   wyrównania stosu do ośmiu bajtów nawet jeżeli zrzucamy na niego
   liczbę 32-bitową.  Do tego dochodzi jeszcze
@@ -64,7 +64,7 @@
 <!-- nick: AdamK -->
 <!-- nick_url: http://blog.adam.klobukowski.pl -->
 
-<p>„Do tego dochodzi jeszcze bardziej skomplikowany, a przez to wolniejszy, proces tłumaczenia adresów logicznych na adresy fizyczne” – skąd masz takie informacje?</p>
+<p>„Do tego dochodzi jeszcze bardziej skomplikowany, a przez to wolniejszy, proces tłumaczenia adresów logicznych na adresy fizyczne” — skąd masz takie informacje?</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-07-18 10:38:18 -->
@@ -94,7 +94,7 @@
 
 <p>Mam wrażenie, że najwięcej może zyskać obsługa SSL-a, czy SSH, ale z tego też wcale tak często się nie korzysta (a na pewno rzadko z punktu widzenia procesora, który dostaje prztyczki dwa albo i trzy miliardy razy na sekundę).</p>
 
-<p>Wykonaj sobie polecenie <code>awk 'NR == 1 {print $5 * 100 / ($2+$3+$4+$5)}' /proc/stat</code> (chyba, że masz jakiś dziwny system operacyjny) i zobaczysz ile procent czasu Twój procesor nic nie robi — w moim przypadku jest to ponad 97% (jeżeli w tle, z ustawionym nicem masz coś@Home to z polecenia wyrzuć <code>+$4</code>).</p>
+<p>Wykonaj sobie polecenie <code>awk 'NR == 1 {print $5 * 100 / ($2+$3+$4+$5)}' /proc/stat</code> (chyba, że masz jakiś dziwny system operacyjny) i zobaczysz ile procent czasu Twój procesor nic nie robi — w moim przypadku jest to ponad 97% (jeżeli w tle, z ustawionym nicem masz coś@Home to z polecenia wyrzuć <code>+$4</code>).</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-07-18 11:35:24 -->
@@ -133,7 +133,7 @@ Halo!! Czy wszyscy już się przestawili, że int ma 32 bity?</p>
 <!-- nick_url: http://blog.adam.klobukowski.pl -->
 
 <p>int nie ma zdefiniowanej wielkości, zazwyczaj jest równa domyślnej długości słowa dla danego procesora.<br />
-short ma 16 bitów, long 32, long long 64 (ale nie mam pewności jak na architekturze 64bit, ale myślę że nic tu nie ruszano – właśnie dla zachowania kompatybilności, za dużo rzeczy mogłoby się posypać)</p>
+short ma 16 bitów, long 32, long long 64 (ale nie mam pewności jak na architekturze 64bit, ale myślę że nic tu nie ruszano — właśnie dla zachowania kompatybilności, za dużo rzeczy mogłoby się posypać)</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-07-18 12:02:33 -->
@@ -149,7 +149,7 @@ short ma 16 bitów, long 32, long long 64 (ale nie mam pewności jak na architek
 <!-- nick: AdamK -->
 <!-- nick_url: http://blog.adam.klobukowski.pl -->
 
-<p>Zależy na jakie definicje się patrzy – w samym języku C nie, ale ‘poza nim’ są takie definicje, to jest fajny artykuł: http://www.unix.org/whitepapers/64bit.html z którego wynika że może być bardzo różnie.</p>
+<p>Zależy na jakie definicje się patrzy — w samym języku C nie, ale ‘poza nim’ są takie definicje, to jest fajny artykuł: http://www.unix.org/whitepapers/64bit.html z którego wynika że może być bardzo różnie.</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-07-18 12:07:34 -->
@@ -158,7 +158,7 @@ short ma 16 bitów, long 32, long long 64 (ale nie mam pewności jak na architek
 
 <p>A Twój przenośny program, używał longa by mieć dla siebie caaaaaałe 32 bity, więc zapewne pisałeś go w latach 90. Od tego czasu masz 10 razy więcej pamięci, dlatego wszystko nagle zacznie mulić gdy program sprzed 10 lat będzie uruchamiany.</p>
 
-<p>Druga sprawa to to, że używam operatora sizeof, więc tak długo, jak z rozmiarem słowa idziemy w górę, nic nie powinno się popsuć. Oczywiście, możesz próbować odpalić coś co było pisane na 32 bity na 8 bitowcu. Ale czy warto? Chyba lepiej napisać od nowa – używając jasno określonych zmiennych typów:<br />
+<p>Druga sprawa to to, że używam operatora sizeof, więc tak długo, jak z rozmiarem słowa idziemy w górę, nic nie powinno się popsuć. Oczywiście, możesz próbować odpalić coś co było pisane na 32 bity na 8 bitowcu. Ale czy warto? Chyba lepiej napisać od nowa — używając jasno określonych zmiennych typów:<br />
 uint8, uint16, uint32, int8, int16, int32 czy jak tam sobie chcesz nazwać.</p>
 
 <!-- COMMENT -->
@@ -200,7 +200,7 @@ dziala swietnie!</p>
 
 <p>darkjames, ależ ja korzystam z <code>stdint.h</code> jak i nie rzutuję ze wskaźników na liczby, co nie zmienia faktu, że nie każdy tak robi. Zresztą odchodzimy od tematu. Fakt faktem, że zużycie pamięci wzrasta z różnych powodów, czy to większych wskaźników, czy wyrównywania struktur, które mają w sobie 32 bitowego <code>inta</code> oraz 64 bitowy wskaźnik, czy zrzucanie nawet 32 bitowych danych na stos w postaci 64 bitowych liczb.</p>
 
-<p>Piszesz, że działa Ci świetnie — pojawia się pytanie: A czy działa Ci lepiej niż 32 bitowy system? Może wręcz przeciwnie?</p>
+<p>Piszesz, że działa Ci świetnie — pojawia się pytanie: A czy działa Ci lepiej niż 32 bitowy system? Może wręcz przeciwnie?</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-07-18 12:18:10 -->
@@ -233,7 +233,7 @@ Przejdź już nad tym do porządku dziennego ;-)</p>
 <!-- nick: Caladan -->
 <!-- nick_url: http://caladan.jogger.pl -->
 
-<p>Płyta ucina czy Windows ucina? Przekroczenie 4GB pamięci znów przywraca do życia stare cyrki – segmentację pamięci, chociaż już nie taką jawną. Czy musimy mieć znów jakieś magiczne technologie adresów 48-bitowych?<br />
+<p>Płyta ucina czy Windows ucina? Przekroczenie 4GB pamięci znów przywraca do życia stare cyrki — segmentację pamięci, chociaż już nie taką jawną. Czy musimy mieć znów jakieś magiczne technologie adresów 48-bitowych?<br />
 A tak w ogóle to x86-64, jak i cała wcześniejsza x86 jest do dupy. ;-)</p>
 
 <!-- COMMENT -->
@@ -247,7 +247,7 @@ A tak w ogóle to x86-64, jak i cała wcześniejsza x86 jest do dupy. ;-)</p>
 <!-- nick: Hoppke -->
 <!-- nick_url: http://hoppke.jogger.pl -->
 
-<p>Jest jeszcze druga strona medalu — obecne procki 64-bitowe są wielordzeniowe. I o ile nawet 64 bity mogą nie być specjalnie pociągające, o tyle już te gratisowe rdzenie…</p>
+<p>Jest jeszcze druga strona medalu — obecne procki 64-bitowe są wielordzeniowe. I o ile nawet 64 bity mogą nie być specjalnie pociągające, o tyle już te gratisowe rdzenie…</p>
 
 <p>(mam w domu 64 bitowy procesor, używam na nim 32 bitowego OS-a z 4GB ramu :)</p>
 
@@ -309,7 +309,7 @@ A tak w ogóle to x86-64, jak i cała wcześniejsza x86 jest do dupy. ;-)</p>
 
 <p>W zasadzie każdy program skompilowany pod x86_64 będzie przyśpieszał z racji większej liczby rejestrów, ale skoro mówisz o grach to pojawia się pytanie czy będą to gry 64 bitowe czy 32 bitowe, bo jeżeli te drugie to w żadnym stopniu z 64 bitowego systemu nie skorzystają.</p>
 
-<p>Trzeba sobie też zdawać sprawę, iż na szybkość pracy komputera procesor często ma coraz mniejszy wpływ — coraz bardziej istotne są inne podzespoły takie jak np. pamięć i właśnie dlatego odradzam 64 bity w komputerach z małą (jak na obecne czasy) ilością RAM-u.</p>
+<p>Trzeba sobie też zdawać sprawę, iż na szybkość pracy komputera procesor często ma coraz mniejszy wpływ — coraz bardziej istotne są inne podzespoły takie jak np. pamięć i właśnie dlatego odradzam 64 bity w komputerach z małą (jak na obecne czasy) ilością RAM-u.</p>
 
 <p>Reasumując, jako ogólną zasadę przyjmowałbym co następuje: jeżeli masz RAM-u mniej niż 2GiB zostań przy 32 bitach, jeżeli masz RAM-u więcej niż 4GiB przejdź na 64 bity, w pozostałych przypadkach rób co wygodniejsze.</p>
 
@@ -324,12 +324,12 @@ A tak w ogóle to x86-64, jak i cała wcześniejsza x86 jest do dupy. ;-)</p>
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Co nie oznacza, że na wszystkich innych maszynach wszystko popsują. Samochody combi są zaprojektowane do przewozu większego bagażu, a mimo to jedna osoba też takimi może z powodzeniem jeździć. Większa liczba rejestrów i bardziej rozbudowane instrukcje SIMD dawały pewne nadzieję, że nawet przy 512MiB nie będzie źle — okazało się, że jest tragicznie (w kwestii czego kolega zdaje się zgadzać).</p>
+<p>Co nie oznacza, że na wszystkich innych maszynach wszystko popsują. Samochody combi są zaprojektowane do przewozu większego bagażu, a mimo to jedna osoba też takimi może z powodzeniem jeździć. Większa liczba rejestrów i bardziej rozbudowane instrukcje SIMD dawały pewne nadzieję, że nawet przy 512MiB nie będzie źle — okazało się, że jest tragicznie (w kwestii czego kolega zdaje się zgadzać).</p>
 
 <!-- COMMENT -->
 <!-- date: 2009-02-09 01:16:12 -->
 <!-- nick: morg -->
 
-<p>X86_64 przyda się programiście SQLPlusa piszącego w Oracle. Baza danych nawet taka mała – 1 GB potrafi podczas przetwarzania zakleić prawie cały RAM (3,50 GB) a zużycie procesora potrafi wskoczyć na 90%. Nie jestem programistą, ale na moim kompie w pracy (Pentium D, 2 × 3400 GHz, Fedora 10 x86_64) widziałem wskaźniki podczas przetwarzania na takiej bazie.</p>
+<p>X86_64 przyda się programiście SQLPlusa piszącego w Oracle. Baza danych nawet taka mała — 1 GB potrafi podczas przetwarzania zakleić prawie cały RAM (3,50 GB) a zużycie procesora potrafi wskoczyć na 90%. Nie jestem programistą, ale na moim kompie w pracy (Pentium D, 2 × 3400 GHz, Fedora 10 x86_64) widziałem wskaźniki podczas przetwarzania na takiej bazie.</p>
 
 <p>W zastosowaniach domowych, nawet podczas przetwarzania grafiki/filmów i innych zasobożernych akcji wysarczy 32-bitowy system. Natomiast w przypadku aplikacji wielowątkowych jakimi są relacyjne bazy danych przestanie nas to zadowalać. Wzrost wydajności może przekroczyć 50%. Tak było w moim przypadku. Zadania na x86_64 średnio były szybsze w zakresie 40-60%.</p>
