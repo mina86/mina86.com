@@ -306,7 +306,18 @@ a:hover, a:focus, a:active {
 }
 
 article {
-	margin: 2em 0 3em;
+	padding: 2em 0;
+	position: relative;
+
+	& + &:before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 15%;
+		width: 70%;
+		height: 1px;
+		border-top: 1px solid mix(@body-bg, #000, 80%);
+	}
 
 	p, dd, li {
 		text-align: justify;
