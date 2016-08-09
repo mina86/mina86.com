@@ -420,7 +420,7 @@ def generate(writer, site):
     # Generate pagination pages (10 entries per page)
     i = 0
     while i * 10 < len(posts):
-        href = lambda p: '/%d.html' % p if p else '/'
+        href = lambda p: '/%d' % p if p else '/'
         writer.write_html('%d.html' % i if i else 'index.html', 'index', {
             'title': 'Page %d' % i if i else None,
             'canonical': BASE_HREF + href(i),
