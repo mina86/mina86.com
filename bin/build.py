@@ -46,7 +46,10 @@ def print_action(action, *target):
 
 
 def make(targets):
-    args = ['make', '-j8', '-s']
+    args = ['make', '-s']
+    if not re.search('--jobserver-(?:fds|auth)',
+                     os.environ.get('MAKEFLAGS', '')):
+        args.append('-j8')
     args.extend(targets)
     subprocess.check_call(args)
 
