@@ -237,7 +237,7 @@ class Writer(object):
 
     def write_atom(self, filename, entries, href, feed_id, title=None):
         author = (u'<author><name>Michał ‘mina86’ Nazarewicz</name>'
-                  u'<uri>http://mina86.com/</uri></author>')
+                  u'<uri>%s</uri></author>' % BASE_HREF)
 
         def e(val):
             return val.replace('&', '&amp;').replace('<', '&lt;')
@@ -266,7 +266,7 @@ class Writer(object):
                 <updated>%(date)s</updated>
                 %(author)s
         ''',
-              title=title + u'―mina86.com' if title else 'mina86.com',
+              title=title + u' — mina86.com' if title else 'mina86.com',
               id=feed_id,
               self_url=e('%s/%s' % (BASE_HREF, filename)),
               page_url=e(BASE_HREF + href),
