@@ -3,26 +3,25 @@
 <!-- tags: x86_64 -->
 <!-- categories: Articles, Reviews, Techblog -->
 
-<p>64 bitowe procesory x86_64, x64, amd64, intel64, czy
-  jak je tam chcemy zwać, zdobywają coraz większą popularność. Jest
-  również coraz więcej systemów operacyjnych wykorzystujących ich
-  potencjalne możliwości. Nareszcie pozbyliśmy się problemu
-  przekręcenie licznika w 2038! Nareszcie możemy zaadresować
-  1 TiB fizycznej pamięci (to, że nasza płyta główna obsługuje
-  3 GiB, a jak mamy szczęście 3,5 GiB to już
-  szczegół). Nareszcie mamy 48 bitową (<abbr title="to jest">tj.</abbr> 256TiB) logiczną przestrzeń adresową!  Do tego
-  dochodzi lepsza obsługa instrukcji <acronym lang="en"
-  title="Single Instruction Multiple Data">SIMD</acronym>, więcej
-  rejestrów, 64 bitowa arytmetyka itp.</p>
+<p>64-bitowe procesory x86_64, x64, amd64, intel64, czy jak je tam
+  chcemy zwać, zdobywają coraz większą popularność. Jest również coraz
+  więcej systemów operacyjnych wykorzystujących ich potencjalne
+  możliwości. Nareszcie pozbyliśmy się problemu przekręcenie licznika
+  w 2038! Nareszcie możemy zaadresować 1 TiB fizycznej pamięci (to, że
+  nasza płyta główna obsługuje 3 GiB, a jak mamy szczęście 3,5 GiB to
+  już szczegół). Nareszcie mamy 48-bitową (<abbr title="to
+  jest">tj.</abbr> 256 TiB) logiczną przestrzeń adresową!  Do tego
+  dochodzi lepsza obsługa instrukcji <acronym lang="en" title="Single
+  Instruction Multiple Data">SIMD</acronym>, więcej rejestrów,
+  64-bitowa arytmetyka itp.</p>
 
 <p>Rzecz jasna nie ma nic za darmo.  Za te udogodnienia musimy płacić
-  i bynajmniej nie chodzi mi o pieniądze, bo to raczej
-  najmniej istotne — istotniejszą kwestią jest większe
-  zużycie pamięci z powodu użycia ośmiobajtowych wskaźników, czy
-  wyrównania stosu do ośmiu bajtów nawet jeżeli zrzucamy na niego
-  liczbę 32-bitową.  Do tego dochodzi jeszcze
-  bardziej skomplikowany, a przez to wolniejszy, proces
-  tłumaczenia adresów logicznych na adresy fizyczne.</p>
+  i bynajmniej nie chodzi mi o pieniądze, bo to raczej najmniej
+  istotne — istotniejszą kwestią jest większe zużycie pamięci z powodu
+  użycia ośmiobajtowych wskaźników, czy wyrównania stosu do ośmiu
+  bajtów nawet jeżeli zrzucamy na niego liczbę 32-bitową.  Do tego
+  dochodzi jeszcze bardziej skomplikowany, a przez to wolniejszy,
+  proces tłumaczenia adresów logicznych na adresy fizyczne.</p>
 
 <!-- EXCERPT -->
 
@@ -36,28 +35,28 @@
   poprzedniego stanu rzeczy.</p>
 
 <p>Jaki z tego morał? Jeżeli jesteś zwykłym użytkownikiem nie baw
-  się w 64 bitowe systemy o ile nie masz dużo RAM-u, bo nie będziesz
+  się w 64-bitowe systemy o ile nie masz dużo RAM-u, bo nie będziesz
   miał z tego większych korzyści, a co więcej możesz zauważyć negatywne
   skutki.  Zresztą nawet jeżeli masz dużo pamięci przechodzenie może okazać się
   zbytnim zachodem jeżeli korzystasz już z systemu 32-bitowego. Do roku 2038
   mamy jeszcze 30 lat, pamięć do 64 GiB można obsłuży
   dzięki <a href="https://en.wikipedia.org/wiki/Physical_Address_Extension"><acronym lang="en"
-  title="Physical Address Extension">PAE</acronym></a>, 48 bitowej
+  title="Physical Address Extension">PAE</acronym></a>, 48-bitowej
   przestrzeni adresowej nie potrzebuje żaden z programów, które
   używasz, z <acronym title="Streaming SIMD Extensions 3"
   lang="en">SSE3</acronym> gcc pewnie i tak nie umie
-  skorzystać, 64 bitowa arytmetyka jest wykorzystywana przez zaledwie
+  skorzystać, 64-bitowa arytmetyka jest wykorzystywana przez zaledwie
   kilka programów, które i tak nie są krytyczne dla szybkości
   systemu (<abbr title="zobacz również">zob.</abbr>
   <a href="https://pl.wikipedia.org/wiki/Prawo_Amdahla">prawo
   Amdahla</a>), a korzyści wynikające z większej liczby
   rejestrów mogą zniknąć w cieniu większego zużycia pamięci.</p>
 
-<p>Nie twierdzę, że 64 bitowy procesor jest złym wyborem, ale
-  w wielu sytuacjach (mówię głównie o zastosowaniach
-  „domowych”) nie ma co liczyć, że jak za sprawą dotknięcia
-  czarodziejską różdżką nasz komputer zacznie działać szybciej,
-  gdy przejdziemy na 64 bitowy system.</p>
+<p>Nie twierdzę, że 64-bitowy procesor jest złym wyborem, ale w wielu
+  sytuacjach (mówię głównie o zastosowaniach „domowych”) nie ma co
+  liczyć, że jak za sprawą dotknięcia czarodziejską różdżką nasz
+  komputer zacznie działać szybciej, gdy przejdziemy na 64-bitowy
+  system, w sytuacji, gdy mamy stosunkowo mało RAM-u.</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-07-18 10:10:59 -->

@@ -3,12 +3,11 @@
 <!-- tags: systemy operacyjne, synchronizacja, procesy, wątki, semafory, unix -->
 <!-- categories: Articles, Techblog, WEiTI -->
 
-<p>Coś z serii „ja już zaliczyłem na 5.0, a może komuś
-  się przyda”, czyli przygotowany przeze mnie plik
-  z odpowiedziami na pytania przygotowawcze do egzaminu
-  z przedmiotu Systemy operacyjne.  Zapewne największa wartość
-  mają one dla studentów Elektroniki Politechniki Warszawskiej,
-  niemniej jednak może ktoś się tym zainteresuje.</p>
+<p>Coś z serii „ja już zaliczyłem na pięć, a może komuś się przyda”,
+  czyli przygotowany przeze mnie plik z odpowiedziami na pytania
+  przygotowawcze do egzaminu z przedmiotu Systemy operacyjne.  Zapewne
+  największa wartość mają one dla studentów Elektroniki Politechniki
+  Warszawskiej, niemniej jednak może ktoś się tym zainteresuje.</p>
 
 <!-- EXCERPT -->
 
@@ -201,7 +200,7 @@
   <dd><code>for &lt;zmienna&gt;; do &lt;polecenie&gt;; done</code> tak jak
     powyżej, gdy za listę słów poda się <code>"$@"</code>.</dd>
   <dd><code>while &lt;warunek&gt;; do &lt;polecenie&gt;; done</code>
-    wykonuje polecenie tak długo jak warunek zwraca kod błędu 0.</dd>
+    wykonuje polecenie tak długo jak warunek zwraca kod błędu zero.</dd>
   <dd><code>while :; do &lt;polecenie&gt;; done</code> taka miła pętla
     nieskończona.</dd>
 
@@ -250,7 +249,7 @@ done &lt;/etc/passwd</pre></dd>
     w tle i zaraz po tym <code>y</code>.  <code>z</code> zostanie uruchomione,
     gdy działanie zakończy <code>y</code>.</dd>
   <dd><code>x || y</code> — <code>y</code> wykonane
-    jeżeli <code>x</code> zwróci status różny od 0.</dd>
+    jeżeli <code>x</code> zwróci status różny od zera.</dd>
   <dd><code>find / foo.x 2&gt;&amp;1 1&gt;/dev/null</code> — przeszuka
     cały dysk, a następnie jeszcze katalog/plik <code>foo.x</code>
     w bieżącym katalogu.  Komunikaty błędów wypisane do stdout
@@ -279,9 +278,9 @@ done &lt;/etc/passwd</pre></dd>
     i zaraz po uruchomieniu nim (nie musi się on kończyć)
     uruchamiany jest <code>y</code>.</dd>
   <dd><code>x &amp;&amp; y</code> — uruchamiany jest <code>x</code>
-    i jeżeli zwraca status 0 to uruchamiany jest <code>y</code>.</dd>
+    i jeżeli zwraca status równy zero to uruchamiany jest <code>y</code>.</dd>
   <dd><code>x || y</code> — jak wyżej, tylko <code>y</code> uruchamiany
-    jest, gdy <code>x</code> zwraca status różny od 0.</dd>
+    jest, gdy <code>x</code> zwraca status różny od zero.</dd>
   <dd><code>x ; y &amp;</code> — uruchamiany jest <code>x</code>,
     a gdy się skończy uruchamiany jest <code>y</code> w tle.</dd>
   <dd><code>cat x &gt; y &lt;</code> — błąd składni?  Bez

@@ -7,19 +7,75 @@
 
 <!-- EXCERPT -->
 
-<p>Żeby nie motać za bardzo (i nie udawać, że wiem o czym piszę) ograniczę się na początek do sygnałów przesyłanych przez zwykły kabel miedziany.  Prąd w nim płynący ma zasadniczo dwa parametry--natężenie oraz napięcie--które mają wartości ciągłe przeto są wartościami analogowymi.  Umówmy się na początek, iż sygnał będziemy kodować za pomocą napięcia i załóżmy jednocześnie, że wszystko jest tak zrobione, iż w kablu naszym występują napięcia od 0 do 5 woltów.  Teraz wystarczy jedno proste założenie: Niech wszystko poniżej 1,5 wolta oznacza stan niski, a wszystko powyżej 3,5 woltów oznacza stan wysoki i gotowe!</p>
+<p>Żeby nie motać za bardzo (i nie udawać, że wiem o czym piszę)
+ograniczę się na początek do sygnałów przesyłanych przez zwykły kabel
+miedziany.  Prąd w nim płynący ma zasadniczo dwa parametry--natężenie
+oraz napięcie--które mają wartości ciągłe przeto są wartościami
+analogowymi.  Umówmy się na początek, iż sygnał będziemy kodować za
+pomocą napięcia i załóżmy jednocześnie, że wszystko jest tak zrobione,
+iż w kablu naszym występują napięcia zero 0–5 woltów.  Teraz wystarczy
+jedno proste założenie: Niech wszystko poniżej 1,5 wolta oznacza stan
+niski, a wszystko powyżej 3,5 woltów oznacza stan wysoki i gotowe!</p>
 
-<p>A co z takim razie z wartościami pomiędzy 1,5 a 3,5 wolta? Są to poziomy niedozwolone i sygnalizujące błąd transmisji.  Podejście takie ukazuje w czym tak naprawdę transmisja cyfrowa jest lepsza od analogowej.  Otóż, w realnym świecie, jeżeli po jednej stronie kabla nadamy sygnał <code>u(t)</code> to po drugiej stronie odczytamy <code>u′(t) = u(t) + delta(t)</code> gdzie <code>delta(t)</code> to jakieś losowe zakłócenia.  W przypadku sygnału analogowego nie mamy żadnej możliwości odfiltrować tych zakłóceń--nie wiadomo wszak czy są to zakłócenia czy prawidłowy sygnał.  Przy transmisji cyfrowej możemy, bo wszak, wystarczy, aby nadawca wysyłał stan niski jako pół, a stan wysoki jako 4,5 wolta i wówczas nawet zakłócenia o wartości jednego wolta nie będą w stanie zaburzyć transmisji, a zakłócenia o wartości do 3 woltów będzie można wykryć.  To czy stan wysoki oznacza jedynkę, a stan niski zero czy na odwrót jest już kwestią wtórną.</p>
+<p>A co z takim razie z wartościami pomiędzy 1,5 a 3,5 wolta? Są to
+poziomy niedozwolone i sygnalizujące błąd transmisji.  Podejście takie
+ukazuje w czym tak naprawdę transmisja cyfrowa jest lepsza od
+analogowej.  Otóż, w realnym świecie, jeżeli po jednej stronie kabla
+nadamy sygnał <code>u(t)</code> to po drugiej stronie
+odczytamy <code>u′(t) = u(t) + delta(t)</code>
+gdzie <code>delta(t)</code> to jakieś losowe zakłócenia.  W przypadku
+sygnału analogowego nie mamy żadnej możliwości odfiltrować tych
+zakłóceń--nie wiadomo wszak czy są to zakłócenia czy prawidłowy
+sygnał.  Przy transmisji cyfrowej możemy, bo wszak, wystarczy, aby
+nadawca wysyłał stan niski jako pół, a stan wysoki jako 4,5 wolta
+i wówczas nawet zakłócenia o wartości jednego wolta nie będą w stanie
+zaburzyć transmisji, a zakłócenia o wartości do 3 woltów będzie można
+wykryć.  To czy stan wysoki oznacza jedynkę, a stan niski zero czy na
+odwrót jest już kwestią wtórną.</p>
 
-<p>A czy możnaby ustalić więcej niż dwa zakresy? Np. wysoki, niski i średni? Oczywiście można.  Wówczas transmisja przebiegałaby szybciej, ale za to byłaby bardziej podatna na zakłócenia.</p>
+<p>A czy możnaby ustalić więcej niż dwa zakresy? Np. wysoki, niski
+i średni? Oczywiście można.  Wówczas transmisja przebiegałaby
+szybciej, ale za to byłaby bardziej podatna na zakłócenia.</p>
 
-<p>Dodatkowo sygnał cyfrowy, w przeciwieństwie do analogowego, umożliwia zastosowanie kodów wykrywających błędy.  Dość prymitywną metodą, ukazującą jednak sens, jest suma wszystkich słów o zadanej długości modulo jakaś wartość.  Bardziej zaawansowaną metodą są kody <acronym title="Cyclic redundancy check" lang="en">CRC</acronym> (dodawane przecież do ramek ethernetowych, <acronym title="Internet Protocol" lang="en">IP</acronym>v4 i <acronym title="Transmission Control Protocol" lang="en">TCP</acronym>) projektowane specjalnie dla tego celu. Aby wykryć błąd w transmisji można również użyć innych funkcji mieszających takich jak np. <acronym title="Message-Digest algorithm 5" lang="en">MD5</acronym> (stosowane przy ściąganiu plików; tak jakby ktoś nie wiedział o co biega z tymi plikami <code>CHECKSUM.md5</code>) czy <acronym title="Secure Hash Algorithm 1" lang="en">SHA1</acronym>.</p>
+<p>Dodatkowo sygnał cyfrowy, w przeciwieństwie do analogowego,
+umożliwia zastosowanie kodów wykrywających błędy.  Dość prymitywną
+metodą, ukazującą jednak sens, jest suma wszystkich słów o zadanej
+długości modulo jakaś wartość.  Bardziej zaawansowaną metodą są
+kody <acronym title="Cyclic redundancy check" lang="en">CRC</acronym>
+(dodawane przecież do ramek ethernetowych, <acronym title="Internet
+Protocol" lang="en">IP</acronym>v4 i <acronym title="Transmission
+Control Protocol" lang="en">TCP</acronym>) projektowane specjalnie dla
+tego celu. Aby wykryć błąd w transmisji można również użyć innych
+funkcji mieszających takich jak np. <acronym title="Message-Digest
+algorithm 5" lang="en">MD5</acronym> (stosowane przy ściąganiu plików;
+tak jakby ktoś nie wiedział o co biega z tymi
+plikami <code>CHECKSUM.md5</code>) czy <acronym title="Secure Hash
+Algorithm 1" lang="en">SHA1</acronym>.</p>
 
-<p>Ponadto, można zastosować kody korekcyjne umożliwiające odtworzenie zakłóconej (do pewnego stopnia przynajmniej) transmisji.  Najprostszym przykładem jest wysyłanie każdego bitu trzy razy.  Dzięki temu, jeżeli odbiorca odbierze dwa razy jedynkę i raz zero to <em>koryguje</em> taką sytuację przyjmując jako odebraną wartość jedynkę (z tego co mi wiadomo, kodowanie takie jest wykorzystywane w niektórych pamięciach ECC).</p>
+<p>Ponadto, można zastosować kody korekcyjne umożliwiające odtworzenie
+zakłóconej (do pewnego stopnia przynajmniej) transmisji.  Najprostszym
+przykładem jest wysyłanie każdego bitu trzy razy.  Dzięki temu, jeżeli
+odbiorca odbierze dwa razy jedynkę i raz zero to <em>koryguje</em>
+taką sytuację przyjmując jako odebraną wartość jedynkę (z tego co mi
+wiadomo, kodowanie takie jest wykorzystywane w niektórych pamięciach
+ECC).</p>
 
-<p>O wiele wydajniejszym sposobem jest zastosowanie kodów Hamminga, które dzielą bity sekwencji o konkretnej długości na nachodzące na siebie grupy i do każdej z grup dodają po bit parzystości tak, aby w każdej grupie liczba jedynek była parzysta.  Jeżeli jakiś bit zostanie przekłamany bity parzystości dla grup, w których on się znajduje będą miały złą wartość.  Sztuczka polega na takim podziale na grupy, aby widząc, w których grupach nastąpił błąd transmisji móc ten błąd poprawić.  W zależności od liczby dodanych bitów parzystości kod może być w stanie poprawić różną liczbę błędów, a jeszcze większą liczbę przekłamań wykryć.</p>
+<p>O wiele wydajniejszym sposobem jest zastosowanie kodów Hamminga,
+które dzielą bity sekwencji o konkretnej długości na nachodzące na
+siebie grupy i do każdej z grup dodają po bit parzystości tak, aby
+w każdej grupie liczba jedynek była parzysta.  Jeżeli jakiś bit
+zostanie przekłamany bity parzystości dla grup, w których on się
+znajduje będą miały złą wartość.  Sztuczka polega na takim podziale na
+grupy, aby widząc, w których grupach nastąpił błąd transmisji móc ten
+błąd poprawić.  W zależności od liczby dodanych bitów parzystości kod
+może być w stanie poprawić różną liczbę błędów, a jeszcze większą
+liczbę przekłamań wykryć.</p>
 
-<p>No i to chyba tyle.  Zupełnie oddzielnym tematem jest przesyłanie sygnałów (czy to analogowych czy cyfrowych) w eterze i jak to się dzieje, że na tym samym terenie może działa jednocześnie wiele stacji radiowych czy telefonicznych i do tego jeszcze możemy rozmawiać przez komórkę stojąc obok kilku access pointów.</p>
+<p>No i to chyba tyle.  Zupełnie oddzielnym tematem jest przesyłanie
+sygnałów (czy to analogowych czy cyfrowych) w eterze i jak to się
+dzieje, że na tym samym terenie może działa jednocześnie wiele stacji
+radiowych czy telefonicznych i do tego jeszcze możemy rozmawiać przez
+komórkę stojąc obok kilku access pointów.</p>
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 17:33:17 -->
