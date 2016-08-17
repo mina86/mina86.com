@@ -1,5 +1,4 @@
 public
-bin/*.jar
 .tmp
 files/index.html
 */*.pyc

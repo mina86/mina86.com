@@ -1,7 +1,7 @@
 all: public
 
 public: static/mina86.gpg
-	@+python ./bin/build.py $@
+	@+python ./tools/build.py $@
 
 touch:
 	touch src/*.* src/data/*.*
