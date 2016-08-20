@@ -25,9 +25,9 @@ span.udesc { font-variant: all-small-caps }
 </style>
 
 
-<h2>UTF-16 is <em>not</em> a ﬁxed-width encoding</h2>
+<h2>UTF-16 is <em>not</em> a fixed-width encoding</h2>
 
-<p>Unicode deﬁnes 17 <dfn>planes</dfn> (most famous being plane zero,
+<p>Unicode defines 17 <dfn>planes</dfn> (most famous being plane zero,
   the Basic Multilingual Plane or BMP).  Each plane consists of
   65 536 <dfn>code points</dfn>.  Quick multiplication unveils
   staggering number of 1 114 112 entries.  It quickly becomes obvious
@@ -35,7 +35,7 @@ span.udesc { font-variant: all-small-caps }
   unit</dfn>, aren’t enough to identify each code point uniquely.
 
 <p>To solve that problem, a somehow awkward concept of surrogate pairs
-  has been introduced.  (On unrelated note, is it just me who ﬁnds
+  has been introduced.  (On unrelated note, is it just me who finds
   spelling of ‘awkward’ so <em>meta</em>?) Anyway, 2048 code points
   have been carved out to make room for high and low surrogates.  In
   UTF-16, a high surrogate followed by a low surrogate — four octets
@@ -48,55 +48,50 @@ span.udesc { font-variant: all-small-caps }
 
 <ol>
   <li>
-    <p>Subtract 10000₁₆ from the code point to produce a 20-bit
+    <p>Subtract 10000<sub>16</sub> from the code point to produce a 20-bit
       number.
-    <p>1F574₁₆ - 10000₁₆ = F574₁₆
-      = <span class=hisur>0000111101</span><span class=losur>0101110100</span>₂
+    <p>1F574<sub>16</sub> - 10000<sub>16</sub> = F574<sub>16</sub>
+      = <span class=hisur>0000111101</span><span class=losur>0101110100</span><sub>2</sub>
   <li>
-    <p>Add D800₁₆ to the ten most signiﬁcant bits of that
+    <p>Add D800<sub>16</sub> to the ten most significant bits of that
       number — that’s the high surrogate.
-    <p>D800₁₆ + <span class=hisur>0000111101</span>₂
-      = <span class=chsur>110110</span><span class=xxsur>0000000000</span>₂
-      + <span class=hisur>0000111101</span>₂
-      = <span class=chsur>110110</span><span class=hisur>0000111101</span>₂
-      = D83D₁₆
+    <p>D800<sub>16</sub> + <span class=hisur>0000111101</span><sub>2</sub>
+      = <span class=chsur>110110</span><span class=xxsur>0000000000</span><sub>2</sub>
+      + <span class=hisur>0000111101</span><sub>2</sub>
+      = <span class=chsur>110110</span><span class=hisur>0000111101</span><sub>2</sub>
+      = D83D<sub>16</sub>
   <li>
-    <p>Add DC00₁₆ to the ten least signiﬁcant bits of the same
+    <p>Add DC00<sub>16</sub> to the ten least significant bits of the same
       number — that’s the low surrogate.
-    <p>DC00₁₆ + <span class=losur>0101110100</span>₂
-      = <span class=clsur>110111</span><span class=xxsur>0000000000</span>₂
-      + <span class=losur>0101110100</span>₂
-      = <span class=clsur>110111</span><span class=losur>0101110100</span>₂
-      = DD74₁₆
+    <p>DC00<sub>16</sub> + <span class=losur>0101110100</span><sub>2</sub>
+      = <span class=clsur>110111</span><span class=xxsur>0000000000</span><sub>2</sub>
+      + <span class=losur>0101110100</span><sub>2</sub>
+      = <span class=clsur>110111</span><span class=losur>0101110100</span><sub>2</sub>
+      = DD74<sub>16</sub>
   <li>
     <p>Output the high surrogate followed by low surrogate.
     <p>UTF-16 encoding of U+1F574 is U+D83D U+DD74.
 </ol>
 
 
-<h2>Case change is not reversible (and changes length)</h2>
+<h2>Case change is not reversible and may change length</h2>
 
-<p>An observant reader, or one using software with subpar Unicode
-  support, might notice that within this article, sequences of
-  a letter ‘f’ followed by a letter ‘i’ are replaced by
-  U+FB01: <span class=udesc>Latin small ligature fi</span>.  Despite
-  having ‘small’ in its description, the character doesn’t have
-  a corresponding ‘capital’ counterpart.  This implies that
-  <code>lc(uc(<i>deﬁne</i>)) = lc(<i>DEFINE</i>) = <i>define</i></code>
-  which code point for code point is different
-  than <code><i>deﬁne</i></code>.
+<p>German speakers probably recognise ß, a small letter sharp s.  It
+  is a bit of a unique snowflake in Latin alphabets in that it has no
+  corresponding upper case form.  Or rather, even though capital sharp
+  s exists, the correct, according to German orthography, way to
+  capitalise ß is by replacing it with two letters S.  Similarly, an
+  ﬁ ligature becomes FI.  Other characters, such as ŉ, need to be
+  decomposed producing ʼN.
 
-<p>Similarly, even though capital sharp s is deﬁned, it is rarely ever
-  used and instead a proper, according to German orthography, upper
-  case form of ‘ß’ is ‘SS’.
+<p>In case this isn’t confusing enough, strings may get shorter as
+  well.  ‘I◌̇stanbul’ (which starts with capital I followed by
+  U+0307: <span class=udesc>combining dot above</span>) becomes
+  ‘istanbul’ when lower cased.  One code point fewer.
 
-<p>In both examples, changing case not only is not reversible but also
-  increases length of a string (one code point becomes two).
-
-<p>But that’s not all!  It gets even weirder.  Below is a table of
-  some corner cases.  My experiments show that Firefox handles all
-  cases correctly while Chrome and Opera fail to properly capitalise
-  ‘ﬁlm’.
+<p>Below is a table of some of the corner cases.  Firefox fails at
+  İstanbul when spelled using combining dot above character, while
+  Chrome and Opera fail to properly capitalise ‘ﬁlm’.
 
 <table class="tb">
   <thead>
@@ -127,9 +122,20 @@ span.udesc { font-variant: all-small-caps }
       <td scope=row>lc(‘Ⅷ’)
       <td>ⅷ
       <td style="text-transform:lowercase">Ⅷ
-     <tr>
+    <tr>
+      <td lang=nl scope=row>tc(‘ĳs’)
+      <td lang=nl>Ĳs
+      <td lang=nl style="text-transform:capitalize">ĳs
+    <tr>
       <td colspan=3 style=padding-left:2em>Some ligatures and digraphs
         have corresponding characters in desired case.
+    <tr>
+      <td lang=nl scope=row>tc(‘ijs’)
+      <td lang=nl>IJs
+      <td lang=nl style="text-transform:capitalize">ijs
+    <tr>
+      <td colspan=3 style=padding-left:2em>Interestingly, Firefox
+      handles Dutch ij even if written as separate letters.
   <tbody>
    <tr>
       <td scope=row>lc(‘<span lang=el>ΌΣΟΣ</span>’)
@@ -138,18 +144,22 @@ span.udesc { font-variant: all-small-caps }
     <tr>
       <td colspan=3 style=padding-left:2em>Lower case sigma is ‘σ’ in
         the middle but ‘ς’ at the end of a word.
+  <tbody>
     <tr>
       <td scope=row>uc(‘<span lang=tr>istanbul</span>’)
       <td lang=tr>İSTANBUL</td>
       <td lang=tr style="text-transform:uppercase">istanbul
+    <tr>
+      <td scope=row>lc(‘<span lang=tr>İSTANBUL</span>’)
+      <td lang=tr>istanbul</td>
+      <td lang=tr style="text-transform:lowercase">İSTANBUL
     <tr>
       <td scope=row>lc(‘<span lang=tr>IRMAK</span>’)
       <td lang=tr>ırmak</td>
       <td lang=tr style="text-transform:lowercase">IRMAK
     <tr>
       <td colspan=3 style=padding-left:2em>Turkish has a dot-less
-        (a.k.a. closed) and dotted ‘i’.  Capital ‘i’ includes a tittle
-        while lower case ‘I’ dosen’t.
+        (a.k.a. closed) and dotted ‘i’.
 </table>
 
 
@@ -157,11 +167,9 @@ span.udesc { font-variant: all-small-caps }
 
 <p>Above examples show that concepts of a letter or a character may be
   blurry and confusing.  Is aforementioned ‘ß’ a letter or just
-  a fancy way of writing ‘ss’ or maybe ‘sz’?  What of ligatures and
-  digraphs?  But at least everyone can agree that ‘é’ is a single
-  letter and <span class=udesc>Latin small letter e with acute</span>
-  is its name, right?  Here it is again: ‘e&#769;’, except this time
-  it’s a regular letter e followed by
+  a fancy way of writing ‘ss’? ‘sz’? What of ligatures and digraphs?
+  But at least everyone agrees ‘é’ is a single letter, right?  Here it
+  is again: ‘é’, except this time it’s a regular letter e followed by
   U+0301: <span class=udesc>combining acute accent</span>, i.e. ‘e◌́’.
 
 <p>The former, single-code-point representation, is
@@ -177,7 +185,7 @@ span.udesc { font-variant: all-small-caps }
   (U+03A9: <span class=udesc>Greek capital letter omega</span>), Hebrew
   ‘שׂ‎’ ≈ ‘ש‎◌‎ׂ’ and more.
 
-<p>Based on canonical equivalence, Unicode deﬁnes a Normalised Form
+<p>Based on canonical equivalence, Unicode defines a Normalised Form
   C (NFC) and Normalised Form D (NFD).  The former often uses
   precomposed while the latter uses decomposed representation of
   characters.
@@ -210,7 +218,7 @@ span.udesc { font-variant: all-small-caps }
 <p>There’s also a <dfn>compatibility equivalence</dfn> which can be
   thought of as covering ‘meaning’ of strings.  For example ‘ﬁ’
   (U+FB01: <span class=udesc>Latin small ligature fi</span>) means the
-  same thing as ‘f + i’, ‘ǆ ∼ d + z + ◌̌’ etc.  This is a bit simpliﬁed
+  same thing as ‘f + i’, ‘ǆ ∼ d + z + ◌̌’ etc.  This is a bit simplified
   view though since ‘5²’ has a distinct meaning from ‘52’ yet the
   sequences are in the same compatibly equivalence class.
 
@@ -228,11 +236,11 @@ span.udesc { font-variant: all-small-caps }
     <tr><th rowspan=2>Block<br>(Range)<th colspan=2>Octets used by
     <tr><th>UTF-8<th>UTF-16
   <tbody>
-    <tr><td>CJK Uniﬁed Ideographs Extension A<br>(U+3400–U+4DBF)  <td>3<td>2
-    <tr><td>CJK Uniﬁed Ideographs            <br>(U+4E00–U+9FFF)  <td>3<td>2
-    <tr><td>CJK Uniﬁed Ideographs Extension B<br>(U+20000–U+2A6DF)<td>4<td>4
-    <tr><td>CJK Uniﬁed Ideographs Extension C<br>(U+2A700–U+2B73F)<td>4<td>4
-    <tr><td>CJK Uniﬁed Ideographs Extension D<br>(U+2B740–U+2B81F)<td>4<td>4
+    <tr><td>CJK Unified Ideographs Extension A<br>(U+3400–U+4DBF)  <td>3<td>2
+    <tr><td>CJK Unified Ideographs            <br>(U+4E00–U+9FFF)  <td>3<td>2
+    <tr><td>CJK Unified Ideographs Extension B<br>(U+20000–U+2A6DF)<td>4<td>4
+    <tr><td>CJK Unified Ideographs Extension C<br>(U+2A700–U+2B73F)<td>4<td>4
+    <tr><td>CJK Unified Ideographs Extension D<br>(U+2B740–U+2B81F)<td>4<td>4
 </table>
 
 <p>Alas, the devil, as he often does, lays in the details, namely in
@@ -296,9 +304,9 @@ span.udesc { font-variant: all-small-caps }
 <p>Truth of the matter is that to save space a technique independent
   of Unicode should be used.  One that has been around for years and
   any modern browser supports: compression.  And this is also true for
-  storage.  Even with a dense ﬁle with virtually no markup
+  storage.  Even with a dense file with virtually no markup
   (e.g. a double newline separating paragraphs as the only ASCII
-  characters) it is far better to simply compress the ﬁle then try to
+  characters) it is far better to simply compress the file then try to
   mess around with encoding.
 
 
@@ -318,7 +326,7 @@ span.udesc { font-variant: all-small-caps }
 
 <p>In other words, just don’t use U+F8FF.
 
-<p>Fruit fans should not despair though but rather ﬁnd consolation in
+<p>Fruit fans should not despair though but rather find consolation in
 the fact that there is a <span class=udesc>red apple</span> (🍎,
 U+1F34E), a <span class=udesc>green apple</span> (🍏, U+1F34F) and
 even a <span class=udesc>pineapple</span> (🍍, U+1F34D which isn’t
@@ -338,7 +346,7 @@ even an apple nor grows on pine trees).
 <h2>Conclusion</h2>
 
 <p>There is far more that could be said about Unicode.  Introduction
-  of emojis and skin tone modiﬁers makes the standard so much more…
+  of emojis and skin tone modifiers makes the standard so much more…
   interesting to name just one aspect.
 
 <p>But even with a limited exposure to the standard this article
@@ -354,7 +362,7 @@ even an apple nor grows on pine trees).
   interpreted from the beginning and having random access to each code
   point doesn’t speed anything up.
 
-<p>And ﬁnally, don’t be fooled by false UTF-16 propaganda.  The encoding
+<p>And finally, don’t be fooled by false UTF-16 propaganda.  The encoding
   combines disadvantages of UTF-8 (being variable-length) with
   disadvantages of UTF-32 (taking up a lot of space) and as such is
   the worst possible solution for Unicode text.  Just use UTF-8
