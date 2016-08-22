@@ -189,9 +189,9 @@ main:
 .LCFI5:
         movl    $42, -12(%ebp)
         movl    $66, -8(%ebp)
-<b>        movl    -8(%ebp), %eax      ; ### eax = bar ###</b>
-<b>        movl    %eax, -12(%ebp)     ; ### foo = eax ###</b>
-<b>        incl    -8(%ebp)            ; ### ++bar     ###</b>
+<b>        movl    -8(%ebp), %eax	; ### eax = bar ###</b>
+<b>        movl    %eax, -12(%ebp)	; ### foo = eax ###</b>
+<b>        incl    -8(%ebp)		; ### ++bar     ###</b>
         movl    -8(%ebp), %eax
         addl    -12(%ebp), %eax
         addl    $16, %esp

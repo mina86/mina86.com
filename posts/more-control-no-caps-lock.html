@@ -121,8 +121,7 @@ a file with “keyboard” or “layout” in its name such as
 copy it to the latter directory:</p>
 
 <pre>
-cp -i \
-	/usr/share/X11/xorg.conf.d/90-keyboard-layout.conf \
+cp -i	/usr/share/X11/xorg.conf.d/90-keyboard-layout.conf \
 	/etc/X11/xorg.conf.d/</pre>
 
 <p>Once the file is copied, either add or modify the “XkbOptions”
@@ -295,11 +294,9 @@ describing keymap.  For instance, I use
 <pre>
 cd /path/to/keymap/directory  # eg. cd /usr/share/kbd/keymaps/i386/qwerty
 gzip -d &lt;<i>kaymap</i>.map.gz | \
-sed \
-	-e 's/keycode[[:space:]][[:space:]]*58[[:space:]][[:space:]]*=[[:space:]][[:space:]]*Caps_Lock/keycode  58 = Control' \
+sed	-e 's/keycode[[:space:]][[:space:]]*58[[:space:]][[:space:]]*=[[:space:]][[:space:]]*Caps_Lock/keycode  58 = Control' \
 	-e 's/keycode[[:space:]][[:space:]]*29[[:space:]][[:space:]]*=[[:space:]][[:space:]]*Control/keycode  29 = Caps_Lock/' \
-	| \
-gzip -9 &gt;<i>kaymap</i>-my.map.gz</pre>
+	| gzip -9 &gt;<i>kaymap</i>-my.map.gz</pre>
 
 <p>You can use a bit more descriptive suffix instead of <code>-my</code> —
 for instance <code>-nocaps</code> or <code>-swapcaps</code>.  Also this will

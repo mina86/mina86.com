@@ -576,11 +576,14 @@ static "C++" float mysin(long double x) { return sinl(x); }</pre>
 <h2>VIII Type Agnostic Limits Functions</h2>
   <ol>
     <li>
-        Macros defined in the <code>limits.h</code> header suffer from the same
-        problems described above.  It would be nice to have constructs
-        such as <code>_Type_min`, `_Type_max</code>, etc. which, the same as
-        <code>sizeof</code>, take an expression or type as an argument and return the
-        smallest, biggest, etc. value representable by the type.
+        Macros defined in the <code>limits.h</code> header suffer from
+        the same problems described above.  It would be nice to have
+        constructs such
+        as <code>_Type_min</code>, <code>_Type_max</code>, etc. which,
+        the same as
+        <code>sizeof</code>, take an expression or type as an argument
+        and return the smallest, biggest etc. value representable by
+        the type.
     </li>
     <li>
         Identifiers starting by an underscore followed by capital letter

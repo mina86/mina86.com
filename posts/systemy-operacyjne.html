@@ -353,23 +353,23 @@ do {
 } while (r);</pre></dd>
   <dd>Albo jak ktoś woli pseudo-assembler:
     <pre>
-                mov     reg, 1
-loop_here:      tsl     reg, [semaphore]
-                jne     reg, 0, loop_here</pre></dd>
+		mov     reg, 1
+loop_here:	tsl     reg, [semaphore]
+		jne     reg, 0, loop_here</pre></dd>
   <dd>Albo jak ktoś woli ix86 (w notacji AT&amp;T):
     <pre>
-                 mov    eax, 1
-loop_here:       xchg   eax, [semaphore]
-                 or     eax, eax
-                 jnz    loop_here</pre></dd>
+		mov    eax, 1
+loop_here:	xchg   eax, [semaphore]
+		or     eax, eax
+		jnz    loop_here</pre></dd>
 
   <dt>Algorytm i opis idei poprawnego rozwiązania problemu pięciu
     filozofów.</dt>
 
   <dd><pre>
 #define N 5
-enum State { THINKING, HUNGRY, EATING } states[N] = { THINKING /* … * };
-semaphore sem[N] = { 0 /* … * };
+enum State { THINKING, HUNGRY, EATING } states[N] = { THINKING /* … */ };
+semaphore sem[N] = { 0 /* … */ };
 semaphore mutex = 1;
 
 #define LEFT(n) (((n) + N - 1) % N)

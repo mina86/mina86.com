@@ -87,8 +87,7 @@ returned to the buddy system so it can be used by regular
 applications.  To make reservation happen, one needs to call:
 
 <pre>
-void dma_contiguous_reserve(
-	phys_addr_t limit);</pre>
+void dma_contiguous_reserve(phys_addr_t limit);</pre>
 
 <p>just after memblock is initialised but prior to the buddy allocator
 setup.
