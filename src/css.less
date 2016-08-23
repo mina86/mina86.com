@@ -255,13 +255,7 @@
 html, body {
 	@media screen, projection, tv, handheld {
 		color: @text-color;
-		/* Yes, I’m setting background of BODY to header’s background
-		   colour which is also what I want for footer background
-		   colour.  This is so that even on short pages, where footer
-		   does not reach the end of the viewport, the whole bottom of
-		   the window uses this colour as a background.  @body-bg is set
-		   on @main-id element instead. */
-		background: @head-bg;
+		background: @body-bg;
 	}
 	font-family: @body-font;
 	font-feature-settings: 'onum', 'pnum';
@@ -274,6 +268,18 @@ html, body {
 /**** Page layout ****/
 
 @media screen, projection, tv, handheld {
+	html {
+		height: 100%;
+	}
+	body {
+		display: flex;
+		flex-direction: column;
+		min-height: 100%;
+	}
+	@{body-id} {
+		flex: 1;
+	}
+
 	@{head-id} {
 		height: 14em;
 	}
@@ -364,6 +370,7 @@ a:hover, a:focus, a:active {
 /**** Page header ****/
 
 @{head-id} {
+	background: @head-bg;
 	font-family: @head-font;
 
 	h1 {
@@ -449,12 +456,6 @@ a:hover, a:focus, a:active {
 
 
 /**** Main content, text of the article and such ****/
-
-@media screen, projection, tv, handheld {
-	@{body-id} {
-		background: @body-bg;
-	}
-}
 
 article {
 	padding: 2em 0;
@@ -865,6 +866,7 @@ blockquote {
 
 @{foot-id} {
 	color: #999;
+	background: @head-bg;
 	border-top: 1px dotted #ddf;
 	font-size: @small;
 	padding: 1em 0;
