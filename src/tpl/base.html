@@ -28,19 +28,25 @@
   </div>
 {%- endmacro -%}
 
-{%- macro prev_next(what) -%}
+{%- macro prev_next(use_subject=false) -%}
   {% if prev or next %}
     <nav class="p">
       <ul>
         {%- if prev -%}
-          <li><a accesskey="P" href="{{ prev.href }}"
-                 title="{{ prev.title }}" rel="prev">«
-                 <u>p</u>revious {{ what }}</a>
-         {%- endif -%}
-         {%- if next -%}
-           <li class="n"><a accesskey="N" href="{{ next.href }}"
-                            title="{{ next.title }}" rel="next"
-                            ><u>n</u>ext {{ what }} »</a>
+          <li><a accesskey="P" href="{{ prev.href }}" rel="prev"
+              {%- if prev.title and not use_subject %} title="{{ prev.title }}"
+              {%- endif -%}>« <u>p</u>revious
+            {%- if use_subject -%}: <i>{{ prev.subject }}</i>
+            {%- else %} page
+            {%- endif -%}</a>
+        {%- endif -%}
+        {%- if next -%}
+          <li class="n"><a accesskey="N" href="{{ next.href }}" rel="next"
+              {%- if next.title and not use_subject %} title="{{ next.title }}"
+              {%- endif -%}><u>n</u>ext
+            {%- if use_subject -%}: <i>{{ next.subject }}</i>
+            {%- else %} page »
+            {%- endif -%}</a>
          {%- endif -%}
       </ul>
     </nav>
@@ -123,8 +129,12 @@
 <link rel="alternate home" type="application/atom+xml"
       href="/atom.xml" title="Atom feed">
 {{ link('canonical', canonical) }}
-{% if prev %}{{ link('prev', prev.href, prev.title) }}{% endif %}
-{% if next %}{{ link('next', next.href, next.title) }}{% endif %}
+{% if prev %}{{
+  link('prev', prev.href, prev.title | default(prev.subject, true))
+}}{% endif %}
+{% if next %}{{
+  link('next', next.href, next.title | default(next.subject, true))
+}}{% endif %}
 
 
 <header id="h" role=banner>

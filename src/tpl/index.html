@@ -1,9 +1,9 @@
 {%- extends 'base.html' -%}
 
 {%- block main -%}
-  {{ prev_next('posts') }}
+  {{ prev_next() }}
   {% for entry in entries %}
     {{ post(entry, false) }}
   {% endfor %}
-  {{ prev_next('posts') }}
+  {{ prev_next() }}
 {%- endblock -%}
