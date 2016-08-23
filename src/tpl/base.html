@@ -28,12 +28,14 @@
   </div>
 {%- endmacro -%}
 
+{%- set _prev_next_accesskeys = [ "accesskey=P", "accesskey=N" ] -%}
 {%- macro prev_next(use_subject=false) -%}
   {% if prev or next %}
     <nav class="p">
       <ul>
         {%- if prev -%}
-          <li><a accesskey="P" href="{{ prev.href }}" rel="prev"
+          <li><a href="{{ prev.href }}" rel="prev"
+              {{ _prev_next_accesskeys[0] }}
               {%- if prev.title and not use_subject %} title="{{ prev.title }}"
               {%- endif -%}>« <u>p</u>revious
             {%- if use_subject -%}: <i>{{ prev.subject }}</i>
@@ -41,7 +43,8 @@
             {%- endif -%}</a>
         {%- endif -%}
         {%- if next -%}
-          <li class="n"><a accesskey="N" href="{{ next.href }}" rel="next"
+          <li class="n"><a href="{{ next.href }}" rel="next"
+              {{ _prev_next_accesskeys[1] }}
               {%- if next.title and not use_subject %} title="{{ next.title }}"
               {%- endif -%}><u>n</u>ext
             {%- if use_subject -%}: <i>{{ next.subject }}</i>
@@ -50,6 +53,8 @@
          {%- endif -%}
       </ul>
     </nav>
+    {%- set _ = _prev_next_accesskeys.__setitem__(0, "") -%}
+    {%- set _ = _prev_next_accesskeys.__setitem__(1, "") -%}
   {% endif %}
 {%- endmacro -%}
 
