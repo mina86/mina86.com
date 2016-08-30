@@ -334,7 +334,7 @@ def read_entry(filename, fd, cls=Post):
 
 def read_entries(dirname, cls=Post):
     for name in os.listdir(dirname):
-        if name.startswith('.'):
+        if name.startswith('.') or name.startswith('#'):
             continue
         with codecs.open(os.path.join(dirname, name), encoding='utf-8') as fd:
             yield read_entry(name, fd, cls)
