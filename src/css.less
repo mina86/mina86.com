@@ -51,13 +51,15 @@
 @icons-id: #i;  /* Icons section at the bottom of the sidebar. */
 
 /* http://spencermortensen.com/articles/typographic-scale/
-   ratio = 2, notes = 3 */
-@small:    0.8rem;
-@normal:   1.0rem;
-@large:    1.3rem;
-// @huge:     1.6rem;
-@huge:     2.0rem;
-@title:    2.0rem;
+   ratio = 2, notes = 5 */
+@tiny:     round(pow(2rem, -0.4), 2);
+@small:    round(pow(2rem, -0.2), 2);
+@normal:   1.00rem;
+/*         one skipped */
+@large:    round(pow(2rem,  0.4), 2);
+/*         one skipped */
+@huge:     round(pow(2rem,  0.8), 2);
+@title:    2.00rem;
 
 @cosmic-latte: #fff8e7;  /* https://en.wikipedia.org/wiki/Cosmic_latte */
 @milky-way: #f9f1ff;  /* http://www.news.pitt.edu/milkywaycolor */
@@ -537,7 +539,7 @@ p@{byline-cls} {
 }
 
 p.nt {
-	font-size: @small;
+	font-size: @tiny;
 	margin-left: 30%;
 	text-align: left;
 	hyphens: manual;
@@ -554,7 +556,7 @@ p.ig, figure {
 p.ig + p.ig {
 	text-align: right;
 	margin-top: -1em;
-	font-size: @small;
+	font-size: @tiny;
 	page-break-before: avoid;
 }
 
@@ -576,6 +578,7 @@ pre {
 	border-top: 1px dotted #363;
 	border-bottom: 1px dotted #363;
 	overflow-x: auto;
+	font-size: @small;
 }
 code, var {
 	hyphens: manual;
@@ -588,7 +591,7 @@ code, var {
 
 	@{qed-cls} @{article-text-cls} > p:last-child:after {
 		color: #999;
-		font-size: @small;
+		font-size: @tiny;
 		content: ' -30-';
 	}
 }
@@ -648,7 +651,8 @@ blockquote {
 	background-position: -125px 0;
 	min-height: 20px;
 	padding: 0 30px;
-	margin: 1em 0 1em 4px;
+	margin: 1em;
+	font-size: @small;
 }
 
 .plFlag, .enFlag {
@@ -675,7 +679,7 @@ blockquote {
 	float: left;
 }
 @{meta-cls} > div {
-	font-size: @small;
+	font-size: @tiny;
 	text-align: right;
 }
 @{social-cls} {
@@ -684,7 +688,7 @@ blockquote {
 	&:extend(.np);
 }
 @{cats-and-tags-cls} {
-	font-size: @small;
+	font-size: @tiny;
 	text-align: right;
 	&:extend(.np);
 
@@ -801,7 +805,7 @@ blockquote {
 	small {
 		display: table-cell;
 		text-align: right;
-		font-size: @small;
+		font-size: @tiny;
 		padding: 0 0.5em;
 		color: #555;
 	}
@@ -868,7 +872,7 @@ blockquote {
 	color: #999;
 	background: @head-bg;
 	border-top: 1px dotted #ddf;
-	font-size: @small;
+	font-size: @tiny;
 	padding: 1em 0;
 	text-align: center;
 
@@ -899,7 +903,7 @@ blockquote {
 	a:after {
 		color: #333 !important;
 		font-weight: normal;
-		font-size: @small;
+		font-size: @tiny;
 	}
 
 	@{article-text-cls}, @{meta-cls} {
