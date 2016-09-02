@@ -15,7 +15,7 @@
 
 /* I need something which will automatically choose IDs and classes. */
 /* id:        d e   g     j k       o p q r   t u v w x y z */
-/* cls: a   c   e     h   j k l m   o     r     u v   x y z */
+/* cls: a   c   e     h   j k l m   o     r     u     x y z */
 
 @head-id: #h;  /* Page header. */
 @body-id: #b;  /* Page body (article text, comments, sidebar etc). */
@@ -23,6 +23,7 @@
 
 @main-id: #m;  /* Article, comments etc.  In other words, body sans sidebar. */
 @side-id: #s;  /* Sidebar. */
+@pin-cls: .v;  /* Sidebar pinned to the side. */
 
 @wrap-cls: .w;  /* Wrapper DIV inside @head-id and @body-id elements which exists
                   to limit the ‘usable’ width. */
@@ -330,6 +331,9 @@ html, body {
 			width: @sidebar-width;
 			background: none;
 			padding: 0;
+		}
+		@{side-id}@{pin-cls} {
+			position: fixed;
 		}
 
 		@{side-id} section {
