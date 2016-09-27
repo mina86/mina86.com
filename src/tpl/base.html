@@ -9,6 +9,10 @@
  #   canonical -- canonical URL for the page
  #}
 
+{%- macro attr(name, value, cond=true) -%}
+  {%- if cond and value %} {{ name }}="{{ value }}" {% endif -%}
+{%- endmacro -%}
+
 {%- macro link(rel, href, title='') -%}
   {%- if href -%}
     <link rel="{{ rel }}" href="{{ href }}"
@@ -23,38 +27,36 @@
     <a href="https://twitter.com/share"
        class="twitter-share-button"
        data-url="{{ href }}"
-       {%- if title %} data-text="{{ title }}"
-       {%- endif %}>Tweet</a>
+       {{ attr('title', title) }}>Tweet</a>
   </div>
 {%- endmacro -%}
 
-{%- set _prev_next_accesskeys = [ "accesskey=P", "accesskey=N" ] -%}
-{%- macro prev_next(use_subject=false) -%}
+{%- set _prev_next_accesskeys = [ 1 ] -%}
+{%- macro prev_next() -%}
   {% if prev or next %}
     <nav class="p">
       <ul>
         {%- if prev -%}
           <li><a href="{{ prev.href }}" rel="prev"
-              {{ _prev_next_accesskeys[0] }}
-              {%- if prev.title and not use_subject %} title="{{ prev.title }}"
-              {%- endif -%}>« <u>p</u>revious
-            {%- if use_subject -%}: <i>{{ prev.subject }}</i>
-            {%- else %} page
-            {%- endif -%}</a>
+                   {{ attr('accesskey', 'P', _prev_next_accesskeys[0]) }}
+                   {{ attr('title', prev.title, not prev.subject) }}
+                 >« <u>p</u>revious
+                   {%- if prev.subject -%}: <i>{{ prev.subject }}</i>
+                   {%- else %} page
+                   {%- endif -%}</a>
         {%- endif -%}
         {%- if next -%}
           <li class="n"><a href="{{ next.href }}" rel="next"
-              {{ _prev_next_accesskeys[1] }}
-              {%- if next.title and not use_subject %} title="{{ next.title }}"
-              {%- endif -%}><u>n</u>ext
-            {%- if use_subject -%}: <i>{{ next.subject }}</i>
-            {%- else %} page »
-            {%- endif -%}</a>
+                   {{ attr('accesskey', 'N', _prev_next_accesskeys[0]) }}
+                   {{ attr('title', next.title, not next.subject) }}
+                 ><u>n</u>ext
+                   {%- if next.subject -%}: <i>{{ next.subject }}</i>
+                   {%- else %} page
+                   {%- endif -%} »</a>
          {%- endif -%}
       </ul>
     </nav>
-    {%- set _ = _prev_next_accesskeys.__setitem__(0, "") -%}
-    {%- set _ = _prev_next_accesskeys.__setitem__(1, "") -%}
+    {%- set _ = _prev_next_accesskeys.__setitem__(0, 0) -%}
   {% endif %}
 {%- endmacro -%}
 
