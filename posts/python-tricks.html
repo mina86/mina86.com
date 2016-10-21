@@ -39,9 +39,10 @@
   the example).  Both methods take local timezone into account which
   is why the offset is added.
 
-<p>The proper solution is <code>calendar.timegm</code> (which for some
-  bizarre reason is not included in <code>time</code> module; yet
-  another proof Python is much less ‘clean’ than its advocates argue):
+<p>As Olive Teepee pointed out, Python 3.3 addresses this with
+  a <code>datetime.timestamp</code> method but if one is stuck with
+  older releases the proper, alas somewhat more convoluted, solution
+  is to use <code>calendar.timegm</code>:
 
 <pre>
 import calendar, datetime, time
