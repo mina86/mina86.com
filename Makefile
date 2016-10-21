@@ -1,6 +1,6 @@
 all: public
 
-public: static/mina86.gpg
+public: static/mina86.gpg static/cv/index.html
 	@+python ./tools/build.py $@
 
 touch:
@@ -26,6 +26,12 @@ distclean:
 static/mina86.gpg:
 	@echo " GPG  $@"
 	gpg --armor --export 0x2060401250751FF4 >$@
+
+static/cv/index.html: cv/cv.xml cv/cv.xsl tools/embed-images.py \
+                      $(glob cv/*.png) $(glob cv/*.jpg)
+	@echo " XSL  $@"
+	mkdir -p -- $(dir $@)
+	xsltproc $< | python ./tools/embed-images.py cv >$@
 
 %.gz: %
 	@echo " GZ   $@"

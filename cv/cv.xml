@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="cv.xsl"?>
+<cv>
+  <group style="compact">
+    <entry>
+      <head>Name</head>
+      <p>Michał Nazarewicz</p>
+    </entry>
+
+    <entry>
+      <head>Email</head>
+      <p><a href="mailto:mina86@mina86.com">mina86@mina86.com</a></p>
+    </entry>
+  </group>
+
+
+  <group>
+    <head>Skills</head>
+
+    <entry>
+      <head>Programming languages</head>
+      <p>Good knowledge of C, C++, Python, JavaScript and shell
+      scripting.  Some Perl, Lisp, Java, PHP and Pascal.  Basics of
+      Assembly (x86, MIPS, ARM), Prolog and Haskell.</p>
+    </entry>
+
+    <entry>
+      <head>Other languages and technologies</head>
+      <p>HTML, XML, CSS, some XSLT, SQL and LaTeX.</p>
+    </entry>
+
+    <entry>
+      <head>Systems</head>
+
+      <p>Comprehensive knowledge of GNU/Linux systems from user and
+      administrator perspective as well as system and kernel
+      developer.</p>
+    </entry>
+
+    <entry>
+      <head>Natural languages</head>
+      <p>Native Polish speaker, fluent in English.</p>
+    </entry>
+
+  </group>
+
+
+  <group>
+    <head>Work</head>
+
+    <entry logo="google.png">
+      <time>January 2011–<present/></time>
+      <head>Site Reliability Engineer/Software Engineer (Google)</head>
+
+      <p>I have worked on numerous services ranging from large scale
+      <a href="https://payments.google.com">payments processing
+      infrastructure</a> through <a
+      href="https://support.google.com/">customer support centre</a>
+      and customer relationship management tools to small headcount
+      tracking software.</p>
+
+      <p>I have been responsible for stability and monitoring of those
+      services.  To that end I have configured and developed
+      monitoring tools as well as designed and implemented software to
+      be as resilient as possible.  This often required graceful
+      handling of one-site failures and developing systems with
+      redundancy in mind.</p>
+
+      <p>Since mid-2015, I have been a tech lead of a small team
+      writing a headcount tracking software responsible for dictating
+      the direction of the tool and interactions with internal
+      customers.</p>
+
+      <tech>Python, shell scripts, C++, MySQL, App Engine and plethora
+        of internal Google technologies</tech>
+
+    </entry>
+
+    <entry logo="samsung.png">
+      <time>May 2008–December 2010</time>
+      <head>Linux kernel hacker (Samsung Electronics)</head>
+
+      <p>I have been working on the Linux kernel and have since <a
+      href="https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/log/?qt=author&amp;q=nazarewicz">written
+      over 150 accepted patches</a>.  I have been involved with the <a
+      href="https://lwn.net/Articles/395712/">USB composite
+      framework</a> and memory management and authored multiple
+      drivers and frameworks including <a
+      href="http://mina86.com/cma/">Contiguous Memory Allocator</a>,
+      Mass Storage USB function and FunctionFS framework.</p>
+
+      <p>Prior to working on the Linux kernel I have been working with
+      a mobile web browser based on Mozilla suite.  I have been
+      developing extensions as well as investigating Flash plugin
+      support on ARM systems.</p>
+
+      <tech>C, shell scripts, C++</tech>
+    </entry>
+
+    <entry logo="rootnode.png">
+      <time>September 2006–March 2007</time>
+      <head>Linux administrator (Rootnode Association)</head>
+
+      <p>I have been developing software for and administrating
+      a Rootnode service offering shell accounts, web hosting etc. on
+      a set of shared servers.</p>
+
+      <tech>Perl, shell scripts</tech>
+    </entry>
+
+    <!-- <entry> -->
+    <!--   <time>2004–2007</time> -->
+    <!--   <head>Webdeveloper</head> -->
+
+    <!--   <p>I have developed various webpages in the past.  Most notable -->
+    <!--   are now defunct ekipa.tlen.pl, <a -->
+    <!--   href="http://maxior.pl/">maxior.pl</a> and <a -->
+    <!--   href="http://bajer.pl/">bajer.pl</a>.</p> -->
+
+    <!--   <tech>PHP, MySQL, PostgreSQL, JavaScript</tech> -->
+    <!-- </entry> -->
+
+  </group>
+
+
+  <group>
+    <head>Other projects</head>
+
+    <entry logo="git.png">
+      <head>Free software projects and contributions</head>
+
+      <p>A lot of my free software code is <a
+      href="https://github.com/mina86?tab=repositories">available on
+      GitHub</a>.  I maintain <a
+      href="http://tinyapps.mina86.com/">Tiny Applications</a>
+      consisting of lots of utilities for everyday work in a Unix
+      environment.  I also maintain smaller projects such as <a
+      href="https://github.com/mina86/urxvt-tabbedex">urxvt-tabbedex</a>
+      and <a
+      href="https://github.com/mina86/auto-dim-other-buffers.el">auto-dim-other-buffers</a>.</p>
+
+      <p>Lastly, I have contributed to existing open source software
+      such as <a
+      href="https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/log/?qt=author&amp;q=nazarewicz">Linux</a>,
+      <a
+      href="http://git.savannah.gnu.org/cgit/emacs.git/log/?qt=author&amp;q=Nazarewicz">Emacs</a>,
+      <a
+      href="https://github.com/git/git/commits?author=mina86">git</a>,
+      <a
+      href="http://git.musicpd.org/cgit/master/mpd.git/log/?qt=author&amp;q=nazarewicz">mpd</a>,
+      <a
+      href="http://git.musicpd.org/cgit/master/mpc.git/log/?qt=author&amp;q=nazarewicz">mpc</a>,
+      <a
+      href="http://git.notmuchmail.org/git/notmuch?a=search&amp;h=HEAD&amp;st=author&amp;s=nazarewicz">notmuch</a>
+      and plethora of other small projects.</p>
+
+      <tech>C, C++, Perl, shell script and more</tech>
+    </entry>
+
+    <entry logo="mina86.com.png">
+      <head><a href="http://mina86.com/">mina86.com</a></head>
+
+      <p>My web page where I&#160;publish (mostly)
+      technical entries from broad variety of topics.</p>
+    </entry>
+
+  </group>
+
+
+  <group>
+    <head>Education</head>
+
+    <entry logo="wut.png">
+      <time>2006–2012</time>
+      <head><a href="http://www.pw.edu.pl/">Warsaw University of Technology</a></head>
+
+      <p>Bachelor of Computer Science defended with honours at the <a
+      href="http://www.elka.pw.edu.pl">Information Technology and
+      Electronics Department</a>.</p>
+    </entry>
+
+    <entry logo="uw.jpg">
+      <time>2005–2006</time>
+      <head><a href="http://www.uw.edu.pl">Warsaw University</a></head>
+
+      <p><a href="http://www.mimuw.edu.pl">Mathematics, Informatics,
+      Applied Mathematics</a> department.  Left to pursue computer
+      science at WUT instead.</p>
+    </entry>
+
+    <!-- <entry logo="staszic.png"> -->
+    <!--   <time>2002–2005</time> -->
+    <!--   <head><a href="http://www.staszic.waw.pl/">Stanisław -->
+    <!--     Staszic High School</a></head> -->
+
+    <!--   <p>Experimental Math profile.</p> -->
+    <!-- </entry> -->
+
+  </group>
+
+</cv>

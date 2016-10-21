@@ -2,4 +2,5 @@ public
 .tmp
 files/index.html
 */*.pyc
+static/cv.html
 static/mina86.gpg

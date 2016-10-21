@@ -31,6 +31,7 @@ import htmlmin.parser
 
 
 _MIMETYPES = {
+    '.jpg': 'image/jpeg',
     '.png': 'image/png',
     '.svg': 'image/svg+xml',
 }
@@ -46,9 +47,7 @@ def _encode_string(mime, data, q):
     return '%sdata:%s,%s%s' % (q, mime, data, q)
 
 
-def _insart_data(src_dir, m):
-    path = m.group(1)
-
+def _insert_data(src_dir, path):
     _, ext = os.path.splitext(path)
     mime = _MIMETYPES[ext]
     data = open(os.path.join(src_dir, path)).read()
@@ -65,17 +64,16 @@ def _insart_data(src_dir, m):
     return encodings[0]
 
 
-def _map_static(mappings, m):
-    path = m.group(0)
+def _map_static(mappings, path):
     return mappings.get(path, path)
 
 
 def process_css(data, src_dir, mappings):
     data = re.sub(r'DATA<([^<>]+)>',
-                  lambda m: _insart_data(src_dir, m),
+                  lambda m: _insert_data(src_dir, m.group(1)),
                   data)
     data = re.sub(r'/d/[-_a-zA-Z0-9.]*',
-                  lambda m: _map_static(mappings, m),
+                  lambda m: _map_static(mappings, m.group(0)),
                   data)
     return data
 
@@ -84,6 +82,7 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
 
     def __init__(self, *args, **kw):
         self._static_mappings = kw.pop('static_mappings', None)
+        self._src_dir = kw.pop('src_dir', None)
         htmlmin.parser.HTMLMinParser.__init__(self, *args, **kw)
 
     def handle_starttag(self, tag, attrs):
@@ -100,9 +99,13 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
                 attrs[i] = attr, self._transform_attr(tag, attr, value)
 
     def _transform_attr(self, tag, attr, value):
-        ret = self._static_mappings.get(value)
-        if ret:
-            return ret
+        if self._static_mappings:
+            ret = self._static_mappings.get(value)
+            if ret:
+                return ret
+
+        if self._src_dir and tag == 'img' and attr == 'src':
+            return _insert_data(self._src_dir, value)
 
         value = re.sub(r'\s+', ' ', value.strip())
         if attr == 'style':
@@ -125,15 +128,16 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
 
 
 
-def minify_html(data, static_mappings):
+def minify_html(data, **kw):
     block = ('body', 'br', 'col', 'div', 'form', 'h[1-6]', 'head', 'html',
              'link', 'meta', 'p', 'script', 'table', 't[dhr]', 'textarea',
              'title', '[ou]l', '[A-Z_][A-Z_]*', 'section', 'header', 'aside',
              'article', 'nav', 'footer')
     block = '(?:%s)' % '|'.join(block)
 
-    def make_parser(*args, **kw):
-        return HTMLMinParser(*args, static_mappings=static_mappings, **kw)
+    def make_parser(*args, **kwargs):
+        kwargs.update(kw)
+        return HTMLMinParser(*args, **kwargs)
 
     data = htmlmin.minify(data,
                           remove_comments=True,
