@@ -50,6 +50,7 @@ REPO_URL = paths.REPO_URL
 
 
 class _Addresable(object):
+    lang = None
     _subdir = None
 
     @property
@@ -119,9 +120,13 @@ class Post(_Addresable):
 
     def __init__(self, filename, d, excerpt, body):
         if filename.endswith('.html'):
-            self.permalink = filename[:-5]
-        else:
-            self.permalink = filename
+            filename = filename[:-5]
+
+        if filename.endswith('.en') or filename.endswith('.pl'):
+            self.lang = filename[-2:]
+            filename = filename[:-3]
+
+        self.permalink = filename
 
         self.subject = d['subject'].strip()
 
@@ -290,7 +295,7 @@ class Writer(object):
                       entry.permalink),
                   url=e(entry.url),
                   date=entry.date,
-                  lang='en',
+                  lang=entry.lang or 'en',
                   body=e(entry.body.full))
         write('</feed>')
 

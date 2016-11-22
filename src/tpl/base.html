@@ -62,12 +62,13 @@
 
 {%- macro post(entry, post_page) -%}
 {%- set full = post_page or not entry.body.excerpt -%}
-  <article {% if full %} class=q {% endif %}>
+  <article {% if full %} class=q {% endif %}
+           {% if entry.lang %} lang="{{ entry.lang }}" {% endif %}>
 
     <h1><a href="{{ entry.href }}" title="Permanent link to the entry.">{{
         entry.subject }}</a></h1>
 
-    <p class="b">Posted by <em>Michał ‘mina86’ Nazarewicz</em> on
+    <p class="b" lang=en>Posted by <em>Michał ‘mina86’ Nazarewicz</em> on
       <em>{{ entry.date | date }}</em>
 
     <div class=t>
@@ -82,12 +83,11 @@
       {% if not post_page %}
         <ul>
           {% if not full %}
-            <li><a href="{{ entry.href }}#m">Continue reading</a>
+            <li><a href="{{ entry.href }}#m" lang=en>Continue reading</a>
           {% endif %}
-          <li><a href="{{ entry.href }}#c"><span class="spot-im-replies-count"
-                                                 data-post-id="{{
-                                                     entry.permalink
-                                                 }}">See</span> comments</a>
+          <li><a href="{{ entry.href }}#c"
+                 lang=en><span class="spot-im-replies-count" data-post-id="{{
+                               entry.permalink }}">See</span> comments</a>
         </ul>
       {% endif %}
 
@@ -98,14 +98,14 @@
           <li><a href="{{ entry.href }}"
                  title="Permanent link to the entry.">permlink</a>
         </ul>
-        <p>In categories:
+        <p lang=en>In categories:
         <ul>
           {% for cat in entry.categories %}
             <li><a href="{{ cat.href }}" rel="category">{{ cat }}</a>
           {% endfor %}
         </ul>
         {% if entry.tags %}
-          <p>Tagged with:
+          <p lang=en>Tagged with:
           <ul>
             {% for tag in entry.tags %}<li>{{ tag }}{% endfor %}
           </ul>
@@ -119,7 +119,7 @@
 
 <!DOCTYPE html>
 <!--!github.com/mina86/mina86.com-->
-<html lang={{ lang | default('en') }}>
+<html lang=en>
 <meta charset=UTF-8>
 <title>{% if title %}{{ title }} ― {% endif %}mina86.com</title>
 <meta name=viewport content="width=device-width, initial-scale=1">
