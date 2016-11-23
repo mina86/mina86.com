@@ -48,6 +48,8 @@ TPL_SUBDIR = paths.TPL_SUBDIR
 
 REPO_URL = paths.REPO_URL
 
+SUPPORTED_LANGUAGES = ('en', 'pl')
+
 
 class _Addresable(object):
     lang = None
@@ -121,10 +123,11 @@ class Post(_Addresable):
     def __init__(self, filename, d, excerpt, body):
         if filename.endswith('.html'):
             filename = filename[:-5]
-
-        if filename.endswith('.en') or filename.endswith('.pl'):
-            self.lang = filename[-2:]
-            filename = filename[:-3]
+        for lang in SUPPORTED_LANGUAGES:
+            if filename.endswith('.' + lang):
+                self.lang = lang
+                filename = filename[:-len(lang)-1]
+                break
 
         self.permalink = filename
 
