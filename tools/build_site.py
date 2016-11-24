@@ -51,8 +51,74 @@ REPO_URL = paths.REPO_URL
 SUPPORTED_LANGUAGES = ('en', 'pl')
 
 
+TRANSLATIONS = {
+    # Category names
+    'Everything': {'pl': 'Wszystko'},
+    'Articles': {'pl': 'Artykuły'},
+    'Downloads': {'pl': 'Do pobrania'},
+    'English': {'pl': 'Po angielsku'},
+    'Games': {'pl': 'Gry'},
+    'Misc': {'pl': 'Różne'},
+    'Reviews': {'pl': 'Recenzje'},
+    'Site News': {'pl': 'Aktualności'},
+
+    # Pagination
+    'Page %d': {'pl': '%d. strona'},
+    'Older entries': {'pl': 'Starsze wpisy'},
+    'Newer entries': {'pl': 'Nowsze wpisy'},
+
+    # Text in templates
+    'Contact': {'pl': 'Kontakt'},
+    'Categories': {'pl': 'Kategorie'},
+    'Archive': {'pl': 'Archiwum'},
+    'Atom feed': {'pl': 'Kanał Atom'},
+
+    '<u>p</u>revious:': {'pl': '<u>p</u>oprzedni wpis:'},
+    '<u>p</u>revious page': {'pl': '<u>p</u>oprzedna strona'},
+    '<u>n</u>ext:': {'pl': '<u>n</u>astępny wpis:'},
+    '<u>n</u>ext page': {'pl': '<u>n</u>astępna strona'},
+
+    'Permanent link to the entry.': {'pl': 'Stabilny link do wpisu.'},
+    'Continue reading': {'pl': 'Czytaj dalej'},
+    'In categories:': {'pl': 'Kategorie:'},
+    'Tagged with:': {'pl': 'Tagi:'},
+}
+
+
+def get_translation(lang, text):
+    t = TRANSLATIONS.get(text)
+    text = t.get(lang, text) if t else text
+    return text.decode('utf-8') if isinstance(text, str) else text
+
+
+MONTHS_PL = (None, 'stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca',
+             'lipca', 'sierpnia', u'września', u'października', 'listopada',
+             'grudnia')
+
+
+def format_byline(lang, author, date):
+    author = author.replace('<', '&lt').replace('&', '&amp;')
+
+    day = date.day
+    month = date.month
+    year = date.year
+#     month_roman = unichr(0x215F + date.month)
+
+    if lang == 'pl':
+        date = u'%d %s %d' % (day, MONTHS_PL[month], year)
+        fmt = '<em>%s</em> | <em>%s</em>'
+    else:
+        th = 'th'
+        if day < 10 or day > 20:
+            th = {1: 'st', 2: 'nd', 3: 'rd'}.get(day % 10, 'th')
+        month = date.strftime('%B')
+        date = '%d%s %s %d' % (day, th, month, year)
+        fmt = 'Posted by <em>%s</em> on <em>%s</em>'
+
+    return jinja2.utils.Markup(fmt % (author, date))
+
+
 class _Addresable(object):
-    lang = None
     _subdir = None
 
     @property
@@ -66,13 +132,15 @@ class _Addresable(object):
         else:
             return '/%s/' % self.permalink
 
-    @property
-    def filename(self):
+    def filename_for_lang(self, lang=None):
         args = []
         if self._subdir:
             args.append(self._subdir)
         args.append(self.permalink)
-        args.append('index.html')
+        if lang:
+            args.append('index.%s.html' % lang)
+        else:
+            args.append('index.html')
         return os.path.join(*args)
 
 
@@ -88,7 +156,7 @@ class _Group(_Addresable, unicode):
 
     def add_entry(self, entry):
         self.entries.append(entry)
-        date = entry.date
+        date = entry.latest_date
         if self.date is None or (date is not None and date > self.date):
             self.date = date
 
@@ -120,35 +188,43 @@ class Body(object):
 
 class Post(_Addresable):
 
-    def __init__(self, filename, d, excerpt, body):
-        if filename.endswith('.html'):
-            filename = filename[:-5]
-        for lang in SUPPORTED_LANGUAGES:
-            if filename.endswith('.' + lang):
-                self.lang = lang
-                filename = filename[:-len(lang)-1]
-                break
+    # This is an *ugly*, *ugly* global variable.
+    PREFERRED_LANGUAGE = None
 
-        self.permalink = filename
+    class _Data(collections.namedtuple('PostData', 'subject body date lang')):
 
-        self.subject = d['subject'].strip()
+        def __new__(cls, d):
+            date = d.get('date')
+            if date:
+                date = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+            return super(Post._Data, cls).__new__(
+                cls,
+                subject=d['subject'].strip(),
+                body=d['__body__'],
+                date=date,
+                lang=d['__lang__'])
 
-        date = d.get('date')
-        if date:
-            date = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
-        self.date = date
-
-        cats = d.get('categories')
-        if cats:
-            cats = sorted(Category(cat, date) for cat in cats.split(','))
-        self.categories = cats
-
-        tags = d.get('tags')
-        if tags:
-            tags = sorted(Tag(tag, date) for tag in tags.split(','))
+    def __init__(self, permalink, categories, tags, versions):
+        self.permalink = permalink
+        self.categories = categories
         self.tags = tags
 
-        self.body = Body(excerpt, body)
+        versions = [self._Data(ver) for ver in versions]
+        self._versions = dict((d.lang, d) for d in versions)
+        self._default = (self._versions.get(SUPPORTED_LANGUAGES[0]) or
+                         self._versions.get(None) or versions[0])
+
+        date = None
+        for d in versions:
+            if d.date is not None and (date is None or d.date > date):
+                date = d.date
+        self.latest_date = date
+
+    def __getattr__(self, attr):
+        if attr not in self._Data._fields:
+            raise AttributeError(attr)
+        d = self._versions.get(self.PREFERRED_LANGUAGE, self._default)
+        return getattr(d, attr)
 
     _subdir = property(lambda self: self.date.strftime('%Y'))
 
@@ -157,31 +233,100 @@ class Page(Post):
     _subdir = None
 
 
+def parse_filename(filename):
+    if (filename[0] == '.' or filename[0] == '#' or
+        filename.endswith('.comments')):
+        return None
+
+    if filename.endswith('.html'):
+        filename = filename[:-5]
+    for lang in SUPPORTED_LANGUAGES:
+        if filename.endswith('.' + lang):
+            return filename[:-len(lang)-1], lang
+    else:
+        raise ValueError('filename with no language specified: ' + filename)
+
+
+def read_entry(fd):
+    excerpt = None
+    content = ''
+    kw = d = {}
+
+    for line in fd:
+        if kw is not None:
+            m = _KW_LINE_RE.search(line)
+            if m:
+                kw[m.group(1)] = m.group(2)
+                continue
+            kw = None
+
+        m = _KW_SEPARATOR_LINE_RE.search(line)
+        if not m:
+            content += line
+            continue
+
+        if m.group(1) == 'COMMENT':
+            break
+        elif m.group(1) == 'EXCERPT':
+            excerpt = content
+            content = ''
+        else:
+            sys.stderr.write('Unexpected separator: ' + line)
+
+    d['__body__'] = Body(excerpt, content)
+    return d
+
+
 class Site(object):
 
-    def __init__(self, posts, pages):
-        self.posts = posts
-        self.pages = pages
-        self.categories = self._groups('categories')
-        self.tags = self._groups('tags')
+    def __init__(self, posts_dir, pages_dir):
+        self._categories = {}
+        self._tags = {}
+        self.posts = list(self._read_entries(posts_dir, Post))
+        self.pages = list(self._read_entries(pages_dir, Page))
 
-    def _groups(self, attr):
-        groups = {}
-        for entry in self.entries:
-            lst = getattr(entry, attr)
-            if not lst:
+    categories = property(lambda self: self._categories.itervalues())
+    tags = property(lambda self: self._tags.itervalues())
+
+    def _read_entries(self, dirname, factory):
+        entries = []
+        for filename in os.listdir(dirname):
+            pl = parse_filename(filename)
+            if not pl:
                 continue
-            for idx, grp in enumerate(lst):
-                grp = groups.setdefault(grp, grp)
-                grp.add_entry(entry)
-                lst[idx] = grp
-        groups = set(groups)
-        for grp in groups:
-            grp.entries.sort(key=lambda entry: entry.date, reverse=True)
-        return groups
+            permalink, lang = pl
 
-    entries = property(lambda self: itertools.chain(self.posts, self.pages))
-    groups = property(lambda self: itertools.chain(self.categories, self.tags))
+            with codecs.open(os.path.join(dirname, filename),
+                             encoding='utf-8') as fd:
+                d = read_entry(fd)
+
+            d['__lang__'] = lang
+            d['__permalink__'] = permalink
+            entries.append(d)
+
+        entries.sort(key=lambda d: d['__permalink__'])
+        for permalink, versions in itertools.groupby(
+                entries, key=lambda d: d['__permalink__']):
+            versions = list(versions)
+
+            kw = {}
+            for attr, f in (('categories', Category),
+                            ('tags', Tag)):
+                groups = set()
+                for d in versions:
+                    text = d.get(attr)
+                    if text:
+                        groups.update(t.strip() for t in text.split(','))
+                g = getattr(self, '_' + attr)
+                kw[attr] = [g.setdefault(t, f(t)) for t in groups]
+
+            p = factory(permalink, kw['categories'], kw['tags'], versions)
+
+            for attr, lst in kw.items():
+                for group in lst:
+                    group.add_entry(p)
+
+            yield p
 
 
 class Sitemap(object):
@@ -219,21 +364,9 @@ class Sitemap(object):
 
 class Writer(object):
 
-    @staticmethod
-    def format_date(dt):
-        day = dt.day
-        th = 'th'
-        if day < 10 or day > 20:
-            th = {1: 'st', 2: 'nd', 3: 'rd'}.get(day % 10, 'th')
-        # month = unichr(0x215F + dt.month)
-        month = dt.strftime('%B')
-        year = dt.year
-        return '%d%s %s %d' % (day, th, month, year)
-
     def __init__(self, writer, tpl_dir, static_mappings):
         self._env = jinja2.Environment(loader=jinja2.FileSystemLoader(tpl_dir),
                                        autoescape=True)
-        self._env.filters['date'] = self.format_date
         self._writer = writer
         self._tpl_dir = tpl_dir
         self._static_mappings = static_mappings
@@ -312,188 +445,175 @@ _KW_LINE_RE = re.compile(r'^<!-- ([a-z]+): (.*) -->')
 _KW_SEPARATOR_LINE_RE = re.compile(r'^<!-- ([A-Z]*) -->')
 
 
-def read_entry(filename, fd, cls=Post):
-    excerpt = None
-    content = ''
-    kw = d = {}
-
-    for line in fd:
-        if kw is not None:
-            m = _KW_LINE_RE.search(line)
-            if m:
-                kw[m.group(1)] = m.group(2)
-                continue
-            kw = None
-
-        m = _KW_SEPARATOR_LINE_RE.search(line)
-        if not m:
-            content += line
-            continue
-
-        if m.group(1) == 'COMMENT':
-            break
-        elif m.group(1) == 'EXCERPT':
-            excerpt = content
-            content = ''
-        else:
-            sys.stderr.write('Unexpected separator: ' + line)
-
-    return cls(filename, d, excerpt, content)
-
-
-def read_entries(dirname, cls=Post):
-    for name in os.listdir(dirname):
-        if name.startswith('.') or name.startswith('#'):
-            continue
-        with codecs.open(os.path.join(dirname, name), encoding='utf-8') as fd:
-            yield read_entry(name, fd, cls)
-
-
 def generate(writer, site):
     sitemap = Sitemap()
 
-    posts = sorted(site.posts, key=lambda post: post.date, reverse=True)
-
-    # Figure out links to archive pages
-    by_year = collections.defaultdict(list)
-    for post in posts:
-        by_year[post.date.year].append(post)
-
-    archives = []
-    years = sorted(by_year, reverse=True)
-    for i in range(len(years)):
-        year = years[i]
-        archives.append({
-            'href': '/%d/' % year,
-            'desc': str(year),
-            'count': len(by_year[year]),
-        })
-
-    # Figure out links to category pages
-    categories = [
-        {
-            'href': '/',
-            'desc': 'Everything',
-            'count': len(posts),
-            'feed': '/atom',
-        }
-    ]
-    for cat in sorted(site.categories, key=lambda v: v.lower()):
-        categories.append({
-            'href': cat.href,
-            'desc': cat,
-            'count': len(cat.entries),
-            'feed': '/c/%s/atom' % cat.permalink,
-        })
-
-    # Generate archive pages
-    for i in range(len(years)):
-        year = years[i]
-        writer.write_html('%d/index.html' % year, 'index', {
-            'title': str(year),
-            'canonical': '%s/%d/' % (BASE_HREF, year),
-            'prev': {
-                'href': '/%d/' % years[i - 1],
-                'title': str(years[i - 1])
-            } if i else None,
-            'next': {
-                'href': '/%d/' % years[i + 1],
-                'title': str(years[i + 1])
-            } if i + 1 < len(years) else None,
-            'entries': by_year[year],
-            'archives': archives,
-            'categories': categories,
-        })
-        sitemap.add('%s/%d/' % (BASE_HREF, year),
-                    by_year[year][0].date,
-                    'weekly' if year == NOW.year else 'monthly',
-                    '0.1')
-
-    # Generate category pages
-    for cat in site.categories:
-        writer.write_html(cat.filename, 'index', {
-            'title': cat,
-            'canonical': cat.url,
-            'entries': cat.entries,
-            'archives': archives,
-            'categories': categories,
-        })
-        sitemap.add(cat.url, cat.entries[0].date, 'weekly', '0.3')
-
-        filename = os.path.join(os.path.dirname(cat.filename), 'atom.xml')
-        feed_id = 'http://mina86.com/atom/cat/%s/content/html/' % cat.permalink
-        writer.write_atom(filename, cat.entries,
-                          href=cat.href, feed_id=feed_id,
-                          title=cat)
-
-    # Generate pagination pages (10 entries per page)
-    i = 0
-    while i * 10 < len(posts):
-        href = lambda p: '/%d' % p if p else '/'
-        writer.write_html('%d.html' % i if i else 'index.html', 'index', {
-            'title': 'Page %d' % i if i else None,
-            'canonical': BASE_HREF + href(i),
-            'prev': {
-                'href': href(i + 1),
-                'title': 'Older entries'
-            } if i * 10 + 10 < len(posts) else None,
-            'next': {
-                'href': href(i - 1),
-                'title': 'Newer entries'
-            } if i else None,
-            'entries': posts[i * 10:i * 10 + 10],
-            'archives': archives,
-            'categories': categories,
-        })
-        sitemap.add(BASE_HREF + href(i), posts[i * 10].date,
-                    'weekly', '0.4' if i else '1.0')
-        i += 1
-    writer.write_atom('atom.xml', posts,
-                      href='/', feed_id='http://mina86.com/atom/content/html/')
-
-    # Generate posts pages
-    redirs = collections.defaultdict(list)
+    redirs = collections.defaultdict(set)
     redirs_cutoff = datetime.datetime(2016, 5, 1)
-    for i in range(len(posts)):
-        # next and prev are swapped because posts is reversed
-        cur = posts[i]
-        writer.write_html(cur.filename, 'post', {
-            'title': cur.subject,
-            'next': posts[i - 1] if i else None,
-            'entry': cur,
-            'prev': posts[i + 1] if i + 1 < len(posts) else None,
-            'canonical': cur.url,
-            'archives': archives,
-            'categories': categories,
-        })
-        sitemap.add(cur.url, cur.date, priority='1.0')
-        if cur.date < redirs_cutoff:
-            redirs[cur.date.year].append(cur.permalink)
 
-    # Generate rewrites in /p directory which for a short while was where all
-    # files lived.
-    content = ['RewriteEngine On']
-    for year in sorted(redirs):
-        links = redirs[year]
-        if len(links) == 1:
-            links = links[0]
+    for lang in SUPPORTED_LANGUAGES:
+        Post.PREFERRED_LANGUAGE = lang
+
+        T = lambda text: get_translation(lang, text)
+
+        if lang == SUPPORTED_LANGUAGES[0]:
+            sitemap_add = sitemap.add
         else:
-            links.sort()
-            links = '(?:%s)' % '|'.join(links)
-        content.append(
-            'RewriteRule "^(%s(?:/.*|$))" "/%s/$1" [END,R=permanent]' % (
-                links, year))
-    writer.write_file('p/.htaccess', '\n'.join(content))
+            sitemap_add = lambda *args, **kw: None
 
-    # Generate pages pages
-    for entry in site.pages:
-        writer.write_html(entry.filename, 'page', {
-            'entry': entry,
-            'canonical': entry.url,
-            'archives': archives,
-            'categories': categories,
-        })
-        sitemap.add(entry.url, priority='1.0')
+        def write_html(filename, tpl, data):
+            data['lang'] = lang
+            data['T'] = (
+                lambda text: jinja2.utils.Markup(get_translation(lang, text)))
+            data['byline'] = (
+                lambda author, date: format_byline(lang, author, date))
+            writer.write_html(filename, tpl, data)
+
+        posts = sorted(site.posts, key=lambda post: post.date, reverse=True)
+
+        # Figure out links to archive pages
+        by_year = collections.defaultdict(list)
+        for post in posts:
+            by_year[post.date.year].append(post)
+
+        archives = []
+        years = sorted(by_year, reverse=True)
+        for i in range(len(years)):
+            year = years[i]
+            archives.append({
+                'href': '/%d/' % year,
+                'desc': str(year),
+                'count': len(by_year[year]),
+            })
+
+        # Figure out links to category pages
+        categories = [
+            {
+                'href': '/',
+                'desc': T('Everything'),
+                'count': len(posts),
+                'feed': '/atom',
+            }
+        ]
+        for cat in sorted(site.categories, key=lambda v: T(v).lower()):
+            categories.append({
+                'href': cat.href,
+                'desc': T(cat),
+                'count': len(cat.entries),
+                'feed': '/c/%s/atom' % cat.permalink,
+            })
+
+        # Generate archive pages
+        for i in range(len(years)):
+            year = years[i]
+            write_html('%d/index.%s.html' % (year, lang), 'index', {
+                'title': str(year),
+                'canonical': '%s/%d/' % (BASE_HREF, year),
+                'prev': {
+                    'href': '/%d/' % years[i - 1],
+                    'title': str(years[i - 1])
+                } if i else None,
+                'next': {
+                    'href': '/%d/' % years[i + 1],
+                    'title': str(years[i + 1])
+                } if i + 1 < len(years) else None,
+                'entries': by_year[year],
+                'archives': archives,
+                'categories': categories,
+            })
+            sitemap_add('%s/%d/' % (BASE_HREF, year),
+                        by_year[year][0].date,
+                        'weekly' if year == NOW.year else 'monthly',
+                        '0.1')
+
+        # Generate category pages
+        for cat in site.categories:
+            filename = cat.filename_for_lang(lang)
+            entries = sorted(cat.entries, key=lambda p: p.date, reverse=True)
+            write_html(filename, 'index', {
+                'title': T(cat),
+                'canonical': cat.url,
+                'entries': entries,
+                'archives': archives,
+                'categories': categories,
+            })
+            sitemap_add(cat.url, cat.date, 'weekly', '0.3')
+
+            filename = os.path.join(os.path.dirname(filename),
+                                    'atom.%s.xml' % lang)
+            feed_id = ('http://mina86.com/atom/cat/%s/content/html/' %
+                       cat.permalink)
+            writer.write_atom(filename, entries, href=cat.href, feed_id=feed_id,
+                              title=T(cat))
+
+        # Generate pagination pages (10 entries per page)
+        i = 0
+        while i * 10 < len(posts):
+            href = lambda p: '/%d' % p if p else '/'
+            filename = '%s.%s.html' % (str(i) if i else 'index', lang)
+            write_html(filename, 'index', {
+                'title': T('Page %d') % i if i else None,
+                'canonical': BASE_HREF + href(i),
+                'prev': {
+                    'href': href(i + 1),
+                    'title': T('Older entries')
+                } if i * 10 + 10 < len(posts) else None,
+                'next': {
+                    'href': href(i - 1),
+                    'title': T('Newer entries')
+                } if i else None,
+                'entries': posts[i * 10:i * 10 + 10],
+                'archives': archives,
+                'categories': categories,
+            })
+            sitemap_add(BASE_HREF + href(i), posts[i * 10].date,
+                        'weekly', '0.4' if i else '1.0')
+            i += 1
+        writer.write_atom('atom.%s.xml' % lang, posts,
+                          href='/',
+                          feed_id='http://mina86.com/atom/content/html/')
+
+        # Generate posts pages
+        for i in range(len(posts)):
+            # next and prev are swapped because posts is reversed
+            cur = posts[i]
+            write_html(cur.filename_for_lang(lang), 'post', {
+                'title': cur.subject,
+                'next': posts[i - 1] if i else None,
+                'entry': cur,
+                'prev': posts[i + 1] if i + 1 < len(posts) else None,
+                'canonical': cur.url,
+                'archives': archives,
+                'categories': categories,
+            })
+            sitemap_add(cur.url, cur.date, priority='1.0')
+            if cur.date < redirs_cutoff:
+                redirs[cur.date.year].add(cur.permalink)
+
+        # Generate rewrites in /p directory which for a short while was where
+        # all files lived.
+        content = ['RewriteEngine On']
+        for year in sorted(redirs):
+            links = redirs[year]
+            if len(links) == 1:
+                links = links.pop()
+            else:
+                links = sorted(links)
+                links = '(?:%s)' % '|'.join(links)
+            content.append(
+                'RewriteRule "^(%s(?:/.*|$))" "/%s/$1" [END,R=permanent]' % (
+                    links, year))
+        writer.write_file('p/.htaccess', '\n'.join(content))
+
+        # Generate pages pages
+        for entry in site.pages:
+            write_html(entry.filename_for_lang(lang), 'page', {
+                'entry': entry,
+                'canonical': entry.url,
+                'archives': archives,
+                'categories': categories,
+            })
+            sitemap_add(entry.url, priority='1.0')
 
     # Finalise with writing out sitemap
     sitemap = sitemap.format()
@@ -501,9 +621,6 @@ def generate(writer, site):
 
 
 def build(writer, static_mappings):
-    posts = list(read_entries(POSTS_SUBDIR))
-    pages = list(read_entries(PAGES_SUBDIR, cls=Page))
-    site = Site(posts, pages)
-
+    site = Site(posts_dir=POSTS_SUBDIR, pages_dir=PAGES_SUBDIR)
     writer = Writer(writer, TPL_SUBDIR, static_mappings)
     generate(writer, site)

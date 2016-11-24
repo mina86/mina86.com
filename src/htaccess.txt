@@ -50,6 +50,9 @@ RewriteRule "^(.*)/RK=0/" \
 Options +MultiViews
 DirectoryIndex index
 
+LanguagePriority pl en
+AddLanguage pl .pl
+
 # Serve proper charset information
 AddCharset UTF-8 .html .xml .js .css
 

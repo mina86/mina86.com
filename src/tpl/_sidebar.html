@@ -1,7 +1,7 @@
 <h1>Sidebar</h1>
 
 <section id="n">
-  <h2>Contact</h2>
+  <h2>{{ T('Contact') }}</h2>
   <ul>
     <li>Michał<span> ‘mina86’ </span>Nazarewicz
     <li><a href="mailto:mina86@mina86.com">mina86@mina86.com</a>
@@ -14,21 +14,22 @@
 </section>
 
 <section id="l">
-  <h2>Categories</h2>
+  <h2>{{ T('Categories') }}</h2>
   <ul>
     {% for cat in categories %}
       <li>
         <a href="{{ cat.href }}">{{ cat.desc }}</a>
         <small>({{ cat.count }})</small>
         {% if cat.feed %}
-          <a href="{{ cat.feed }}" class="f"><span>Atom feed</span></a>
+          <a href="{{ cat.feed }}"
+             class="f"><span>{{ T('Atom feed') }}</span></a>
         {% endif %}
       {% endfor %}
   </ul>
 </section>
 
 <section id="a">
-  <h2>Archive</h2>
+  <h2>{{ T('Archive') }}</h2>
   <ul>
     {% for arch in archives %}
       <li><a href="{{ arch.href }}">{{ arch.desc }}</a> <small>({{ arch.count }})</small>

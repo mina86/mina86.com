@@ -40,19 +40,21 @@
           <li><a href="{{ prev.href }}" rel="prev"
                    {{ attr('accesskey', 'P', _prev_next_accesskeys[0]) }}
                    {{ attr('title', prev.title, not prev.subject) }}
-                 >« <u>p</u>revious
-                   {%- if prev.subject -%}: <i>{{ prev.subject }}</i>
-                   {%- else %} page
-                   {%- endif -%}</a>
+                 >« {% if prev.subject -%}{{
+                          T('<u>p</u>revious:') | safe
+                       }} <i>{{ prev.subject }}</i>
+                    {%- else %} {{ T('<u>p</u>revious page') | safe }}
+                    {%- endif -%}</a>
         {%- endif -%}
         {%- if next -%}
           <li class="n"><a href="{{ next.href }}" rel="next"
                    {{ attr('accesskey', 'N', _prev_next_accesskeys[0]) }}
                    {{ attr('title', next.title, not next.subject) }}
-                 ><u>n</u>ext
-                   {%- if next.subject -%}: <i>{{ next.subject }}</i>
-                   {%- else %} page
-                   {%- endif -%} »</a>
+                 >{%- if next.subject -%}{{
+                           T('<u>n</u>ext:') | safe
+                       }} : <i>{{ next.subject }}</i>
+                  {%- else %}{{ T('<u>n</u>ext page') | safe }}
+                  {%- endif -%} »</a>
          {%- endif -%}
       </ul>
     </nav>
@@ -62,14 +64,13 @@
 
 {%- macro post(entry, post_page) -%}
 {%- set full = post_page or not entry.body.excerpt -%}
-  <article {% if full %} class=q {% endif %}
-           {% if entry.lang %} lang="{{ entry.lang }}" {% endif %}>
+  <article {% if full %} class=q {% endif %} lang="{{ entry.lang }}">
 
-    <h1><a href="{{ entry.href }}" title="Permanent link to the entry.">{{
+    <h1><a href="{{ entry.href }}"
+           title="{{ T('Permanent link to the entry.') }}">{{
         entry.subject }}</a></h1>
 
-    <p class="b" lang=en>Posted by <em>Michał ‘mina86’ Nazarewicz</em> on
-      <em>{{ entry.date | date }}</em>
+    <p class="b">{{ byline('Michał ‘mina86’ Nazarewicz', entry.date) }}
 
     <div class=t>
       {% if full %}
@@ -83,11 +84,19 @@
       {% if not post_page %}
         <ul>
           {% if not full %}
-            <li><a href="{{ entry.href }}#m" lang=en>Continue reading</a>
+            <li><a href="{{ entry.href }}#m">{{
+                T('Continue reading') }}</a>
           {% endif %}
-          <li><a href="{{ entry.href }}#c"
-                 lang=en><span class="spot-im-replies-count" data-post-id="{{
-                               entry.permalink }}">See</span> comments</a>
+          <li><a href="{{ entry.href }}#c">
+              {%- if lang == 'pl' -%}
+                Komentarze: <span class="spot-im-replies-count"
+                      data-post-id="{{ entry.permalink }}"lang=en>zobacz</span>
+              {%- else -%}
+                <span class="spot-im-replies-count"
+                      data-post-id="{{ entry.permalink }}"
+                      lang=en>See</span> comments
+              {%- endif -%}
+            </a>
         </ul>
       {% endif %}
 
@@ -98,14 +107,14 @@
           <li><a href="{{ entry.href }}"
                  title="Permanent link to the entry.">permlink</a>
         </ul>
-        <p lang=en>In categories:
+        <p>{{ T('In categories:') }}
         <ul>
           {% for cat in entry.categories %}
-            <li><a href="{{ cat.href }}" rel="category">{{ cat }}</a>
+            <li><a href="{{ cat.href }}" rel="category">{{ T(cat) }}</a>
           {% endfor %}
         </ul>
         {% if entry.tags %}
-          <p lang=en>Tagged with:
+          <p>{{ T('Tagged with:') }}
           <ul>
             {% for tag in entry.tags %}<li>{{ tag }}{% endfor %}
           </ul>
@@ -119,7 +128,7 @@
 
 <!DOCTYPE html>
 <!--!github.com/mina86/mina86.com-->
-<html lang=en>
+<html lang={{ lang }}>
 <meta charset=UTF-8>
 <title>{% if title %}{{ title }} ― {% endif %}mina86.com</title>
 <meta name=viewport content="width=device-width, initial-scale=1">
@@ -149,12 +158,21 @@
     <h1><a href="/" role=presentation><span>mina86</span>.com</a></h1>
     <nav>
       <ul>
-        <li><a accesskey="H" href="/"><u>H</u>ome</a>
-        <li><a accesskey="D" href="https://github.com/mina86/">Co<u>d</u>e</a>
-        <li><a accesskey="F" href="/c/downloads/"><u>F</u>iles</a>
-        <li class=d><a accesskey="N" href=#n>Co<u>n</u>tact</a>
-        <li class=d><a accesskey="C" href=#l><u>C</u>ategories</a>
-        <li class=d><a accesskey="A" href=#a><u>A</u>rchive</a>
+        {%- if lang == 'pl' -%}
+          <li><a accesskey="H" href="/">Główna</a>
+          <li><a accesskey="D" href="https://github.com/mina86/">Ko<u>d</u></a>
+          <li><a accesskey="F" href="/c/downloads/">Pliki</a>
+          <li class=d><a accesskey="N" href=#n>Ko<u>n</u>takt</a>
+          <li class=d><a accesskey="C" href=#l>Kategorie</a>
+          <li class=d><a accesskey="A" href=#a>Archiwum</a>
+        {%- else -%}
+          <li><a accesskey="H" href="/"><u>H</u>ome</a>
+          <li><a accesskey="D" href="https://github.com/mina86/">Co<u>d</u>e</a>
+          <li><a accesskey="F" href="/c/downloads/"><u>F</u>iles</a>
+          <li class=d><a accesskey="N" href=#n>Co<u>n</u>tact</a>
+          <li class=d><a accesskey="C" href=#l><u>C</u>ategories</a>
+          <li class=d><a accesskey="A" href=#a><u>A</u>rchive</a>
+        {%- endif -%}
       </ul>
     </nav>
     <gcse:search></gcse:search>
@@ -171,12 +189,25 @@
 
 
 <footer id=f role=contentinfo>
-  <p>Unless stated otherwise, text of the entries licensed under
-  the <a rel="license nofollow"
-  href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA
-  4.0</a> license, and code – <a rel="license nofollow"
-  href="https://www.apache.org/licenses/LICENSE-2.0">Apache License,
-  Version 2.0</a>.
+  {%- if lang == 'pl' -%}
+
+    <p>O ile nie zaznaczono inaczej, treść wpisów udostępniany na
+      zasadach licencji <a rel="license"
+      href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA
+      4.0</a>, a kod – <a rel="license"
+      href="https://www.apache.org/licenses/LICENSE-2.0">Apache
+      License, Version 2.0</a>.
+
+  {%- else -%}
+
+    <p>Unless stated otherwise, text of the entries licensed under
+      the <a rel="license"
+      href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA
+      4.0</a> license and code – <a rel="license"
+      href="https://www.apache.org/licenses/LICENSE-2.0">Apache
+      License, Version 2.0</a>.
+
+  {%- endif -%}
 </footer>
 
 
