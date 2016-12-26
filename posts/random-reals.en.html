@@ -1,0 +1,207 @@
+<!-- subject: Generating random reals -->
+<!-- date: 2016-12-26 22:31:12 -->
+<!-- tags: random, prng, floating point -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>A well known way of generating random floating point numbers in the
+  presence of a pseudo-random number generator (PRNG) is to divide
+  output of the latter by one plus its maximum possible return value.
+
+<pre>
+extern uint64_t random_uint64(void);
+
+double random_double(void) {
+	return random_uint64() / (UINT64_MAX + 1.0);
+}
+</pre>
+
+<p>This method is simple, effective, inefficient and wrong on a few
+levels.
+
+<!-- EXCERPT -->
+
+
+<h2>Discretisation</h2>
+
+<p>The ‘floating’ in ‘floating point’ refers to decimal point’s
+  ability to move around to scale number’s <em>absolute</em> precision
+  while maintaining <em>relative</em> precision.  This allows very big
+  as well as very small numbers to be represented.  For example, while
+  an IEEE 754 double precision number can encode 2¹⁰⁰ and 2⁻¹⁰⁰, it
+  cannot represent their sum.
+
+<p>This impacts how densely ‘representable’ integers are distributed
+  on a number line.  All positive integers less than 2⁵³ can be
+  represented, but then only every second integer in [2⁵³, 2⁵⁴) range
+  can; only fourth in [2⁵⁴, 2⁵⁵); and so on.
+
+<p>The effect is that when a random 64-bit unsigned integer is
+  converted into a double, some numbers are more probably than others.
+  For example, 2⁶³ is 2048 times more likely to be choose than 1.
+
+<p>This isn’t yet a reason to run in circles while screaming in panic.
+  We quickly convince ourselves that (sufficiently
+  large) <em>ranges</em> behave correctly.  There may be fewer
+  distinct values in the [2⋅2⁶², 3⋅2⁶²) range but over all it’ll end
+  up with the same number of ‘hits’ as the [0, 2⁶²) range.
+
+<figure style="width: 50%; padding: 1rem; margin-left: 1rem; background: #fff; float: right; font-size: 0.87em">
+  <svg viewBox="0 0 16000 8000" style="width: 100%; height: auto"
+       version="1.1" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"
+       stroke-width="28.222">
+    <path fill="none" stroke="#B3B3B3" d="M2159,7838L2159,7688M15679,7838L15679,7688M2009,7688L2159,7688M2009,6774L2159,6774M2009,5860L2159,5860M2009,4946L2159,4946M2009,4033L2159,4033M2009,3119L2159,3119M2009,2205L2159,2205M2009,1291L2159,1291M2009,378L2159,378"/>
+    <path fill="#729FCF" stroke="none" d="M2159,1291L2595,1291 3031,1564 3467,1019 3903,2108 4339,1019 4775,1019 5212,1019 5648,3198 6084,1019 6520,1019 6956,1019 7392,1019 7829,1019 8264,1019 8700,1019 9136,5376 9572,1019 10008,1019 10445,1019 10881,1019 11317,1019 11753,1019 12189,1019 12625,1019 13062,1019 13498,1019 13934,1019 14370,1019 14806,1019 15242,1019 15679,1019 15679,7688 2159,7688 2159,1291Z"/>
+    <path fill="none" stroke="#B3B3B3" stroke-dasharray="100" d="M2159,1291L15679,1291"/>
+    <text font-family="Liberation Sans, sans-serif" font-size="353px" fill="#000">
+      <tspan  x="321" y="7809">0.9999993</tspan>
+      <tspan  x="321" y="2325">0.9999999</tspan>
+      <tspan  x="321" y="1411">1.0000000</tspan>
+      <tspan  x="321" y="498" >1.0000001</tspan>
+    </text>
+  </svg>
+  <figcaption>Rough probability density of <code>random_uint32() /
+      (UINT32_MAX + 1.0f)</code>.</figcaption>
+</figure>
+
+<p>Except that it won’t…
+
+
+<h2>Non-uniform distribution</h2>
+
+<p>The density would behave correctly if bits lost during conversion
+  were zeroed.  In that scenario, all integers from [2⁶³, 2⁶³+2047]
+  range map to its beginning equating the probability of an integer
+  from [0, 2047] being chosen.
+
+<p>The problem is that the default (and sometimes the only
+  accessible) <a href="http://www.gnu.org/s/libc/manual/html_node/Rounding.html">rounding
+  mode</a> is to round towards nearest.  Because 2⁶³+2047 is closer to
+  2⁶³+2048 than to 2⁶³, it will get rounded to the former.
+
+<pre>
+$ gcc -std=c99 -o rounding -x c - &lt;&lt;EOF && ./rounding
+#include &lt;stdio.h>
+#include &lt;stdint.h>
+#include &lt;inttypes.h>
+
+int main(void) {
+	double x = (UINT64_C(1) &lt;&lt; 63) + 2047;
+	uint64_t y = (uint64_t)x - (UINT64_C(1) &lt;&lt; 63);
+	printf("%" PRIu64 "\n", y);
+	return 0;
+}
+EOF
+<strong>2048</strong>
+</pre>
+
+<p>In other words, roughly half of the integers in [2⁶³, 2⁶³+2047]
+  range end up mapped to 2⁶³+2048 instead of 2⁶³.  Fortunately the
+  latter gets some numbers from the previous range, [2⁶³-2048, 2⁶³-1],
+  so it’s not totally extorted.
+
+<p>It still isn’t treated fairly.  2⁶³-2048 is a 63-bit number and the
+  precision loss is ten bits (compared to eleven for 2⁶³+2048) which
+  in turn means that only the top fourth of the [2⁶³-2048, 2⁶³-1]
+  range maps to 2⁶³.  Overall, 2⁶³ ‘gets’ roughly 1537 integers mapped
+  to it while 2⁶³+2048 gets 2047.
+
+<p>This behaviour favours large numbers and penalises powers
+  especially strongly.  Even still, the bias isn’t huge and for many
+  casual uses might be perfectly acceptable.
+
+<p>But wait, it gets worse!
+
+
+<h2>Off-by-one</h2>
+
+<p>Choosing a random element from a list is often done with the help
+  of a random non-negative real number less than one.  It’s enough to
+  multiply it by length of the list and truncate down to obtain
+  a random index:
+
+<pre>
+template&lt;class T, size_t size>
+T &amp;choose(T (&amp;arr)[size]) {
+	return arr[(size_t)(random_double() * size)];
+}
+</pre>
+
+<p>This is perfect except for a tiny issue where memory past the array
+  may be accessed.  In general the method is not guaranteed to work
+  and <code>N / (N + 1.0)</code> is not always less then one.
+
+<pre>
+RAND_MAX   / (RAND_MAX   + 1.0 ) = 0.999999999534339
+RAND_MAX   / (RAND_MAX   + 1.0f) = 1
+UINT32_MAX / (UINT32_MAX + 1.0 ) = 0.999999999767169
+UINT32_MAX / (UINT32_MAX + 1.0f) = 1
+UINT64_MAX / (UINT64_MAX + 1.0 ) = 1
+UINT64_MAX / (UINT64_MAX + 1.0f) = 1
+</pre>
+
+<p>If a PRNG outputs integers wider than floating point
+  number’s precision (24 bits
+  for <a href="https://en.wikipedia.org/wiki/Single-precision_floating-point_format">single</a>
+  and 53 bits
+  for <a href="https://en.wikipedia.org/wiki/Double-precision_floating-point_format">double</a>
+  precision numbers), division result has to
+  be <a href="http://www.gnu.org/s/libc/manual/html_node/Rounding.html">rounded</a>
+  to fit.  The default of rounding towards the nearest results in
+  aberrations seen above.
+
+<p>This becomes a real bug if single precision arithmetic or a more
+  capable pseudo-random number generator is used.  For instance,
+  <a href="http://xoroshiro.di.unimi.it/">xorshro128+</a> is trivial
+  to implement and produces 64-bit outputs.  More than a double
+  precision IEEE 754 numbers can handle.
+
+<p>Rounding towards zero or minus infinity would avert the issue, but
+  those modes are rarely implemented and even if that were available,
+  switching mode just for the sake of random number generation may be
+  unfeasible.
+
+
+<h2>Solution</h2>
+
+<p>There are a faw ways to solve the issue.  My favourite method which
+  happens to be the fastest is to construct floating point number by
+  hand.  This is much easier than it sounds:
+
+<pre>
+static inline double make_double(uint64_t x) {
+	double ret;
+	x = (1023 &lt;&lt; 52) | (x >> 12)
+	memcpy(&amp;ret, &amp;x, sizeof ret);
+	return ret - 1.0;
+}
+</pre>
+
+<p><code>memcpy</code> prevents any aliasing issues and GCC is good
+  at optimising it.  Speaking of which, if portability is an issue,
+  number of bits in mantissa can be queried via <code>DBL_RADIX</code>
+  macro from <code>float.h</code> header and if unknown floating point
+  representation is used, <code>ldexp</code> can be used instead.
+
+<p>That approach can be <a
+  href="https://github.com/mina86/random-reals/blob/master/make-real.h">packaged
+  into a C/C++ library</a>  easily and as promised is not only
+  effective but also efficient:
+
+<pre>
+=== Using division ===
+
+real	0m16.183s
+user	0m16.172s
+sys	0m0.000s
+
+=== Using bit manipulations ===
+
+real	0m6.660s
+user	0m6.656s
+sys	0m0.000s
+</pre>
+
+<p>Benchmark’s source code can be found
+  in <a href="https://github.com/mina86/random-reals">random-reals</a>
+  git repository alongside utilities used to gather histogram shown in
+  previous section.
