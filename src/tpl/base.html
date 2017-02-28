@@ -77,16 +77,13 @@
         {{ entry.body | safe }}
       {% else %}
         {{ entry.body.short | safe }}
+        <p><a href="{{ entry.href }}#m">{{ T('Continue reading') }} »</a>
       {% endif %}
     </div>
 
     <footer class="g">
       {% if not post_page %}
         <ul>
-          {% if not full %}
-            <li><a href="{{ entry.href }}#m">{{
-                T('Continue reading') }}</a>
-          {% endif %}
           <li><a href="{{ entry.href }}#c">
               {%- if lang == 'pl' -%}
                 Komentarze: <span class="spot-im-replies-count"
