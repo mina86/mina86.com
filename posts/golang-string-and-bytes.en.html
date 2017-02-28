@@ -1,0 +1,83 @@
+<!-- subject: Go: string↔[]byte -->
+<!-- date: 2017-02-28 20:14:55 -->
+<!-- tags: golang -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>Yes… I’ve started coding in Go recently.  It lacks many things but
+  the one feature relevant to this post is <code>const</code> keyword.
+  Arrays and slices in particular are always mutable and so equivalent
+  of C’s <code>const char *</code> does not exist.
+
+<p>On the other hand, strings are immutable which means that
+  conversion between a <code>string</code> and <code>[]byte</code>
+  requires memory allocation and copying of the data¹.  Often this
+  might be acceptable but to squeeze every last cycle the following
+  two functions might help achieve zero-copy implementation:
+
+<pre>
+func String(bytes []byte) string {
+	hdr := *(*reflect.SliceHeader)(unsafe.Pointer(&amp;bytes))
+	return *(*string)(unsafe.Pointer(&amp;reflect.StringHeader{
+		Data: hdr.Data,
+		Len:  hdr.Len,
+	}))
+}
+
+func Bytes(str string) []byte {
+	hdr := *(*reflect.StringHeader)(unsafe.Pointer(&amp;str))
+	return *(*[]byte)(unsafe.Pointer(&amp;reflect.SliceHeader{
+		Data: hdr.Data,
+		Len:  hdr.Len,
+		Cap:  hdr.Len,
+	}))
+}
+</pre>
+
+<p>Depending on the length of the strings, the difference in
+  performance might be noticeable:
+
+<!-- EXCERPT -->
+
+<table>
+  <thead>
+    <tr>
+      <th>Argument length
+      <th><code>String(bytes)</code> [ns]
+      <th><code>string(bytes)</code> [ns]
+      <th>
+  <tbody>
+    <tr class=rht><td>0       <td>1.86<td>      3.08<td>1.7✕
+    <tr class=rht><td>10      <td>1.86<td>      9.75<td>5.2✕
+    <tr class=rht><td>1000    <td>1.86<td>    232.<span style="opacity:0">00</span><td>124.<span style="opacity:0">7</span>✕
+    <tr class=rht><td>100000  <td>1.89<td>  13981.<span style="opacity:0">00</span><td>7397.<span style="opacity:0">4</span>✕
+    <tr class=rht><td>10000000<td>1.88<td>1126164.<span style="opacity:0">00</span><td>599023.<span style="opacity:0">4</span>✕
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Argument length
+      <th><code>Bytes(bytes)</code> [ns]
+      <th><code>[]byte(bytes)</code> [ns]
+      <th>
+    <tr class=rht><td>0       <td>1.86<td>      6.24<td>3.4✕
+    <tr class=rht><td>10      <td>1.86<td>      7.31<td>3.9✕
+    <tr class=rht><td>1000    <td>1.85<td>    230.<span style="opacity:0">00</span><td>124.<span style="opacity:0">3</span>✕
+    <tr class=rht><td>100000  <td>1.86<td>  15198.<span style="opacity:0">00</span><td>8171.<span style="opacity:0">0</span>✕
+    <tr class=rht><td>10000000<td>1.89<td>1141424.<span style="opacity:0">00</span><td>603928.<span style="opacity:0">0</span>✕
+</table>
+
+<p>As expected, unsafe variant stays constant since it always
+  allocates the same amount of memory (a single structure) and copies
+  just two or three values.  The safe version on the other hand scales
+  roughly linearly since it has to copy the data but is slower even
+  when dealing with an empty string.  This could be an overhead of
+  a function call which unsafe version avoids by getting inlined.
+
+<p>The code, including tests and benchmarks used to generate the table
+  above, can be found in a git repository
+  at <a href="https://github.com/mina86/unsafeConvert">github.com/mina86/unsafeConvert</a>.
+
+<p>¹ As of now and to the best of my knowledge Go compiler is not
+  smart enough to recognise when the copying can be avoided without
+  sacrificing any promises the language is making.
