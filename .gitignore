@@ -3,4 +3,4 @@ public
 files/index.html
 */*.pyc
 static/cv.html
-static/mina86.gpg
+static/mina86.pub

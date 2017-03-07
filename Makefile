@@ -1,6 +1,6 @@
 all: public
 
-public: static/mina86.gpg static/cv/index.html
+public: static/mina86.pub static/cv/index.html
 	@+python ./tools/build.py $@
 
 touch:
@@ -23,7 +23,7 @@ distclean:
 	@exec mkdir -p $(dir $@)
 	exec lessc -su=on -sm=on $< | cleancss --semantic-merging -s >$@
 
-static/mina86.gpg:
+static/mina86.pub:
 	@echo " GPG  $@"
 	gpg --armor --export 0x2060401250751FF4 >$@
 
