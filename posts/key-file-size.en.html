@@ -1,0 +1,68 @@
+<!-- subject: PSA: Yes, 64-byte key file is OK -->
+<!-- date: 2017-04-04 23:14:55 -->
+<!-- tags: luks, encryption, cryptography -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>In <a href="/p/psa-chmod">an earlier entry</a> I’ve changed
+  generated key file used for disk encryption from 4096 to meagre 64
+  bytes.  I gave no mention of that adjustment considering it
+  unimportant but have since been enquired about security of such
+  a short password.
+
+<p>Rest assured, a 64-byte key file is sufficient for any symmetric
+  encryption (disk encryption being one example) and anything more
+  does not improve security.
+
+<!-- EXCERPT -->
+
+<p>Even a modest 100 bits should be enough for the most paranoid
+  amongst us, according
+  to <a href="https://gitlab.com/cryptsetup/cryptsetup/wikis/FrequentlyAskedQuestions">cryptsetup
+  FAQ</a>.  64 bytes is five times as many and recall that difficulty
+  of breaking an encryption grows exponentially with the size of the
+  secret.
+
+<p>Bet let’s crank it up to eleven.  The largest cryptosetup supports
+  (and will
+  likely <a href="http://security.stackexchange.com/questions/6141/amount-of-simple-operations-that-is-safely-out-of-reach-for-all-humanity/6149#6149">ever
+  need to support</a>) are 512-bit keys¹.  No matter how enormous
+  encryption password is, ultimately at most 512 bits will be used.
+  In other words, if key file is bigger it becomes easier to attack
+  the derived encryption key instead.
+
+<p>And since
+  <a href="http://security.stackexchange.com/questions/6141/amount-of-simple-operations-that-is-safely-out-of-reach-for-all-humanity/6149#6149">brute-forcing
+  512-bit key would require roughly 2²⁸⁷ solar systems worth of
+  energy</a>
+  (or <a href="http://www.space.com/25959-how-many-stars-are-in-the-milky-way.html">2²⁵⁰
+  Milky Way galaxies</a>) a motivated adversary will focus on
+  <a href="https://xkcd.com/538/">other methods</a> of obtaining the
+  password.
+
+<p>There is a small caveat.  If the password was generated from a poor
+  entropy source, instead of brute-forcing the encryption, guessing
+  output of the pseudo random number generator should turn out much
+  more rewarding.  This is precisely
+  how <a href="https://www.schneier.com/blog/archives/2008/05/random_number_b.html">Debian’s
+  OpenSSL vulnerability</a> came about.
+
+<p>While it may be tempting to think a large file guards against such
+  mishaps, PRNG is unable to concoct entropy.  Guessing its initial
+  state (which in case of aforementioned vulnerability was just 31
+  bits) is sufficient to predict its output to arbitrary length.
+
+<p>This is why I’ve also changed the command to
+  use <code>/dev/random</code> which gives better guarantees regarding
+  randomness of its output compared to <code>/dev/urandom</code>.
+
+<p>To sum up and reiterate, provided that good randomness source is
+  used (hint: always use <code>/dev/random</code>), when creating
+  a binary key file for a LUKS container, 64 bytes is plenty and even
+  half of that is more than enough.
+
+<p>¹ 512-bit encryption key is used for 256-bit block ciphers in XTS
+  mode.  And even here the doubling of the size appears to be caused
+  by misunderstanding of XEX algorithm rather than need for better
+  security,
+  see <a href="http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/comments/XTS/XTS_comments-Liskov_Minematsu.pdf">comments
+  on XTS-AES by M. Liskov and K. Minematsu</a>.
