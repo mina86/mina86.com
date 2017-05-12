@@ -20,8 +20,8 @@
     <entry>
       <head>Programming languages</head>
       <p>Good knowledge of C, C++, Python, JavaScript and shell
-      scripting.  Some Perl, Lisp, Java, PHP and Pascal.  Basics of
-      Assembly (x86, MIPS, ARM), Prolog and Haskell.</p>
+      scripting.  Some Rust, Go, Perl, Lisp, Java, PHP and Pascal.
+      Basics of Assembly (x86, MIPS, ARM), Prolog and Haskell.</p>
     </entry>
 
     <entry>
@@ -82,7 +82,7 @@
 
       <p>I have been working on the Linux kernel and have since <a
       href="https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/log/?qt=author&amp;q=nazarewicz">written
-      over 150 accepted patches</a>.  I have been involved with the <a
+      over 180 accepted patches</a>.  I have been involved with the <a
       href="https://lwn.net/Articles/395712/">USB composite
       framework</a> and memory management and authored multiple
       drivers and frameworks including <a
