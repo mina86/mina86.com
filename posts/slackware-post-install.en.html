@@ -348,35 +348,24 @@ LOGIN_STRING    "%s's password:"
 ISSUE_FILE      /etc/issue
 MOTD_FILE       /etc/motd</pre>
 
-<p>and then edit <code>/etc/issue</code> file to contain:
+<p>and then execute as root:
 
 <pre>
-                 __
-            ,-~¨^  ^¨-,           _,
-           /          / ;^-._...,¨/
-          /          / /         /
-         /          / /         /
-        /          / /         /
-       /,.-:''-,_ / /         /     Welcome to
-       _,.-:--._ ^ ^:-._ __../      Microsoft®
-     /^         / /¨:.._¨__.;     Windows™ 3.11
-    /          / /      ^  /      for Workgroups
-   /          / /         /
-  /          / /         /
- /_,.--:^-._/ /         /
-^            ^¨¨-.___.:^  ™ - G33K</pre>
+&gt;/etc/issue printf '
+ _____ _____ _____                              _____ _____ _____ _____
+|   | |   __|  _  | ... %shemtrails %sontrol ... |   __|     |  |  |     |
+| | | |__   |     | Regional %sonitoring %system |  |  |   --|     |  |  |
+|_|___|_____|__|__| ....... Node %s/%02d ....... |_____|_____|__|__|__  _|
+                                                       Scarborough  |__|
 
-<p>Or if you prefer something with not so many lines:</p>
+' C C M S "$(tr -dc a-z </dev/urandom |head -c2)" "$((RANDOM % 100))"
+</pre>
 
-<pre>
-       ._,-,_.          _    ________    _       ______    __
-       ||| |||         / \  |__    __|  / \     |   _  \  |  |
-       ||| |||        / . \    |  |    / . \    |  |_) /  |  |
-       ;|| ||:       / /_\ \   |  |   / /_\ \   |     (   |  |
-     ./ /| |\ \.    /  ___  \  |  |  /  ___  \  |  |\  \  |  |
-     |./ :_: \.|   /__/   \__\ |__| /__/   \__\ |__| \__\ |__|</pre>
-
-<p>Of course any other <a href="http://mina86.com/p/linux-console-is-sexy/"><abbr title="American Standard Code for Information Interchange">ASCII</abbr> art</a> will do, and with <a href=https://en.wikipedia.org/wiki/ANSI_escape_code><abbr title="American National Standards Institute">ANSI</abbr> escape codes</a> even colours can be added!
+<p>Any other <abbr title="American Standard Code for Information
+Interchange">ASCII</abbr> art</a> will do, and with
+<a href=https://en.wikipedia.org/wiki/ANSI_escape_code><abbr title="American
+National Standards Institute">ANSI</abbr> escape codes</a> even colours can be
+added!
 
 <p>While on the topic of colours, I find blue to be too dark on my terminals
 (since I prefer black backgrounds), so the next thing I do is change colour of
