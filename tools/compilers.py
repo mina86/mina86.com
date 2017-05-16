@@ -83,6 +83,9 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
     def __init__(self, *args, **kw):
         self._static_mappings = kw.pop('static_mappings', None)
         self._src_dir = kw.pop('src_dir', None)
+        base = kw.pop('base_href', None)
+        assert not base or (base[0:4] == 'http' and base[-1] == '/'), base
+        self._base_href = base
         htmlmin.parser.HTMLMinParser.__init__(self, *args, **kw)
 
     def handle_starttag(self, tag, attrs):
@@ -106,6 +109,11 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
 
         if self._src_dir and tag == 'img' and attr == 'src':
             return _insert_data(self._src_dir, value)
+
+        if (self._base_href and
+            (attr == 'src' or (attr == 'href' and tag != 'link')) and
+            value.startswith(self._base_href)):
+            return value[len(self._base_href)-1:]
 
         value = re.sub(r'\s+', ' ', value.strip())
         if attr == 'style':

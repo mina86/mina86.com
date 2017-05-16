@@ -374,7 +374,8 @@ class Writer(object):
     def write_html(self, filename, tpl_name, data):
         data = self._env.get_template(tpl_name + '.html').render(data)
         data = compilers.minify_html(data,
-                                     static_mappings=self._static_mappings)
+                                     static_mappings=self._static_mappings,
+                                     base_href=BASE_HREF + '/')
         self.write_file(filename, data)
 
     def write_atom(self, filename, entries, href, feed_id, title=None):
