@@ -38,7 +38,7 @@ import paths
 
 
 HOST = 'mina86.com'
-BASE_HREF = 'http://' + HOST
+BASE_HREF = 'https://' + HOST
 
 NOW = datetime.datetime.utcnow()
 

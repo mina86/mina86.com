@@ -86,7 +86,7 @@
       href="https://lwn.net/Articles/395712/">USB composite
       framework</a> and memory management and authored multiple
       drivers and frameworks including <a
-      href="http://mina86.com/cma/">Contiguous Memory Allocator</a>,
+      href="https://mina86.com/cma/">Contiguous Memory Allocator</a>,
       Mass Storage USB function and FunctionFS framework.</p>
 
       <p>Prior to working on the Linux kernel I have been working with
@@ -158,7 +158,7 @@
     </entry>
 
     <entry logo="mina86.com.png">
-      <head><a href="http://mina86.com/">mina86.com</a></head>
+      <head><a href="https://mina86.com/">mina86.com</a></head>
 
       <p>My web page where I&#160;publish (mostly)
       technical entries from broad variety of topics.</p>
