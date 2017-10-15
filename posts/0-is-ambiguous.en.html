@@ -11,10 +11,9 @@ href=https://blogs.fsfe.org/adridg/?p=1014>Adriaan de
 Groot’s entry</a>, I decided to write something about <code>0</code>,
 <code>NULL</code> and upcoming <code>nullptr</code>.
 
-<p>I will try to be informative and explain what the whole buzz is
-about and then give my opinion about <code>nullptr</code>.  Let us first
-inspect how a <a
-href=https://en.wikipedia.org/wiki/Pointer_%28computer_programming%29#Null_pointer>null
+<p>I will try to be informative and explain what the whole buzz is about and
+then give my opinion about <code>nullptr</code>.  Let us first inspect how
+a <a href=https://en.wikipedia.org/wiki/Pointer_%28computer_programming%29#Null_pointer>null
 pointer</a> can be donated in C and C++.
 
 <!-- EXCERPT -->
@@ -40,10 +39,9 @@ usually figure out.  For instance:
 	<b>return</b> 0;	/* number zero (main returns int) */
 }</pre>
 
-<p>However, if function lacks a prototype or has variable length of
-arguments, there may be too little information to figure out what
-programmer meant.  A good example is <code>printf()</code> function from
-standard library:
+<p>However, if function lacks a prototype or has variable length of arguments,
+available information may be insufficient to figure out what programmer meant.
+A good example is <code>printf</code> function from standard library:
 
 <pre>
 #include &lt;stdio.h&gt;
@@ -173,9 +171,9 @@ code if cast is not used in the first case.
 <code>std::nullptr_t</code> which can be implicitly converted to any other
 pointer while, at the same time, cannot be converted to a number.
 
-<p>This seems like a good thing, right? Unfortunately, there are two
-issues with this approach.  First one is that it does not fix the
-problem.  For instance, the following is still ambiguous:
+<p>This seems like a good thing, right? Unfortunately, there are two issues with
+this approach.  First one is that it does not fix the problem completely.  For
+instance, the following is still ambiguous:
 
 <pre>
 <b>void</b> print(<b>char</b> *);
@@ -185,25 +183,23 @@ problem.  For instance, the following is still ambiguous:
 	print(<b>nullptr</b>);
 }</pre>
 
-<p>At the same time, yet another keyword has been introduced which
-serves no purpose.  <code>NULL</code> was a perfectly fine identifier
-which might be used without polluting keyword name space (which is
-a problem since adding a keyword to the language may break existing
-code).
+<p>At the same time, yet another keyword has been introduced which serves no
+purpose.  <code>NULL</code> was a perfectly fine identifier which might have
+been used without polluting keyword name space or adding another identifier
+people need to understand..
 
 <p>My recommendation is not to bother with it.  Just ignore this thing
 and stick to <code>NULL</code> where context is clear and
-<code>(<var>foo</var> *)0</code> when calling function.
+<code>(<var>foo</var> *)0</code> when calling function with multiple versions.
 
-<p>UPDATE: It has been pointed out to me that <code>nullptr</code> in fact
-fixes a single problem: it prevents an incorrect function from being
-called.  This is true but it does not change much in my reasoning:
-I still recommend ignoring <code>nullptr</code> and using <code>NULL</code>,
-which is more portable and when <code>nullptr</code> comes around,
-compilers will define the latter as the former anyway. This is also
-what C++ committee should do instead of adding to the confusion by
-introducing <em>yet another</em> method of representing a null
-pointer.
+<p>UPDATE: It has been pointed out to me that <code>nullptr</code> in fact fixes
+a single problem: it prevents an incorrect function from being called.  This is
+true but it does not change much in my reasoning: I still recommend
+ignoring <code>nullptr</code> and using <code>NULL</code>, which is more
+portable and when <code>nullptr</code> comes around, compilers will define the
+latter as the former anyway.  This is also what C++ committee should do instead
+of adding to the confusion by introducing <em>yet another</em> method of
+representing a null pointer.
 
 <h2>Null pointer representation</h2>
 

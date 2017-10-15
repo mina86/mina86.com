@@ -3,12 +3,11 @@
 <!-- tags: unicode, utf-8, utf-16, cjk -->
 <!-- categories: Articles, English, Techblog -->
 
-<p>There is <em>a lot</em> of misconceptions about Unicode.  Most are
-  there because people assume what they know about ASCII or ISO-8859-*
-  is true about Unicode.  They are usually harmless but they tend to
-  creep into minds of people who work with text which leads to badly
-  designed software and technical decisions made based on false
-  information.
+<p>There are <em>a lot</em> of misconceptions about Unicode.  Most are there
+  because people assume what they know about ASCII or ISO-8859-* is true about
+  Unicode.  They are usually harmless but they tend to creep into minds of
+  people who work with text which leads to badly designed software and technical
+  decisions made based on false information.
 
 <p>Without further ado, here’s a few facts about Unicode that might
   surprise you.
@@ -195,11 +194,10 @@ span.udesc { font-variant: all-small-caps }
   from the text after any kind of normalisation.  There’s a bunch of
   those.
 
-<p>‘Converting to NFC’, a hopeful programmer will say, ‘guarantees
-  that a single letter maps to no more than one code point!’ Alas, no…
-  For example, there is no Unicode character for ‘ḍ̇’ (i.e. letter
-  d with dot above and below).  No matter what form is used, the
-  character must take more than one code point.
+<p>‘Converting to NFC’, a hopeful programmer will say, ‘guarantees that a single
+  letter maps to no more than one code point!’ Alas, no… For example, no Unicode
+  character for ‘ḍ̇’ (i.e. letter d with dot above and below) exists.  No matter
+  what form is used, the character must take more than one code point.
 
 <p>NFC is not even guaranteed to be the shortest representation of a given string.  We’ve already seen that
   ‘<span dir=ltr>שׂ</span>’ is canonically equivalent to
@@ -327,10 +325,9 @@ span.udesc { font-variant: all-small-caps }
 <p>In other words, just don’t use U+F8FF.
 
 <p>Fruit fans should not despair though but rather find consolation in
-the fact that there is a <span class=udesc>red apple</span> (🍎,
-U+1F34E), a <span class=udesc>green apple</span> (🍏, U+1F34F) and
-even a <span class=udesc>pineapple</span> (🍍, U+1F34D which isn’t
-even an apple nor grows on pine trees).
+a <span class=udesc>red apple</span> (🍎, U+1F34E), a <span class=udesc>green
+apple</span> (🍏, U+1F34F) and even a <span class=udesc>pineapple</span> (🍍,
+U+1F34D which isn’t even an apple nor grows on pine trees).
 
 
 <h2>Shortening text isn’t quite as easy as you might think</h2>

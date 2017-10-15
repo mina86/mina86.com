@@ -14,11 +14,10 @@ than a hundred each on separate line.</p>
 may choose to think about it while <a
 href="http://xkcd.com/303/">their code’s compiling</a>.</p>
 
-<p>Of course, a “C program” needs not to be taken too
-seriously — depending on not too far fetched undefined
-behaviours of given implementation is all right (but please
-do not use <code>system()</code> or <code>exec()</code> family of calls ;)
-).</p>
+<p>Of course, a “C program” needs not to be taken too seriously —
+depending on not too far fetched undefined behaviours of given
+implementation is all right (but please do not use <code>system</code>
+or <code>exec</code> family of calls ;) ).</p>
 
 <!-- EXCERPT -->
 
@@ -48,16 +47,16 @@ a C programmer curious about ins and outs of the
 language.</p>
 
 <p><b>Implicit return type</b>.  Starting from the very beginning, the
-<code>main()</code> function has no return type specified.  That is
+<code>main</code> function has no return type specified.  That is
 actually quite all right since C89 defaults function’s return type to
 <code>int</code>.</p>
 
 <p><b>Old function prototype</b>.  This is not the only “problem” with
-the function though.  <code>main()</code>’s prototype lacks also argument
-types.  This is also a perfectly valid C syntax.  In
-original design types were not part of function declaration and, not
-to break old code, this (otherwise deprecated syntax) remained in C89.
-The old function definition looks as follows:</p>
+the function though.  <code>main</code>’s prototype lacks also argument
+types.  This is also a perfectly valid C syntax.  In original design
+types were not part of function declaration and, not to break old code,
+this (otherwise deprecated syntax) remained in C89.  The old function
+definition looks as follows:</p>
 
 <pre>
 <i>rettype</i> foo(<i>arg1</i>, <i>arg2</i>)
@@ -95,14 +94,14 @@ number of arguments.  To declare function with no arguments one needs
 to use <code>void</code> keyword, ie.: <code>int foo(void)</code>.</p>
 
 <p><b>Implicit type</b>.  So, what <em>is</em> the type of
-<code>main()</code> arguments?  There was none specified anywhere.  This
+<code>main</code> arguments?  There was none specified anywhere.  This
 is, yet again, quite all right since C89 defaults to <code>int</code>.
-Generally, anything that has been declared but has no type specified
-is of type <code>int</code>.  For example <code>static i;</code> is the same
-thing as <code>static int i;</code>.</p>
+Generally, anything that has been declared but has no type specified is
+of type <code>int</code>.  For example <code>static i;</code> is the
+same thing as <code>static int i;</code>.</p>
 
 <p><b>Incorrect argument type</b>.  This brings us to the next issue.
-The two <code>main()</code> function prototypes defined by the standard
+The two <code>main</code> function prototypes defined by the standard
 are:</p>
 
 <pre>
@@ -118,31 +117,30 @@ because in most (for some definitions of “most”) implementations
 passing convention for the two type is compatible and <code>int</code> has
 no trap representations, we are in the clear.</p>
 
-<p><b><code>i</code>’s initialisation</b>.  Looking carefully at the code
-one notices that <code>i</code> is never initialised and instead it uses
-the value passed as first argument to <code>main()</code> as its initial
-value.  This reveals a quite interesting bug: if one calls the
+<p><b><code>i</code>’s initialisation</b>.  Looking carefully at the
+code one notices that <code>i</code> is never initialised and instead it
+uses the value passed as first argument to <code>main</code> as its
+initial value.  This reveals a quite interesting bug: if one calls the
 program with some arguments, it will skip initial prime numbers.</p>
 
 <p>What I find more fascinating though is situation where
-<code>main()</code>’s first argument is zero (which standard
-permits).  In this situation <code>j</code> will overflow (which is
-undefined behaviour for signed integers) and the second loop will
-finish when <code>j</code> reaches <code>-1</code>.  This is also
-a situation where <code>b/a</code> will yield undesired true value
-hence it is better to use <code>j&lt;i</code> comparison.</p>
+<code>main</code>’s first argument is zero (which standard permits).  In
+this situation <code>j</code> will overflow (which is undefined
+behaviour for signed integers) and the second loop will finish
+when <code>j</code> reaches <code>-1</code>.  This is also a situation
+where <code>b/a</code> will yield undesired true value hence it is
+better to use <code>j&lt;i</code> comparison.</p>
 
-<p><b>Implicit declaration</b>.  Obviously, to print the prime number
-we have used the <code>printf()</code>.  This is a straight forward
-approach, but what is interesting is that there is no
-<code>printf()</code> declaration.  And yet another time, this is quite
-all right from C89’s point of view.  If function declaration is
-missing an implicit declaration based on types of passed arguments
-with <code>int</code> as a return type is assumed.</p>
+<p><b>Implicit declaration</b>.  Obviously, to output the number we’ve
+used <code>printf</code> function.  This is a straight-forward approach,
+yet we seem to be missing said function’s declaration.  And yet another
+time, this is quite all right from C89’s point of view.  If function
+declaration is missing an implicit declaration based on types of passed
+arguments with <code>int</code> as a return type is assumed.</p>
 
 <p>Let’s stay here for a second because this is a good
 opportunity to yet again remind everybody not to cast result of
-<code>malloc()</code> function.  Consider the following code:</p>
+<code>malloc</code> function.  Consider the following code:</p>
 
 <pre>
 int main(void) {
@@ -167,7 +165,7 @@ int main(void) {
 
 <p><b>Lack of return</b>.  The last issue with the prime number
 printing code is the lack of return statement.  C99 specifies that
-“reaching the <code>}</code> that terminates the <code>main()</code> function
+“reaching the <code>}</code> that terminates the <code>main</code> function
 returns a value of zero.”  One cannot hide behind C99 though since the
 code uses various C89 only “features” (implicit type, implicit
 function declaration, etc).  Yes, this is another undefined behaviour
