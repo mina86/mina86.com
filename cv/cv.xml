@@ -19,9 +19,10 @@
 
     <entry>
       <head>Programming languages</head>
-      <p>Good knowledge of C, C++, Python, JavaScript and shell
-      scripting.  Some Rust, Go, Perl, Lisp, Java, PHP and Pascal.
-      Basics of Assembly (x86, MIPS, ARM), Prolog and Haskell.</p>
+      <p>Good knowledge of C, C++, Python, JavaScript, TypeScript and
+      shell scripting.  Some Rust, Go, Perl, Lisp, Java, PHP and
+      Pascal.  Basics of Assembly (x86, MIPS, ARM), Prolog and
+      Haskell.</p>
     </entry>
 
     <entry>
