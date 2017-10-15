@@ -146,15 +146,15 @@ using ntpdate to query for the time every hour.  This can be set up by
 invoking:
 
 <pre>
-cat &gt;/etc/crontab.hourly/ntpsync &lt;&lt;EOF
+cat &gt;/etc/cron.hourly/ntpsync &lt;&lt;EOF
 #!/bin/sh
 # Change to two-letter code of the country the machine is in.
 country=<var>us</var>
 exec /usr/sbin/ntpdate -u -s 0.$$country.pool.ntp.org \
 	1.$$country.pool.ntp.org 2.$$country.pool.ntp.org
 EOF
-chmod 755 /etc/crontab.hourly/ntpsync
-/etc/crontab.hourly/ntpsync</pre>
+chmod 755 /etc/cron.hourly/ntpsync
+/etc/cron.hourly/ntpsync</pre>
 
 
 <h2>Logging</h2>
@@ -243,7 +243,8 @@ echo 'ALL: ALL' &gt;&gt;/etc/hosts.deny</pre>
 
 <h2>Other miscellaneous security</h2>
 
-<p>There is a bunch of files normal users do not need access to:
+<p>Regular user need no access to many of the system-wide configuration files.
+  That access can be revoked with a few simple commands:
 
 <pre>
 chmod -R go-rwx /etc/cron.*
@@ -350,7 +351,7 @@ MOTD_FILE       /etc/motd</pre>
 
 <p>and then execute as root:
 
-<pre>
+<pre style="font-family: monospace"">
 &gt;/etc/issue printf '
  _____ _____ _____                              _____ _____ _____ _____
 |   | |   __|  _  | ... %shemtrails %sontrol ... |   __|     |  |  |     |
@@ -358,7 +359,7 @@ MOTD_FILE       /etc/motd</pre>
 |_|___|_____|__|__| ....... Node %s/%02d ....... |_____|_____|__|__|__  _|
                                                        Scarborough  |__|
 
-' C C M S "$(tr -dc a-z </dev/urandom |head -c2)" "$((RANDOM % 100))"
+' C C M S "$(tr -dc a-z &lt;/dev/urandom |head -c2)" "$((RANDOM % 100))"
 </pre>
 
 <p>Any other <abbr title="American Standard Code for Information
