@@ -247,6 +247,16 @@
 	overflow: hidden;
 }
 
+.grayscale-on() {
+	filter: grayscale(1);
+	-webkit-filter: grayscale(1);
+}
+
+.grayscale-off() {
+	filter: none;
+	-webkit-filter: none;
+}
+
 
 * {
 	box-sizing: border-box;
@@ -348,6 +358,17 @@ html, body {
 		/* Sticking those here helps with minification: */
 		@{contact-id} li:first-child span { display: block; }
 		@{head-id} li@{hidden-links-cls} { display: none; }
+	}
+}
+
+@{side-id} {
+	a img {
+		.grayscale-on();
+	}
+	a:hover, a:focus, a:active {
+		img {
+			.grayscale-off();
+		}
 	}
 }
 
@@ -651,8 +672,8 @@ code, var {
 
 /* Misc */
 blockquote {
-	background: url(/d/t.png) no-repeat;
-	background-position: -125px 0;
+	background: url(/d/sprites.png) no-repeat;
+	background-position: -75px 0;
 	min-height: 20px;
 	padding: 0 30px;
 	margin: 1em;
@@ -665,15 +686,15 @@ blockquote {
 }
 
 .plFlag, .enFlag {
-	background: url(/d/t.png) no-repeat;
+	background: url(/d/sprites.png) no-repeat;
 	/* That’s for .enFlag, .plFlag will override it below.  Sticking it here helps
 	   with minification. */
-	background-position: -100px -25px;
+	background-position: -50px -25px;
 	text-indent: 22px;
 }
 
 .plFlag {
-	background-position: -75px -50px;
+	background-position: -25px -50px;
 }
 
 /* Meta information, social etc. */
@@ -822,14 +843,18 @@ blockquote {
 }
 @{feed-icon-cls} {
 	width: 16px;
-}
-@{feed-icon-cls} span {
-	background: url(/d/t.png) no-repeat;
-	display: block;
-	background-position: -25px -50px;
-	width: 16px;
-	height: 16px;
-	.text-off-screen();
+	span {
+		background: url(/d/sprites.png) no-repeat;
+		display: block;
+		background-position: 0px -25px;
+		width: 16px;
+		height: 16px;
+		.grayscale-on();
+		.text-off-screen();
+	}
+	&:hover span, &:focus span, &:active span {
+		.grayscale-off();
+	}
 }
 
 /* Icons */
@@ -848,28 +873,24 @@ blockquote {
 		display: inline-block;
 		width: 24px;
 		height: 24px;
-	}
-
-	a {
-		background: url(/d/t.png) no-repeat;
+		background: url(/d/sprites.png) no-repeat;
+		.grayscale-on();
 		.text-off-screen();
+		&:hover, &:focus, &:active {
+			.grayscale-off();
+		}
 	}
 
 	/* FSF */
-	li:nth-child(1) a       { background-position: -100px  0px; }
-	li:nth-child(1) a:hover { background-position: -50px -50px; }
+	li:nth-child(1) a { background-position:   0px -45px; }
 	/* FSFE */
-	li:nth-child(2) a       { background-position: -50px   0px; }
-	li:nth-child(2) a:hover { background-position: -50px -25px; }
-	/* FSFE Fellowship */
-	li:nth-child(3) a       { background-position: -25px   0px; }
-	li:nth-child(3) a:hover { background-position: -25px -25px; }
+	li:nth-child(2) a { background-position: -50px   0px; }
+	/* FSFE Fellowship
+	li:nth-child(3) a { background-position:   0px   0px; } */
 	/* Conservancy */
-	li:nth-child(4) a       { background-position:   0px   0px; }
-	li:nth-child(4) a:hover { background-position:   0px -25px; }
+	li:nth-child(4) a { background-position: -25px   0px; }
 	/* Slackware */
-	li:nth-child(5) a       { background-position: -75px   0px; }
-	li:nth-child(5) a:hover { background-position: -75px -25px; }
+	li:nth-child(5) a { background-position: -25px  -25px; }
 
 	&:extend(.np);
 }
