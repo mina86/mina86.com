@@ -1,50 +1,51 @@
 RewriteEngine On
-RewriteBase "/"
+RewriteBase /
 
 # Old paths for post URLs and category indexes:
-RewriteCond "%{DOCUMENT_ROOT}/$1/$2" -d
-RewriteRule "^(20[01][0-9])/[0-1][0-9]/[0-3][0-9]/([^/]+)/?$" \
-            "$1/$2/"          [END,R=permanent]
-RewriteCond "%{DOCUMENT_ROOT}/c/$1" -d
-RewriteRule "^kategoria/([a-z-]*)(?:/\d*)?$" \
-            "c/$1/"          [END,R=permanent]
+RewriteCond %{DOCUMENT_ROOT}/$1/$2 -d
+RewriteRule ^(20[01][0-9])/[0-1][0-9]/[0-3][0-9]/([^/]+)/?$ \
+            https://mina86.com/$1/$2/             [END,R=permanent]
+RewriteCond %{DOCUMENT_ROOT}/c/$1 -d
+RewriteRule ^kategoria/([a-z-]*)(?:/\d*)?$ \
+            https://mina86.com/c/$1/              [END,R=permanent]
 
-RewriteRule "^2010/12/12/prime-numbers-less-than-a-hundread(?:/)?$" \
-            "2010/prime-numbers-less-than-a-hundred/" [END,R=permanent]
+RewriteRule ^2010/12/12/(prime-numbers-less-than-a-hundread)/?$ \
+            https://mina86.com/2010/$1/           [END,R=permanent]
 
 # Atom and RSS feeds.  Current code doesn’t have as much configuration as the
 # old site so this flattens all of the feeds to a single format.  This very long
 # prefix is because mod_negotiate comes before mod_rewrite so any requests to
 # /atom/whatever end up being translated to /atom.xml/whatever or
 # /atom.xml.gz/whatever.
-RewriteCond "%{DOCUMENT_ROOT}/c/$1" -d
-RewriteRule "^(?:atom(?:\.xml(?:\.gz)?)?|rss)/cat/([a-z-]*)/.*" \
-            "c/$1/atom"      [END,R=permanent]
-RewriteRule "^(?:atom(?:\.xml(?:\.gz)?)?|rss)/(?:(?:content|short)/(?:html/)?(?:\d*/)?)?" \
-            "atom"           [END,R=permanent]
+RewriteCond %{DOCUMENT_ROOT}/c/$1 -d
+RewriteRule ^(?:atom(?:\.xml(?:\.gz)?)?|rss)/cat/([a-z-]*)/.* \
+            https://mina86.com/c/$1/atom          [END,R=permanent]
+RewriteRule ^(?:atom(?:\.xml(?:\.gz)?)?|rss)/(?:(?:content|short)/(?:html/)?(?:\d*/)?)? \
+            https://mina86.com/atom               [END,R=permanent]
 
 # In retrospect, I’m not sure if it was worth renaming from ‘files’ to ‘d’.
-RewriteRule "^files/(.*)" \
-            "d/$1"           [END,R=permanent]
+RewriteRule ^files/(.*)  https://mina86.com/d/$1  [END,R=permanent]
 
 # /sid/<code>/… is the way Jogger used to handle logged in users.  I’m
 # still getting requests like that so for the transition period,
 # redirect them to proper URLs.
-RewriteRule "^sid/[a-z0-9A-Z]*/(.*)$" \
-            "$1"             [END,R=permanent]
+RewriteRule ^sid/[a-z0-9A-Z]*/(.*)$ \
+            https://mina86.com/$1                 [END,R=permanent]
 
 # Icons
-RewriteCond "%{DOCUMENT_ROOT}/d/$1" -f
-RewriteRule "^(?:apple-)?touch-icon-[0-9]+x([0-9]+\.png)$" \
-            "d/$1"           [END,R=permanent]
-RewriteRule "^(?:apple-)?touch-icon.png$"                  \
-            "d/192.png"      [END,R=temp]
+RewriteCond %{DOCUMENT_ROOT}/d/$1 -f
+RewriteRule ^(?:apple-)?touch-icon-[0-9]+x([0-9]+\.png)$ \
+            https://mina86.com/d/$1               [END,R=permanent]
+RewriteRule ^(?:apple-)?touch-icon.png$                  \
+            https://mina86.com/d/192.png          [END,R=temp]
 
 # Some morons don’t know how to scrape Yahoo search.  Help them out so that logs
 # don’t get filled with 404s.
-RewriteRule "^(.*)/RK=0/" \
-            "/$1"            [END,R=permanent]
+RewriteRule ^(.*)/RK=0/ https://mina86.com/$1     [END,R=permanent]
 
+# Enforce HTTPS
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https     [NV]
+RewriteRule ^(.*)$  https://mina86.com/$1         [END,R=permanent]
 
 # If browser supports gzip and we have compressed file, send it.
 Options +MultiViews

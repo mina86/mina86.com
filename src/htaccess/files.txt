@@ -1,1 +1,7 @@
 Options +Indexes
+
+RewriteEngine On
+RewriteBase /
+
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https     [NV]
+RewriteRule ^(.*)$  https://mina86.com/$1         [END,R=permanent]
