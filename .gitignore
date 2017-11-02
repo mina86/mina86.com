@@ -1,6 +1,7 @@
 public
+!public/files.mina86.com
+public/files.mina86.com/.htaccess
 .tmp
-files/index.html
 */*.pyc
-static/cv.html
+static/cv/index.html
 static/mina86.pub

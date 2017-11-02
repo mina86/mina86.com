@@ -219,8 +219,8 @@ def main(argv):
 
     print_action('...', 'static files')
     build_static(writer)
-    writer.copy((SRC_SUBDIR, 'htaccess.txt'), '.htaccess')
-    writer.copy((SRC_SUBDIR, 'htaccess.D.txt'),
+    writer.copy((SRC_SUBDIR, 'htaccess', 'main.txt'), '.htaccess')
+    writer.copy((SRC_SUBDIR, 'htaccess', 'D.txt'),
                 os.path.join(NO_EXPIRY_DIR_NAME, '.htaccess'))
 
     print_action('...', 'compressed files')
