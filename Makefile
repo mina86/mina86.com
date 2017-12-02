@@ -57,7 +57,7 @@ static/mina86.pub:
 static/cv/index.html: cv/cv.xml cv/cv.xsl tools/embed-images.py \
                       $(glob cv/*.png) $(glob cv/*.jpg)
 	@echo " XSL  $@"
-	mkdir -p -- $($@D)
+	mkdir -p -- $(@D)
 	xsltproc $< | python ./tools/embed-images.py cv >$@
 
 %.gz: %
