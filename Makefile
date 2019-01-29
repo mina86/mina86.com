@@ -34,7 +34,7 @@ touch:
 	touch src/*.* src/data/*.*
 
 clean:
-	-rm -rf -- .tmp
+	-rm -rf -- .tmp static/cv/index.html
 
 distclean:
 	-rm -rf -- .tmp $(foreach d,$(DISTCLEAN_DOMAINS),public/$d)

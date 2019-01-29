@@ -19,10 +19,9 @@
 
     <entry>
       <head>Programming languages</head>
-      <p>Good knowledge of C, C++, Python, JavaScript, TypeScript and
-      shell scripting.  Some Rust, Go, Perl, Lisp, Java, PHP and
-      Pascal.  Basics of Assembly (x86, MIPS, ARM), Prolog and
-      Haskell.</p>
+      <p>Good knowledge of C, C++, Python, JavaScript, TypeScript,
+      shell scripting and Java.  Some Rust, Go, Perl, Lisp and Pascal.
+      Basics of Assembly (x86, MIPS, ARM), Prolog and Haskell.</p>
     </entry>
 
     <entry>
@@ -42,78 +41,92 @@
       <head>Natural languages</head>
       <p>Native Polish speaker, fluent in English.</p>
     </entry>
-
   </group>
 
 
   <group>
     <head>Work</head>
 
+    <entry logo="barclays.jpg">
+      <time>March 2018–January 2019</time>
+      <head>Quant Developer, VP (Barclays Capital)</head>
+
+      <p>I worked on models for algorithmic trading of futures and
+      currencies.  In particular, I developed a framework for
+      automated verification of implementation’s behaviour in
+      connection to bank’s regulatory and contractual obligations.</p>
+
+      <p>As a person fluent in Python and git, I also developed
+      several utilities integrating with source repository and our
+      development workflow.</p>
+
+      <tech>Java, Python</tech>
+    </entry>
+
     <entry logo="google.png">
-      <time>January 2011–<present/></time>
+      <time>January 2011–February 2018</time>
       <head>Site Reliability Engineer/Software Engineer (Google)</head>
 
-      <p>I have worked on numerous services ranging from large scale
-      <a href="https://payments.google.com">payments processing
-      infrastructure</a> through <a
+      <p>I worked on myriad services and projects including: ⅰ)
+      a large scale <a href="https://payments.google.com">payments
+      processing infrastructure</a> processing and recording all
+      payments made to or by Google, ⅱ) a <a
       href="https://support.google.com/">customer support centre</a>
-      and customer relationship management tools to small headcount
-      tracking software.</p>
+      serving customised help pages to users, ⅲ) a customer
+      relationship management system helping marketers provide best
+      support to customers, ⅳ) an HR systems tracking teams’
+      headcount, ⅴ) service managing the state of production systems
+      and making changes to it and ⅵ) several development and
+      productivity applications.</p>
 
-      <p>I have been responsible for stability and monitoring of those
-      services.  To that end I have configured and developed
-      monitoring tools as well as designed and implemented software to
-      be as resilient as possible.  This often required graceful
-      handling of one-site failures and developing systems with
-      redundancy in mind.</p>
-
-      <p>Since mid-2015, I have been a tech lead of a small team
-      writing a headcount tracking software responsible for dictating
-      the direction of the tool and interactions with internal
-      customers.</p>
+      <p>My roles varied from Site Reliability Engineer (where I was
+      responsible for stability and monitoring of services I was
+      responsible for), Software Engineer (where I was developing new
+      features) and Tech Lead (where I managed a team and directed
+      development of a system), usually involving a mixture of the
+      three.</p>
 
       <tech>Python, shell scripts, C++, MySQL, App Engine and plethora
         of internal Google technologies</tech>
-
     </entry>
 
     <entry logo="samsung.png">
       <time>May 2008–December 2010</time>
       <head>Linux kernel hacker (Samsung Electronics)</head>
 
-      <p>I have been working on the Linux kernel and have since <a
+      <p>I worked on the Linux kernel and have <a
       href="https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/log/?qt=author&amp;q=nazarewicz">written
-      over 180 accepted patches</a>.  I have been involved with the <a
+      over 180 accepted patches</a>.  I was involved with the <a
       href="https://lwn.net/Articles/395712/">USB composite
-      framework</a> and memory management and authored multiple
-      drivers and frameworks including <a
+      framework</a> and memory management authoring multiple drivers
+      and frameworks including <a
       href="https://mina86.com/cma/">Contiguous Memory Allocator</a>,
       Mass Storage USB function and FunctionFS framework.</p>
 
-      <p>Prior to working on the Linux kernel I have been working with
-      a mobile web browser based on Mozilla suite.  I have been
-      developing extensions as well as investigating Flash plugin
-      support on ARM systems.</p>
+      <p>Prior to working on the Linux kernel I worked on a mobile web
+      browser based on Mozilla suite including extensions development
+      as well as investigation of Flash plugin support on ARM
+      systems.</p>
 
       <tech>C, shell scripts, C++</tech>
     </entry>
 
-    <entry logo="rootnode.png">
+    <!--entry logo="rootnode.png">
       <time>September 2006–March 2007</time>
       <head>Linux administrator (Rootnode Association)</head>
 
-      <p>I have been developing software for and administrating
-      a Rootnode service offering shell accounts, web hosting etc. on
-      a set of shared servers.</p>
+      <p>I developed software for and administrated a Rootnode service
+      offering shell accounts, web hosting etc. on a set of shared
+      servers.</p>
 
       <tech>Perl, shell scripts</tech>
-    </entry>
+    </entry-->
 
     <!-- <entry> -->
     <!--   <time>2004–2007</time> -->
     <!--   <head>Webdeveloper</head> -->
 
-    <!--   <p>I have developed various webpages in the past.  Most notable -->
+    <!--   <p>I’ve developed various webpages in the past.  Most notable -->
     <!--   are now defunct ekipa.tlen.pl, <a -->
     <!--   href="http://maxior.pl/">maxior.pl</a> and <a -->
     <!--   href="http://bajer.pl/">bajer.pl</a>.</p> -->
@@ -140,7 +153,7 @@
       and <a
       href="https://github.com/mina86/auto-dim-other-buffers.el">auto-dim-other-buffers</a>.</p>
 
-      <p>Lastly, I have contributed to existing open source software
+      <p>Lastly, I’ve contributed to existing open source software
       such as <a
       href="https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/log/?qt=author&amp;q=nazarewicz">Linux</a>,
       <a
