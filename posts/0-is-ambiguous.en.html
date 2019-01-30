@@ -3,12 +3,9 @@
 <!-- tags: c, c++, null, nullptr, null pointer -->
 <!-- categories: Articles, English, Techblog -->
 
-<p>It has been a long time since my last entry.  In fact, it was so
-long, that this condition has already been <a
-href="http://zboczuch.jogger.pl/2010/10/20/moje-wpisy-sa-wieksze-od-twoich/">pointed
-out</a> pushing me into finally writing something.  Inspired by <a
-href=https://blogs.fsfe.org/adridg/?p=1014>Adriaan de
-Groot’s entry</a>, I decided to write something about <code>0</code>,
+<p>It has been a long time since my last entry, so inspired by
+<a href=https://blogs.fsfe.org/adridg/?p=1014>Adriaan de Groot’s entry</a>,
+I decided to write something about <code>0</code>,
 <code>NULL</code> and upcoming <code>nullptr</code>.
 
 <p>I will try to be informative and explain what the whole buzz is about and
@@ -20,22 +17,20 @@ pointer</a> can be donated in C and C++.
 
 <h2>The confusing <code>0</code></h2>
 
-<p>In C and C++, the literal <code>0</code> has two meanings: it’s either
-an octal (yes, octal) literal representing number zero or a null
-pointer.  Which meaning is used depends on context, which compiler can
-usually figure out.  For instance:
+<p>In C and C++, the literal <code>0</code> has two meanings: it’s either an
+octal (yes, octal, here’s a fun fact of the day for you ;) ) literal
+representing number zero or a null pointer.  Which meaning is used depends on
+context, which compiler can usually figure out.  For instance:
 
 <pre>
-<b>void</b> number(<b>int</b>);
-<b>void</b> pointer(<b>char</b> *);
+<b>void</b> takes_number(<b>int</b>);
+<b>void</b> takes_pointer(<b>long</b> *);
 
 <b>int</b> main(<b>void</b>) {
-	<b>char</b> ch, *ptr;
-	ch = 0;		/* number zero (ch is of type char) */
-	ptr = 0;	/* null pointer (ptr is of type pointer to char)*/
-	number(0);	/* number zero (number accepts int as argument) */
-	pointer(0);	/* null pointer (pointer accepts pointer to
-			 * char as argument) */
+	<b>char</b> ch = 0;	/* number zero */
+	<b>char</b> *ptr = 0;	/* null pointer */
+	takes_number(0);	/* number zero (argument is an int) */
+	takes_pointer(0);	/* null pointer (argument is a pointer) */
 	<b>return</b> 0;	/* number zero (main returns int) */
 }</pre>
 
@@ -47,31 +42,28 @@ A good example is <code>printf</code> function from standard library:
 #include &lt;stdio.h&gt;
 
 <b>int</b> main(<b>void</b>) {
-	printf("%p\n", 0);	/* ??? */
+	printf("%p\n", 0);
 	<b>return</b> 0;
 }</pre>
 
-<p>In those situations, the first meaning is assumed but since it is
-not so common nowadays it is not such a big issue.  Still there are
-two things to keep in mind: (i) <em>always</em> provide function
-prototypes and (ii) when using functions with variable arguments use
-<code>(<var>foo</var> *)0</code> to mean a null pointer.
+<p>In such situations, the first meaning prevails (i.e. a number), which in turn
+makes the above into an undefined behaviour (an <code>int</code> is passed where
+a pointer is expected).
 
+<p>Based on that, two things to keep in mind are to <em>always</em> provide
+function prototypes and prefer explicit <code>(void *)0</code> to mean a null
+pointer when calling variadic functions.
 
 <h2>The confusing <code>NULL</code></h2>
 
-<p>Since context is not always obvious some programmers prefer to
-explicitly indicate the intended meaning by using different notations
-for numbers and pointers.  For those purposes, <code>NULL</code> macro has
-been introduced.  Standard requires that it is defined in such a way,
-that it can be used in pointer context to mean a null pointer.  In C,
-the macro is often defined as:
+<p>To disambiguate <em>intended</em> context, <code>NULL</code> macro can be
+used.  Standard requires that it is defined such that it can be used in pointer
+context to mean a null pointer.  In C the macro is often defined as:
 
 <pre>#define NULL ((void *)0)</pre>
 
-<p>This guarantees not only that <code>NULL</code> means a null pointer in
-pointer context but also that a diagnostic message must be issued when
-one tries to use <code>NULL</code> as a number, ie.:
+<p>This fulfils the aforementioned requirement and in addition guarantees
+a warning when it is used as a number, i.e.:
 
 <pre>
 $ <i>cat test.c</i>
@@ -85,20 +77,22 @@ test.c: In function ‘main’:
 test.c:4: warning: return makes integer from pointer without a cast
 $</pre>
 
-<p>But then comes C++ with stricter typing and says implicit
-conversions from pointer to void to any other pointer type are
-invalid, which renders the following an invalid C++ code:
+<p>And all was good until C++ came along with its stricter typing rules.  Since
+in C++ implicit conversions from <code>void*</code> to other pointer type is
+illegal making aforementioned definition invalid:
 
 <pre>
+#define OLD_NULL ((<b>void</b> *)0)
+
 <b>int</b> main(<b>void</b>) {
-	<b>char</b> *ptr = (<b>void</b> *)0;
+	<b>char</b> *ptr = OLD_NULL;  /* compile time error */
 	<b>return</b> 0;
 }</pre>
 
-<p>The easiest way around is to define <code>NULL</code> as plain
-<code>0</code> or <code>0L</code>.  This is in fact what often happens.  GCC
-uses <code>__null</code> extension but it seems <code>__null</code> is treated
-like <code>0L</code> in some contexts:
+<p>The easiest solution is to define <code>NULL</code> as a plain <code>0</code>
+(or <code>0L</code>).  GCC is a bit smarter and uses <code>__null</code>
+extension but confusingly even that is treated like <code>0</code> in some
+contexts:
 
 <pre>
 $ <i>cat test.c</i>
@@ -116,9 +110,9 @@ test.c:5: warning: NULL used in arithmetic
 test.c:6: warning: NULL used in arithmetic
 $</pre>
 
-<p>Whenever you use <code>NULL</code>, you have to keep in mind that you
-never know what it really is.  This in particular means, that the
-following code, after pre-processing, may or may not be valid:
+<p>Whenever you use <code>NULL</code>, you have to keep in mind that you never
+know what it really is.  This in particular means, that the following code may
+or may not be valid:
 
 <pre>
 #include &lt;stdio.h&gt;
@@ -131,100 +125,78 @@ following code, after pre-processing, may or may not be valid:
 
 <h2>Function overloading</h2>
 
-<p>And since we are in the realm of C++ we can now deal with the
-biggest issue.  As you may already know, C++ allows function
-overloading, so that several functions with the same name can exist so
-long as they have different arguments.  As a consequence, function
-name is not enough to figure out function’s prototype.  Let us
-consider the following simple code:
+<p>Fortunately (at least in the context of null pointers), variadic functions
+aren’t that common.  Function overloading is what poses more problem since even
+with full prototypes, it’s not always possible to determine arguments types just
+by function name and its arity alone.  For example:
 
 <pre>
 <b>void</b> print(<b>int</b> num);
-<b>void</b> print(<b>void</b> *ptr);
+<b>void</b> print(<b>long</b> *ptr);
 
 <b>int</b> main(<b>void</b>) {
-	print(0);
+	print(0);		/* first function */
+	print((long *)0);	/* second function */
+	print(NULL);		/* ??? */
 	<b>return</b> 0;
 }</pre>
 
-<p>The above will invoke the first function.  To call the second one,
-we should use a cast, since we know that using <code>NULL</code> is not
-reliable:
-
-<pre>
-<b>int</b> main(<b>void</b>) {
-	print((<b>void</b> *)0);
-	<b>return</b> 0;
-}</pre>
-
-<p>The lesson here is that in C++ you must always use
-<code>(<var>foo</var> *)0</code> when you want to pass a null pointer to
-a function.  Even if the call is not ambiguous at this time, someone
-may add an overloaded version of the function which will break the
-code if cast is not used in the first case.
+<p>The lesson here is that (especially in C++) <code>NULL</code> macro is
+ambiguous as well and when dealing with overloaded functions an explicit cast
+might be necessary.
 
 
-<h2>Useless <code>nullptr</code></h2>
+<h2>So what about <code>nullptr</code>?</h2>
 
-<p>Addressing those issues, the C++ working group defined a new
-<code>nullptr</code> keyword which evaluates to a null pointer of type
-<code>std::nullptr_t</code> which can be implicitly converted to any other
-pointer while, at the same time, cannot be converted to a number.
+<p>To help address those issues, C++11 introduced <code>nullptr</code> keyword.
+It evaluates to a <code>std::nullptr_t</code> object which can be implicitly
+converted to any null pointer (but not to a number).
 
-<p>This seems like a good thing, right? Unfortunately, there are two issues with
-this approach.  First one is that it does not fix the problem completely.  For
-instance, the following is still ambiguous:
+<p>Unfortunately, one problem remains.  If multiple pointer types are acceptable
+in given context, the compiler cannot determine which one to use.  This is most
+easy to see with an overloaded function taking different types of pointers as in
+the following example:
 
 <pre>
 <b>void</b> print(<b>char</b> *);
-<b>void</b> foo(wchar_t *);
+<b>void</b> print(wchar_t *);
 
 <b>int</b> main(<b>void</b>) {
 	print(<b>nullptr</b>);
 }</pre>
 
-<p>At the same time, yet another keyword has been introduced which serves no
-purpose.  <code>NULL</code> was a perfectly fine identifier which might have
-been used without polluting keyword name space or adding another identifier
-people need to understand..
+<p>But at least any ambiguity results in failure to build rather than the
+compiler silently choosing one of the options (which may or may not be what we
+want).
 
-<p>My recommendation is not to bother with it.  Just ignore this thing
-and stick to <code>NULL</code> where context is clear and
-<code>(<var>foo</var> *)0</code> when calling function with multiple versions.
+<p>My other criticism is that <code>NULL</code> was (and still is) a perfectly
+fine identifier which served us for years yet the committee decided to throw it
+away like yesterday’s jam and instead pollute keyword name-space and people’s
+minds with yet another name that means ‘a null pointer’.  The standard could
+define <code>_Null</code> keyword and mandate that <code>NULL</code> expands
+to <code>_Null</code> which would be much more straightforward.
 
-<p>UPDATE: It has been pointed out to me that <code>nullptr</code> in fact fixes
-a single problem: it prevents an incorrect function from being called.  This is
-true but it does not change much in my reasoning: I still recommend
-ignoring <code>nullptr</code> and using <code>NULL</code>, which is more
-portable and when <code>nullptr</code> comes around, compilers will define the
-latter as the former anyway.  This is also what C++ committee should do instead
-of adding to the confusion by introducing <em>yet another</em> method of
-representing a null pointer.
+<p>I used to be a wee bit critical of this new keyword.  I’m still not in love
+with it, but I also recognise I’m being in minority (perhaps even minority of
+one person).  As such, <code>nullptr</code> is the best we’re gonna get going
+forward, though spelling out the pointer type explicitly is also a perfectly
+valid solution and don’t let others tell you otherwise. ;)
 
 <h2>Null pointer representation</h2>
 
-<p>The last thing I want to talk about is a null pointer’s
-representation.  There are two misconceptions that came from the fact
-that <code>0</code> is used to mean a null pointer.  The first one is that
-a null pointer is in fact represented by a “zero value” (ie. all bits
-clear).  The second one is that when implementation uses a different
-representation assigning <code>0</code> to a pointer does not yield a null
-pointer.
+<p>The last thing I want to talk about is a null pointer’s representation.
+There are two misconceptions that came from the fact that <code>0</code> is used
+to mean a null pointer.  The first one is that a null pointer is in fact
+represented by a ‘zero value’ (i.e. all bits clear).  The second one is that
+when implementation uses a different representation assigning <code>0</code> to
+a pointer does not yield a null pointer.
 
-<p>Both of those are incorrect.  In some implementations
-(microcontrollers, x86 real mode, …) a “zero pointer” is perfectly
-fine and using (for instance) all bits set representation to mean
-a null pointer may make more sense.  At the same time, it’s compiler
-responsibility to use correct representation whenever <code>0</code> is
-used to mean a <code>null pointer</code>.
+<p>Both of those are incorrect.  In various implementations zero is a perfectly
+cromulent address and <a href="http://c-faq.com/null/machexamp.html">other
+representations for a null pointer</a> (e.g. all bits set) may make more sense.
+Regardless, <code>0</code> always means a null pointer in pointer context and
+it’s compiler’s responsibility to translate it into the correct representation.
 
-<p>UPDATE: Przemoc <a href=http://c-faq.com/null/machexamp.html>has
-pointed to one of <code>comp.lang.c</code> FAQs</a> which gives examples
-of machines where null pointers that are not represented by all bits
-clear as well as machines with different representation of pointers of
-different types (which I haven’t mentioned in this article). Also, the
-recurring issue of not being able to comment has been fixed (hopefully
-for good this time).
 
 <h2>Summary</h2>
 
@@ -232,44 +204,12 @@ for good this time).
 mind while programming in C or C++:
 
 <ol>
-  <li>Always define function prototypes.  Always.
-  <li>When function has variable number of arguments, use
-  <code>(<var>foo</var> *)0</code> to mean a null pointer.
-  <li>In C++, when specifying function arguments, use
-  <code>(<var>foo</var> *)0</code> to mean a null pointer.  This also
-  applies to a single argument constructors where no explicit
-  function call is made.
-  <li>When new C++ standard comes around, just ignore
-  <code>nullptr</code>, it solves no problems and only adds to the
-  confusion.
+  <li>Always define function prototypes.
+  <li>In C++ use <code>nullptr</code>¹ or <code>(<var>T</var>*)0</code> to mean
+  a null pointer.
+  <li>In C, if you’re using <code>NULL</code> beware of variadic functions and
+  false sense of security the macro might give you.
 </ol>
 
-<!-- COMMENT -->
-<!-- date: 2010-10-29 11:39:55 -->
-<!-- nick: mina86 -->
-<!-- nick_url: http://mina86.com -->
-
-<p>I usually do not compare against 0 or NULL.  I find it too verbouse, p and !p is just enqugh for me. :)</p>
-
-<!-- COMMENT -->
-<!-- date: 2010-10-31 10:36:42 -->
-<!-- nick: mina86 -->
-<!-- nick_url: http://mina86.com -->
-
-<p>I never really felt the need to invent such a class even though it most probably will work as expected.  Actually my attitude towards NULL has changed recently: In the past I considered NULL too confusing and never used it (in favour of plain 0 or (foo *)0).  This had an advantage that whenever I wrote foo(0) I was fully aware that this may be interpreted as a number one day when a new overloaded version of foo() will come around.  Linux kernel hacking messed with my brain thought and I started using NULL. :P</p>
-
-<p>In the end, however, anyone should use what works for them.  The above is a nice class indeed and if anyone feels like it, they should use it.</p>
-
-<p>This also shows that compilers and the committee do something wrong.  Why on Earth, compilers don’t define NULL in terms of such an object?  This is really beyond me.  It would partially solve the problem (at least the part that nullptr tries to solve) without the need for standard to be changed at all.</p>
-
-<!-- COMMENT -->
-<!-- date: 2013-03-03 15:14:40 -->
-<!-- nick: mina86.com -->
-<!-- nick_url: https://mina86.com/2011/null-the-never-ending-story/ -->
-
-<p>Null: The never-ending story<br /><br />I have already mentioned some problems with the null<br />
-pointer but my recent discovery knocked my socks off.<br />
-<br />
-By now, it should come with no surprise to anyone that 0<br />
-in pointer context acts as a null pointer (no matter of its<br />
-actual […]</p>
+<p>¹ I used to recommend ignoring <code>nullptr</code> keyword but nowadays
+  people will look at you funny if you try using <code>NULL</code>.
