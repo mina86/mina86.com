@@ -106,14 +106,14 @@ def format_byline(lang, author, date):
 
     if lang == 'pl':
         date = '%d %s %d' % (day, MONTHS_PL[month], year)
-        fmt = '<em>%s</em> | <em>%s</em>'
+        fmt = '%s | %s'
     else:
         th = 'th'
         if day < 10 or day > 20:
             th = {1: 'st', 2: 'nd', 3: 'rd'}.get(day % 10, 'th')
         month = date.strftime('%B')
-        date = '%d%s %s %d' % (day, th, month, year)
-        fmt = 'Posted by <em>%s</em> on <em>%s</em>'
+        date = '%d%s of %s %d' % (day, th, month, year)
+        fmt = 'Posted by %s on %s'
 
     return jinja2.utils.Markup(fmt % (author, date))
 

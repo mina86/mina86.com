@@ -89,159 +89,12 @@
 @text-color: #333333;  /* L* = 20 */
 @code-color: #004a17;  /* L* = 20 */
 
+@import url('https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700|Ubuntu+Mono:400,400i,700|Ubuntu:400,400i,700&subset=latin-ext');
 
-/* Regarding body-font:
-
-   Georgia vs Utopia:
-   - Utopia is a bit narrower.  This is good for headings but for body text
-     I think I prefer Georgia’s metrics especially since they end up matching
-     code font better.
-   - Both have two-storey ‘g’ except Georgia uses one-storey ‘g’ in italic
-     variant which I think is better.
-   - Both have two-storey ‘a’ in roman and one-storey ‘a’ in italic.
-   - Sadly, none extend ‘Q’ under following character.
-   - Otherwise very similar fonts.
-   - Utopia lacks old-style figures.
-
-   Georgia vs Charter:
-   - Charter extends ‘Q’ under following character in italic. It’s rather
-     subtle though and only in italic, so I’m not that impressed.
-   - It’s thinner and narrower which ends up being fine.
-   - Similarly to Utopia, Charter has two-storey ‘g’ even in italic and
-     two-storey ‘a’ in roman and one-story in italic.
-   - Charter lacks old-style figures.
-
-   So I’d say Charter > Utopia but because Charter doesn’t have old-style
-   figures, Georgia > Charter.  This should cover virtually all users.
-
-   Linux Libertine:
-   - Has old and lining numerals.  Lining are the default.
-   - Two-storey ‘a’ and ‘g’ in roman.  In italic only ‘a’ is one-storey but it
-     looks somewhat better than in other fonts IMO.
-   - Smallest than all other serif fonts which I think is disadvantage for web.
-   - ‘Q’ in ‘Qu’ extends under the ‘u’ but that happens only in that pair.
-   - ‘M’ with non-parallel legs and the middle almost touching the base line.
-     Neither I like.
-   - Has the typical f* ligatures.
-
-   Georgia vs Merriweather:
-   - Both have old-style figures.
-   - Both have two-storey ‘g’ and ‘a’ in roman and one-storey in italic.
-   - Regular Merriweather is bolder than Georgia and I think it’s better for
-     web.  Surprisingly, bold versions of both have the same width.
-   - Merriweather has M with non-parallel legs which I don’t like.  It looks
-     especially bad in acronyms.
-   - Merriweather being a bit bolder ends up matching code-font better.
-   - Requires web fonts.
-   - Merriweather’s ‘Q’ extends under following character.  Sadly only in roman.
-     Even worse, it happens even if the following character has a descendent so
-     ‘Qy’ looks bad.
-   - Merriweather doesn’t have ligatures.
-
-   I’d probably use Merriweather but its status is a bit weird.  Its site
-   advertises a pro version but it’s nowhere to be found.  Meanwhile, the free
-   version apparently doesn’t even have kerning.
-
-   Heuristica:
-   - Based on Utopia but with better kerning.
-   - Has old style numerals.
-   - Two-storey ‘g’ in roman and italic.
-   - Two-storey ‘a’ in roman, one-storey in italic.
-   - Has automatic ligatures (at least ‘fi’).
-
-   No other free(ish) font that I could find has old-style numerals.  There was
-   one (whose name I cannot recommend but started in C) which had old-style
-   numerals but only one of it’s styles was free.  I didn’t consider it so much
-   better over Georgia to be worth paying for.
-
-   Quickly about other serif fonts:
-   - Free Serif is small for some reason.  It has an alternative ‘Q’ in italic
-     though witch extends under following character which is actually pretty
-     gorgeous.  It doesn’t have old-style numerals.
-   - Noto Serif and DejaVu Serif are very similar.  Nothing really special about
-     them. */
-
-/* Sans serif fonts:
-
-   Fira Sans:
-   - ‘I’, ‘l’ and ‘1’ have different glyphs but ‘I’ and ‘l’ are somehow close in
-     appearance. ‘I’ doesn’t have serifs but ‘l’ has a small serif protruding to
-     the lift.
-   - Underscores are joined.
-   - Has slashed zero.  But it’s broken, see
-     https://github.com/mozilla/Fira/issues/187
-   - Has old style figures.
-   - Has ‘M’ with slanted legs.
-
-   Open Sans:
-   - ‘I’ and ‘l’ look the same.
-   - ‘1’ has no base.
-   - Two-storey ‘g’ and ‘a’.
-   - The middle ‘V’ in ‘M’ touches baseline creating a lot of needless empty
-     space above it.
-
-   Noto Sans:
-   - ‘I’, ‘l’ and ‘1’ are easy to distinguish. ‘I’ has serifs, ‘l’ has none; ‘1’
-     has base.
-   - One-storey ‘g’ and two-storey ‘a’.
-   - Kerning feels off. E.g. too much spacing on both sides of ‘M’ in ‘OMP’.
-   - Symbols (e.g. parens) are somewhat bigger than in other fonts which is
-     nice.
-   - The middle ‘V’ in ‘M’ touches baseline creating a lot of needless empty
-     space above it.
-
-   Verdana:
-   - ‘I’, ‘l’ and ‘1’ are easy to distinguish. ‘I’ has serifs, ‘l’ has none and
-     ‘1’ has no base.
-   - Wider spaces, underscores and general spacing between characters compared
-     to all other fonts except for Input Sans.
-   - It’s also marginally bolder, but that I would rather consider
-     a disadvantage.
-   - Underscores join.
-   - Almost universally present on systems.
-
-   Geneva:
-   - ‘I’ and ‘l’ without serifs; hard to distinguish. ‘1’ has no base.
-   - Underscores don’t join.
-
-   DejaVu Sans:
-   - ‘I’ and ‘l’ without serifs; hard to distinguish. ‘1’ has no base.
-   - Underscores join.
-   - Kerning feels off.  E.g. in ‘me’.
-
-   Liberation Sans:
-   - ‘I’ and ‘l’ are identical.
-   - Underscores are joined.
-   - Two-storey ‘g’ (with an open loop).
-   - ‘ti’ are too close to each other.
-
-   Lucida Sans, Lucida Grande and Lucida Sans Unicode:
-   - ‘I’ and ‘l’ look the same.
-   - Underscores aren’t connected but that’s hard to see at small sizes.
-   - LSU ‘1’ with a base and longer thingy at the top (whatever it is called)
-     compared to other Lucidas.
-   - Kerning in LS and LSU looks worse, than in LG, for ‘ci’ pair for example.
-   - LSU has some glyphs — like dash, pipe, solidus, etc — a tiny bit bolder
-     which I like more.
-   - Overall: LSU > LG > LS.
-   - The middle ‘V’ in ‘M’ touches baseline creating a lot of needless empty
-     space above it.
-
-   Input Sans:
-   - ‘I‘, ‘l’ and ‘1’ very easy to distinguish.  ‘I’ has serifs, ‘1’ has base.
-   - Hes stroked zero.
-   - Underscores don’t connect.
-   - Input is maybe even too wide.  Input Sans Narrow might be a better choice.
-     It is still wider than Verdana but not by a lot.
-   - Closing curly brace actually feels ‘too fancy’ for a sans-serif font.
-   - {Regular, Bold} {Roman, Italic} (total of four styles) ends up 10 USD per
-     year which is more than what I’m paying for hosting.  At this moment I’m
-     not convinced this is worth it. */
-
-@body-font: /* Merriweather, */ Georgia, Charter, Utopia, serif;
-@code-font: 'Input Sans Narrow', Verdana, sans-serif;
+@body-font: 'Libre Baskerville', Georgia, Charter, Utopia, serif;
+@mono-font: 'Ubuntu Mono', 'Liberation Mono', 'Courier New', monospace;  /* for <pre> */
+@code-font: 'Ubuntu', Verdana, sans-serif;  /* for <code> and <kbd> */
 @head-font: 'DejaVu Sans', Verdana, sans-serif;
-@headers-font: 'Linux Libertine', @body-font;
 @sidebar-width: 14em;
 @content-width: 50em;
 @octo-width: 4em;
@@ -278,8 +131,7 @@ html, body {
 		background: @body-bg;
 	}
 	font-family: @body-font;
-	font-feature-settings: 'onum', 'pnum';
-	font-variant-numeric: oldstyle-nums proportional-nums;
+	font-variant: common-ligatures oldstyle-nums proportional-nums;
 	text-rendering: optimizelegibility;
 	line-height: 1.5em;
 }
@@ -507,8 +359,6 @@ article {
 
 	p, dd, li {
 		text-align: justify;
-		text-justify: distribute;
-		text-justify: newspaper;
 		hanging-punctuation: first allow-end last;
 		hyphens: auto;
 	}
@@ -538,7 +388,6 @@ article {
 /* Headers */
 article {
 	h1, h2, h3 {
-		font-family: @headers-font;
 		margin: 1rem 0;
 		a, a:hover, a:focus, a:active {
 			border: none;
@@ -546,6 +395,7 @@ article {
 	}
 	h1 {
 		font-size: @huge;
+		font-style: italic;
 		margin-top: 0;
 	}
 	h2 {
@@ -564,10 +414,6 @@ p@{byline-cls} {
 	color: #666;
 	page-break-before: avoid;
 	page-break-after: avoid;
-
-	em {
-		font-weight: bold;
-	}
 }
 
 p.nt {
@@ -595,13 +441,13 @@ p.ig + p.ig {
 /* Code */
 pre, code, kbd {
 	font-family: @code-font;
-	font-feature-settings: 'lnum', 'zero';
-	font-variant-numeric: lining-nums slashed-zero;
+	font-variant: lining-nums slashed-zero;
 	color: @code-color;
 	text-shadow: none;
 	page-break-inside: avoid;
 }
 pre {
+	font-family: @mono-font;
 	@media screen, projection, tv, handheld {
 		background: @pre-bg;
 	}
@@ -611,16 +457,16 @@ pre {
 	border-bottom: 1px dotted #363;
 	overflow-x: auto;
 	font-size: @small;
+	i {
+		font-style: regular;
+		font-family: @body-font;
+	}
 }
 code, var {
 	hyphens: manual;
 }
 
 @media screen, projection, tv, handheld {
-	pre b, pre var {
-		text-shadow: 1px 1px 0 #cec;
-	}
-
 	@{qed-cls} @{article-text-cls} > p:last-child:after {
 		color: #999;
 		font-size: @tiny;
@@ -656,7 +502,7 @@ code, var {
    whose layout is based on tables.  *sighs* */
 @{article-text-cls} {
 	table, tr, th, td {
-		font-variant-numeric: lining-nums tabular-nums;
+		font-variant: lining-nums tabular-nums;
 		border-collapse: collapse;
 	}
 	th, td {
@@ -666,6 +512,7 @@ code, var {
 		padding: 0.2em 0.5em;
 	}
 	table {
+		font-variant-numeric: tabular-nums;
 		margin: 1em auto;
 	}
 	thead, .tb tbody, tfoot {
