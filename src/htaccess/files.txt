@@ -7,4 +7,4 @@ RewriteCond %{HTTP:X-Forwarded-Proto} !=https     [NV]
 RewriteRule ^(.*)$  https://mina86.com/$1         [END,R=permanent]
 
 # Just a day for now, see <https://faq.nearlyfreespeech.net/full/enforcessl>.
-Header set Strict-Transport-Security "max-age=31556925; includeSubDomains" "expr=%{req_novary:X-Forwarded-Proto}=='https'"
+Header set Strict-Transport-Security "max-age=31556925" "expr=%{req_novary:X-Forwarded-Proto}=='https'"
