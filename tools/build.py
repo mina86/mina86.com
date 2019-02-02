@@ -42,7 +42,7 @@ REPO_URL = paths.REPO_URL
 
 
 def print_action(action, *target):
-    print ' %-4s %s' % (action, ' '.join(target))
+    print(' %-4s %s' % (action, ' '.join(target)))
 
 
 def make(targets):
@@ -92,14 +92,15 @@ class Writer(object):
     def write_file(self, filename, content, action='GEN'):
         filename = os.path.join(self._out_dir, filename)
         self._files.append(filename)
-        if isinstance(content, unicode):
+        if isinstance(content, str):
             content = content.encode('utf-8')
 
         # If file already exists and has the same content, do not overwrite it
         # so that modification date is not affected.
         if os.path.isfile(filename):
-            with open(filename) as fd:
-                if content == fd.read():
+            with open(filename, 'rb') as fd:
+                got = fd.read()
+                if content == got:
                     return
         else:
             dirname = os.path.dirname(filename)
@@ -107,7 +108,7 @@ class Writer(object):
                 os.makedirs(dirname)
 
         print_action(action, filename)
-        with open(filename, 'w') as fd:
+        with open(filename, 'wb') as fd:
             fd.write(content)
 
 
@@ -125,13 +126,13 @@ def build_no_expiry(writer):
     mappings = {}
 
     def copy(src, content_filter=None):
-        content = open(src).read()
+        content = open(src, 'rb').read()
         if content_filter:
             content = content_filter(content)
 
         name = hashlib.md5()
         name.update(content)
-        name = base64.urlsafe_b64encode(name.digest())[:8]
+        name = base64.urlsafe_b64encode(name.digest())[:8].decode('ascii')
 
         basename = os.path.basename(src)
         basename, ext = os.path.splitext(basename)
@@ -164,8 +165,8 @@ def build_no_expiry(writer):
     # Copy files from .tmp to static/D with their new names.
     handlers = {
         '.css': lambda data: compilers.process_css(
-            data, SRC_DATA_SUBDIR, mappings).replace('/*!', '/*'),
-        '.js': lambda data: '//%s\n%s' % (REPO_URL, data)
+            data, SRC_DATA_SUBDIR, mappings).replace(b'/*!', b'/*'),
+        '.js': lambda data: b'//%s\n%s' % (REPO_URL.encode('ascii'), data)
     }
 
     for path in paths:
@@ -229,7 +230,7 @@ def main(argv):
     print_action('...', 'cleanup')
     cleanup(out_dir, writer.files)
 
-    print ' DONE'
+    print(' DONE')
 
 
 if __name__ == '__main__':

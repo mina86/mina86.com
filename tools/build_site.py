@@ -22,7 +22,7 @@
 
 import codecs
 import collections
-import cStringIO
+import io
 import datetime
 import gzip
 import itertools
@@ -88,11 +88,11 @@ TRANSLATIONS = {
 def get_translation(lang, text):
     t = TRANSLATIONS.get(text)
     text = t.get(lang, text) if t else text
-    return text.decode('utf-8') if isinstance(text, str) else text
+    return text.decode('utf-8') if isinstance(text, bytes) else text
 
 
 MONTHS_PL = (None, 'stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca',
-             'lipca', 'sierpnia', u'września', u'października', 'listopada',
+             'lipca', 'sierpnia', 'września', 'października', 'listopada',
              'grudnia')
 
 
@@ -105,7 +105,7 @@ def format_byline(lang, author, date):
 #     month_roman = unichr(0x215F + date.month)
 
     if lang == 'pl':
-        date = u'%d %s %d' % (day, MONTHS_PL[month], year)
+        date = '%d %s %d' % (day, MONTHS_PL[month], year)
         fmt = '<em>%s</em> | <em>%s</em>'
     else:
         th = 'th'
@@ -144,10 +144,10 @@ class _Addresable(object):
         return os.path.join(*args)
 
 
-class _Group(_Addresable, unicode):
+class _Group(_Addresable, str):
 
     def __new__(cls, val, date=None):
-        self = unicode.__new__(cls, val.strip())
+        self = str.__new__(cls, val.strip())
         self.date = date
         self.entries = []
         return self
@@ -285,8 +285,8 @@ class Site(object):
         self.posts = list(self._read_entries(posts_dir, Post))
         self.pages = list(self._read_entries(pages_dir, Page))
 
-    categories = property(lambda self: self._categories.itervalues())
-    tags = property(lambda self: self._tags.itervalues())
+    categories = property(lambda self: iter(self._categories.values()))
+    tags = property(lambda self: iter(self._tags.values()))
 
     def _read_entries(self, dirname, factory):
         entries = []
@@ -319,10 +319,11 @@ class Site(object):
                         groups.update(t.strip() for t in text.split(','))
                 g = getattr(self, '_' + attr)
                 kw[attr] = [g.setdefault(t, f(t)) for t in groups]
+                kw[attr].sort()
 
             p = factory(permalink, kw['categories'], kw['tags'], versions)
 
-            for attr, lst in kw.items():
+            for attr, lst in list(kw.items()):
                 for group in lst:
                     group.add_entry(p)
 
@@ -349,7 +350,7 @@ class Sitemap(object):
             url.append(('priority', priority))
 
     def format(self):
-        output = cStringIO.StringIO()
+        output = io.StringIO()
         output.write('<?xml version="1.0" encoding="UTF-8"?><urlset '
                      'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
         for loc in sorted(self._urls):
@@ -379,13 +380,13 @@ class Writer(object):
         self.write_file(filename, data)
 
     def write_atom(self, filename, entries, href, feed_id, title=None):
-        author = (u'<author><name>Michał ‘mina86’ Nazarewicz</name>'
-                  u'<uri>%s</uri></author>' % BASE_HREF)
+        author = ('<author><name>Michał ‘mina86’ Nazarewicz</name>'
+                  '<uri>%s</uri></author>' % BASE_HREF)
 
         def e(val):
             return val.replace('&', '&amp;').replace('<', '&lt;')
 
-        fd = cStringIO.StringIO()
+        fd = io.StringIO()
 
         def write(val, **kw):
             val = re.sub('\s+', ' ', val)
@@ -396,7 +397,7 @@ class Writer(object):
                 if 'date' in kw:
                     kw['date'] = kw['date'].strftime('%Y-%m-%dT%H:%M:%SZ')
                 val %= kw
-            fd.write(val.encode('utf-8'))
+            fd.write(val)
 
         write('''
             <?xml version="1.0" encoding="UTF-8"?>
@@ -409,7 +410,7 @@ class Writer(object):
                 <updated>%(date)s</updated>
                 %(author)s
         ''',
-              title=title + u' — mina86.com' if title else 'mina86.com',
+              title=title + ' — mina86.com' if title else 'mina86.com',
               id=feed_id,
               self_url=e('%s/%s' % (BASE_HREF, filename)),
               page_url=e(BASE_HREF + href),

@@ -24,91 +24,95 @@ import base64
 import os
 import re
 import sys
+import typing
 
 sys.path.insert(1, os.path.abspath(os.path.join(os.path.dirname(__file__),
                                                 '..', '..', 'htmlmin')))
 import htmlmin.parser
 
 
-_MIMETYPES = {
+_MIMETYPES: typing.Dict[str, str] = {
     '.jpg': 'image/jpeg',
     '.png': 'image/png',
     '.svg': 'image/svg+xml',
 }
 
 
-def _encode_base64(mime, data):
+def _encode_base64(mime: str, data: bytes) -> bytes:
     data = base64.standard_b64encode(data)
-    return 'data:%s;base64,%s' % (mime, data)
+    return b'data:%s;base64,%s' % (mime.encode('ascii'), data)
 
 
-def _encode_string(mime, data, q):
+def _encode_string(mime: str, data: str, q: str) -> bytes:
     data = data.replace('\n', '\\n').replace(q, '\\' + q)
-    return '%sdata:%s,%s%s' % (q, mime, data, q)
+    return '{}data:{},{}{}'.format(q, mime, data, q).encode('utf-8')
 
 
-def _insert_data(src_dir, path):
+def _insert_data(src_dir: str, path: str) -> bytes:
     _, ext = os.path.splitext(path)
     mime = _MIMETYPES[ext]
-    data = open(os.path.join(src_dir, path)).read()
+    data = open(os.path.join(src_dir, path), 'rb').read()
 
     encodings = [_encode_base64(mime, data)]
     if ext == '.svg':
-        data = re.sub(r'[\0-\x1f\x80-\xff%#]',
-                      lambda m: '%%%02x' % ord(m.group(0)),
-                      data.strip())
-        encodings.append(_encode_string(mime, data, '"'))
-        encodings.append(_encode_string(mime, data, "'"))
+        str_data = re.sub(r'[\0-\x1f\x80-\xff%#]',
+                          lambda m: '%%%02x' % ord(m.group(0)),
+                          data.decode('utf-8').strip())
+        encodings.append(_encode_string(mime, str_data, '"'))
+        encodings.append(_encode_string(mime, str_data, "'"))
         encodings.sort(key=len)
 
     return encodings[0]
 
 
-def _map_static(mappings, path):
+def _map_static(mappings: typing.Dict[str, str], path: str) -> str:
     return mappings.get(path, path)
 
 
-def process_css(data, src_dir, mappings):
-    data = re.sub(r'DATA<([^<>]+)>',
-                  lambda m: _insert_data(src_dir, m.group(1)),
+def process_css(data: bytes, src_dir: str,
+                mappings: typing.Dict[str, str]) -> bytes:
+    data = re.sub(rb'DATA<([^<>]+)>',
+                  lambda m: _insert_data(src_dir, m.group(1).decode('utf-8')),
                   data)
-    data = re.sub(r'/d/[-_a-zA-Z0-9.]*',
-                  lambda m: _map_static(mappings, m.group(0)),
+    data = re.sub(rb'/d/[-_a-zA-Z0-9.]*',
+                  lambda m: _map_static(mappings, m.group(0).decode('utf-8')).encode('utf-8'),
                   data)
     return data
 
+_Attributes = typing.Sequence[typing.Tuple[str, typing.Optional[str]]]
 
 class HTMLMinParser(htmlmin.parser.HTMLMinParser):
 
-    def __init__(self, *args, **kw):
+    def __init__(self, *args: typing.Any, **kw: typing.Any):
         self._static_mappings = kw.pop('static_mappings', None)
         self._src_dir = kw.pop('src_dir', None)
         base = kw.pop('base_href', None)
         assert not base or (base[0:4] == 'http' and base[-1] == '/'), base
         self._base_href = base
-        htmlmin.parser.HTMLMinParser.__init__(self, *args, **kw)
+        super().__init__(*args, **kw)
 
-    def handle_starttag(self, tag, attrs):
+    def handle_starttag(self, tag: str, attrs: _Attributes) -> None:
         self._transform_attrs(tag, attrs)
-        return htmlmin.parser.HTMLMinParser.handle_starttag(self, tag, attrs)
+        super().handle_starttag(tag, attrs)
 
-    def handle_startendtag(self, tag, attrs):
+    def handle_startendtag(self, tag: str, attrs: _Attributes) -> None:
         self._transform_attrs(tag, attrs)
-        return htmlmin.parser.HTMLMinParser.handle_startendtag(self, tag, attrs)
+        super().handle_startendtag(tag, attrs)
 
-    def _transform_attrs(self, tag, attrs):
+    def _transform_attrs(self, tag: str, attrs: _Attributes) -> None:
         for i, (attr, value) in enumerate(attrs):
             if value:
-                attrs[i] = attr, self._transform_attr(tag, attr, value)
+                typing.cast(typing.List, attrs)[i] = (
+                    attr, self._transform_attr(tag, attr, value))
 
-    def _transform_attr(self, tag, attr, value):
+    def _transform_attr(self, tag: str, attr: str, value: str) -> str:
         if self._static_mappings:
             ret = self._static_mappings.get(value)
             if ret:
                 return ret
 
         if self._src_dir and tag == 'img' and attr == 'src':
-            return _insert_data(self._src_dir, value)
+            return _insert_data(self._src_dir, value).decode('utf-8')
 
         if (self._base_href and
             (attr == 'src' or (attr == 'href' and tag != 'link')) and
@@ -126,24 +130,25 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
             value = re.sub(r' ?, ?', ',', value)
         return value
 
-    def handle_comment(self, comment):
+    def handle_comment(self, comment: str) -> None:
         if comment.startswith('[if '):
             comment = re.sub(
                 r'"(/d/[^"]*)"',
                 lambda m: self._static_mappings.get(m.group(1), m.group(1)),
                 comment)
-        htmlmin.parser.HTMLMinParser.handle_comment(self, comment)
+        super().handle_comment(comment)
 
 
 
-def minify_html(data, **kw):
-    block = ('body', 'br', 'col', 'div', 'form', 'h[1-6]', 'head', 'html',
-             'link', 'meta', 'p', 'script', 'table', 't[dhr]', 'textarea',
-             'title', '[ou]l', '[A-Z_][A-Z_]*', 'section', 'header', 'aside',
-             'article', 'nav', 'footer')
-    block = '(?:%s)' % '|'.join(block)
+def minify_html(data: str, **kw: typing.Any) -> str:
+    block = '(?:%s)' % '|'.join((
+        'body', 'br', 'col', 'div', 'form', 'h[1-6]', 'head', 'html', 'link',
+        'meta', 'p', 'script', 'table', 't[dhr]', 'textarea', 'title', '[ou]l',
+        '[A-Z_][A-Z_]*', 'section', 'header', 'aside', 'article', 'nav',
+        'footer'
+    ))
 
-    def make_parser(*args, **kwargs):
+    def make_parser(*args: typing.Any, **kwargs: typing.Any) -> HTMLMinParser:
         kwargs.update(kw)
         return HTMLMinParser(*args, **kwargs)
 

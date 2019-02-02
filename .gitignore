@@ -2,6 +2,8 @@ public
 !public/files.mina86.com
 public/files.mina86.com/.htaccess
 .tmp
-*/*.pyc
 static/cv/index.html
 static/mina86.pub
+*.pyc
+.mypy_cache/
+__pycache__/

@@ -26,8 +26,8 @@ import compilers
 
 
 def main(argv):
-    data = sys.stdin.read().decode('utf-8')
-    print compilers.minify_html(data, src_dir=argv[1]).encode('utf-8')
+    data = sys.stdin.read()
+    print(compilers.minify_html(data, src_dir=argv[1]))
 
 
 if __name__ == '__main__':
