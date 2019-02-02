@@ -17,8 +17,6 @@
 	W['_gaq'] = [['_setAccount', 'UA-240278-1'], ['_trackPageview']];
 	a('www.google-analytics.com/ga.js');
 
-	W['___gcfg'] = {lang: 'en-GB'};
-	a('apis.google.com/js/plusone.js');
 	a('platform.twitter.com/widgets.js');
 
 	a('cse.google.com/cse.js?cx=005697715059674104273:zluc68s5jow');
