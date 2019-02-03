@@ -11,6 +11,8 @@
 	    header = b.call(D, 'h'),
 	    footer = b.call(D, 'f');
 
+	a('cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML');
+
 	W['SPOTIM'] = {spotId: 'sp_yH01UA8B'};
 	a('www.spot.im/launcher/bundle.js');
 

@@ -1,0 +1,273 @@
+<!-- subject: Calculating sRGB↔XYZ matrix -->
+<!-- date: 2019-02-03 07:42:06 -->
+<!-- tags: rgb, srgb, colorimetry -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>I’ve recently found myself in need of an sRGB↔XYZ transformation matrix
+  expressed to the maximum possible precision.  Sources on the Internet
+  typically limit the precision to just a few decimal places so I've decided to
+  do the calculations by myself.
+
+<p>What we’re looking for is a 3-by-3 matrix \(M\) which, when multiplied by red,
+  green and blue coördinates of a colour, produces its XYZ coördinates.  In
+  other words,
+  a <a href="https://www.khanacademy.org/math/linear-algebra/alternate-bases/change-of-basis/v/linear-algebra-change-of-basis-matrix">change
+  of basis matrix</a> from a space whose basis vectors are sRGB’s primary
+  colours:
+
+  $$ M = \begin{bmatrix}
+    X_r & X_g & Y_b \\
+    Y_r & Y_g & Y_b \\
+    Z_r & Z_g & Z_b
+  \end{bmatrix} $$
+
+<!-- EXCERPT -->
+
+
+<h2>Derivation</h2>
+
+<p>sRGB primary colours are defined in
+  <a href="https://webstore.iec.ch/publication/6169">IEC 61966 standard</a> (and
+  also <a href="https://www.itu.int/rec/R-REC-BT.709-6-201506-I/en">Rec. 709
+  document</a> which is 170 franks cheaper) as a pair
+  of <a href="https://en.wikipedia.org/wiki/CIE_1931_color_space#CIE_xy_chromaticity_diagram_and_the_CIE_xyY_color_space">x
+  and y</a> values (i.e. chromaticity coördinates).  Converting them to XYZ
+  space is simple: \(X = x Y / y\) and \(Z = (1 - x - y) Y / y,\) but leaves
+  luminocity (the Y value) undefined.
+
+<table>
+  <thead>
+    <tr>
+      <th>
+      <th scope=col>\(\langle x, y\rangle\)
+      <th scope=col>\(\langle X, Y, Z\rangle\)
+  <tbody>
+    <tr>
+      <th scope=row>Red
+      <td>\(\langle 0.64, 0.33\rangle\)
+      <td>\(\langle 64 Y_r / 33, \; Y_r, \; Y_r / 11\rangle\)
+    <tr>
+      <th scope=row>Green
+      <td>\(\langle 0.30, 0.60\rangle\)
+      <td>\(\langle Y_g / 2, \; Y_g, \; Y_g / 6\rangle\)
+      <tr>
+        <th scope=row>Blue
+        <td>\(\langle 0.15, 0.06\rangle\)
+        <td>\(\langle 5 Y_b / 2, \; Y_b, \; 79 Y_b / 6\rangle\)
+      <tr>
+        <th scope=row>White (D65)
+        <td>\(\langle 0.31271, 0.32902\rangle\)
+        <td>\(\langle 31271 Y_w / 32902, \; Y_w, \; 35827 Y_w / 32902\rangle\)
+</table>
+
+<p>That’s where reference white point comes into play.  Its coördinates in
+  linear RGB space, \(\langle 1, 1, 1 \rangle,\) can be plugged into the change
+  of basis formula to yield the following equation:
+
+  $$ \begin{bmatrix}
+    X_w \\ Y_w \\ Z_w
+  \end{bmatrix} = \begin{bmatrix}
+    X_r & X_g & X_b \\
+    Y_r & Y_g & Y_b \\
+    Z_r & Z_g & Z_b
+  \end{bmatrix} \begin{bmatrix}
+    1 \\ 1 \\ 1
+  \end{bmatrix} $$
+
+<p>For each colour \(c\) (including white), \(X_c\) and \(Z_c\) can be expressed
+  as a product of a known quantity and \(Y_c\) (see table above).  Furthermore,
+  by definition of a white point, \(Y_w = 1.\) At this point luminocities of the
+  primary colours are the only unknowns.  To isolate them, let’s define \(X'_c =
+  X_c / Y_c\) and \(Z'_c = Z_c / Y_c\) and see where that leads us:
+
+  $$ \begin{align}
+    \begin{bmatrix}
+      X_w \\ Y_w \\ Z_w
+    \end{bmatrix} &=
+    \begin{bmatrix}
+      X_r & X_g & X_b \\
+      Y_r & Y_g & Y_b \\
+      Z_r & Z_g & Z_b
+    \end{bmatrix} \begin{bmatrix}
+      1 \\ 1 \\ 1
+    \end{bmatrix} \\ &= \begin{bmatrix}
+      X'_r Y_r & X'_g Y_g & X'_b Y_b \\
+      Y_r      & Y_g      & Y_b \\
+      Z'_r Y_r & Z'_g Y_g & Z'_b Y_b
+    \end{bmatrix} \begin{bmatrix}
+      1 \\ 1 \\ 1
+    \end{bmatrix} \\ &= \begin{bmatrix}
+      X'_r & X'_g & X'_b \\
+      1    & 1    & 1 \\
+      Z'_r & Z'_g & Z'_b
+    \end{bmatrix} \begin{bmatrix}
+      Y_r & 0 & 0 \\
+      0 & Y_g & 0 \\
+      0 & 0 & Y_b
+    \end{bmatrix} \begin{bmatrix}
+      1 \\ 1 \\ 1
+    \end{bmatrix} \\ &= \begin{bmatrix}
+      X'_r & X'_g & X'_b \\
+      1    & 1    & 1 \\
+      Z'_r & Z'_g & Z'_b
+    \end{bmatrix} \begin{bmatrix}
+      Y_r \\ Y_g \\ Y_b
+    \end{bmatrix} \\ \\
+
+    \begin{bmatrix}
+      Y_r \\ Y_g \\ Y_b
+    \end{bmatrix} &= \begin{bmatrix}
+      X'_r & X'_g & X'_b \\
+      1    & 1    & 1 \\
+      Z'_r & Z'_g & Z'_b
+    \end{bmatrix}^{-1} \begin{bmatrix}
+      X_w \\ Y_w \\ Z_w
+    \end{bmatrix}
+  \end{align} $$
+
+<p>All quantities on the right-hand side are known therefore \([Y_r Y_g Y_b]^T\)
+  can be computed.  Let’s tidy things up into a final formula.
+
+
+<h2>Final formula</h2>
+
+<p>Given chromaticity of primary colours of an RGB space (\(\langle x_r, y_r
+  \rangle,\) \(\langle x_g, y_g \rangle\) and \(\langle x_b, y_b \rangle\)) and
+  its reference white point (\(\langle x_w, y_w \rangle\)), the matrix for
+  converting linear RGB coördinates to XYZ is:
+
+  $$ M = \begin{bmatrix}
+    X'_r Y_r & X'_g Y_g & X'_b Y_b \\
+    Y_r      & Y_g      & Y_b \\
+    Z'_r Y_r & Z'_g Y_g & Z'_b Y_b
+  \end{bmatrix} $$
+
+<p>which can also be written as \(M = M' \times \mathrm{diag}(Y_r, Y_g, Y_b)\)
+where:
+
+  $$\begin{align}
+    & M' = \begin{bmatrix}
+      X'_r & X'_g & X'_b \\
+      1    & 1    & 1 \\
+      Z'_r & Z'_g & Z'_b
+    \end{bmatrix}\!\!, \\ \\
+
+    & \left.
+      \begin{array}{l}
+         X'_c = x_c / y_c \\
+         Z'_c = (1 - x_c - y_c) / y_c
+      \end{array}
+    \right\} \textrm{ for each colour } c, \\ \\
+
+    & \begin{bmatrix}
+      Y_r \\ Y_g \\ Y_b
+    \end{bmatrix} = M'^{-1} \begin{bmatrix}
+      X_w \\ Y_w \\ Z_w
+    \end{bmatrix} \textrm{ and} \\ \\
+
+    & \begin{bmatrix}
+      X_w \\ Y_w \\ Z_w
+    \end{bmatrix} = \begin{bmatrix}
+      x_w / y_w \\ 1 \\ (1 - x_w - y_w) / y_w
+    \end{bmatrix}\!\!.
+  \end{align} $$
+
+<p>Matrix converting coördinates in the opposite direction is the inverse of
+  \(M,\) i.e. \(M^{-1}\).
+
+
+<h2>Implementation</h2>
+
+<p>Having theoretical part covered, it’s time to put the equations into
+  practice, which brings up a question of language to use.  With
+  <a href="https://docs.python.org/3/library/stdtypes.html#numeric-types-int-float-complex">unlimited-precision
+  integers</a> and
+  <a href="https://docs.python.org/3/library/fractions.html">rational numbers
+  arithmetic already implementation</a>, Python is particularly good choice as
+  it will allow all calculations to be done without rounding.  Implementation
+  begins with an overview of the algorithm:
+
+<pre>
+Chromaticity = collections.namedtuple('Chromaticity', 'x y')
+
+def calculate_rgb_matrix(primaries, white):
+    M_prime = (tuple(c.x / c.y             for c in primaries),
+               tuple(1                     for _ in primaries),
+               tuple((1 - c.x - c.y) / c.y for c in primaries))
+    W = (white.x / white.y, 1, (1 - white.x - white.y) / white.y)
+    Y = mul_matrix_by_column(inverse_3x3_matrix(M_prime), W)
+    return mul_matrix_by_diag(M_prime, Y)
+</pre>
+
+<p>The function first constructs \(M'\) matrix and \(W = [X_w Y_w Z_w]^T\)
+  column which are used to calculate \([Y_r Y_g Y_b]^T\) using \(M'^{-1} W\)
+  formula.  With that computed, the function returns \(M' \times
+  \mathrm{diag}(Y_r, Y_g, Y_b)\) which is the transform matrix.
+
+<p>All operations on matrices are delegated to separate functions.  Since the
+  matrices the code deals with are small there is no need to optimise any of the
+  algorithms and instead the most straightforward matrix multiplication
+  algorithms are chosen:
+
+<pre>
+def mul_matrix_by_column(matrix, column):
+    return tuple(
+        sum(row[i] * column[i] for i in range(len(row)))
+        for row in matrix)
+
+def mul_matrix_by_diag(matrix, column):
+    return tuple(
+        tuple(row[c] * column[c] for c in range(len(column)))
+        for row in matrix)
+</pre>
+
+<p>Only the function inverting a 3-by-3 matrix is somewhat more complex:
+
+<pre>
+def inverse_3x3_matrix(matrix):
+    def cofactor(row, col):
+        minor = [matrix[r][c]
+                 for r in (0, 1, 2) if r != row
+                 for c in (0, 1, 2) if c != col]
+        a, b, c, d = minor
+        det_minor = a * d - b * c
+        return det_minor if (row ^ col) & 1 == 0 else -det_minor
+
+    comatrix = tuple(
+        tuple(cofactor(row, col) for col in (0, 1, 2))
+        for row in (0, 1, 2))
+    det = sum(matrix[0][col] * comatrix[0][col] for col in (0, 1, 2))
+    return tuple(
+        tuple(comatrix[col][row] / det for col in (0, 1, 2))
+        for row in (0, 1, 2))
+</pre>
+
+<p>It first
+  constructs <a href="https://en.wikipedia.org/wiki/Minor_(linear_algebra)#First_minors">matrix
+  of cofactors</a> of the input (i.e. <code>comatrix</code>).  Because
+  function’s argument is always a 3-by-3 matrix, each minor’s determinant can be
+  trivially calculated using \(\bigl|\begin{smallmatrix} a & b \\ c &
+  d \end{smallmatrix}\bigr| = a d - b c\) formula.  Once the comatrix is
+  constructed, <a href="https://en.wikipedia.org/wiki/Minor_(linear_algebra)#Applications_of_minors_and_cofactors">calculating
+  determinant of the input matrix and its inverse</a> becomes just a matter of
+  executing a few loops.
+
+<p>The above code works for any RGB system.  To get result for sRGB its sRGB’s
+  primaries and white point chromaticities need to me passed:
+
+<pre>
+def calculate_srgb_matrix():
+    primaries = (Chromaticity(fractions.Fraction(64, 100),
+                              fractions.Fraction(33, 100)),
+                 Chromaticity(fractions.Fraction(30, 100),
+                              fractions.Fraction(60, 100)),
+                 Chromaticity(fractions.Fraction(15, 100),
+                              fractions.Fraction( 6, 100)))
+    white = Chromaticity(fractions.Fraction(31271, 100000),
+                         fractions.Fraction(32902, 100000))
+    return calculate_rgb_matrix(primaries, white)
+</pre>
+
+<p>Full implementation with other bells and whistles can be
+  found <a href="https://github.com/mina86/ansi_colours/blob/master/tools/luminance-coefficients.py">inside
+  of <code>ansi_colours</code> repository</a>.
