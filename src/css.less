@@ -680,7 +680,7 @@ code, var {
 /* Misc */
 blockquote {
 	background: url(/d/sprites.png) no-repeat;
-	background-position: -75px 0;
+	background-position: -69px 0;
 	min-height: 20px;
 	padding: 0 30px;
 	margin: 1em;
@@ -692,16 +692,10 @@ blockquote {
 	}
 }
 
-.plFlag, .enFlag {
-	background: url(/d/sprites.png) no-repeat;
-	/* That’s for .enFlag, .plFlag will override it below.  Sticking it here helps
-	   with minification. */
-	background-position: -50px -25px;
-	text-indent: 22px;
-}
-
 .plFlag {
-	background-position: -25px -50px;
+	background: url(/d/sprites.png) no-repeat;
+	background-position: -41px -25px;
+	text-indent: 22px;
 }
 
 /* Meta information, social etc. */
@@ -889,15 +883,13 @@ blockquote {
 	}
 
 	/* FSF */
-	li:nth-child(1) a { background-position:   0px -45px; }
+	li:nth-child(1) a { background-position: -16px -22px; }
 	/* FSFE */
-	li:nth-child(2) a { background-position: -50px   0px; }
-	/* FSFE Fellowship
-	li:nth-child(3) a { background-position:   0px   0px; } */
+	li:nth-child(2) a { background-position:   5px   0px; }
+	/* FSFE Fellowship */
+	li:nth-child(3) a { background-position: -45px   0px; }
 	/* Conservancy */
-	li:nth-child(4) a { background-position: -25px   0px; }
-	/* Slackware */
-	li:nth-child(5) a { background-position: -25px  -25px; }
+	li:nth-child(4) a { background-position: -20px   0px; }
 
 	&:extend(.np);
 }
