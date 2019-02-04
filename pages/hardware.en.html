@@ -52,71 +52,71 @@
   <area shape="poly" coords="788,371,21,532,113,828,706,642,793,408" onmouseout="s('');" onmouseover="s('heat');" nohref="nohref" />
 </map>
 
-<script type="text/javascript">// <![CDATA[
-	var current = null, current_name = null;
-	function s(name) {
-		if (current && current_name != name) {
-			current.style.display = 'none';
-		}
-		current = document.getElementById('el' + name);
-		if (current) {
-			current.style.display = 'block';
-			current_name = name;
+<script>
+var current = null, currentName = null;
+function s(name) {
+	if (current && currentName != name) {
+		current.style.display = 'none';
+	}
+	current = document.getElementById('el' + name);
+	if (current) {
+		current.style.display = 'block';
+		currentName = name;
+	} else {
+		current = null;
+	}
+};
+
+window.addEventListener('load', function() {
+	var div = document.getElementById('img');
+	if (!div)
+		return;
+
+	var img = div.firstChild;
+	var imgWidth = img.scrollWidth, imgHeight = img.scrollHeight;
+	var divWidth = div.clientWidth, divHeight = div.clientHeight;
+
+	if (divWidth < imgHeight) {
+		div.style.height = '' + divWidth + 'px';
+		divHeight = div.clientHeight;
+	}
+
+	var mm = function(e) {
+		if (!e)
+			e = window.event;
+
+		var x, y;
+		if (e.pageX || e.pageY) {
+			x = e.pageX;
+			y = e.pageY;
+		} else if (e.clientX || e.clientY) {
+			x = e.clientX + D.body.scrollLeft
+				+ D.documentElement.scrollLeft;
+			y = e.clientY + D.body.scrollTop
+				+ D.documentElement.scrollTop;
 		} else {
-			current = null;
+			return;
 		}
+
+		var el = img;
+		do {
+			x -= el.offsetLeft;
+			y -= el.offsetTop;
+		} while (el = el.offsetParent);
+
+		if (divWidth < imgWidth)
+			div.scrollLeft = Math.round((imgWidth - divWidth) * x / divWidth);
+		if (divHeight < imgHeight)
+			div.scrollTop = Math.round((imgHeight - divHeight) * y / divHeight);
 	};
 
-	window.addEventListener('load', function() {
-		var div = document.getElementById('img');
-		if (!div)
-			return;
-
-		var img = div.firstChild;
-		var imgWidth = img.scrollWidth, imgHeight = img.scrollHeight;
-		var divWidth = div.clientWidth, divHeight = div.clientHeight;
-
-		if (divWidth < imgHeight) {
-			div.style.height = '' + divWidth + 'px';
-			divHeight = div.clientHeight;
-		}
-
-		var mm = function(e) {
-			if (!e)
-				e = window.event;
-
-			var x, y;
-			if (e.pageX || e.pageY) {
-				x = e.pageX;
-				y = e.pageY;
-			} else if (e.clientX || e.clientY) {
-				x = e.clientX + D.body.scrollLeft
-					+ D.documentElement.scrollLeft;
-				y = e.clientY + D.body.scrollTop
-					+ D.documentElement.scrollTop;
-			} else {
-				return;
-			}
-
-			var el = img;
-			do {
-				x -= el.offsetLeft;
-				y -= el.offsetTop;
-			} while (el = el.offsetParent);
-
-			if (divWidth < imgWidth)
-				div.scrollLeft = Math.round((imgWidth - divWidth) * x / divWidth);
-			if (divHeight < imgHeight)
-				div.scrollTop = Math.round((imgHeight - divHeight) * y / divHeight);
-		};
-
-		div.addEventListener('mousemove', mm, true);
-		document.getElementById('m').addEventListener('mousemove', mm, true);
-	}, false);
-  //]]></script>
+	div.addEventListener('mousemove', mm, true);
+	document.getElementById('m').addEventListener('mousemove', mm, true);
+}, false);
+  </script>
 
 <p style="display:none" id="elT410"><strong>Lenovo T410</strong>.
-Even though it's my business laptop, I use it all the time for
+Even though it’s my business laptop, I use it all the time for
 almost everything.</p>
 
 <p style="display:none" id="elcables"><strong>Electron transmitting
@@ -124,33 +124,32 @@ device</strong>.  I have bunch of those under (and above) my desk
 tangled together into an untangleable mess.</p>
 
 <p style="display:none" id="elcasio"><strong>Cisco
-<i>fx</i>-65</strong>. I have won it in a Math competition while in
-elementary school (by getting 2<sup>nd</sup> place in country or
-something like that) and I have been using it ever since, even
-though nowadays I tend to either use <tt>bc</tt> or Emacs'
-<tt>calc</tt>.</p>
+<i>fx</i>-65</strong>. I have won it in a Math competition while in elementary
+school (by getting 2nd place in country or something like that) and I have been
+using it ever since, even though nowadays I tend to either use <code>bc</code>
+or Emacs’ <code>calc</code>.</p>
 
 <p style="display:none" id="elcharger"><strong>USB charger</strong>.
-It's just a simple electron transmitting device, but also a proof
+It’s just a simple electron transmitting device, but also a proof
 that paying several hundreds of dollars is worth the money, since
 you get to get such useful toys.</p>
 
 <p style="display:none" id="elcomb"><strong>Hair entropy
-reducer</strong>.  I don't even use it that often… I don't even know
-why it's on my desk…</p>
+reducer</strong>.  I don’t even use it that often… I don’t even know
+why it’s on my desk…</p>
 
 <p style="display:none" id="eldell"><strong>DELL 2407WFPb</strong>.
-My “business” monitor.  Yes, you've read it right: Google gave me
+My ‘business’ monitor.  Yes, you’ve read it right: Google gave me
 a 24″ screen to use at home.  Obviously, I have two more in the
 office.</p>
 
 <p style="display:none" id="eldvd"><strong>Death ray</strong>.  This
-death ray has a very small power though.  Still, it's enough to burn
+death ray has a very small power though.  Still, it’s enough to burn
 plastic.</p>
 
 <p style="display:none" id="elfan"><strong>Arctic Cold Freezer
-XTREME</strong> Rev.2.  Despite its name, it's never arctic cold
-though… It's attached to <strong>AMD Phenom(tm) II X3 710</strong>
+XTREME</strong> Rev.2.  Despite its name, it’s never arctic cold
+though… It’s attached to <strong>AMD Phenom II X3 710</strong>
 and <strong>ASRock A785GM-LE/128M</strong>.  The latter is not
 really my choice, but my previous motherboard decided to no longer
 work, and this one was the only one they had in store that supported
@@ -158,98 +157,98 @@ my processor.</p>
 
 <p style="display:none" id="elfiresword"><strong>Firesword</strong>.
 Google branded at that.  Best part is that I had to sign a paper
-saying I won't hold Google responsible for damages caused by the use
+saying I won’t hold Google responsible for damages caused by the use
 of it.  Yeah, it produces quite a bit of photons.</p>
 
 <p style="display:none" id="elflashlight"><strong>Electromagnetic
 wave generator</strong>.  Useful when I need to dive under my
 desk.  Has a chameleon drawn on the cover with mysterious texts
-“Suse”, which is some Maya Linux distribution. But seriously, they
+‘Suse’, which is some Maya Linux distribution. But seriously, they
 actually are active, and the oldest commercial Linux distribution
 still in development.</p>
 
 <p style="display:none" id="elfoot"><strong>Kinesis foot
-pedal</strong>.  I don't use it though.  Wanna buy?</p>
+pedal</strong>.  I don’t use it though.  Wanna buy?</p>
 
 <p style="display:none" id="elgateway"><strong>Gateway
-FPD2185W</strong>.  The first screen larger than 20″ I've had.
+FPD2185W</strong>.  The first screen larger than 20″ I’ve had.
 I bought it years ago below the usual price because factory fault it
-has.  What fault you ask me? I've never noticed any. ;)</p>
+has.  What fault you ask me? I’ve never noticed any. ;)</p>
 
 <p style="display:none" id="elgfx"><strong>ASUS GTX560</strong>.
-Enough to play Zork and tetris.</p>
+Enough to play Zork and Tetris.</p>
 
 <p style="display:none" id="elhdd">2 × <strong>Western Digital
 WD2002FAEX</strong>.  Their name indicates that they should be
-black, but they aren't really… More like metalic, like all other
-HDDs I've seen.  Total capacity of 4 GB, but since they run (mostly)
+black, but they aren’t really… More like metallic, like all other
+HDDs I’ve seen.  Total capacity of 4 GB, but since they run (mostly)
 in RAID-1, its back to 2 GB.</p>
 
 <p style="display:none" id="elheat"><strong>Molecule movement
-generator</strong>.  Pretty usefull in winter.</p>
+generator</strong>.  Pretty useful in winter.</p>
 
 <p style="display:none" id="elhp"><strong>HP stress ball</strong>.
-I'm not sure when HP switched to producing non-electronical
-accessories, but there you have it!</p>
+I’m not sure when HP switched to producing non-electronic
+aaccessories, but there you have it!</p>
 
 <div style="display:none" id="elkinesis">
   <p><strong>Kinesis Advantage
   Pro</strong>. The. Best. Keyboard. Ever.</p>
   <p>In the past, I used to say, that there is no point in buying
-  expensive keyboards because the cheepest thing you can get is as
+  expensive keyboards because the cheapest thing you can get is as
   good as the expensive one. This one proved me wrong.</p>
   <p>Back than, I was using some simple
   Chicony keyboard and frankly, I still think that it was as good as
   many more expensive keyboard, but the so called mechanical
-  switches on Kinesis and its unique shape make it the best HID I've
+  switches on Kinesis and its unique shape make it the best HID I’ve
   ever used.</p>
   <p>Moltron ergonomic keyboard is actually the only thing I think
-  could be considered better, but Kinesiss is slightly cheeper and
-  so I've decided to get the latter rather than the former.</p>
+  could be considered better, but Kinesiss is slightly cheaper and
+  so I’ve decided to get the latter rather than the former.</p>
   <p>In fact, not only one.  I own two of those and have one more at
   work.</p>
 </div>
 
 <p style="display:none" id="elkvm"><strong>Belkin Flip DVI-D KVM
-switch</strong>.  I don't really recommend it.  My issue is that
+switch</strong>.  I don’t really recommend it.  My issue is that
 whenever I want to switch between computers, USB keyboard and mouse
-are disconnected from one and connected to the other machine.  I'd
-much rather the KVM maintained a “virtual” keyboard and mouse so
+are disconnected from one and connected to the other machine.  I’d
+much rather the KVM maintained a ‘virtual’ keyboard and mouse so
 that both computers would think that something is connected to them
 all the time.</p>
 
 <div style="display:none" id="ellogitech">
-  <p><strong>Logitech Z-5500</strong>.  I wouldn't normally buy
+  <p><strong>Logitech Z-5500</strong>.  I wouldn’t normally buy
   them, but it so happened that a coworker was selling them and
-  I managed to get tham way under the normal price.  I have two
-  problems thogh:</p>
+  I managed to get them way under the normal price.  I have two
+  problems though:</p>
   <ul>
-    <li>I don't know how to use 5.1 under Linux, so I just use them
-    in “Stereo × 2” which means rear speakers have the same signal
+    <li>I don’t know how to use 5.1 under Linux, so I just use them
+    in ‘Stereo × 2’ which means rear speakers have the same signal
     as the front ones; and</li>
     <li>on Windows, the centre channel is way too silent in games,
-    so I've ended up disabling it, reducing the whole system to 4.1
+    so I’ve ended up disabling it, reducing the whole system to 4.1
     (still the effect in games is quite nice).</li>
   </ul>
 </div>
 
 <p style="display:none" id="elmouse"><strong>Logitech
 MX518</strong>.  My first ever optical mouse which I enjoy very
-much.  It has been with me for a few years and there's not much
-I don't like about it.  The shape seems almost perfect.  I highly
+much.  It has been with me for a few years and there’s not much
+I don’t like about it.  The shape seems almost perfect.  I highly
 recommend it (even though now it has been replaced with a G400
 model).</p>
 
 <p style="display:none" id="elmug"><strong>Tea storage
-device</strong> with a function of oral delivery.  I've heard it can
-be used with other liquids as well, but I've never tried.</p>
+device</strong> with a function of oral delivery.  I’ve heard it can
+be used with other liquids as well, but I’ve never tried.</p>
 
 <div style="display:none" id="elnexus">
   <p><strong>Samsung Galaxy Nexus</strong>.  You may be mislead by
   the fact that there appears to be nothing in the picture, but
-  that's just an illusion.</p>
-  <p>A Christmass gift from Google.  If it weren't for that company,
-  I'd probably never start using mobile phones, but since they gave
+  that’s just an illusion.</p>
+  <p>A Christmas gift from Google.  If it weren’t for that company,
+  I’d probably never start using mobile phones, but since they gave
   me one and they are paying for my plan, how could I resist?</p>
 </div>
 
@@ -258,8 +257,8 @@ devices</strong>.  A bunch of those laying around.  Digital is nice,
 but analogue has its uses as well.</p>
 
 <p style="display:none" id="elpen"><strong>Kingston DataTraveler
-400</strong>.  I don't even remember since how long I have it.  The
-label beginse to wear off of it.  Even in the age of “da cloud”,
+400</strong>.  I don’t even remember since how long I have it.  The
+label begins to wear off of it.  Even in the age of ‘da cloud’,
 I still find it useful.</p>
 
 <p style="display:none" id="elpipe"><strong>Liquid transfer
@@ -269,10 +268,10 @@ generator</strong>.</p>
 <p style="display:none" id="elrouter"><strong>Sitecom
 router</strong> of some kind.  Got it from my ISP.  Interestingly,
 it appears to have a random SSID and WPA2 password.  Still, just to
-be sure, I've changed them anyway.</p>
+be sure, I’ve changed them anyway.</p>
 
 <p style="display:none" id="elsamsung"><strong>Samsung
-F2380M</strong>.  I've actually written about this screen.  No need
+F2380M</strong>.  I’ve actually written about this screen.  No need
 to repeat.  Go ahead, look it up on my blog.</p>
 
 <p style="display:none"
@@ -282,18 +281,18 @@ a spirit level.  Maybe not as cool as a <em>sonic</em> screwdriver,
 but still nice.</p>
 
 <p style="display:none" id="elsdd">2 × <strong>Intel® SSD, 320
-Series, 40 GB</strong>.  Not that big, but that's because they are
+Series, 40 GB</strong>.  Not that big, but that’s because they are
 meant to hold just the system and some of my most important data.
 They run in a RAID-1 configuration and are Linux-only, not tainted
 by other systems.</p>
 
 <p style="display:none" id="elstrip"><strong>High-voltage electron
-splitter</strong>.  I've actually borrowed it from work, I hope they
-don't mind.</p>
+splitter</strong>.  I’ve actually borrowed it from work, I hope they
+don’t mind.</p>
 
 <p style="display:none" id="elubs"><strong>UBS card reader</strong>.
 As of time of writing, running out of battery, which means that soon
-I'll end up with no access to my bank account.</p>
+I’ll end up with no access to my bank account.</p>
 
 <p style="display:none" id="elv"><strong>Electron energy
 converters</strong>.  I have a whole bunch of those under my desk.
@@ -301,7 +300,7 @@ In fact, my <strong>High-voltage electron splitter</strong> has run
 out of sockets, so I had to get two.</p>
 
 <p style="display:none" id="elwallet"><strong>Strellson Money
-Storage Device</strong>.  The first, and so far the only, thing I've
+Storage Device</strong>.  The first, and so far the only, thing I’ve
 found use of Miles &amp; more points for.</p>
 
 <div style="display:none" id="elwindows">
@@ -312,4 +311,4 @@ found use of Miles &amp; more points for.</p>
   Corporation.</small></p>
 </div>
 
-<p><small>You need a recent browser supporting JavaScript controlled with a mouse to appreciate this web page. In fact I've tested in only in Opera 12.11 and Firefox 14.0.1.</small></p>
+<p><small>You need a recent browser supporting JavaScript controlled with a mouse to appreciate this web page. In fact I’ve tested in only in Opera 12.11 and Firefox 14.0.1.</small></p>
