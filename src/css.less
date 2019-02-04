@@ -445,25 +445,17 @@ pre, code, kbd {
 	color: @code-color;
 	text-shadow: none;
 	page-break-inside: avoid;
+	hyphens: manual;
 }
 pre {
 	font-family: @mono-font;
-	@media screen, projection, tv, handheld {
-		background: @pre-bg;
-	}
-	margin: 1em 0;
-	padding: .5em 1em;
-	border-top: 1px dotted #363;
-	border-bottom: 1px dotted #363;
+	margin: 1rem;
 	overflow-x: auto;
 	font-size: @small;
 	i {
 		font-style: regular;
 		font-family: @body-font;
 	}
-}
-code, var {
-	hyphens: manual;
 }
 
 @media screen, projection, tv, handheld {
