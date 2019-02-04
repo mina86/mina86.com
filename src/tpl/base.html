@@ -51,7 +51,7 @@
                    {{ attr('title', next.title, not next.subject) }}
                  >{%- if next.subject -%}{{
                            T('<u>n</u>ext:') | safe
-                       }} : <i>{{ next.subject }}</i>
+                       }} <i>{{ next.subject }}</i>
                   {%- else %}{{ T('<u>n</u>ext page') | safe }}
                   {%- endif %} »</a>
          {%- endif -%}
