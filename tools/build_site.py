@@ -70,7 +70,6 @@ TRANSLATIONS = {
     # Text in templates
     'Contact': {'pl': 'Kontakt'},
     'Categories': {'pl': 'Kategorie'},
-    'Archive': {'pl': 'Archiwum'},
     'Atom feed': {'pl': 'Kanał Atom'},
 
     '<u>p</u>revious:': {'pl': '<u>p</u>oprzedni wpis:'},

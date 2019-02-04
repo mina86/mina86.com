@@ -13,7 +13,7 @@
  */
 
 /* I need something which will automatically choose IDs and classes. */
-/* id:        d e         j k       o p q r   t u v w x y z */
+/* id:  a     d e         j k       o p q r   t u v w x y z */
 /* cls:     c   e     h   j k l m n o           u     x y   */
 
 @head-id: #h;  /* Page header. */
@@ -45,7 +45,6 @@
 /* Sidebar sections: */
 @contact-id: #n;  /* Contact section in the sidebar. */
 @categories-id: #l;  /* Categories section in the sidebar. */
-@archive-id: #a;  /* Archive section in the sidebar. */
 @feed-icon-cls: .f;  /* Class for the feed icon */
 @icons-id: #i;  /* Icons section at the bottom of the sidebar. */
 
@@ -666,8 +665,8 @@ blockquote {
 	}
 }
 
-/* Categories and archive */
-@{categories-id}, @{archive-id} {
+/* Categories */
+@{categories-id} {
 	ul {
 		display: table;
 		width: 100%;
