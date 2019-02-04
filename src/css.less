@@ -353,7 +353,7 @@ article {
 		top: 0;
 		left: 15%;
 		width: 70%;
-		height: 1px;
+		height: 0;
 		border-top: 1px solid mix(@body-bg, #000, 80%);
 	}
 
@@ -549,19 +549,20 @@ blockquote {
 @{meta-cls} {
 	overflow: auto;
 	page-break-inside: avoid;
-	margin: 1em 0;
+	margin-top: 2em;
 	font-style: italic;
 }
 @{meta-cls} > ul {
-	margin: 1em 0;
 	float: left;
+}
+@{meta-cls} > ul li {
+	margin-bottom: 0.5em;
 }
 @{meta-cls} > div {
 	font-size: @tiny;
 	text-align: right;
 }
 @{social-cls} {
-	margin-top: 1em;
 	min-height: 20px;  /* Height of G+ and Twitter buttons */
 	&:extend(.np);
 }
