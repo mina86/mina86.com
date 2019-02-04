@@ -3,7 +3,6 @@
 /*
  * Classes:
  * - table.tb – add top and bottom border to each of table’s TBODY.
- * - .rht – align text in element right.
  * - .nb – no break
  * - .np – no print
  * - p.nt – a note with some meta information (special licensing information,
@@ -15,7 +14,7 @@
 
 /* I need something which will automatically choose IDs and classes. */
 /* id:        d e         j k       o p q r   t u v w x y z */
-/* cls:     c   e     h   j k l m   o     r     u     x y   */
+/* cls:     c   e     h   j k l m n o           u     x y   */
 
 @head-id: #h;  /* Page header. */
 @body-id: #b;  /* Page body (article text, comments, sidebar etc). */
@@ -34,7 +33,6 @@
 
 /* Main content elements: */
 @pagination-cls: .p;  /* Pagination table. */
-@pagination-next-cls: .n;  /* Right-hand side link in pagination table. */
 @qed-cls: .q;  /* Article is shown in its entirety. */
 @byline-cls: .b;  /* Byline paragraph. */
 @article-text-cls: .t;  /* Text of the article. */
@@ -55,6 +53,9 @@
 @octo-id: #g;
 @octo-bg-cls: .z;
 @octo-arm-cls: .a;
+
+/* Generic stuff */
+@right-align-cls: .r;
 
 
 /* http://spencermortensen.com/articles/typographic-scale/
@@ -616,9 +617,6 @@ blockquote {
 		display: table-cell;
 	}
 }
-@{pagination-next-cls} {
-	text-align: right;
-}
 
 
 /**** Sidebar ****/
@@ -867,7 +865,7 @@ blockquote {
 
 /**** Generic stuff ****/
 
-.rht {
+@{right-align-cls} {
 	text-align: right;
 }
 

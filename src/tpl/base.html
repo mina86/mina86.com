@@ -46,7 +46,7 @@
                     {%- endif -%}</a>
         {%- endif -%}
         {%- if next -%}
-          <li class="n"><a href="{{ next.href }}" rel="next"
+          <li class="r"><a href="{{ next.href }}" rel="next"
                    {{ attr('accesskey', 'N', _prev_next_accesskeys[0]) }}
                    {{ attr('title', next.title, not next.subject) }}
                  >{%- if next.subject -%}{{
