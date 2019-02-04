@@ -1,0 +1,192 @@
+<!-- subject: Java: String↔char[] -->
+<!-- date: 2019-02-09 12:11:31 -->
+<!-- tags: java, reflection, evil -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>Do you recall when I decided to <a href="/2017/golang-string-and-bytes">abuse
+  Go’s run-time</a> and play with <code>string</code>↔<code>[]byte</code></a>
+  conversion?  Fun times… I wonder if we could do the same to Java?
+
+<p>To remind ourselves of the ‘problem’, strings in Java are immutable but
+  because Java has no concept of ownership or <code>const</code> keyword (can we
+  move the industry to Rust already?) to make true on that promise, Java
+  run-time has to make
+  a <a href="http://www.javacreed.com/what-is-defensive-copying/">defensive
+  copy</a> each time a new string is created or when string’s characters are
+  returned.
+
+<p>Alas, do not despair! There is another way (exception handling elided for
+  brevity):
+
+<pre>
+private static Field getValueField() {
+	final Field field = String.class.getDeclaredField("value");
+	field.setAccessible(true);
+	/* Test that it works. */
+	final char[] chars = new char[]{'F', 'o', 'o'};
+	final String string = new String();
+	field.set(string, chars);
+	if (string.equals("Foo") && field.get(string) == chars) {
+		return field;
+	}
+	throw new UnsupportedOperationException(
+		"UnsafeString not supported by the run-time");
+}
+
+private final static Field valueField = getValueField();
+
+public static String fromChars(final char[] chars) {
+	final String string = new String();
+	valueField.set(string, chars);
+	return string;
+}
+
+public static char[] toChars(final String string) {
+	return (char[]) valueField.get(string);
+}
+</pre>
+
+<p>However.  There is a twist…
+
+<!-- EXCERPT -->
+
+
+<h2>Benchmarks</h2>
+
+<p>Benchmarks shouldn’t surprise anyone:
+
+<table>
+  <thead>
+    <tr>
+      <th>Argument length
+      <th><code>UnsafeString​::​fromChars</code> [ns]
+      <th><code>String​::​new</code> [ns]
+      <th>
+  <tbody>
+    <tr class=r><td>      0<td>13.92<td>     4.97<td>    0.37✕
+    <tr class=r><td>      1<td>13.98<td>     8.07<td>    0.58✕
+    <tr class=r><td>      3<td>14.07<td>     8.07<td>    0.57✕
+    <tr class=r><td>      4<td>14.06<td>     8.09<td>    0.58✕
+    <tr class=r><td>     10<td>14.15<td>     9.25<td>    0.65✕
+    <tr class=r><td>     33<td>14.23<td>    12.54<td>    0.88✕
+    <tr class=r><td>    100<td>14.12<td>    29.68<td>    2.10✕
+    <tr class=r><td>  10000<td>14.17<td>  2937.<span style="opacity:0">98</span><td>  207.<span style="opacity:0">33</span>✕
+    <tr class=r><td>1000000<td>14.04<td>319440.<span style="opacity:0">00</span><td>22754.<span style="opacity:0">73</span>✕
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Argument length
+      <th><code>UnsafeString​::​toChars</code> [ns]
+      <th><code>String​::​toCharArray</code> [ns]
+      <th>
+  <tbody>
+    <tr class=r><td>      0<td> 5.79<td>     4.64<td>    0.80✕
+    <tr class=r><td>      1<td> 5.13<td>     9.17<td>    1.79✕
+    <tr class=r><td>      3<td> 5.57<td>     9.08<td>    1.63✕
+    <tr class=r><td>      4<td> 5.13<td>     9.13<td>    1.78✕
+    <tr class=r><td>     10<td> 5.67<td>    10.47<td>    1.85✕
+    <tr class=r><td>     33<td> 5.49<td>    13.03<td>    2.37✕
+    <tr class=r><td>    100<td> 5.11<td>    29.38<td>    5.75✕
+    <tr class=r><td>  10000<td> 5.12<td>  2950.<span style="opacity:0">88</span><td>  575.<span style="opacity:0">79</span>✕
+    <tr class=r><td>1000000<td> 5.15<td>318074.<span style="opacity:0">00</span><td>61728.<span style="opacity:0">38</span>✕
+</table>
+
+<p>The unsafe variant takes roughly the same amount of time regardless of the
+  size of the argument while safe variant scales linearly.  Interestingly,
+  because reflection is <em>slow</em>, safe call is faster for short strings.
+
+<p>The code including tests and benchmarks can be found in
+  <a href="https://github.com/mina86/java-unsafe-string">java-unsafe-string</a>
+  repository.
+
+<p>If the benchmarks aren’t surprising, what’s up with the twist then?
+
+
+<h2>Java 6</h2>
+
+<p>While we’re on the subject of messing with the Java’s <code>String</code>
+  object it might be good to mention the above code won’t work in Java 6 and
+  earlier versions.
+
+<p>Until Java 7u6, <code>String::substring</code> created objects which shared
+  character array with the ‘parent’ string.  This had some advantages – the
+  operation was constant time and constant memory operation – but could lead to
+  memory leaks (if the base string got garbage collected its entire contents
+  would remain in memory even if the substring needed just a small portion of
+  it) and complicated the <code>String</code> class (by requiring offset and
+  length fields).
+
+<p>In the end, the implementation has been changed and strings now own the
+  entire character array.  Interestingly,
+  the <a href="https://www.reddit.com/r/programming/comments/1qw73v/til_oracle_changed_the_internal_string/cdhb77f/">‘trigger’
+  for the change</a> was introduction of (now removed) new hashing algorithm for
+  strings.  Whatever the case, code presented here won’t work before Java 7u6.
+
+<p>But wait, this is still not the twist I’ve promised. ;)
+
+
+<h2>Java 9</h2>
+
+<p>The above benchmarks were run on Java 8 and by now probably everyone and
+  their dog knows that this particular version’s support has ended.  Let’s jump
+  to the next LTS version, Java 11:
+
+<pre>
+$ javac com/mina86/unsafe/*.java &amp;&amp;
+      echo &amp;&amp; java -version &amp;&amp; echo &amp;&amp;
+      java com.mina86.unsafe.UnsafeStringBenchmark
+
+openjdk version "11.0.2" 2019-01-15
+OpenJDK Runtime Environment (build 11.0.2+9-Debian-3)
+OpenJDK 64-Bit Server VM (build 11.0.2+9-Debian-3, mixed mode, sharing)
+
+Testing safe implementation: ........................... done, all ok
+ +   safe::fromChars/0      : 1194602409 ops in 1731473175 ns: 1.44941 ns/op
+ +   safe::fromChars/1      :  204060009 ops in 1622419993 ns: 7.95070 ns/op
+ +   safe::fromChars/3      :  312337323 ops in 2857745803 ns: 9.14955 ns/op
+ +   safe::fromChars/4      :  124336092 ops in 2170864835 ns: 17.4597 ns/op
+ +   safe::fromChars/10     :  306122448 ops in 2816903678 ns: 9.20189 ns/op
+ +   safe::fromChars/33     :  172483182 ops in 1914933095 ns: 11.1021 ns/op
+ +   safe::fromChars/100    :  103099869 ops in 2107079434 ns: 20.4373 ns/op
+ +   safe::fromChars/10000  :     661688 ops in 1031572901 ns: 1559.00 ns/op
+ +   safe::fromChars/1000000:       4397 ops in 1002248806 ns: 227939 ns/op
+ +     safe::toChars/0      :  280731006 ops in 2171809870 ns: 7.73627 ns/op
+ +     safe::toChars/1      :  273448179 ops in 2172255240 ns: 7.94394 ns/op
+ +     safe::toChars/3      :  284117814 ops in 2760800696 ns: 9.71710 ns/op
+ +     safe::toChars/4      :  240143619 ops in 2666941237 ns: 11.1056 ns/op
+ +     safe::toChars/10     :  234594930 ops in 2264769324 ns: 9.65396 ns/op
+ +     safe::toChars/33     :  205747203 ops in 2952933911 ns: 14.3522 ns/op
+ +     safe::toChars/100    :   94298106 ops in 2873368834 ns: 30.4711 ns/op
+ +     safe::toChars/10000  :     357551 ops in 1046061057 ns: 2925.63 ns/op
+ +     safe::toChars/1000000:       9012 ops in 2813949290 ns: 312245 ns/op
+</pre>
+
+<p>So far so good.  The times are bit more noisy but creation of an empty string
+  seemed to be optimised.  Let’s see how unsafe version compares.
+
+<pre>
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.mina86.unsafe.UnsafeStringImpl (file:/home/mpn/code/unsafe-str/) to field java.lang.String.value
+WARNING: Please consider reporting this to the maintainers of com.mina86.unsafe.UnsafeStringImpl
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+java.lang.IllegalArgumentException: Can not set final [B field java.lang.String.value to [C
+	at java.base/jdk.internal.reflect.UnsafeFieldAccessorImpl.throwSetIllegalArgumentException(UnsafeFieldAccessorImpl.java:167)
+	at java.base/jdk.internal.reflect.UnsafeFieldAccessorImpl.throwSetIllegalArgumentException(UnsafeFieldAccessorImpl.java:171)
+	at java.base/jdk.internal.reflect.UnsafeQualifiedObjectFieldAccessorImpl.set(UnsafeQualifiedObjectFieldAccessorImpl.java:83)
+	at java.base/java.lang.reflect.Field.set(Field.java:780)
+	at com.mina86.unsafe.UnsafeStringImpl.makeUnsafeMaybe(UnsafeStringImpl.java:19)
+	at com.mina86.unsafe.UnsafeStringBenchmark.main(UnsafeStringBenchmark.java:15)
+Testing unsafe implementation: unsupported by the run-time
+</pre>
+
+<p>How’s that for a twist? Uh? I overhyped the twist, you say? Well… Dumbledore
+  dies!
+
+<p>On a serious note though, yes, starting with Java 9, Oracle
+  started <a href="http://mail.openjdk.java.net/pipermail/jigsaw-dev/2017-March/011763.html">locking
+  down</a> internal APIs making some low-level optimisations no longer possible,
+  so as you move from Java 8 remember to check any libraries which achieve high
+  performance by messing around Java’s internals.

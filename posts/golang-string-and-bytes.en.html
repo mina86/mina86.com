@@ -1,6 +1,6 @@
 <!-- subject: Go: string↔[]byte -->
 <!-- date: 2017-02-28 20:14:55 -->
-<!-- tags: golang -->
+<!-- tags: golang, reflection, evil -->
 <!-- categories: Articles, English, Techblog -->
 
 <p>Yes… I’ve started coding in Go recently.  It lacks many things but
@@ -60,6 +60,7 @@ func Bytes(str string) []byte {
       <th><code>Bytes(bytes)</code> [ns]
       <th><code>[]byte(bytes)</code> [ns]
       <th>
+  <tbody>
     <tr class=r><td>0       <td>1.86<td>      6.24<td>3.4✕
     <tr class=r><td>10      <td>1.86<td>      7.31<td>3.9✕
     <tr class=r><td>1000    <td>1.85<td>    230.<span style="opacity:0">00</span><td>124.<span style="opacity:0">3</span>✕
