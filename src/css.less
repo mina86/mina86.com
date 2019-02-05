@@ -4,7 +4,6 @@
  * Classes:
  * - table.tb – add top and bottom border to each of table’s TBODY.
  * - .nb – no break
- * - .np – no print
  * - p.nt – a note with some meta information (special licensing information,
  *   note about series, etc.)  Set with smaller font.
  * - p.ig – an image at the top of some posts (most notably news articles) and
@@ -117,6 +116,12 @@
 .grayscale-off() {
 	-webkit-filter: none;
 	filter: none;
+}
+
+.no-print() {
+	@media print {
+		display: none !important;
+	}
 }
 
 
@@ -338,7 +343,7 @@ a:hover, a:focus, a:active {
 	}
 
 	nav, #___gcse_0 {
-		&:extend(.np);
+		.no-print();
 	}
 }
 
@@ -551,7 +556,7 @@ blockquote > :last-child { margin-bottom: 0; }
 	min-height: 20px;  /* Height of G+ and Twitter buttons */
 	font-size: @tiny;
 	text-align: right;
-	&:extend(.np);
+	.no-print();
 	a {
 		display: inline-block;
 		font: bold 11px/18px 'Helvetica Neue', Arial, sans-serif;
@@ -579,7 +584,7 @@ a@{facebook-cls} {
 @{cats-and-tags-cls} {
 	font-size: @tiny;
 	text-align: right;
-	&:extend(.np);
+	.no-print();
 
 	ul {
 		display: block;
@@ -616,7 +621,7 @@ a@{facebook-cls} {
 	display: table;
 	table-layout: fixed;
 	margin: 1em 0;
-	&:extend(.np);
+	.no-print();
 
 	ul {
 		display: table-row;
@@ -694,7 +699,7 @@ a@{facebook-cls} {
 		padding: 0 0.5em;
 		color: #555;
 	}
-	&:extend(.np);
+	.no-print();
 }
 @{feed-icon-cls} {
 	width: 16px;
@@ -744,7 +749,7 @@ a@{facebook-cls} {
 	/* Conservancy */
 	li:nth-child(4) a { background-position: -20px   5px; }
 
-	&:extend(.np);
+	.no-print();
 }
 
 
@@ -863,7 +868,7 @@ a@{facebook-cls} {
 	}
 }
 
-@{meta-cls} > ul li + li, .np {
+@{meta-cls} > ul li + li {
 	@media print {
 		display: none !important;
 	}
