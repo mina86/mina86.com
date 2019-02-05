@@ -176,7 +176,7 @@ def build_no_expiry(writer):
 
 
 _IS_COMPRESSABLE_RE = re.compile(
-    r'\.(?:%s)$' % '|'.join(('css', 'html', 'js', 'xml', 'gpg')))
+    r'\.(?:%s)$' % '|'.join(('css', 'html', 'js', 'xml', 'gpg', 'svg')))
 
 def is_compressable(path):
     return bool(_IS_COMPRESSABLE_RE.search(path))
