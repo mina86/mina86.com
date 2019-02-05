@@ -516,9 +516,12 @@ pre {
 	}
 }
 
+blockquote, @{feed-icon-cls} span, @{icons-id} a {
+	background: url(DATA<sprites.png>) no-repeat;
+}
+
 /* Misc */
 blockquote {
-	background: url(/d/sprites.png) no-repeat;
 	background-position: -69px 0;
 	min-height: 20px;
 	padding: 0 30px;
@@ -529,12 +532,6 @@ blockquote {
 		text-align: left;
 		hyphens: manual;
 	}
-}
-
-.plFlag {
-	background: url(/d/sprites.png) no-repeat;
-	background-position: -41px -25px;
-	text-indent: 22px;
 }
 
 /* Meta information, social etc. */
@@ -682,7 +679,6 @@ blockquote {
 @{feed-icon-cls} {
 	width: 16px;
 	span {
-		background: url(/d/sprites.png) no-repeat;
 		display: block;
 		background-position: 0px -25px;
 		width: 16px;
@@ -711,7 +707,6 @@ blockquote {
 		display: inline-block;
 		width: 24px;
 		height: 24px;
-		background: url(/d/sprites.png) no-repeat;
 		.grayscale-on();
 		.text-off-screen();
 		&:hover, &:focus, &:active {
