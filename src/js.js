@@ -14,7 +14,7 @@
 		'cse.google.com/cse.js?cx=005697715059674104273:zluc68s5jow'
 	].map(function(src) {
 		tmp = D.createElement('script');
-		tmp.src = 'https://' + src;
+		tmp.src = '//' + src;
 		(D.head || D.body).appendChild(tmp);
 	});
 
