@@ -86,23 +86,12 @@
     </div>
 
     <footer class="g">
-      {% if not post_page %}
-        <ul>
-          {% if not full %}
-            <li><a href="{{ entry.href }}#m">{{ T('Continue reading') }} »</a>
-          {% endif %}
-          <li><a href="{{ entry.href }}#c">
-              {%- if lang == 'pl' -%}
-                Komentarze: <span class="spot-im-replies-count"
-                      data-post-id="{{ entry.permalink }}" lang=en>zobacz</span>
-              {%- else -%}
-                <span class="spot-im-replies-count"
-                      data-post-id="{{ entry.permalink }}"
-                      lang=en>See</span> comments
-              {%- endif -%}
-            </a>
-        </ul>
-      {% endif %}
+      {%- if post_page -%}
+      {%- elif full -%}
+        <a href="{{ entry.href }}#c">{{ T('See comments') }} »</a>
+      {%- else -%}
+        <a href="{{ entry.href }}#m">{{ T('Continue reading') }} »</a>
+      {%- endif -%}
 
       {{ social(entry) }}
 
@@ -215,7 +204,6 @@
 
 
 <script src=/d/js></script>
-
 
 {# GitHub octocat corner https://github.com/tholman/github-corners
    Copyright (c) 2016 Tim Holman

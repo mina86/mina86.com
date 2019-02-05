@@ -78,6 +78,7 @@ TRANSLATIONS = {
     '<u>n</u>ext page': {'pl': '<u>n</u>astępna strona'},
 
     'Permanent link to the entry.': {'pl': 'Stabilny link do wpisu.'},
+    'See comments': {'pl': 'Zobacz komentarze'},
     'Continue reading': {'pl': 'Czytaj dalej'},
     'In categories:': {'pl': 'Kategorie:'},
     'Tagged with:': {'pl': 'Tagi:'},

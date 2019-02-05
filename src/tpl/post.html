@@ -8,9 +8,12 @@
   {%- endblock -%}
 
 <div id=c>
-  <script async
-          data-spotim-module="spotim-launcher"
-          src="https://launcher.spot.im/spot/sp_yH01UA8B"
-          data-post-id="{{ entry.permalink }}"></script>
+  <div class="just-comments"
+       data-allowguests="true"
+       data-enableemailnotifications="true"
+       data-locale="{{ lang }}"
+       data-pageid="{{ entry.permalink }}"
+       data-apikey="05aa2c85-b046-4617-98c3-c3bc2d9388d2"></div>
+  <script async src="//just-comments.com/w.js"></script>
 </div>
 {%- endblock -%}
