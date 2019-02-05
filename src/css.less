@@ -14,7 +14,7 @@
 
 /* I need something which will automatically choose IDs and classes. */
 /* id:  a     d e         j k       o p q r   t u v w x y z */
-/* cls:     c   e     h   j k l m n o           u     x y   */
+/* cls:     c   e     h   j k l m n o           u           */
 
 @head-id: #h;  /* Page header. */
 @body-id: #b;  /* Page body (article text, comments, sidebar etc). */
@@ -40,6 +40,8 @@
 
 @meta-cls: .g;
 @social-cls: .s;
+@tweet-cls: .x;
+@facebook-cls: .y;
 @cats-and-tags-cls: .i;
 
 /* Sidebar sections: */
@@ -550,20 +552,28 @@ blockquote > :last-child { margin-bottom: 0; }
 	font-size: @tiny;
 	text-align: right;
 	&:extend(.np);
+	a {
+		display: inline-block;
+		font: bold 11px/18px 'Helvetica Neue', Arial, sans-serif;
+		color: #fff;
+		height: 20px;
+		overflow: hidden;
+		border-radius: 3px;
+		text-decoration: none;
+		text-shadow: none;
+		padding: 1px 8px 1px 20px;
+	}
 }
-@{social-cls} a {
-	display: inline-block;
-	font: 11px/18px 'Helvetica Neue', Arial, sans-serif;
+a@{tweet-cls} {
 	background: #1b95e0 url(DATA<tweet.svg>) no-repeat;
-	color: #fff;
-	border-radius: 3px;
-	height: 20px;
-	overflow: hidden;
-	padding: 1px 8px 1px 20px;
-	text-decoration: none;
-	text-shadow: none;
 	&:active, &:focus, &:hover {
 		background-color: #0c7abf;
+	}
+}
+a@{facebook-cls} {
+	background: #577fbc url(DATA<fb.svg>) no-repeat;
+	&:active, &:focus, &:hover {
+		background-color: #3871C6;
 	}
 }
 @{cats-and-tags-cls} {

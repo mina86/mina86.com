@@ -29,7 +29,10 @@
          entry.href | urlencode
        }}{% if entry.tags -%}
          &amp;hashtags={{ entry.tags | join(',') | urlencode }}
-       {%- endif -%}" target=_blank rel=noopener>Tweet</a>
+       {%- endif -%}" target=_blank rel=noopener class=x>Tweet</a>
+    <a href="//www.facebook.com/sharer/sharer.php?u=https://mina86.com{{
+         entry.href | urlencode
+       }}" target=_blank rel=noopener class=y>Share</a>
   </div>
 {%- endmacro -%}
 
