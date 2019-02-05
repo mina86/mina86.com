@@ -545,13 +545,26 @@ blockquote > :last-child { margin-bottom: 0; }
 @{meta-cls} > ul li {
 	margin-bottom: 0.5em;
 }
-@{meta-cls} > div {
-	font-size: @tiny;
-	text-align: right;
-}
 @{social-cls} {
 	min-height: 20px;  /* Height of G+ and Twitter buttons */
+	font-size: @tiny;
+	text-align: right;
 	&:extend(.np);
+}
+@{social-cls} a {
+	display: inline-block;
+	font: 11px/18px 'Helvetica Neue', Arial, sans-serif;
+	background: #1b95e0 url(DATA<tweet.svg>) no-repeat;
+	color: #fff;
+	border-radius: 3px;
+	height: 20px;
+	overflow: hidden;
+	padding: 1px 8px 1px 20px;
+	text-decoration: none;
+	text-shadow: none;
+	&:active, &:focus, &:hover {
+		background-color: #0c7abf;
+	}
 }
 @{cats-and-tags-cls} {
 	font-size: @tiny;
@@ -590,7 +603,6 @@ blockquote > :last-child { margin-bottom: 0; }
 /* Pagination table */
 @{pagination-cls} {
 	width: 100%;
-	box-sizing: border-box;
 	display: table;
 	table-layout: fixed;
 	margin: 1em 0;

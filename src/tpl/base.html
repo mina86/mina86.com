@@ -21,12 +21,15 @@
   {%- endif -%}
 {%- endmacro -%}
 
-{%- macro social(href, title='') -%}
+{%- macro social(entry) -%}
   <div class="s">
-    <a href="https://twitter.com/share"
-       class="twitter-share-button"
-       data-url="{{ href }}"
-       {{ attr('title', title) }}>Tweet</a>
+    <a href="//twitter.com/intent/tweet?text={{
+         entry.subject | urlencode
+       }}&amp;url=https://mina86.com{{
+         entry.href | urlencode
+       }}{% if entry.tags -%}
+         &amp;hashtags={{ entry.tags | join(',') | urlencode }}
+       {%- endif -%}" target=_blank rel=noopener>Tweet</a>
   </div>
 {%- endmacro -%}
 
@@ -98,7 +101,7 @@
         </ul>
       {% endif %}
 
-      {{ social(entry.href, entry.subject) }}
+      {{ social(entry) }}
 
       <div class="i">
         <ul>

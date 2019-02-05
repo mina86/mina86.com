@@ -9,7 +9,6 @@
 	W['_gaq'] = [['_setAccount', 'UA-240278-1'], ['_trackPageview']];
 	[
 		'cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML',
-		'platform.twitter.com/widgets.js',
 		'launcher.spot.im/spot/sp_yH01UA8B',
 		'www.google-analytics.com/ga.js',
 		'cse.google.com/cse.js?cx=005697715059674104273:zluc68s5jow'
