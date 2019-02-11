@@ -45,13 +45,28 @@ def print_action(action, *target):
     print(' %-4s %s' % (action, ' '.join(target)))
 
 
+_CPU_COUNT = None
+
+def cpu_count():
+    global _CPU_COUNT
+    if _CPU_COUNT is None:
+        n = 0
+        with open('/proc/cpuinfo') as fd:
+            for line in fd:
+                if line.startswith('processor '):
+                    n += 1
+        _CPU_COUNT = n
+    return _CPU_COUNT or 1
+
 def make(targets):
+    makeflags = os.environ.get('MAKEFLAGS') or os.environ.get('MFLAGS')
+    no_jobserver = not bool(makeflags and
+                            re.search('--jobserver-(?:fds|auth)', makeflags))
     args = ['make', '-s']
-    if not re.search('--jobserver-(?:fds|auth)',
-                     os.environ.get('MAKEFLAGS', '')):
-        args.append('-j8')
+    if no_jobserver:
+        args.append('-j{}'.format(cpu_count() * 2))
     args.extend(targets)
-    subprocess.check_call(args)
+    subprocess.check_call(args, close_fds=no_jobserver)
 
 
 class Writer(object):
