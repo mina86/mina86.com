@@ -82,6 +82,12 @@ def process_css(data: bytes, src_dir: str,
 _Attributes = typing.Sequence[typing.Tuple[str, typing.Optional[str]]]
 
 class HTMLMinParser(htmlmin.parser.HTMLMinParser):
+    @staticmethod
+    def _minify_css(data):
+        # CSS style, remove unnecessary spaces after punctuation marks.
+        # This is very likely to break non-trivial rules.
+        data = re.sub(r'\s+', ' ', data.strip())
+        return re.sub(r'\s*([:;,{}])\s*', r'\1', data)
 
     def __init__(self, *args: typing.Any, **kw: typing.Any):
         self._static_mappings = kw.pop('static_mappings', None)
@@ -121,14 +127,23 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
 
         value = re.sub(r'\s+', ' ', value.strip())
         if attr == 'style':
-            # CSS style, remove unnecessary spaces after punctuation marks.
-            # This is very likely to break non-trivial rules.
-            value = re.sub(' ?([:;,]) ', '\\1', value)
+            value = self._minify_css(value)
+        elif attr == 'd' and tag == 'path':
+            # In SVG’s D attribute of PATH element the only required white-space
+            # is between numbers (except space is not necessary before minus
+            # sign).
+            value = re.sub(r' ?([-a-zA-Z,]) ?', r'\1', value)
         elif '%s %s' % (tag, attr) in ('link media', 'area coords',
                                      'meta content'):
             # Comma separated lists, remove unnecessary spaces around commas.
             value = re.sub(r' ?, ?', ',', value)
         return value
+
+    def handle_data(self, data):
+        if self._tag_stack and self._tag_stack[0][0] == 'style':
+            self._data_buffer.append(self._minify_css(data))
+        else:
+            super().handle_data(data)
 
     def handle_comment(self, comment: str) -> None:
         if comment.startswith('[if '):
@@ -145,7 +160,9 @@ def minify_html(data: str, **kw: typing.Any) -> str:
         'body', 'br', 'col', 'div', 'form', 'h[1-6]', 'head', 'html', 'link',
         'meta', 'p', 'script', 'table', 't[dhr]', 'textarea', 'title', '[ou]l',
         '[A-Z_][A-Z_]*', 'section', 'header', 'aside', 'article', 'nav',
-        'footer'
+        'footer', 'style',
+        # SVG elements:
+        'svg', 'rect', 'g',
     ))
 
     def make_parser(*args: typing.Any, **kwargs: typing.Any) -> HTMLMinParser:
@@ -165,5 +182,6 @@ def minify_html(data: str, **kw: typing.Any) -> str:
     data = re.sub(r'(</pre>)\s+', r'\1', data)
     data = re.sub('(<pre>)(?:[ \t]*\n)+', r'\1', data)
     data = re.sub(r'(</?%s\b[^>]*>)\s+' % block, r'\1', data)
+    data = re.sub(r'\s+<text\b', '<text', data)
 
     return data
