@@ -14,7 +14,16 @@
 	].map(function(src) {
 		tmp = D.createElement('script');
 		tmp.src = '//' + src;
-		(D.head || D.body).appendChild(tmp);
+		D.head.appendChild(tmp);
+	});
+
+	/* Apple touch icon */
+	[192, 180, 152, 120, 76].map(function(w) {
+		tmp = D.createElement('link');
+		link.rel = 'apple-touch-icon';
+		link.sizes = w + 'x' + w;
+		link.href = '/d/' + w + '.png';
+		D.head.appendChild(tmp);
 	});
 
 	/* Sidebar pinning */
