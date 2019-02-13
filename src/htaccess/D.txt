@@ -1,3 +1,4 @@
+# -*- apache -*-
 ExpiresActive On
 ExpiresDefault "access plus 1 year"
 # Need to overwrite what has been specified in ../.htaccess

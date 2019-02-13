@@ -451,7 +451,6 @@ def generate(writer, site):
     sitemap = Sitemap()
 
     redirs = collections.defaultdict(set)
-    redirs_cutoff = datetime.datetime(2016, 5, 1)
 
     for lang in SUPPORTED_LANGUAGES:
         Post.PREFERRED_LANGUAGE = lang
@@ -589,23 +588,6 @@ def generate(writer, site):
                 'categories': categories,
             })
             sitemap_add(cur.url, cur.date, priority='1.0')
-            if cur.date < redirs_cutoff:
-                redirs[cur.date.year].add(cur.permalink)
-
-        # Generate rewrites in /p directory which for a short while was where
-        # all files lived.
-        content = ['RewriteEngine On']
-        for year in sorted(redirs):
-            links = redirs[year]
-            if len(links) == 1:
-                links = links.pop()
-            else:
-                links = sorted(links)
-                links = '(?:%s)' % '|'.join(links)
-            content.append(
-                'RewriteRule "^(%s(?:/.*|$))" "/%s/$1" [END,R=permanent]' % (
-                    links, year))
-        writer.write_file('p/.htaccess', '\n'.join(content))
 
         # Generate pages pages
         for entry in site.pages:

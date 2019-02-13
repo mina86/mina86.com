@@ -1,3 +1,4 @@
+# -*- apache -*-
 RedirectPermanent / https://mina86.com/
 
 # Just a day for now, see <https://faq.nearlyfreespeech.net/full/enforcessl>.
