@@ -568,7 +568,7 @@ def generate(writer, site):
                 'categories': categories,
             })
             sitemap_add(BASE_HREF + href(i), posts[i * 10].date,
-                        'weekly', '0.4' if i else '1.0')
+                        'weekly' if i else 'daily', '0.5' if i else '1.0')
             i += 1
         writer.write_atom('atom.%s.xml' % lang, posts,
                           href='/',

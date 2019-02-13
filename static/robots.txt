@@ -1,2 +1,4 @@
 User-agent: *
 Disallow: /p/
+
+Sitemap: https://mina86.com/sitemap.xml
