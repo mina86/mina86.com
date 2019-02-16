@@ -53,16 +53,12 @@ AddType text/javascript .js
 	AddType application/atom+xml .xml
 </FilesMatch>
 
-# Images almost never change so set a long expiry.  CSS and JavaScript resources
-# may change more frequently so a week expiry should be enough.  Finally, for
-# everything else (i.e. HTML and feed files) it’s important that changes are
-# picked up quickly (I can live with slightly outdated styles but user should
-# see new posts as quickly as possible).
+# Images almost never change so set a long expiry.  Everything else set expiry
+# to one hour so changes are picked up quickly.  The /D/ directory has its own
+# rules in its own .htaccess file.
 ExpiresActive On
 ExpiresDefault "access plus 1 hour"
-ExpiresByType text/css "access plus 1 week"
-ExpiresByType text/javascript "access plus 1 week"
 ExpiresByType image/* "access plus 1 month"
 
-# Just a day for now, see <https://faq.nearlyfreespeech.net/full/enforcessl>.
-Header set Strict-Transport-Security "max-age=31556925" "expr=%{req_novary:X-Forwarded-Proto}=='https'"
+Header set Strict-Transport-Security "max-age=31556925" \
+       "expr=%{req_novary:X-Forwarded-Proto}=='https'"
