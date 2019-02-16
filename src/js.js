@@ -13,7 +13,7 @@
 		'cse.google.com/cse.js?cx=005697715059674104273:zluc68s5jow'
 	].map(function(src) {
 		tmp = D.createElement('script');
-		tmp.src = '//' + src;
+		tmp.src = 'https://' + src;
 		D.head.appendChild(tmp);
 	});
 

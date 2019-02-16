@@ -23,14 +23,14 @@
 
 {%- macro social(entry) -%}
   <div class="s">
-    <a href="//twitter.com/intent/tweet?text={{
+    <a href="https://twitter.com/intent/tweet?text={{
          entry.subject | urlencode
        }}&amp;url=https://mina86.com{{
          entry.href | urlencode
        }}{% if entry.tags -%}
          &amp;hashtags={{ entry.tags | join(',') | urlencode }}
        {%- endif -%}" target=_blank rel=noopener class=x>Tweet</a>
-    <a href="//www.facebook.com/sharer/sharer.php?u=https://mina86.com{{
+    <a href="https://www.facebook.com/sharer/sharer.php?u=https://mina86.com{{
          entry.href | urlencode
        }}" target=_blank rel=noopener class=y>Share</a>
   </div>
@@ -150,13 +150,13 @@
       <ul>
         {%- if lang == 'pl' -%}
           <li><a accesskey="H" href="/">Główna</a>
-          <li><a accesskey="D" href="//github.com/mina86/">Ko<u>d</u></a>
+          <li><a accesskey="D" href="https://github.com/mina86/">Ko<u>d</u></a>
           <li><a accesskey="F" href="/c/downloads/">Pliki</a>
           <li class=d><a accesskey="N" href=#n>Ko<u>n</u>takt</a>
           <li class=d><a accesskey="C" href=#l>Kategorie</a>
         {%- else -%}
           <li><a accesskey="H" href="/"><u>H</u>ome</a>
-          <li><a accesskey="D" href="//github.com/mina86/">Co<u>d</u>e</a>
+          <li><a accesskey="D" href="https://github.com/mina86/">Co<u>d</u>e</a>
           <li><a accesskey="F" href="/c/downloads/"><u>F</u>iles</a>
           <li class=d><a accesskey="N" href=#n>Co<u>n</u>tact</a>
           <li class=d><a accesskey="C" href=#l><u>C</u>ategories</a>
@@ -181,18 +181,18 @@
 
     <p>O ile nie zaznaczono inaczej, treść wpisów udostępniany na
       zasadach licencji <a rel="license"
-      href="//creativecommons.org/licenses/by-sa/4.0/">CC BY-SA
+      href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA
       4.0</a>, a kod – <a rel="license"
-      href="//www.apache.org/licenses/LICENSE-2.0">Apache
+      href="https://www.apache.org/licenses/LICENSE-2.0">Apache
       License, Version 2.0</a>.
 
   {%- else -%}
 
     <p>Unless stated otherwise, text of the entries licensed under
       the <a rel="license"
-      href="//creativecommons.org/licenses/by-sa/4.0/">CC BY-SA
+      href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA
       4.0</a> license and code – <a rel="license"
-      href="//www.apache.org/licenses/LICENSE-2.0">Apache
+      href="https://www.apache.org/licenses/LICENSE-2.0">Apache
       License, Version 2.0</a>.
 
   {%- endif -%}
@@ -221,7 +221,7 @@
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE. #}
 
-<a href="//github.com/mina86/" id="g"
+<a href="https://github.com/mina86/" id="g"
    {%- if lang == 'pl' -%}
      aria-label="Zobacz moje repozytoria na GitHubie"
    {%- else -%}
