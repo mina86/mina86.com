@@ -23,8 +23,8 @@
 @side-id: #s;  /* Sidebar. */
 @pin-cls: .v;  /* Sidebar pinned to the side. */
 
-@wrap-cls: .w;  /* Wrapper DIV inside @head-id and @body-id elements which exists
-                  to limit the ‘usable’ width. */
+@wrap-cls: .w;  /* Wrapper DIV inside @head-id and @body-id elements which
+                   exists to limit the ‘usable’ width. */
 
 /* Header elements: */
 /* Last links in header which are hidden when side bar is on the side. */
@@ -77,7 +77,6 @@
 // @even-bg: @milky-way;
 // @sidebar-bg: #fff;
 // @footer-bg: @header-bg;
-// @pre-bg: desaturate(@bg, 100%);
 
 /* http://davidjohnstone.net/pages/lch-lab-colour-gradient-picker is quite
    useful. */
@@ -85,7 +84,6 @@
 @head-bg: #0844a2;  /* Average colour of /d/top-img.jpg */
 @body-bg: #e4f0ff;  /* L* = 95, same a* and b* as @head-bg */
 @side-bg: #b6ccee;  /* Step between @head-bg and @body-bg. */
-@pre-bg:  #f1f1f1;  /* c = 0, same L* and h as @body-bg */
 
 @text-color: #333333;  /* L* = 20 */
 @code-color: #004a17;  /* L* = 20 */
@@ -361,7 +359,7 @@ article {
 		left: 15%;
 		width: 70%;
 		height: 0;
-		border-top: 1px solid mix(@body-bg, #000, 80%);
+		border-top: 1px solid shade(@body-bg, 20%);
 	}
 
 	p, dd, li {
@@ -375,7 +373,7 @@ article {
 	}
 
 	@media screen, projection, tv, handheld {
-		text-shadow: 1px 1px 0 #D9D9E6;;
+		text-shadow: 1px 1px #D9D9E6;
 	}
 }
 
@@ -456,7 +454,7 @@ pre, code, kbd {
 }
 pre {
 	font-family: @mono-font;
-	margin: 1rem;
+	margin: 1rem 0;
 	overflow-x: auto;
 	font-size: @small;
 	i {
