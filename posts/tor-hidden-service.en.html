@@ -1,0 +1,292 @@
+<!-- subject: Setting up Tor hidden service -->
+<!-- date: 2019-02-17 20:11:06 -->
+<!-- tags: tor, hidden service, turris omnia -->
+<!-- categories: Articles, English, Techblog -->
+
+<!--svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="10em" height="10em"
+     viewBox="0 0 760 760"
+     style="float: right">
+  <path d="M411,415  12,415  20,553 331,553 451,760 610,760z
+           M630,381 749,174 669, 36 470,381 670,726 749,588z"
+        fill="#1d1d1b"/>
+  <path d="M291,139 530,139 610,1 212,1 12,346 172,346z"
+        fill="#00a2e2"/>
+</svg-->
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+     width="6em" height="9.2em" viewBox="0 0 24 37"
+     style="float: right; margin: 0 0 0 1em; shape-outside:
+         polygon(0 100%,0 55%,40%35%,40%25%,65%0,100% 0,100%100%);">
+  <path d="M 13.782,2.762 12.798,6.672 C 14.192,3.911 16.407,1.832 18.951,0 17.091,2.16 15.396,4.321 14.357,6.481 16.107,4.02 18.459,2.653 21.111,1.75 17.583,4.895 14.783,8.27 12.65,11.661 L 10.955,10.922 C 11.255,8.215 12.278,5.442 13.782,2.762 Z"
+        fill="#abcd03" />
+  <path d="m 9.255,10.204 3.227,1.339 c 0,0.821 -0.067,3.323 0.446,4.062 5.367,6.912 4.464,20.767 -1.087,21.122 -8.453,0 -11.677,-5.743 -11.677,-11.021 0,-4.813 5.77,-8.013 9.216,-10.857 0.875,-0.766 0.723,-2.458 -0.125,-4.646 z"
+        fill="#fffcdb" />
+  <path d="m 12.483,11.494 1.163,0.593 c -0.109,0.765 0.055,2.461 0.82,2.899 3.391,2.106 6.591,4.403 7.849,6.7 4.485,8.095 -3.145,15.587 -9.735,14.876 3.582,-2.653 4.622,-8.094 3.282,-14.029 -0.547,-2.325 -1.395,-4.43 -2.899,-6.809 -0.652,-1.168 -0.424,-2.616 -0.479,-4.23 z"
+        fill="#7d4698" />
+  <path d="M 8.997,9.434 8.641,9.708 c 1.778,3.199 0.848,4.895 -0.027,5.497 -1.778,1.231 -4.375,2.762 -5.661,4.102 -2.489,2.543 -3.2,4.977 -2.981,8.177 0.246,4.102 3.227,7.52 7.219,8.86 C 8.942,36.918 10.555,37 12.36,37 c 2.899,0 5.88,-0.766 8.04,-2.571 2.297,-1.914 3.664,-4.786 3.664,-7.767 0,-3.008 -1.258,-5.852 -3.473,-7.876 -1.176,-1.066 -2.653,-1.941 -4.184,-2.789 -0.684,-0.383 -2.79,-2.024 -2.079,-4.375 l -2.406,-0.329 1.478,0.738 c -0.492,1.832 1.012,3.747 2.215,4.43 1.203,0.684 3.145,1.969 4.321,3.036 2.051,1.832 3.145,4.43 3.145,7.165 0,2.707 -1.176,5.36 -3.282,7.11 -1.605,1.338 -4.3,2.329 -6.264,2.606 0.743,-0.534 1.728,-1.674 2.188,-2.934 1.012,-2.707 1.203,-5.934 0.793,-9.325 -0.027,-0.328 -0.574,-3.254 -1.094,-4.485 -0.738,-1.832 -2.051,-3.473 -2.188,-3.828 -0.246,-0.602 -0.786,-1.851 -0.745,-3.558 -0.081,1.461 -0.103,1.999 0.171,3.066 0.301,1.176 1.832,2.871 2.461,4.813 1.203,3.719 0.903,8.587 0.027,12.388 -0.154,0.629 -0.581,1.39 -1.151,2.086 0.201,-0.367 0.374,-0.765 0.494,-1.183 0.875,-3.063 1.231,-4.485 0.82,-7.876 -0.055,-0.328 -0.191,-1.449 -0.711,-2.653 -0.766,-1.832 -1.86,-3.582 -1.996,-3.938 -0.246,-0.574 -0.575,-3.063 -0.629,-4.758 0.027,1.422 0.137,4.075 0.52,5.114 0.109,0.355 1.121,1.914 1.832,3.801 0.492,1.313 0.602,2.516 0.684,2.871 0.328,1.559 -0.082,4.184 -0.629,6.673 -0.225,1.101 -0.893,2.422 -1.715,3.223 -0.015,0.011 -0.029,0.022 -0.044,0.032 0.515,-0.518 1.019,-1.387 1.323,-2.436 0.41,-1.449 0.572,-3.304 0.544,-4.48 -0.027,-0.684 -0.329,-2.164 -0.876,-3.504 -0.301,-0.738 -0.763,-1.476 -1.064,-1.996 -0.328,-0.52 -0.33,-1.641 -0.494,-2.953 0.027,1.422 -0.111,2.135 0.244,3.147 0.219,0.602 0.958,1.422 1.176,2.215 0.301,1.067 0.628,2.242 0.601,2.953 0,0.821 -0.051,2.351 -0.407,3.992 -0.266,1.331 -0.874,2.475 -1.89,3.141 v -0.031 c 0.531,-0.592 0.85,-1.179 0.957,-1.771 0.137,-0.711 0.168,-1.424 0.25,-2.271 0.082,-0.711 0.022,-1.669 -0.169,-2.653 -0.273,-1.231 -0.735,-2.485 -0.926,-3.36 0.027,0.957 0.412,2.183 0.576,3.442 0.137,0.93 0.077,1.864 0.05,2.684 -0.027,0.95 -0.343,2.652 -0.776,3.479 -0.408,-0.187 -0.567,-0.4 -0.832,-0.745 -0.328,-0.465 -0.551,-0.93 -0.77,-1.477 -0.164,-0.41 -0.356,-0.88 -0.438,-1.427 -0.109,-0.82 -0.079,-2.104 0.851,-3.417 0.711,-1.039 0.874,-1.118 1.12,-2.321 -0.328,1.066 -0.573,1.175 -1.339,2.077 -0.848,0.985 -0.989,2.435 -0.989,3.61 0,0.492 0.196,1.039 0.388,1.558 0.219,0.547 0.406,1.092 0.707,1.502 0.452,0.665 1.031,1.043 1.314,1.114 0.002,4e-4 0.004,-4.01e-4 0.006,0 0.006,0.001 0.013,0.005 0.018,0.006 -0.019,0.012 -0.037,0.026 -0.056,0.038 C 10.651,35.803 9.388,35.425 8.642,34.785 7.193,33.527 5.909,31.424 5.745,29.592 c -0.137,-1.504 1.256,-3.722 3.197,-4.843 1.641,-0.957 2.022,-2.048 2.378,-3.798 -0.492,1.531 -0.954,2.815 -2.54,3.636 -2.297,1.203 -3.476,3.223 -3.366,5.137 0.164,2.461 1.15,4.129 3.091,5.469 0.564,0.395 1.463,0.802 2.282,1.073 -2.961,-0.687 -3.284,-1.013 -4.142,-2.027 0,-0.055 -0.219,-0.191 -0.219,-0.246 -1.094,-1.258 -2.489,-3.391 -2.981,-5.36 -0.164,-0.684 -0.328,-1.422 -0.137,-2.106 0.902,-3.227 2.872,-4.485 4.84,-5.825 0.492,-0.328 0.957,-0.656 1.422,-0.984 1.094,-0.848 1.367,-3.118 1.613,-4.376 -0.465,1.559 -0.93,3.473 -1.777,4.102 -0.438,0.355 -0.984,0.629 -1.449,0.93 -2.051,1.395 -4.075,2.708 -5.005,6.044 -0.219,0.848 -0.055,1.477 0.137,2.297 0.519,2.051 1.914,4.239 3.063,5.551 0,0 0.192,0.191 0.192,0.219 0.52,0.6 1.191,1.024 1.978,1.365 C 7.637,35.659 6.974,35.418 6.345,35.113 3.145,33.554 1.012,30.218 0.875,27.483 0.575,21.932 3.255,20.318 5.716,18.295 7.11,17.146 9.025,16.599 10.146,14.576 10.365,14.138 10.474,13.154 10.228,12.142 10.119,11.787 9.599,10.556 9.407,10.282 l 2.224,0.917 z"
+        fill="#000" />
+</svg>
+
+<p>Anyone can think of myriad reasons to run a Tor hidden service.  Surely many
+  unsavoury endeavours spring to mind but of course there are as many noble
+  ones.  There are also various pragmatic causes like circumventing lousy NATs.
+  Me? I just wanted to play around with my router.
+
+<p>Configuring a hidden service is actually straightforward so to make things
+  more interesting, this article will cover configuring a hidden service on
+  a <a href="https://omnia.turris.cz/">Turris Omnia</a> router with the help of
+  Linux Containers to maximise isolation of components.  While some of the steps
+  will be Omnia-specific, most translate easily to other systems, so this post
+  may be applicable regardless of the distribution used.
+
+<!-- EXCERPT -->
+
+<h2>External drive</h2>
+
+<p>Turris Omnia uses an eMMC as its root device which, on the count of it being
+  soldered onto the board, is hard to replace.  To mitigate the risk of it
+  wearing off, data can be saved onto an external storage instead.  The router
+  comes with mSATA slot and USB ports.  Either can be used to attach a drive.
+  In addition, mPCIE SATA controller is included in NAS version of the router
+  and can be added to regular versions.
+
+<p>No matter how additional storage is attached, it can be mounted
+  under <code>/srv</code> directory which is where many applications will store
+  their data.  This is a completely adequate solution but there’s also a more…
+  exciting alternative: making the router boot from the external drive.  The
+  upside is that the eMMC will never wear off.  The downside is that it won’t
+  work with a storage device attached through a SATA controller.
+
+<p>First, access to router’s serial console needs to be established.  Any USB to
+  UART connector—such
+  as <a href="https://www.ftdichip.com/Products/Cables/RPi.htm">TTL-232R-RPI</a>
+  or
+  something <a href="https://www.aliexpress.com/item/Black-PL2303HX-USB-turn-TTL-RS232-upgrade-module-USB-to-serial-download-cable-wire-brush-in/32691572599.html">PL2303-based</a>—should
+  work.  If pinout of the converter isn’t documented, it’s usually enough to
+  open it and look at the labels prinetd on its PCB.
+
+  <a href=/d/omnia-uart.jpg><img src=/d/omnia-uart.jpg alt=""
+      style="float: right; margin: 1em 0 1em 1em; max-width: 25%"></a>
+
+  <a href="https://doc.turris.cz/doc/_media/omnia-pinout.png">On Omnia’s
+  side</a>, UART header is located between LEDs and brightness button.  Starting
+  from the side close to the LEDs, the pins are: ground, RX, TX and usually
+  unused +3.3V.
+
+<p>Once <a href="https://doc.turris.cz/doc/en/troubleshooting/serial_link#turris_omnia">connection
+  to the serial console is established</a>, configuring the router to boot from
+  an external drive is as easy as grabbing
+  Omnia’s <a href="https://repo.turris.cz/omnia/medkit/omnia-medkit-latest.tar.gz">medkit</a>
+  and following
+  <a href="https://doc.turris.cz/doc/en/howto/omnia_booting_from_external_storage">official
+  instructions</a>.  One thing to consider is that <code>/dev/sda1</code> name
+  is unstable so rather than <code>root=/dev/sda1</code> kernel argument
+  advocated by the official method it’s better to use partition UUID.  For MBR
+  partition tables, it is composed from disk identifier and partition number
+  which can both be obtained from the output of <code>fdisk -l</code>.
+
+<pre>
+# fdisk -l /dev/sda
+Disk /dev/sda: 55.9 GiB, 60022480896 bytes, 117231408 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x<strong>e17eb372</strong>
+
+Device     Boot Start       End   Sectors  Size Id Type
+/dev/sda1        2048 117231407 117229360 55.9G 83 Linux
+</pre>
+
+<p>For example, if the disk identifier is <code>e17eb372</code> (as shown in
+  listing above), <code>root=​PARTUUID=e17eb372-01</code> should be used instead
+  of <code>root=/dev/sda1</code> when setting bootloader’s <code>bootargs</code>
+  variable.  If time ever comes to replace the disk, identifier of a new drive
+  can be set to match the original using <code>fdisk</code>’s expert mode.
+
+
+<h2>Linux Containers</h2>
+
+<p>To improve isolation between components, it’s a good idea to take advantage
+  of Linux Containers (LXC).  On Omnia, LXC utilities are installed in
+  the <a href="https://192.168.1.1/foris/config/main/updater/">Updater
+  section</a> of Foris interface.  Installation procedure will differ on other
+  systems and their documentation should be consulted.
+
+
+<h2>Web server</h2>
+
+<table style="float: right; margin: 0 0 0 1em">
+  <tr><th>Local network    <td>192.168.1.0/24
+  <tr><th>Gateway &amp DNS <td>192.168.1.1
+  <tr><th>Web server host  <td>192.168.1.80
+</table>
+
+<p>This article will use a web server as an example of hidden service’s
+  back-end, but one should remember that anything accepting TCP connections can
+  be used: SSH server, IRC bouncer and SOCKS proxy are all valid candidates.
+
+<p>First a new container is needed.  Because alpine is a lightweight,
+  security-oriented Linux distribution it is a good choice for container’s base
+  image.  To make things easier, it will be configured with static IP of
+  192.168.1.80 with 192.168.1.1 default gateway and DNS server.
+
+<pre>
+[turris]# lxc-create -n www -P /srv/lxc -t download -- \
+                     -d Alpine -r Edge -a "$(uname -m)"
+[turris]# cat &gt;/srv/lxc/www/rootfs/etc/network/interfaces \
+              &lt;&lt;EOF
+auto eth0
+iface eth0 inet static
+        address 192.168.1.80
+        netmask 255.255.255.0
+        gateway 192.168.1.1
+hostname \$(hostname)
+EOF
+[turris]# echo nameserver 192.168.1.1 \
+               &gt;/srv/lxc/www/rootfs/etc/resolv.conf
+[turris]# lxc-start -n www
+[turris]# lxc-attach -n www
+[www]# apk add lighttpd logrotate
+[www]# rc-update add lighttpd
+[www]# rc-service lighttpd start
+[www]# exit
+</pre>
+
+<p>At this point, <a href="http://192.168.1.80">192.168.1.80</a> should lead to
+  ‘It works’ web page.  Since the HTTP server does not need to make any outgoing
+  connections, the image can (should) have network traffic restricted with the
+  following rules:
+
+<pre>
+[turris]# opkg install iptables-mod-extra
+[turris]# lxc-attach -n www
+[www]# apk add iptables
+# <i>Allow incoming connections from LAN only</i>
+[www]# iptables -A INPUT -s 192.168.1.0/16 -j ACCEPT
+[www]# iptables -A INPUT -m state --state NEW -j DROP
+# <i>Don’t allow any forwarding</i>
+[www]# iptables -P FORWARD DROP
+# <i>Let root resolve domain names</i>
+[www]# iptables -A OUTPUT -d 192.168.1.1 -p udp --dport 53 \
+                          -m owner --uid-owner 0 -j ACCEPT
+[www]# iptables -A OUTPUT -d 192.168.1.1 -p tcp --dport 53 \
+                          -m owner --uid-owner 0 -j ACCEPT
+# <i>Don’t allow initiating connections to LAN</i>
+[www]# iptables -A OUTPUT -d 192.168.1.0/16 -m state --state NEW -j DROP
+[www]# iptables -A OUTPUT -d 192.168.1.0/16 -j ACCEPT
+# <i>Allow only root to talk to the Internet</i>
+[www]# iptables -A OUTPUT -m owner --uid-owner 0 -j ACCEPT
+[www]# iptables -P OUTPUT DROP
+# <i>Store and apply the rules on each boot</i>
+[www]# rc-update add iptables
+[www]# /etc/init.d/iptables save
+[www]# exit
+</pre>
+
+
+<h2>Tor</h2>
+
+<p>The next step is setting up Tor.  Like before, it’s going to run inside of
+  a container to maximise isolation.  However, this time the image will be using
+  dynamic IP, since it’s address won’t be hard-coded anywhere.
+
+<pre>
+[turris]# lxc-create -n tor -P /srv/lxc -t download -- \
+                     -d Alpine -r Edge -a "$(uname -m)"
+[turris]# lxc-start -n tor
+[turris]# lxc-attach -n tor
+[tor]# apk add tor logrotate
+[tor]# cat &gt;/etc/tor/torrc &lt;&lt;EOF
+User tor
+
+SOCKSPort 0
+SOCKSPolicy reject *
+ExitRelay 0
+ExitPolicy reject *:*
+
+Log notice file /var/log/tor/notices.log
+
+DataDirectory /var/lib/tor
+HiddenServiceDir /var/lib/tor/hidden
+HiddenServiceVersion 3
+HiddenServicePort 80 192.168.1.80:80
+EOF
+[tor]# rc-update add tor
+[tor]# rc-service tor start
+[tor]# exit
+</pre>
+
+<p>Once Tor is started, it’ll automatically generate keys for the hidden service
+  and save its .onion address in <code>/var/lib/tor/hidden-site/hostname</code>
+  file (or <code>/srv/lxc/tor/rootfs/var/lib/tor/hidden-site/hostname</code> if
+  acessing it from outside of the container).
+
+<p>At this point everything should work.  The web server should be accessible
+  via its local address as well as through its .onion address.
+
+<p>To finish up with the container, firewall rules need to be created.  Tor
+  needs to be able to talk to the Internet and to the web server but does not
+  need to connect to any other hosts on local network nor accept any incoming
+  connections.  This can be codified with the following instructions:
+
+<pre>
+[turris]# opkg install iptables-mod-extra
+[turris]# lxc-attach -n tor
+[tor]# apk add iptables
+# <i>Disallow incoming connections</i>
+[tor]# iptables -A INPUT -m state --state NEW -j DROP
+# <i>Don’t allow any forwarding</i>
+[tor]# iptables -P FORWARD DROP
+# <i>Allow talking to local DNS</i>
+[tor]# iptables -A OUTPUT -d 192.168.1.1 -p udp --dport 53 -j ACCEPT
+[tor]# iptables -A OUTPUT -d 192.168.1.1 -p tcp --dport 53 -j ACCEPT
+# <i>and the web server that’s being hidden</i>
+# iptables -A OUTPUT -d 192.168.1.80 -p tcp --dport 80 -j ACCEPT
+# <i>but no other host in LAN.</i>
+# iptables -A OUTPUT -d 192.168.1.0/16 -j DROP
+# <i>Store and apply the rules on each boot</i>
+[tor]# rc-update add iptables
+[tor]# /etc/init.d/iptables save
+[tor]# exit
+</pre>
+
+
+<h2>Making containers start at boot</h2>
+
+<p>The final thing to do is make both containers start when the router boots.
+  Otherwise, the hidden service will stop working as soon as host reboots.  In
+  Omnia this is done by editing <code>/etc/config/lxc-auto</code> file to
+  contain the following:
+
+<pre>
+config container
+	option name www
+
+config container
+	option name tor
+</pre>
+
+
+<h2>Security considerations</h2>
+
+<p>While setting up a hidden service is trivial, making it secure is another
+  matter.  It’s not inconceivable that some servers may be tricked to leak
+  information about their external IP.  Perhaps an FTP server is made to make an
+  active data connection over the Internet.  Maybe an HTTP server displays its
+  external address in error pages.  Not to mention arbitrary command execution
+  exploits which could be used to make simple requests over the Internet.
+  Restricting service’s back-end access to the Internet (as has been done in
+  this article) or configuring it to only ever use Tor circuits is one defence.
+
+<p>It’s also important to keep in mind that Tor relays report <em>all</em> their
+  bandwidth publicly.  In other words, if a process providing a hidden service
+  is also running as a relay, it is theoretically possible to locate the service
+  by issuing requests to it and observing transfer reported by the relay.  As
+  such, a Tor relay shouldn’t be run on an instance which is also providing
+  a hidden service.
+
+<p>Security of the service is beyond the scope of this article (especially as in
+  my case privacy is not of paramount importance) so reader is encouraged to do
+  their own due diligence.
