@@ -20,9 +20,9 @@
 	/* Apple touch icon */
 	[192, 180, 152, 120, 76].map(function(w) {
 		tmp = D.createElement('link');
-		link.rel = 'apple-touch-icon';
-		link.sizes = w + 'x' + w;
-		link.href = '/d/' + w + '.png';
+		tmp.rel = 'apple-touch-icon';
+		tmp.sizes = w + 'x' + w;
+		tmp.href = '/d/' + w + '.png';
 		D.head.appendChild(tmp);
 	});
 
