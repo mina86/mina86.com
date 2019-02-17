@@ -1,11 +1,4 @@
 # -*- apache -*-
 Options +Indexes
-
-RewriteEngine On
-RewriteBase /
-
-RewriteCond %{HTTP:X-Forwarded-Proto} !=https     [NV]
-RewriteRule ^(.*)$  https://files.mina86.com/$1   [END,R=permanent]
-
 Header set Strict-Transport-Security "max-age=31556925" \
        "expr=%{req_novary:X-Forwarded-Proto}=='https'"
