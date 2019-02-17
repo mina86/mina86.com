@@ -188,10 +188,9 @@ parallel "$@" --eta '
     into several groups (or shards) such that each job/worker has just
     a few groups to work on.
 
-  <li><p>#slackware.pl’s popularity decreased over time so the per-day
-    files are very unbalanced (this is in addition to weekly
-    variances).  When sharding the files, they should be grouped so
-    that size of each group is similar.
+  <li><p>#slackware.pl’s popularity decreased over time so the per-day files are
+    quite unbalanced (this is in addition to weekly variance).  When sharding
+    the files, they should be grouped so that size of each group is similar.
 
   <li><p>The above two points apply to the output of shuffle phase as
     well.  In real deployements shuffle should try to make the shards

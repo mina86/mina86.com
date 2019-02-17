@@ -56,9 +56,8 @@ The following can be used to free it:
 
 <pre>dma_free_coherent(dev, 100 &lt;&lt; 20, virt_addr, dma_addr);</pre>
 
-<p><a href=http://thread.gmane.org/gmane.linux.kernel/1263136>Barry
-Song has posted a very simple test driver</a> which uses those two to
-allocate DMA memory.
+<p><a href=http://thread.gmane.org/gmane.linux.kernel/1263136>Barry Song has
+posted a simple test driver</a> which uses those two to allocate DMA memory.
 
 <p>More information about the DMA API can be found in <a
 href="https://git.kernel.org/?p=linux/kernel/git/torvalds/linux.git;a=blob;f=Documentation/DMA-API.txt"><code>Documentation/DMA-API.txt</code></a>
