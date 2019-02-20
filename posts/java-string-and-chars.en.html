@@ -97,7 +97,7 @@ public static char[] toChars(final String string) {
   size of the argument while safe variant scales linearly.  Interestingly,
   because reflection is <em>slow</em>, safe call is faster for short strings.
 
-<p>The code including tests and benchmarks can be found in
+<p>The code including tests and benchmarks can be found in the
   <a href="https://github.com/mina86/java-unsafe-string">java-unsafe-string</a>
   repository.
 
@@ -121,8 +121,9 @@ public static char[] toChars(final String string) {
 <p>In the end, the implementation has been changed and strings now own the
   entire character array.  Interestingly,
   the <a href="https://www.reddit.com/r/programming/comments/1qw73v/til_oracle_changed_the_internal_string/cdhb77f/">‘trigger’
-  for the change</a> was introduction of (now removed) new hashing algorithm for
-  strings.  Whatever the case, code presented here won’t work before Java 7u6.
+  for the change</a> was the introduction of (now removed) new hashing algorithm
+  for strings.  Whatever the case, the code presented here won’t work before
+  Java 7u6.
 
 <p>But wait, this is still not the twist I’ve promised. ;)
 
@@ -163,8 +164,8 @@ Testing safe implementation: ........................... done, all ok
  +     safe::toChars/1000000:       9012 ops in 2813949290 ns: 312245 ns/op
 </pre>
 
-<p>So far so good.  The times are bit more noisy but creation of an empty string
-  seemed to be optimised.  Let’s see how unsafe version compares.
+<p>So far so good.  The times are a bit noisier though the creation of an empty
+  string seemed to be optimised.  Let’s see how unsafe version compares.
 
 <pre>
 WARNING: An illegal reflective access operation has occurred

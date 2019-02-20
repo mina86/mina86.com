@@ -29,16 +29,16 @@
 </svg>
 
 <p>Anyone can think of myriad reasons to run a Tor hidden service.  Surely many
-  unsavoury endeavours spring to mind but of course there are as many noble
+  unsavoury endeavours spring to mind but of course, there are as many noble
   ones.  There are also various pragmatic causes like circumventing lousy NATs.
   Me? I just wanted to play around with my router.
 
 <p>Configuring a hidden service is actually straightforward so to make things
   more interesting, this article will cover configuring a hidden service on
   a <a href="https://omnia.turris.cz/">Turris Omnia</a> router with the help of
-  Linux Containers to maximise isolation of components.  While some of the steps
-  will be Omnia-specific, most translate easily to other systems, so this post
-  may be applicable regardless of the distribution used.
+  Linux Containers to maximise isolation of components.  While some steps will
+  be Omnia-specific, most translate easily to other systems, so this post may be
+  applicable regardless of the distribution used.
 
 <!-- EXCERPT -->
 
@@ -46,10 +46,10 @@
 
 <p>Turris Omnia uses an eMMC as its root device which, on the count of it being
   soldered onto the board, is hard to replace.  To mitigate the risk of it
-  wearing off, data can be saved onto an external storage instead.  The router
+  wearing off, data can be saved onto external storage instead.  The router
   comes with mSATA slot and USB ports.  Either can be used to attach a drive.
-  In addition, mPCIE SATA controller is included in NAS version of the router
-  and can be added to regular versions.
+  In addition, mPCIE SATA controller is included in the NAS version of the
+  router and can be added to regular versions.
 
 <p>No matter how additional storage is attached, it can be mounted
   under <code>/srv</code> directory which is where many applications will store
@@ -58,23 +58,23 @@
   upside is that the eMMC will never wear off.  The downside is that it won’t
   work with a storage device attached through a SATA controller.
 
-<p>First, access to router’s serial console needs to be established.  Any USB to
-  UART connector—such
+<p>First, access to the router’s serial console needs to be established.  Any
+  USB to UART connector—such
   as <a href="https://www.ftdichip.com/Products/Cables/RPi.htm">TTL-232R-RPI</a>
   or
   something <a href="https://www.aliexpress.com/item/Black-PL2303HX-USB-turn-TTL-RS232-upgrade-module-USB-to-serial-download-cable-wire-brush-in/32691572599.html">PL2303-based</a>—should
   work.  If pinout of the converter isn’t documented, it’s usually enough to
-  open it and look at the labels prinetd on its PCB.
+  open it and look at the labels printed on its PCB.
 
   <a href=/d/omnia-uart.jpg><img src=/d/omnia-uart.jpg alt=""
       style="float: right; margin: 1em 0 1em 1em; max-width: 25%"></a>
 
   <a href="https://doc.turris.cz/doc/_media/omnia-pinout.png">On Omnia’s
   side</a>, UART header is located between LEDs and brightness button.  Starting
-  from the side close to the LEDs, the pins are: ground, RX, TX and usually
+  from the side close to the LEDs, the pins are ground, RX, TX and usually
   unused +3.3V.
 
-<p>Once <a href="https://doc.turris.cz/doc/en/troubleshooting/serial_link#turris_omnia">connection
+<p>Once the <a href="https://doc.turris.cz/doc/en/troubleshooting/serial_link#turris_omnia">connection
   to the serial console is established</a>, configuring the router to boot from
   an external drive is as easy as grabbing
   Omnia’s <a href="https://repo.turris.cz/omnia/medkit/omnia-medkit-latest.tar.gz">medkit</a>
@@ -83,8 +83,8 @@
   instructions</a>.  One thing to consider is that <code>/dev/sda1</code> name
   is unstable so rather than <code>root=/dev/sda1</code> kernel argument
   advocated by the official method it’s better to use partition UUID.  For MBR
-  partition tables, it is composed from disk identifier and partition number
-  which can both be obtained from the output of <code>fdisk -l</code>.
+  partition tables, it is composed of disk identifier and partition number which
+  can both be obtained from the output of <code>fdisk -l</code>.
 
 <pre>
 # fdisk -l /dev/sda
@@ -102,8 +102,8 @@ Device     Boot Start       End   Sectors  Size Id Type
 <p>For example, if the disk identifier is <code>e17eb372</code> (as shown in
   listing above), <code>root=​PARTUUID=e17eb372-01</code> should be used instead
   of <code>root=/dev/sda1</code> when setting bootloader’s <code>bootargs</code>
-  variable.  If time ever comes to replace the disk, identifier of a new drive
-  can be set to match the original using <code>fdisk</code>’s expert mode.
+  variable.  If the time ever comes to replace the disk, the identifier of a new
+  drive can be set to match the original using <code>fdisk</code>’s expert mode.
 
 
 <h2>Linux Containers</h2>
@@ -111,8 +111,8 @@ Device     Boot Start       End   Sectors  Size Id Type
 <p>To improve isolation between components, it’s a good idea to take advantage
   of Linux Containers (LXC).  On Omnia, LXC utilities are installed in
   the <a href="https://192.168.1.1/foris/config/main/updater/">Updater
-  section</a> of Foris interface.  Installation procedure will differ on other
-  systems and their documentation should be consulted.
+  section</a> of Foris interface.  The installation procedure will differ on
+  other systems and their documentation should be consulted.
 
 
 <h2>Web server</h2>
@@ -127,7 +127,7 @@ Device     Boot Start       End   Sectors  Size Id Type
   back-end, but one should remember that anything accepting TCP connections can
   be used: SSH server, IRC bouncer and SOCKS proxy are all valid candidates.
 
-<p>First a new container is needed.  Because alpine is a lightweight,
+<p>First, a new container is needed.  Because alpine is a lightweight,
   security-oriented Linux distribution it is a good choice for container’s base
   image.  To make things easier, it will be configured with static IP of
   192.168.1.80 with 192.168.1.1 default gateway and DNS server.
@@ -190,7 +190,7 @@ EOF
 
 <p>The next step is setting up Tor.  Like before, it’s going to run inside of
   a container to maximise isolation.  However, this time the image will be using
-  dynamic IP, since it’s address won’t be hard-coded anywhere.
+  dynamic IP since its address won’t be hard-coded anywhere.
 
 <pre>
 [turris]# lxc-create -n tor -P /srv/lxc -t download -- \
@@ -223,13 +223,13 @@ EOF
   file (or <code>/srv/lxc/tor/rootfs/var/lib/tor/hidden-site/hostname</code> if
   acessing it from outside of the container).
 
-<p>At this point everything should work.  The web server should be accessible
+<p>At this point, everything should work.  The web server should be accessible
   via its local address as well as through its .onion address.
 
 <p>To finish up with the container, firewall rules need to be created.  Tor
   needs to be able to talk to the Internet and to the web server but does not
-  need to connect to any other hosts on local network nor accept any incoming
-  connections.  This can be codified with the following instructions:
+  need to connect to any other hosts on the local network nor accept any
+  incoming connections.  This can be codified with the following instructions:
 
 <pre>
 [turris]# opkg install iptables-mod-extra
@@ -288,5 +288,5 @@ config container
   a hidden service.
 
 <p>Security of the service is beyond the scope of this article (especially as in
-  my case privacy is not of paramount importance) so reader is encouraged to do
-  their own due diligence.
+  my case privacy is not of paramount importance) so the reader is encouraged to
+  do their own due diligence.
