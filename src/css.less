@@ -96,7 +96,6 @@
 @head-font: 'DejaVu Sans', Verdana, sans-serif;
 @sidebar-width: 14em;
 @content-width: 50em;
-@octo-width: 4em;
 @wrap-width: (@sidebar-width + @content-width);
 
 
@@ -794,17 +793,14 @@ a@{facebook-cls} {
 	top: 0;
 	border: 0;
 	left: 0;
-	@media (max-width: (@wrap-width + @octo-width)) {
+	width: 5%;
+	max-width: 4em;
+	@media (max-width: (round(2em / 0.05, 2))) {
 		display: none;
 	}
 }
 @{octo-id} svg {
-	width: @octo-width;
-	height: @octo-width;
-	@media (max-width: (@wrap-width + 2 * @octo-width)) {
-		width: (@octo-width / 2);
-		height: (@octo-width / 2);
-	}
+	width: 100%;
 }
 @{octo-id} path {
 	fill: #003496;
