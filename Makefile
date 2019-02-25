@@ -48,8 +48,8 @@ distclean:
 .tmp/%.css: src/%.less
 	@echo " LESS $@"
 	@exec mkdir -p $(@D)
-	exec lessc -su=off --math=strict $< | \
-		cleancss -O2 'mergeSemantically:on;restructureRules:on' >$@
+	exec lessc -su=off --math=strict $< $@
+	exec cleancss -O2 'mergeSemantically:on;restructureRules:on' -o $@ $@
 
 static/mina86.pub:
 	@echo " GPG  $@"
