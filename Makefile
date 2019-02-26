@@ -42,8 +42,9 @@ distclean:
 .tmp/%.js: src/%.js
 	@echo " MIN  $@"
 	@exec mkdir -p $(@D)
-	exec curl -X POST -s --data-urlencode "input@$<" \
-		https://javascript-minifier.com/raw >$@
+	exec uglifyjs -c warnings,unsafe_undefined \
+		-m --mangle-props keep_quoted \
+		-o $@ $<
 
 .tmp/%.css: src/%.less
 	@echo " LESS $@"
