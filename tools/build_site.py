@@ -237,12 +237,9 @@ class Page(Post):
 
 
 def parse_filename(filename):
-    if (filename[0] == '.' or filename[0] == '#' or
-        filename.endswith('.comments')):
+    if not filename.endswith('.html'):
         return None
-
-    if filename.endswith('.html'):
-        filename = filename[:-5]
+    filename = filename[:-5]
     for lang in SUPPORTED_LANGUAGES:
         if filename.endswith('.' + lang):
             return filename[:-len(lang)-1], lang
@@ -250,31 +247,44 @@ def parse_filename(filename):
         raise ValueError('filename with no language specified: ' + filename)
 
 
-def read_entry(fd):
+_DIRECTIVE_LINE_RE = re.compile(r'^<!-- (?:'
+    r'(?P<key>[a-z]+): (?P<value>.*)'
+    r'|(?P<sep>[A-Z]*)'
+    r'|INCLUDE(?P<esc> ESCAPED)?: (?P<inc>[-a-zA-Z0-9.]+)) -->')
+
+def read_entry(fd, dirname):
     excerpt = None
     content = ''
     kw = d = {}
 
     for line in fd:
+        m = _DIRECTIVE_LINE_RE.search(line)
+        m = m and m.groupdict()
+
         if kw is not None:
-            m = _KW_LINE_RE.search(line)
-            if m:
-                kw[m.group(1)] = m.group(2)
+            if m and m['key']:
+                kw[m['key']] = m['value']
                 continue
             kw = None
 
-        m = _KW_SEPARATOR_LINE_RE.search(line)
         if not m:
             content += line
-            continue
 
-        if m.group(1) == 'COMMENT':
+        elif m['inc']:
+            path = os.path.join(dirname, m['inc'])
+            with codecs.open(path, encoding='utf-8') as rd:
+                data = rd.read()
+            if m['esc']:
+                data = data.replace('&', '&amp;').replace('<', '&lt;')
+            content += data
+
+        elif m['sep'] == 'COMMENT':
             break
-        elif m.group(1) == 'EXCERPT':
+        elif m['sep'] == 'EXCERPT':
             excerpt = content
             content = ''
         else:
-            sys.stderr.write('Unexpected separator: ' + line)
+            sys.stderr.write('Unexpected directive: ' + line)
 
     d['__body__'] = Body(excerpt, content)
     return d
@@ -301,7 +311,7 @@ class Site(object):
 
             with codecs.open(os.path.join(dirname, filename),
                              encoding='utf-8') as fd:
-                d = read_entry(fd)
+                d = read_entry(fd, dirname)
 
             d['__lang__'] = lang
             d['__permalink__'] = permalink
@@ -442,10 +452,6 @@ class Writer(object):
 
     def write_file(self, filename, content):
         self._writer.write_file(filename, content)
-
-
-_KW_LINE_RE = re.compile(r'^<!-- ([a-z]+): (.*) -->')
-_KW_SEPARATOR_LINE_RE = re.compile(r'^<!-- ([A-Z]*) -->')
 
 
 def generate(writer, site):

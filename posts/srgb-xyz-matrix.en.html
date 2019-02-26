@@ -8,8 +8,8 @@
   typically limit the precision to just a few decimal places so I've decided to
   do the calculations by myself.
 
-<p>What we’re looking for is a 3-by-3 matrix \(M\) which, when multiplied by red,
-  green and blue coördinates of a colour, produces its XYZ coördinates.  In
+<p>What we’re looking for is a 3-by-3 matrix \(M\) which, when multiplied by
+  red, green and blue coördinates of a colour, produces its XYZ coördinates.  In
   other words,
   a <a href="https://www.khanacademy.org/math/linear-algebra/alternate-bases/change-of-basis/v/linear-algebra-change-of-basis-matrix">change
   of basis matrix</a> from a space whose basis vectors are sRGB’s primary
@@ -33,7 +33,7 @@
   of <a href="https://en.wikipedia.org/wiki/CIE_1931_color_space#CIE_xy_chromaticity_diagram_and_the_CIE_xyY_color_space">x
   and y</a> values (i.e. chromaticity coördinates).  Converting them to XYZ
   space is simple: \(X = x Y / y\) and \(Z = (1 - x - y) Y / y,\) but leaves
-  luminocity (the Y value) undefined.
+  luminosity (the Y value) unknown.
 
 <table>
   <thead>
@@ -76,9 +76,9 @@
 
 <p>For each colour \(c\) (including white), \(X_c\) and \(Z_c\) can be expressed
   as a product of a known quantity and \(Y_c\) (see table above).  Furthermore,
-  by definition of a white point, \(Y_w = 1.\) At this point luminocities of the
-  primary colours are the only unknowns.  To isolate them, let’s define \(X'_c =
-  X_c / Y_c\) and \(Z'_c = Z_c / Y_c\) and see where that leads us:
+  by definition of a white point, \(Y_w = 1.\) At this point, luminosities of
+  the primary colours are the only unknowns.  To isolate them, let’s define
+  \(X'_c = X_c / Y_c\) and \(Z'_c = Z_c / Y_c\) and see where that leads us:
 
   $$ \begin{align}
     \begin{bmatrix}
@@ -125,8 +125,8 @@
     \end{bmatrix}
   \end{align} $$
 
-<p>All quantities on the right-hand side are known therefore \([Y_r Y_g Y_b]^T\)
-  can be computed.  Let’s tidy things up into a final formula.
+<p>All quantities on the right-hand side are known, therefore \([Y_r Y_g
+  Y_b]^T\) can be computed.  Let’s tidy things up into a final formula.
 
 
 <h2>Final formula</h2>
@@ -178,14 +178,15 @@ where:
 
 <h2>Implementation</h2>
 
-<p>Having theoretical part covered, it’s time to put the equations into
+<p>Having the theoretical part covered, it’s time to put the equations into
   practice, which brings up a question of language to use.  With
   <a href="https://docs.python.org/3/library/stdtypes.html#numeric-types-int-float-complex">unlimited-precision
   integers</a> and
   <a href="https://docs.python.org/3/library/fractions.html">rational numbers
-  arithmetic already implementation</a>, Python is particularly good choice as
-  it will allow all calculations to be done without rounding.  Implementation
-  begins with an overview of the algorithm:
+  arithmetic already implemented</a>, Python is a particularly good choice as it
+  will allow all calculations to be done without rounding.
+
+<p>Implementation begins with an overview of the algorithm:
 
 <pre>
 Chromaticity = collections.namedtuple('Chromaticity', 'x y')
@@ -199,15 +200,14 @@ def calculate_rgb_matrix(primaries, white):
     return mul_matrix_by_diag(M_prime, Y)
 </pre>
 
-<p>The function first constructs \(M'\) matrix and \(W = [X_w Y_w Z_w]^T\)
-  column which are used to calculate \([Y_r Y_g Y_b]^T\) using \(M'^{-1} W\)
+<p>The function first constructs \(M'\) matrix and \(W = [X_w\; Y_w\; Z_w]^T\)
+  column which are used to calculate \([Y_r\; Y_g\; Y_b]^T = M'^{-1} W\)
   formula.  With that computed, the function returns \(M' \times
   \mathrm{diag}(Y_r, Y_g, Y_b)\) which is the transform matrix.
 
 <p>All operations on matrices are delegated to separate functions.  Since the
-  matrices the code deals with are small there is no need to optimise any of the
-  algorithms and instead the most straightforward matrix multiplication
-  algorithms are chosen:
+  matrices are small there is no need for any sophisticated algorithms.
+  Instead, the most straightforward multiplication algorithms are used:
 
 <pre>
 def mul_matrix_by_column(matrix, column):
@@ -242,18 +242,18 @@ def inverse_3x3_matrix(matrix):
         for row in (0, 1, 2))
 </pre>
 
-<p>It first
-  constructs <a href="https://en.wikipedia.org/wiki/Minor_(linear_algebra)#First_minors">matrix
+<p>It first constructs
+  a <a href="https://en.wikipedia.org/wiki/Minor_(linear_algebra)#First_minors">matrix
   of cofactors</a> of the input (i.e. <code>comatrix</code>).  Because
   function’s argument is always a 3-by-3 matrix, each minor’s determinant can be
   trivially calculated using \(\bigl|\begin{smallmatrix} a & b \\ c &
   d \end{smallmatrix}\bigr| = a d - b c\) formula.  Once the comatrix is
   constructed, <a href="https://en.wikipedia.org/wiki/Minor_(linear_algebra)#Applications_of_minors_and_cofactors">calculating
-  determinant of the input matrix and its inverse</a> becomes just a matter of
-  executing a few loops.
+  the determinant of the input matrix and its inverse</a> becomes just a matter
+  of executing a few loops.
 
 <p>The above code works for any RGB system.  To get result for sRGB its sRGB’s
-  primaries and white point chromaticities need to me passed:
+  primaries and white point chromaticities need to be passed:
 
 <pre>
 def calculate_srgb_matrix():
@@ -270,4 +270,39 @@ def calculate_srgb_matrix():
 
 <p>Full implementation with other bells and whistles can be
   found <a href="https://github.com/mina86/ansi_colours/blob/master/tools/luminance-coefficients.py">inside
-  of <code>ansi_colours</code> repository</a>.
+  of the <code>ansi_colours</code> repository</a>.
+
+
+<h2>The matrix</h2>
+
+<p>Finally, if you just want to have the result, the matrices calculated using
+  aforementioned code are as follows:
+
+$$ \begin{align}
+    M & = \begin{bmatrix}
+        10135552 & / 24577794 & 8788810 & / 24577794 &  4435075 & / 24577794 \\
+         2613072 & / 12288897 & 8788810 & / 12288897 &   887015 & / 12288897 \\
+         1425312 & / 73733382 & 8788810 & / 73733382 & 70074185 & / 73733382 \\
+    \end{bmatrix} \\ & ≈ \begin{bmatrix}
+        0.4123865632529917   & 0.35759149092062537 & 0.18045049120356368 \\
+        0.21263682167732384  & 0.7151829818412507  & 0.07218019648142547 \\
+        0.019330620152483987 & 0.11919716364020845 & 0.9503725870054354  \\
+    \end{bmatrix} \\[0.5em]
+
+    M^{-1} & = \begin{bmatrix}
+          1283178 & / 395920   &  -608687 & / 395920   & -197412 & / 395920   \\
+        -42591639 & / 43944050 & 82435961 & / 43944050 & 1826061 & / 43944050 \\
+            49353 & / 887015   &  -180961 & / 887015   &  937707 & / 887015   \\
+    \end{bmatrix} \\ & ≈ \begin{bmatrix}
+         3.2410032329763587   & -1.5373989694887855  & -0.4986158819963629   \\
+        -0.9692242522025166   &  1.875929983695176   &  0.041554226340084724 \\
+         0.055639419851975444 & -0.20401120612390997 &  1.0571489771875335   \\
+    \end{bmatrix}
+\end{align} $$
+
+<p>It’s important to remember this is not all that is needed to perform
+  conversion between sRGB and XYZ colour spaces.  The matrix assumes a linear
+  RGB coördinates normalised to [0, 1] range which requires dealing with gamma
+  correction.  For those interested, all
+  that <a href="/2019/srgb-xyz-conversion/">is described in follow-up
+  article</a>.
