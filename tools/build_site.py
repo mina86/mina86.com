@@ -37,8 +37,7 @@ import compilers
 import paths
 
 
-HOST = 'mina86.com'
-BASE_HREF = 'https://' + HOST
+BASE_HREF = 'https://mina86.com'
 
 NOW = datetime.datetime.utcnow()
 
@@ -374,9 +373,8 @@ class Writer(object):
 
     def write_html(self, filename, tpl_name, data):
         data = self._env.get_template(tpl_name + '.html').render(data)
-        data = compilers.minify_html(data,
-                                     static_mappings=self._static_mappings,
-                                     base_href=BASE_HREF + '/')
+        data = compilers.minify_html(
+            data, static_mappings=self._static_mappings)
         self.write_file(filename, data)
 
     def write_atom(self, filename, entries, href, feed_id, title=None):
@@ -420,12 +418,10 @@ class Writer(object):
                 <entry>
                   <title>%(subject)s</title>
                   <id>%(id)s</id>
-                  <link rel="self" href="%(url)s"/>
+                  <link rel="alternate" type="text/html" href="%(url)s"/>
                   <published>%(date)s</published>
-                  <updated>%(date)s</updated>
                   %(author)s
-                  <content type="html" xml:lang="%(lang)s"
-                           xml:base="%(url)s">%(body)s</content>
+                  <content type="html" xml:lang="%(lang)s">%(body)s</content>
                 </entry>
             ''',
                   subject=e(entry.subject),
@@ -434,7 +430,8 @@ class Writer(object):
                   url=e(entry.url),
                   date=entry.date,
                   lang=entry.lang or 'en',
-                  body=e(entry.body.full))
+                  body=e(compilers.minify_html(
+                      entry.body.full, static_mappings=self._static_mappings)))
         write('</feed>')
 
         self.write_file(filename, fd.getvalue())
