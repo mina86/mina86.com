@@ -129,18 +129,19 @@
 <link rel="stylesheet" href="/d/css.css">
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" sizes="192x192" href="/d/192.png">
-{{ link('home', '/', 'mina86.com') }}
-{{ link('index', '/', 'mina86.com') }}
-<link rel="alternate home" type="application/atom+xml"
-      href="/atom" title="Atom feed">
-{{ link('canonical', canonical) }}
-{% if prev %}{{
-  link('prev', prev.href, prev.title | default(prev.subject, true))
-}}{% endif %}
-{% if next %}{{
-  link('next', next.href, next.title | default(next.subject, true))
-}}{% endif %}
-
+{% block meta_links %}
+  {{ link('home', '/', 'mina86.com') }}
+  {{ link('index', '/', 'mina86.com') }}
+  <link rel="alternate home" type="application/atom+xml"
+        href="/atom" title="Atom feed">
+  {{ link('canonical', canonical) }}
+  {% if prev %}{{
+    link('prev', prev.href, prev.title | default(prev.subject, true))
+  }}{% endif %}
+  {% if next %}{{
+    link('next', next.href, next.title | default(next.subject, true))
+  }}{% endif %}
+{% endblock %}
 
 <header id="h" role=banner>
   <div class=w>
