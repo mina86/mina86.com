@@ -81,6 +81,10 @@ TRANSLATIONS = {
     'Continue reading': {'pl': 'Czytaj dalej'},
     'In categories:': {'pl': 'Kategorie:'},
     'Tagged with:': {'pl': 'Tagi:'},
+
+    # Social
+    'Tweet': {'pl': 'Ćwierknij'},
+    'Share': {'pl': 'Udostępnij'},
 }
 
 

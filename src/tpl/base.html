@@ -29,10 +29,10 @@
          entry.href | urlencode
        }}{% if entry.tags -%}
          &amp;hashtags={{ entry.tags | join(',') | urlencode }}
-       {%- endif -%}" target=_blank rel=noopener class=x>Tweet</a>
+       {%- endif -%}" target=_blank rel=noopener class=x>{{ T('Tweet') }}</a>
     <a href="https://www.facebook.com/sharer/sharer.php?u=https://mina86.com{{
          entry.href | urlencode
-       }}" target=_blank rel=noopener class=y>Share</a>
+       }}" target=_blank rel=noopener class=y>{{ T('Share') }}</a>
   </div>
 {%- endmacro -%}
 
@@ -69,7 +69,7 @@
 
 {%- macro post(entry, post_page) -%}
 {%- set full = post_page or not entry.body.excerpt -%}
-  <article {% if full %} class=q {% endif %} lang="{{ entry.lang }}">
+  <article {{ attr('class', 'q', full) }}>
 
     <h1><a href="{{ entry.href }}"
            title="{{ T('Permanent link to the entry.') }}">{{
@@ -77,7 +77,7 @@
 
     <p class="b">{{ byline('Michał ‘mina86’ Nazarewicz', entry.date) }}
 
-    <div class=t>
+    <div class=t lang="{{ entry.lang }}">
       {% if full %}
         {{ entry.body | safe }}
       {% else %}
