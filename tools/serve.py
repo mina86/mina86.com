@@ -36,10 +36,11 @@ def get_certfile() -> str:
     return certfile
 
 def main():
-    httpd = http.server.HTTPServer(('0.0.0.0', 4443), Handler)
+    port = 4443
+    httpd = http.server.HTTPServer(('127.0.0.1', port), Handler)
     httpd.socket = ssl.wrap_socket(
         httpd.socket, server_side=True, certfile=get_certfile())
-    print('Listening at :4443')
+    print('https://127.0.0.1:{}/'.format(port))
     httpd.serve_forever()
 
 if __name__ == '__main__':
