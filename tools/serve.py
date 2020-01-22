@@ -6,6 +6,9 @@ import typing
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
+    extensions_map = http.server.SimpleHTTPRequestHandler.extensions_map
+    extensions_map.setdefault('.webp', 'image/webp')
+
     def __init__(self, *args: typing.Any, **kw: typing.Any):
         directory = os.path.realpath(os.path.join(os.path.dirname(__file__),
                                                   '../public/mina86.com'))
@@ -24,6 +27,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                  if os.path.exists(p):
                      return p
          return path
+
 
 def get_certfile() -> str:
     certfile = os.path.realpath(os.path.join(

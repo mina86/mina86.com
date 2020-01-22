@@ -54,4 +54,16 @@
 		sidebar.style.left = tmp;
 		sidebar.style.top = top;
 	})();
+
+	/* WebP fallback */
+	if (header) {
+		tmp = new Image();
+		tmp.onload = function() {
+			(!this.width || !this.height) && this.onerror();
+		};
+		tmp.onerror = function() {
+			header.style.backgroundImage = 'url(/D/Kjo1sh-Q.jpg)';
+		};
+		tmp.src = 'data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA';
+	}
 })(document, window);
