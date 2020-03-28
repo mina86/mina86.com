@@ -99,8 +99,10 @@ MONTHS_PL = (None, 'stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca',
              'grudnia')
 
 
-def format_byline(lang, author, date):
-    author = author.replace('<', '&lt').replace('&', '&amp;')
+def format_byline(lang, author, email, date):
+    author = '<span data-email="{}">{}</span>'.format(
+        email.replace('<', '&lt').replace('&', '&amp;'),
+        author.replace('<', '&lt').replace('&', '&amp;'))
 
     day = date.day
     month = date.month
@@ -471,10 +473,10 @@ def generate(writer, site):
 
         def write_html(filename, tpl, data):
             data['lang'] = lang
-            data['T'] = (
-                lambda text: jinja2.utils.Markup(get_translation(lang, text)))
-            data['byline'] = (
-                lambda author, date: format_byline(lang, author, date))
+            data['T'] = lambda text: jinja2.utils.Markup(
+                get_translation(lang, text))
+            data['byline'] = lambda author, email, date: format_byline(
+                lang, author, email, date)
             writer.write_html(filename, tpl, data)
 
         posts = sorted(site.posts, key=lambda post: post.date, reverse=True)

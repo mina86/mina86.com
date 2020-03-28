@@ -75,7 +75,8 @@
            title="{{ T('Permanent link to the entry.') }}">{{
         entry.subject }}</a></h1>
 
-    <p class="b">{{ byline('Michał ‘mina86’ Nazarewicz', entry.date) }}
+    <p class="b">{{ byline('Michał ‘mina86’ Nazarewicz', 'mina86@mina86.com',
+                           entry.date) }}
 
     <div class=t lang="{{ entry.lang }}">
       {% if full %}

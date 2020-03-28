@@ -339,9 +339,7 @@ a:hover, a:focus, a:active {
 		}
 	}
 
-	nav, #___gcse_0 {
-		.no-print();
-	}
+	.no-print();
 }
 
 
@@ -374,23 +372,7 @@ article {
 	@media screen, projection, tv, handheld {
 		text-shadow: 1px 1px #D9D9E6;
 	}
-}
 
-/* Links */
-@{article-text-cls} {
-	a {
-		border-bottom: 1px dotted #99f;
-	}
-
-	a:hover, a:focus, a:active {
-		text-decoration: none;
-		border-bottom-style: solid;
-		borter-bottom-color: #09f;
-	}
-}
-
-/* Headers */
-article {
 	h1, h2, h3 {
 		margin: 1rem 0;
 		a, a:hover, a:focus, a:active {
@@ -411,6 +393,17 @@ article {
 	}
 }
 
+@{article-text-cls} {
+	a {
+		border-bottom: 1px dotted #99f;
+	}
+
+	a:hover, a:focus, a:active {
+		text-decoration: none;
+		border-bottom-style: solid;
+		borter-bottom-color: #09f;
+	}
+}
 /* Byline etc */
 p@{byline-cls} {
 	font-style: italic;
@@ -450,6 +443,9 @@ pre, code, kbd {
 	text-shadow: none;
 	page-break-inside: avoid;
 	hyphens: manual;
+	@media print {
+		color: inherit;
+	}
 }
 pre {
 	font-family: @mono-font;
@@ -542,11 +538,17 @@ blockquote > :last-child { margin-bottom: 0; }
 	page-break-inside: avoid;
 	margin-top: 2em;
 	font-style: italic;
+
+	& > a {
+		float: left;
+		margin-bottom: 0.5em;
+	}
+
+	& > ul li + li {
+		.no-print();
+	}
 }
-@{meta-cls} > a {
-	float: left;
-	margin-bottom: 0.5em;
-}
+
 @{social-cls} {
 	min-height: 20px;  /* Height of G+ and Twitter buttons */
 	font-size: @tiny;
@@ -650,6 +652,8 @@ a@{facebook-cls} {
 	ul, li {
 		list-style: none;
 	}
+
+	.no-print();
 }
 
 /* Contact */
@@ -694,7 +698,6 @@ a@{facebook-cls} {
 		padding: 0 0.5em;
 		color: #555;
 	}
-	.no-print();
 }
 @{feed-icon-cls} {
 	width: 16px;
@@ -743,8 +746,6 @@ a@{facebook-cls} {
 	li:nth-child(3) a { background-position: -45px   0px; }
 	/* Conservancy */
 	li:nth-child(4) a { background-position: -20px   5px; }
-
-	.no-print();
 }
 
 
@@ -763,7 +764,9 @@ a@{facebook-cls} {
 	}
 
 	@media print {
-		margin-top: 4em;
+		color: #333;
+		background: #fff;
+		border-top: 1px dotted #ddd;
 	}
 }
 
@@ -798,6 +801,7 @@ a@{facebook-cls} {
 	@media (max-width: (round(2em / 0.05, 2))) {
 		display: none;
 	}
+	.no-print();
 }
 @{octo-id} svg {
 	width: 100%;
@@ -854,15 +858,14 @@ a@{facebook-cls} {
 		}
 	}
 
-	article h1 a[href^="/"]:after {
-		content: "\a〈mina86.com" attr(href) "〉";
-		white-space: pre-wrap;
+	[data-email]::after {
+		content: " 〈" attr(data-email) "〉";
+		font-size: @tiny;
 	}
-}
 
-@{meta-cls} > ul li + li {
-	@media print {
-		display: none !important;
+	article h1 a[href^="/"]:after {
+		content: "https://mina86.com" attr(href);
+		display: block;
 	}
 }
 
