@@ -180,25 +180,29 @@
 
 
 <footer id=f role=contentinfo>
-  {%- if lang == 'pl' -%}
+  <p>© {% if entry and entry.date %} {{ entry.date.year }}
+       {% endif %} Michał Nazarewicz.
 
-    <p>O ile nie zaznaczono inaczej, treść wpisów udostępniany na
-      zasadach licencji <a rel="license"
-      href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA
-      4.0</a>, a kod – <a rel="license"
-      href="https://www.apache.org/licenses/LICENSE-2.0">Apache
-      License, Version 2.0</a>.
+    {% if lang == 'pl' %}
 
-  {%- else -%}
+      O ile nie zaznaczono inaczej, treść wpisów udostępniany na zasadach
+      licencji <a rel="license"
+      href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>,
+      a kod na zasadach licencji <a rel="license"
+      href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, Version
+      2.0</a>.
 
-    <p>Unless stated otherwise, text of the entries licensed under
-      the <a rel="license"
-      href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA
-      4.0</a> license and code – <a rel="license"
-      href="https://www.apache.org/licenses/LICENSE-2.0">Apache
-      License, Version 2.0</a>.
+    {% else %}
 
-  {%- endif -%}
+      Unless stated otherwise, text of the entries is distributed under the
+      terms of the <a rel="license"
+      href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons
+      Attribution-ShareAlike 4.0 International</a> license and code under the
+      terms of the <a rel="license"
+      href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, Version
+      2.0</a>.
+
+    {% endif %}
 </footer>
 
 <script src=/d/js.js></script>
