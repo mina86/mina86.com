@@ -45,21 +45,21 @@
 <h2>External drive</h2>
 
 <p>Turris Omnia uses an eMMC as its root device which, on the count of it being
-  soldered onto the board, is hard to replace.  To mitigate the risk of it
-  wearing off, data can be saved onto external storage instead.  The router
-  comes with mSATA slot and USB ports.  Either can be used to attach a drive.
-  In addition, mPCIE SATA controller is included in the NAS version of the
-  router and can be added to regular versions.
+  soldered onto the board, is hard to replace.  To mitigate the risk of wearing
+  it off, data can be saved onto external storage instead.  The router comes
+  with mSATA slot and USB ports.  Either can be used to attach a drive.  In
+  addition, mPCIE SATA controller is included in the NAS version of the router
+  and can be added to regular versions.
 
 <p>No matter how additional storage is attached, it can be mounted
   under <code>/srv</code> directory which is where many applications will store
   their data.  This is a completely adequate solution but there’s also a more…
-  exciting alternative: making the router boot from the external drive.  The
-  upside is that the eMMC will never wear off.  The downside is that it won’t
-  work with a storage device attached through a SATA controller.
+  exciting alternative: making the router boot from the external drive.  This
+  way, the eMMC will never wear off.  Unfortunately, it won’t work with storage
+  attached through SATA controller.
 
-<p>First, access to the router’s serial console needs to be established.  Any
-  USB to UART connector—such
+<p>The get things rolling, access to the router’s serial console needs to be
+  established.  Any USB to UART connector—such
   as <a href="https://www.ftdichip.com/Products/Cables/RPi.htm">TTL-232R-RPI</a>
   or
   something <a href="https://www.aliexpress.com/item/Black-PL2303HX-USB-turn-TTL-RS232-upgrade-module-USB-to-serial-download-cable-wire-brush-in/32691572599.html">PL2303-based</a>—should
@@ -123,9 +123,9 @@ Device     Boot Start       End   Sectors  Size Id Type
   <tr><th>Web server host  <td>192.168.1.80
 </table>
 
-<p>This article will use a web server as an example of hidden service’s
-  back-end, but one should remember that anything accepting TCP connections can
-  be used: SSH server, IRC bouncer and SOCKS proxy are all valid candidates.
+<p>This article will use a web server as an example of a hidden service, but one
+  should remember that anything accepting TCP connections can be used: SSH
+  server, IRC bouncer and SOCKS proxy are all valid candidates.
 
 <p>First, a new container is needed.  Because alpine is a lightweight,
   security-oriented Linux distribution it is a good choice for container’s base

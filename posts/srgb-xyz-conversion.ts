@@ -23,7 +23,7 @@ const rgbFromXyzMatrix: Matrix = [
 
 /**
  * Performs an sRGB gamma expansion of an 8-bit value, i.e. an integer in [0,
- * 255] range, into a floating point value in [0, 1] range.
+ * 255] range, into a floating-point value in [0, 1] range.
  */
 function gammaExpansion(value255: number): number {
 	return value255 <= 10
@@ -32,7 +32,7 @@ function gammaExpansion(value255: number): number {
 }
 
 /**
- * Performs an sRGB gamma compression of a floating point value in [0, 1] range
+ * Performs an sRGB gamma compression of a floating-point value in [0, 1] range
  * into an 8-bit value, i.e. an integer in [0, 255] range.
  */
 function gammaCompression(linear: number): number {

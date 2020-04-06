@@ -18,13 +18,13 @@
   approximates <a href="https://en.wikipedia.org/wiki/Stevens%27s_power_law">a power
   function</a> of its intensity.  This can be expressed as \(P = S^\alpha\)
   where \(P\) is the perceived brightness and \(S\) is linear intensity.
-  \(\alpha\) has been experimentally measure to be less than one which means
+  \(\alpha\) has been experimentally measured to be less than one which means
   that people are more sensitive to changes to dark colours rather than to
   bright ones.
 
 <p>Based on that observation, colour space’s encoding can be made more efficient
   by using higher precision when encoding dark colours and lower when encoding
-  bright ones.  This is akin to precision of floating point numbers scaling with
+  bright ones.  This is akin to precision of floating-point numbers scaling with
   value’s magnitude.  In RGB systems, the role of precision scaling is done
   by <dfn>gamma correction</dfn>.  When colour is captured (for example from
   a digital camera) it goes through <dfn>gamma compression</dfn> which spaces
@@ -148,7 +148,7 @@
 <p>And that’s it.  Encoding, gamma correction
   and <a href="/2019/srgb-xyz-matrix/">the conversion matrix</a> are all the
   necessary pieces to get the conversion implemented.  To keep things
-  interesting, let's this time write the code in TypeScript:
+  interesting, lets this time write the code in TypeScript:
 
 <pre>
 <!-- INCLUDE ESCAPED: srgb-xyz-conversion.ts -->

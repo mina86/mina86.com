@@ -1,9 +1,9 @@
 <!-- subject: Generating random reals -->
 <!-- date: 2016-12-26 22:31:12 -->
-<!-- tags: random, prng, floating point -->
+<!-- tags: random, prng, floating-point -->
 <!-- categories: Articles, English, Techblog -->
 
-<p>A well known way of generating random floating point numbers in the
+<p>A well known way of generating random floating-point numbers in the
   presence of a pseudo-random number generator (PRNG) is to divide
   output of the latter by one plus its maximum possible return value.
 
@@ -23,7 +23,7 @@ levels.
 
 <h2>Discretisation</h2>
 
-<p>The ‘floating’ in ‘floating point’ refers to decimal point’s ability to move
+<p>The ‘floating’ in ‘floating-point’ refers to decimal point’s ability to move
   around to scale number’s <em>absolute</em> precision while
   maintaining <em>relative</em> precision.  This allows very large as well as
   very small numbers to be represented.  For example, while an IEEE 754 double
@@ -138,7 +138,7 @@ UINT64_MAX / (UINT64_MAX + 1.0 ) = 1
 UINT64_MAX / (UINT64_MAX + 1.0f) = 1
 </pre>
 
-<p>If a PRNG outputs integers wider than floating point
+<p>If a PRNG outputs integers wider than floating-point
   number’s precision (24 bits
   for <a href="https://en.wikipedia.org/wiki/Single-precision_floating-point_format">single</a>
   and 53 bits
@@ -163,7 +163,7 @@ UINT64_MAX / (UINT64_MAX + 1.0f) = 1
 <h2>Solution</h2>
 
 <p>There are a faw ways to solve the issue.  My favourite method which
-  happens to be the fastest is to construct floating point number by
+  happens to be the fastest is to construct floating-point number by
   hand.  This is much easier than it sounds:
 
 <pre>
@@ -178,7 +178,7 @@ static inline double make_double(uint64_t x) {
 <p><code>memcpy</code> prevents any aliasing issues and GCC is good
   at optimising it.  Speaking of which, if portability is an issue,
   number of bits in mantissa can be queried via <code>DBL_RADIX</code>
-  macro from <code>float.h</code> header and if unknown floating point
+  macro from <code>float.h</code> header and if unknown floating-point
   representation is used, <code>ldexp</code> can be used instead.
 
 <p>That approach can be <a
