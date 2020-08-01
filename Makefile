@@ -28,7 +28,7 @@ $(foreach d,mina86.nfshost.com mina86.name nazarewicz.name, \
 
 public: public/mina86.com
 public/mina86.com: static/mina86.pub static/cv/index.html
-	@+exec python ./tools/build.py $@
+	@+exec python3 ./tools/build.py $@
 
 touch:
 	touch src/*.* src/data/*.*
@@ -60,7 +60,7 @@ static/cv/index.html: cv/cv.xml cv/cv.xsl tools/embed-images.py \
                       $(glob cv/*.png) $(glob cv/*.jpg)
 	@echo " XSL  $@"
 	mkdir -p -- $(@D)
-	xsltproc $< | python ./tools/embed-images.py cv >$@
+	xsltproc $< | python3 ./tools/embed-images.py cv >$@
 
 %.gz: %
 	@echo " GZ   $@"
