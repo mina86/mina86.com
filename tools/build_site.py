@@ -56,7 +56,6 @@ TRANSLATIONS = {
     'Articles': {'pl': 'Artykuły'},
     'Downloads': {'pl': 'Do pobrania'},
     'English': {'pl': 'Po angielsku'},
-    'Games': {'pl': 'Gry'},
     'Misc': {'pl': 'Różne'},
     'Reviews': {'pl': 'Recenzje'},
     'Site News': {'pl': 'Aktualności'},
