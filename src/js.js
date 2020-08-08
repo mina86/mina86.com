@@ -10,7 +10,6 @@
 	[
 		'cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js',
 		'www.google-analytics.com/ga.js',
-		'cse.google.com/cse.js?cx=005697715059674104273:zluc68s5jow'
 	].map(function(src) {
 		tmp = D.createElement('script');
 		tmp.async = true;
