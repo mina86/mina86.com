@@ -89,9 +89,7 @@
     <footer class="g">
       {%- if post_page -%}
       {%- elif full -%}
-        {# Comments have been removed for now so no point in having a ‘See
-           comments’ link #}
-        {# <a href="{{ entry.href }}#c">{{ T('See comments') }} »</a> #}
+        <a href="{{ entry.href }}#c">{{ T('See comments') }} »</a>
       {%- else -%}
         <a href="{{ entry.href }}#m">{{ T('Continue reading') }} »</a>
       {%- endif -%}

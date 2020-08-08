@@ -4,7 +4,13 @@
 
   {%- block article -%}
     {{ post(entry, true) }}
-    {{ prev_next() }}
   {%- endblock -%}
+
+  <div id=c>
+    <div class="talkyard-comments"
+         data-discussion-id="{{ entry.permalink }}"></div>
+  </div>
+
+  {{ prev_next() }}
 
 {%- endblock -%}

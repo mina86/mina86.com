@@ -7,9 +7,11 @@
 
 	/* Third party scripts */
 	W['_gaq'] = [['_setAccount', 'UA-240278-1'], ['_trackPageview']];
+	W['talkyardServerUrl'] = 'https://comments-for-mina86-com.talkyard.net';
 	[
 		'cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js',
 		'www.google-analytics.com/ga.js',
+		'c1.ty-cdn.net/-/talkyard-comments.min.js'
 	].map(function(src) {
 		tmp = D.createElement('script');
 		tmp.async = true;
