@@ -1,0 +1,49 @@
+<!-- subject: Hacking GOG.com for fun and profit -->
+<!-- date: 2020-08-24 19:37:56 -->
+<!-- tags: gog, gimp -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>If you have a <a href=https://www.gog.com/>GOG</a> account, you might have
+  received an email announcing
+  a <a href="https://www.gog.com/news/the_harvest_sale_brings_the_juiciest_deals_up_to_91_off">Harvest
+  Sale</a>.  While it’s unusual for harvest to last only 48 hours, but apart
+  from that naming blunder, the sale is no different than many that came before
+  it.  What caught my attention was somewhat creative spot the difference puzzle
+  that accompanied it.  Specifically, as pretext to share some image processing
+  insights.
+
+<figure><img src=/d/gog-harvest.png style="max-width: 80%; height: auto"
+	     alt="Portion of the spot the difference Harvest Sale puzzle"
+	     width=760 height=180 ></figure>
+
+<p>Each identified difference presents a discount code for an exciting game.
+  Surely, one cannot let it go to waste!  Alas, years of sitting in a cave in
+  front of a computer destroyed our eyesight; how could we possibly succeed‽
+  Simple!
+
+<!-- EXCERPT -->
+
+<p>Firstly, make a screenshot of the puzzle.  The drawing in the email is rather
+  tall so you might need to take a few of them (each capturing portion of the
+  picture) or zoom out until the entire illustration fits.  To practice feel
+  free to grab the above image of the portion of the puzzle.
+
+<p>With the screenshot ready, open it in an <a href=https://www.gimp.org/>image
+  manipulation program</a>.  To make things easier crop it — the default key
+  binding for Crop tool is Shift+C — to discard irrelevant parts.  Having done
+  that, duplicate the layer.  That can be accomplished through Layer menu or by
+  pressing Ctrl+Shift+D.  Now, flip one of the layers.  This operation is
+  accessible through the Layer → Transform → Flip Horizontally menu option as
+  well as inside of the Layers dialogue.
+
+<div style="float: right; margin: 1em 0 1em 2em">
+  <img style src=/d/gog-harvest-inv.png alt="" width=380 height=180></div>
+
+<p>The Layers dialogue is what we need now as that’s where the magic happen.  if
+  you haven’t brought it up yet do it now for example with Ctrl+L shortcut.
+  Make sure the top layer is selected and finally choose Difference from the
+  Mode drop-down. Et voilà.
+
+<p>Depending on the cropping done at the beginning, the top layer might need to
+  be moved a little — key binding for the Move tool is M.  If done correctly,
+  the differences should be highlighted with bright colours.
