@@ -31,38 +31,55 @@ sys.path.insert(1, os.path.abspath(os.path.join(os.path.dirname(__file__),
 import htmlmin.parser
 
 
-_MIMETYPES: typing.Dict[str, str] = {
-    '.jpg': 'image/jpeg',
-    '.png': 'image/png',
-    '.svg': 'image/svg+xml',
+_MIMETYPES: typing.Dict[str, bytes] = {
+    '.jpg': b'image/jpeg',
+    '.png': b'image/png',
+    '.svg': b'image/svg+xml',
 }
 
-
-def _encode_base64(mime: str, data: bytes) -> bytes:
+def _encode_base64(mime: bytes, data: bytes) -> bytes:
     data = base64.standard_b64encode(data)
-    return b'data:%s;base64,%s' % (mime.encode('ascii'), data)
+    return b'data:%s;base64,%s' % (mime, data)
 
+def _encode_string(mime: bytes, data: bytes, css: bool) -> bytes:
+    chars = r'\0-\x1f\x80-\xff%#'
+    if not css:
+        # In HTML mode we don’t have to URL escape greater than sign, apostrophe
+        # and quote in the string since those can be handled via HTML entities.
+        # However, URL encoding is just three-character long while the entities
+        # are at least four.
+        if data.count(b"'") > data.count(b'"'):
+            chars += r' >"'
+        else:
+            chars += r" >'"
 
-def _encode_string(mime: str, data: str, q: str) -> bytes:
-    data = data.replace('\n', '\\n').replace(q, '\\' + q)
-    return '{}data:{},{}{}'.format(q, mime, data, q).encode('utf-8')
+    str_data = re.sub('[{}]'.format(chars),
+                      lambda m: '%%%02x' % ord(m.group(0)),
+                      data.decode('utf-8').strip())
 
+    def fmt(data: str, quote: str = '') -> bytes:
+        quote = quote.encode('ascii')
+        return b'%sdata:%s,%s%s' % (quote, mime, data.encode('ascii'), quote)
 
-def _insert_data(src_dir: str, path: str) -> bytes:
+    if not css:
+        return fmt(str_data)
+
+    str_data.replace('\n', '\\n')
+    x, y = [fmt(str_data.replace(q, '\\' + q), q) for q in '\'"']
+    return x if len(x) < len(y) else y
+
+def _insert_data(src_dir: str, path: str, css: bool = False) -> bytes:
     _, ext = os.path.splitext(path)
     mime = _MIMETYPES[ext]
     data = open(os.path.join(src_dir, path), 'rb').read()
 
-    encodings = [_encode_base64(mime, data)]
-    if ext == '.svg':
-        str_data = re.sub(r'[\0-\x1f\x80-\xff%#]',
-                          lambda m: '%%%02x' % ord(m.group(0)),
-                          data.decode('utf-8').strip())
-        encodings.append(_encode_string(mime, str_data, '"'))
-        encodings.append(_encode_string(mime, str_data, "'"))
-        encodings.sort(key=len)
+    encoded = _encode_base64(mime, data)
+    if ext != '.svg':
+        return encoded
 
-    return encodings[0]
+    x = encoded
+    y = _encode_string(mime, data, css)
+    return x if len(x) < len(y) else y
 
 
 def _map_static(mappings: typing.Dict[str, str], path: str) -> str:
@@ -72,7 +89,8 @@ def _map_static(mappings: typing.Dict[str, str], path: str) -> str:
 def process_css(data: bytes, src_dir: str,
                 mappings: typing.Dict[str, str]) -> bytes:
     data = re.sub(rb'DATA<([^<>]+)>',
-                  lambda m: _insert_data(src_dir, m.group(1).decode('utf-8')),
+                  lambda m: _insert_data(src_dir, m.group(1).decode('utf-8'),
+                                         css=True),
                   data)
     data = re.sub(rb'/d/[-_a-zA-Z0-9.]*',
                   lambda m: _map_static(mappings, m.group(0).decode('utf-8')).encode('utf-8'),

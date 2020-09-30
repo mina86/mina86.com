@@ -13,7 +13,7 @@
   <xsl:template match="/cv">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Curriculum Vitæ</title>
+    <title>Michał Nazarewicz — Curriculum Vitæ</title>
     <style>
       body {
         font-family: Verdana, "Trebuchet MS", Tahoma, Helvetica, sans-serif;

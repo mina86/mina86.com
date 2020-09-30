@@ -47,6 +47,29 @@
   <group>
     <head>Work</head>
 
+    <entry logo="hrt.svg">
+      <time>March 2019–September 2020</time>
+      <head>Core Developer (Hudson River Trading)</head>
+
+      <p>I have added low-latency integration to traditional and
+      cryptocurrency exchanges.  Those include market data feeds as
+      well as order entry interfaces using a mixture of protocols
+      (HTTP, FIX, custom binary protocols etc.).</p>
+
+      <p>I’ve worked on improving and optimising HRT’s internal
+      libraries.  For example by devising a more robust time-zone API,
+      pushing more use of new C++ features such as string_views and
+      speeding up some operations through use of SIMD
+      instructions.</p>
+
+      <p>I’ve been responsible for ongoing maintenance and live
+      troubleshooting during trading hours.  My previous experiences
+      have allowed me to promote a better ops practices which have
+      improved robustness of HRT’s systems.</p>
+
+      <tech>C++</tech>
+    </entry>
+
     <entry logo="barclays.jpg">
       <time>March 2018–January 2019</time>
       <head>Quant Developer, VP (Barclays Capital)</head>
