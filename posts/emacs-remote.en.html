@@ -1,0 +1,199 @@
+<!-- subject: Emacs remote file editing over TRAMP -->
+<!-- date: 2021-01-31 03:25:42 -->
+<!-- tags: emacs -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>I often develop software on remote machines; logged in via SSH to
+  a workstation where all source code reside.  In those situations, I like to
+  have things work the same way regardless of which host I’m on.  Since more
+  often than not I open files from shell rather than from within my editor, this
+  in particular means having the same command opening files in Emacs available
+  on all computers.  <code>emacsclient <var>filename</var></code> works locally
+  but gets a bit tricky over SSH.
+
+<p>Running Emacs in a terminal is of course possible, but graphical interface
+  provides minor benefits which I like to keep.  X forwarding is another option
+  but gets sluggish over high-latency connections.  And besides, having multiple
+  Emacs instance running (one local and one remote) is <em>not</em> the way.
+
+<p>Fortunately, by utilising SSH remote forwarding, Emacs can be configured to
+  edit remote files and accept server commands from within an SSH session.
+  Herein I will describe how to accomplish that.
+
+<!-- EXCERPT -->
+
+<h2>Starting Emacs server</h2>
+
+<p>First step is to get edit server running.  <dfn>Edit server</dfn> is
+  a feature of Emacs which allows the editor to be controlled by a separate
+  process, namely emacsclient.  Its most obvious benefit is opening files in an
+  existing Emacs instance rather than having to launch a new copy each time.
+  The simplest way to start a server is by calling <code>start-server</code>
+  command inside of Emacs by typing <kbd>M-x server-start RET</kbd>.  If the
+  server is working correctly, executing <code>emacsclient -e
+  emacs-version</code> in a terminal should result in Emacs version being
+  printed.
+
+<pre style="float: right; margin-left: 2em;">
+$ emacsclient -e '
+(if server-use-tcp (error "Using TCP")
+  (concat server-socket-dir "/" server-name))
+'
+"/run/user/1000/emacs/server"
+</pre>
+
+<p>There
+  are <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html">other
+  ways to start a server</a>.  Whichever method one picks, the important points
+  are to ⅰ) make sure TCP is not used and ⅱ) note where the UNIX-domain socket
+  is created.  The former is the case if <code>server-use-tcp</code>
+  is <code>nil</code>; the later is indicated by <code>server-socket-dir</code>
+  and <code>server-name</code> variables.  Their values can be inspected by
+  typing <kbd>C-h v <var>variable-name</var> RET</kbd> (which
+  runs <code>describe-variable</code> command).
+
+<table style="float: right; margin-left: 2em;">
+  <thead>
+    <tr><th>Variable<th>Expected value
+  <tbody>
+    <tr><td><code>server-use-tcp</code><td><code>nil</code>
+    <tr><td><code>server-socket-dir<code>
+        <td>"<code>/run/user/<var>&lt;UID&gt;</var>/emacs</code>"
+    <tr><td><code>server-name</code><td>"<code>server</code>"
+</table>
+
+<p>Note that where exactly the socket ends up may vary.  To keep things simple,
+  this article assumes values as listed in the table on the right.  Depending on
+  particular system, commands and configuration described further down may need
+  adjustments to match where the server’s socket is actually located.
+
+
+<h2>Security implications</h2>
+
+<p>Before going further, there’s an important security consideration.  The edit
+  server protocol allows for Elisp forms to be sent for evaluation.  This means
+  that whoever connects to the editor can execute arbitrary code with privileges
+  of the user Emacs runs under.  Normally this is not an issue since only the
+  user running the server is able to connect to it.
+
+<p>However, just like with X and agent forwarding, remote socket forwarding
+  gives remote host’s administrator access to local socket which can be
+  exploited to run arbitrary code on local host.  Solution described herein is
+  therefore <em>not</em> recommended unless administrator of the remote host is
+  trusted.
+
+
+<h2>Forwarding the socket</h2>
+
+<p>Rather than talking abstracting about local and remote hosts, it might be
+  more fun to pick some names for machines in question.  Naming things is the
+  most difficult things in it, but let us settle on the local machine being
+  earth.local while the remote one phobos.mars.uac.
+
+<p>To allow emacsclient running on Phobos to communication with Emacs back on
+  Earth, socket created by the edit server needs to be forwarded.  Fortunately,
+  analogous to TCP, OpenSSH supports UNIX-domain socket forwarding.  To know
+  what to forward, two paths need to be determined: ⅰ) location of the
+  UNIX-domain socket which local Emacs is listening on; and ⅱ) path where remote
+  emacsclient will look for a socket.  Both typically lay under user’s XDG
+  runtime directory and thus can be determined with a little help from
+  xdg-user-dir tool:
+
+<pre>
+user@earth$ <b>local_socket=$(xdg-user-dir RUNTIME)/emacs/server</b>
+user@earth$ <b>remote_socket=$(ssh -aknxSnone phobos.mars.uac \
+                          xdg-user-dir RUNTIME)/emacs/earth</b>
+user@earth$ <b>test -S "$local_socket" || echo Missing local socket</b>
+user@earth$ <b>printf '‘%s’\n' "$local_socket" "$remote_socket"</b>
+‘/run/user/1000/emacs/server’
+‘/run/user/1234/emacs/earth
+</pre>
+
+<p>It is good idea to use a non-standard server name on remote side to avoid
+  clashes if an unrelated Emacs server happened to be running there already.
+  The snippet above uses the default ‘<code>server</code>’ on local side while
+  ‘<code>earth</code>’ on remote side indicating which computer the socket leads
+  to.  With the paths determined, the next step is to enable socket forwarding
+  when opening a new SSH session.  Options and syntax for UNIX-domain socket
+  forwarding are the same as for TCP port forwarding.  In particular
+  the <code>-R</code> switch is used on command line used as follows:
+
+<pre>
+user@earth$ <b>ssh -R "$remote_socket:$local_socket" phobos.mars.uac</b>
+</pre>
+
+<p>Once authenticated, SSH will create <code>$remote_socket</code> on Phobos and
+  forward all incoming connections to <code>$local_socket</code> on Earth.  With
+  that, remote emacsclient will be able to talk to local Emacs through that
+  socket.  This can be tested by executing the following inside of the SSH
+  session:
+
+<pre>
+user@phobos$ <b>emacsclient -s earth -e '(system-name)'</b>
+"local"
+user@phobos$ <b>emacsclient -s earth -T /ssh:phobos.mars.uac: <var>filename</var></b>
+</pre>
+
+<p>Thanks to <a href="https://www.gnu.org/software/tramp/">TRAMP</a> (which
+  enables transparent access to remote files from within Emacs), Emacs running
+  on Earth will open <var>filename</var> located on Phobos.  If instead it tries
+  to open a local file, there may be issues with TRAMP configuration.
+  Adding <code>(require 'tramp)</code>
+  to <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html">Emacs’
+  initialisation file</a> should fix that issue.
+
+
+<h2>Making it permanent</h2>
+
+<p>Explicitly specifying the <code>-R</code> flag each time would be rather
+  tedious.  On top of that, things break once SSH session is terminated and new
+  one established.  The socket on remote side is never cleaned and as a result
+  a new tunnel cannot be created.  Both of those issues can be easily solved
+  with some configuration.  To get it sorted, the following section should be
+  added to <code>~/.ssh/config</code>:
+
+<pre id="alias">
+Host phobos
+    HostName phobos.mars.uac
+    RemoteForward /run/user/1234/emacs/earth /run/user/100/emacs/server
+    StreamLocalBindUnlink yes
+    ControlMaster auto
+    ControlPersist 30m  # or 1
+</pre>
+
+<p><code>Host</code> defines an alias for the host such that full domain name
+  does not need to by typed each time.  Instead, <code>HostName</code> specifies
+  the full domain.  <code>RemoteForward</code> cakes care of the <code>-R</code>
+  switch.  Paths given in the example may, of course, need to be
+  adjusted.  <code>StreamLocalBindUnlink yes</code> addresses the issue of stale
+  sockets blocking new forwarding attempts.
+
+<p>Lastly, <code>ControlMaster</code> and <code>ControlPersist</code>
+  configures <a href="https://en.wikibooks.org/wiki/OpenSSH/Cookbook/Multiplexing">multiplexing</a>
+  which makes SSH reuse a single TCP connection rather than creating a new one
+  each time a new session is requested.  This avoids superfluous socket
+  forwarding tunnels being created if one is already available.
+  The <code>30m</code> persist timeout means that control master will keep the
+  connection open for half an hour after last SSH session is closed.  If thirty
+  minutes is too long for some reason, the timeout can be brought down to one.
+  I do not recommend disabling it altogether though, because then the
+  first <code>ssh</code> invocation (which establishes the multiplexing
+  connection and became control master) will hang for as long as any SSH
+  sessions are active.
+
+<p>With all that set up, the configuration can be tested with a much more
+  concise set of commands:
+
+<pre>
+user@earth$ <b>ssh -R "$remote_socket:$local_socket" phobos.mars.uac</b>
+user@phobos$ <b>emacsclient -s earth -T /ssh:phobos: <var>filename</var></b>
+</pre>
+
+<p>To make the setup even more convenient, one can create an alias on remote
+  host for the emacsclient invocation.  For example by adding the following
+  to <code>~/.bashrc</code> (or equivalent shell’s runtime configuration file):
+
+<pre>alias e='emacsclient -s earth -T /ssh:phobos:'</pre>
+
+<p>And that’s it. At least for now. I don’t use TRAMP myself as I find it too
+  slow. I employ sshfs instead but that will have to wait for another article.
