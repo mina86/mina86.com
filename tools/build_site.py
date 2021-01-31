@@ -430,7 +430,7 @@ class Writer(object):
               date=entries[0].date)
         for entry in entries[:10]:
             write('''
-                <entry>
+                <entry xml:base="%(url)s">
                   <title>%(subject)s</title>
                   <id>%(id)s</id>
                   <link rel="alternate" type="text/html" href="%(url)s"/>
