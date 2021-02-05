@@ -9,7 +9,7 @@
   do the calculations by myself.
 
 <p>What we’re looking for is a 3-by-3 matrix \(M\) which, when multiplied by
-  red, green and blue coördinates of a colour, produces its XYZ coördinates.  In
+  red, green and blue coordinates of a colour, produces its XYZ coordinates.  In
   other words,
   a <a href="https://www.khanacademy.org/math/linear-algebra/alternate-bases/change-of-basis/v/linear-algebra-change-of-basis-matrix">change
   of basis matrix</a> from a space whose basis vectors are sRGB’s primary
@@ -31,7 +31,7 @@
   also <a href="https://www.itu.int/rec/R-REC-BT.709-6-201506-I/en">Rec. 709
   document</a> which is 170 francs cheaper) as a pair
   of <a href="https://en.wikipedia.org/wiki/CIE_1931_color_space#CIE_xy_chromaticity_diagram_and_the_CIE_xyY_color_space">x
-  and y</a> values (i.e. chromaticity coördinates).  Converting them to XYZ
+  and y</a> values (i.e. chromaticity coordinates).  Converting them to XYZ
   space is simple: \(X = x Y / y\) and \(Z = (1 - x - y) Y / y,\) but leaves
   luminosity (the Y value) unknown.
 
@@ -60,7 +60,7 @@
         <td>\(\langle 31271 Y_w / 32902, \; Y_w, \; 35827 Y_w / 32902\rangle\)
 </table>
 
-<p>That’s where reference white point comes into play.  Its coördinates in
+<p>That’s where reference white point comes into play.  Its coordinates in
   linear RGB space, \(\langle 1, 1, 1 \rangle,\) can be plugged into the change
   of basis formula to yield the following equation:
 
@@ -134,7 +134,7 @@
 <p>Given chromaticity of primary colours of an RGB space (\(\langle x_r, y_r
   \rangle,\) \(\langle x_g, y_g \rangle\) and \(\langle x_b, y_b \rangle\)) and
   its reference white point (\(\langle x_w, y_w \rangle\)), the matrix for
-  converting linear RGB coördinates to XYZ is:
+  converting linear RGB coordinates to XYZ is:
 
   $$ M = \begin{bmatrix}
     X'_r Y_r & X'_g Y_g & X'_b Y_b \\
@@ -172,7 +172,7 @@ where:
     \end{bmatrix}\!\!.
   \end{align} $$
 
-<p>Matrix converting coördinates in the opposite direction is the inverse of
+<p>Matrix converting coordinates in the opposite direction is the inverse of
   \(M,\) i.e. \(M^{-1}\).
 
 
@@ -302,7 +302,7 @@ M_inv = [
 
 <p>It’s important to remember this is not all that is needed to perform
   conversion between sRGB and XYZ colour spaces.  The matrix assumes a linear
-  RGB coördinates normalised to [0, 1] range which requires dealing with gamma
+  RGB coordinates normalised to [0, 1] range which requires dealing with gamma
   correction.  For those interested, all
   that <a href="/2019/srgb-xyz-conversion/">is described in follow-up
   article</a>.

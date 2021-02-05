@@ -1,0 +1,587 @@
+<!-- subject: Greyscale, you might be doing it wrong -->
+<!-- date: 2021-02-07 20:06:46 -->
+<!-- tags: rgb, greyscale -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>While working on <a href=https://crates.io/crates/ansi_colours>ansi_colours
+  crate</a> I’ve learned about colour spaces things I’ve never thought I would.
+  One of those is intricacies of greyscale.  Or rather not so much greyscale
+  itself but conversion from sRGB.  ‘How hard can it be?’ one might ask, ‘Just
+  sum all components and divide by three!’ one might provide a helpful
+  suggestion.
+
+<p>Taking an arithmetic mean of red, green and blue coordinates of the colour is
+  often mentioned method for conversion to greyscale.  Inaccuracy of the method
+  is usually acknowledged but justified by its simplicity and speed.  That’s
+  a fair trade-off except that equally simple and fast algorithm which is
+  noticeably more accurate exists.  It is built on an observation that green
+  contributes the most to the luminosity and that computers like powers of two.
+  The code reads as follows:
+
+<pre id=2g>fn grey_from_rgb_avg_2g(r: u8, g: u8, b: u8) -&gt; u8 {
+    ((r as u16 + 2 * g as u16 + b as u16) / 4) as u8
+}</pre>
+
+<p>Taking the green channel twice increases accuracy of the transformation and
+  eliminates all division instruction (replacing it by a bit shift) making the
+  function superior in every respect.  However, even if speed is an important
+  factor, there are better algorithms.
+
+<!-- EXCERPT -->
+
+
+<h2 id=distance>Accuracy measurement</h2>
+
+<p>Phrases such as ‘increases accuracy’ prompt a question about measurements
+  used to make those claims.  When it comes to colourimetry there is an obvious
+  answer: <a href="https://en.wikipedia.org/wiki/Color_difference#CIEDE2000">the
+  ΔE*₀₀ formula</a> (simply referred to as ΔE herein).  It builds on
+  the <a href="https://en.wikipedia.org/wiki/Lab_color_space">L*a*b* colour
+  space</a> in which L* denotes luminosity and shades of grey have a* and b*
+  coordinates equal to zero.  Therefore, converting any colour into L*a*b* and
+  then zeroing its a* and b* components turns it into shade of grey.  Combining
+  that with the ΔE distance yields the following measurement of accuracy:
+
+<pre>
+// (r, g, b): input sRGB colour; y: calculated shade of grey in sRGB space
+// result: CIEDE2000 distance between actual shade of grey and the provided one
+fn distance(r: u8, g: u8, b: u8, y: u8) -&gt; f32 {
+    let colour_in_lab = lab::Lab::from_rgb(&[r, g, b]);
+    let perfect_grey = lab::Lab { l: colour_in_lab.l, a: 0.0, b: 0.0 };
+    let approximated_grey = lab::Lab::from_rgb(&[y, y, y]);
+    delta_e::DE2000::new(perfect_grey, approximated_grey)
+}
+</pre>
+
+<p>Using this measurement shows that (r + 2g + b) / 4 formula is nearly 40% more
+  accurate than the naïve arithmetic mean.  (Benchmarks and graphs are included
+  at <a href="#bench">the end of the article</a>).  But we can do so much
+  better.
+
+
+<h2>Perfect conversion</h2>
+
+<p>The perfect conversion algorithm would be to move to L*a*b* colour space, set
+  a* and b* to zero and go back to sRGB.  This can be optimised significatly by
+  recognising that L* component depends on the Y coordinate
+  of <a href="https://en.wikipedia.org/wiki/CIE_1931_color_space">the XYZ colour
+  space</a> only.  Going all the way isn’t necessary and it’s enough to
+  calculate the Y component (without bothering with X and Z) and apply gamma
+  correction to it to get the desired shade of grey.  This method is implemented
+  by the following code:
+
+<pre id=exact>
+fn grey_from_rgb_exact(r: u8, g: u8, b: u8) -&gt; u8 {
+    fn to_linear(v: u8) -&gt; f32 {
+        if v &lt;= 10 {
+            v as f32 * (1.0 / (12.92 * 255.0))
+        } else {
+            ((v as f32 + 0.055 * 255.0) * (1.0 / (1.055 * 255.0))).powf(2.4)
+        }
+    }
+
+    fn from_linear(v: f32) -&gt; u8 {
+        (if v &lt;= 0.0031308 {
+            (12.92 * 255.0) * v
+        } else {
+            v.powf(1.0 / 2.4) * (1.055 * 255.0) - (0.055 * 255.0)
+        } + 0.5) as u8
+    }
+
+    let Y = 0.21267285140562248 * to_linear(r) +
+            0.715152155287818   * to_linear(g) +
+            0.07217499330655958 * to_linear(b);
+    from_linear(y)
+}
+</pre>
+
+<p>Coefficients at the end come from <a href="/2019/srgb-xyz-matrix/">the
+  sRGB→XYZ conversion matrix</a> (specifically it’s the second row)
+  whereas <code>from_linear</code> and <code>to_linear</code> functions
+  implement <a href="/2019/srgb-xyz-conversion/">sRGB gamma correction</a>.
+
+<p>While completely accurate, this function is roughly 30 times slower than the
+  other two considered so far.  If absolute precision is necessary, this
+  algorithm is the one to use.  On the other hand, sacrificing accuracy leads to
+  significant spead-ups and may be worth considering.
+
+
+<h2 id=gamma22>Simplified sRGB</h2>
+
+<p>One possible time save is to simplify sRGB gamma formula.  Common
+  approximation is to assume gamma equal to 2.2.  This
+  streamlines <code>to_linear</code> and <code>from_linear</code> functions by
+  removing a conditional but in doing so eliminates the cheaper of the two code
+  paths.  As a result, it makes the conversion slower rather than faster.  Not
+  all is lost though since this approach can be pushed some more by using gamma
+  equal to 2:
+
+<pre id=gamma2>
+fn grey_from_rgb_gamma2(r: u8, g: u8, b: u8) -&gt; u8 {
+    ((r as f32 * r as f32 * 0.21267285140562248 +
+      g as f32 * g as f32 * 0.715152155287818   +
+      b as f32 * b as f32 * 0.07217499330655958).sqrt() + 0.5) as u8
+}
+</pre>
+
+<p>Hardly anyone would call it sRGB, but it speeds up the algorithm by over 80%.
+  Furthermore, despite being rather crude, handles 90% of the colours pretty
+  well requiring ‘close inspection’ to see a difference between correct and
+  calculated grey.  (Again, all benchmarks <a href="#bench">at the end</a>).
+
+
+<h2>Integer square root</h2>
+
+<p>Using the γ = 2 approximation has additional benefit for platforms without
+  a fast floating point unit.  With a minor degradation in accuracy, the
+  algorithm can be rewritten to consist entirely of integer arithmetic.  While
+  the trade-off may not be worth it on modern desktop machines which perform
+  square root operation as fast as division but less powerful systems may still
+  benefit from this approach:
+
+<pre id=isqrt>
+fn grey_from_rgb_gamma2_isqrt(r: u8, g: u8, b: u8) -&gt; u8 {
+    fn isqrt(n: u32) -&gt; u8 {
+        let mut n = n;
+        let mut x = 0;
+        let mut b = 1 &lt;&lt; 16;
+
+        while b &gt; n {
+            b = b / 4;
+        }
+
+        while b != 0 {
+            if n >= x + b {
+                n = n - x - b;
+                x = x / 2 + b;
+            } else {
+                x = x / 2;
+            }
+            b = b / 4;
+        }
+        x as u8
+    }
+
+    isqrt((r as u32 * r as u32 * 13938 +
+           g as u32 * g as u32 * 46868 +
+           b as u32 * b as u32 *  4730) >> 16)
+}
+</pre>
+
+
+<h2>More accurate weights</h2>
+
+<p>Pushing the idea of simplifying gamma correction further eventually leads to
+  the point where conversion to and from linear values is skipped entirely.  The
+  result is a weighted average just as discussed at the beginning.  This time,
+  however, knowing what coefficients to use allows for a much better choice of
+  weights:
+
+<pre id=float>
+fn grey_from_rgb_avg_float(r: u8, g: u8, b: u8) -&gt; u8 {
+    (r as f32 * 0.21263682167732384 +
+     g as f32 * 0.7151829818412507  +
+     b as f32 * 0.07218019648142547 + 0.5) as u8
+}
+</pre>
+
+<p>This can be speed up by once again turning to integer arithmetic.  There are
+  many possible sets of integer weights but really the only two worth mentioning
+  are (54, 183, 19) and (3567454, 11998779, 1210983).  The former makes the
+  calculations fit 16-bit integers while the later 32-bit ones.
+
+<pre id=bit>
+fn grey_from_rgb_avg_16bit(r: u8, g: u8, b: u8) -&gt; u8 {
+    let y = 54 * r as u16 + 183 * g as u16 + 19 * b as u16
+    ((y + (1 &lt;&lt; 7)) &gt;&gt; 8) as u8
+}
+
+fn grey_from_rgb_avg_32bit(r: u8, g: u8, b: u8) -&gt; u8 {
+    let y = 3567454 * r as u32 + 11998779 * g as u32 + 1210983 * b as u32;
+    ((y + (1 &lt;&lt; 23)) &gt;&gt; 24) as u8
+
+}
+</pre>
+
+
+<h2 id=bench>Benchmarks</h2>
+
+<p>Having described the algorithms it’s time to quantify all the claims about
+  their accuracy and speed.  Source code of the functions and benchmarks is
+  available <a href="https://github.com/mina86/ansi_colours/blob/master/tools/src/bin/luminance.rs">within
+  ansi_colours module</a>.  Let’s first quickly recap all the described methods
+  that are about to be evaluated:
+
+<dl>
+  <dt>Average
+  <dd>The simple arithmetic average of red, green and blue components.
+  <dt>2×Green <small>(<a href="#2g"><code>grey_from_rgb_avg_2g</code></a>)</small>
+  <dd>Weighted average where red and blue components have weight one while green
+    two.
+  <dt>16-bit weights <small>(<a href="#bit"><code>grey_from_rgb_avg_16bit</code></a>)</small>
+  <dt>32-bit weights <small>(<a href="#bit"><code>grey_from_rgb_avg_32bit</code></a>)</small>
+  <dd>Weighted average with integer weight limited to 16-bit or 32-bit
+    quantities respectively.
+  <dt>Float weights <small>(<a href="#float"><code>grey_from_rgb_avg_float</code></a>)</small>
+  <dd>Weighted average with exact floating point weights.
+  <dt>γ=2 (no fpu) <small>(<a href="#isqrt"><code>grey_from_rgb_gamma2_isqrt</code></a>)</small>
+  <dd>Approximation of sRGB gamma as γ = 2 without any floating point arithmetic
+    operations.
+  <dt>γ=2.0 <small>(<a href="#gamma2"><code>grey_from_rgb_gamma2</code></a>)</small>
+  <dt>γ=2.2 <small>(<a href="#gamma22">Simplified sRGB</a>)</small>
+  <dd>Approximation of sRGB gamma as γ = 2.0 or γ = 2.2 respectively.
+  <dt>Exact <small>(<a href="#exact"><code>grey_from_rgb_exact</code></a>)</small>
+  <dd>The exact method for conversion to grey doing proper gamma correction.
+</dl>
+
+<figure style="float: right; margin: 1em; margin-right: 0">
+  <svg viewBox="0 0 70 140" width="140px" height="280px" version="1.1"
+       xmlns="http://www.w3.org/2000/svg" stroke="none">"
+    <rect x="0"  y="0"   width="30" height="30" fill="#4746b7"/>
+    <rect x="10" y="0"   width="10" height="10" fill="#4d46b7"/>
+    <rect x="0"  y="10"  width="10" height="10" fill="#4749b7"/>
+    <rect x="20" y="10"  width="10" height="10" fill="#4746be"/>
+    <rect x="10" y="20"  width="10" height="10" fill="#4944b5"/>
+    <rect x="40" y="0"   width="30" height="30" fill="#4746b7"/>
+    <rect x="50" y="0"   width="10" height="10" fill="#3946b7"/>
+    <rect x="40" y="10"  width="10" height="10" fill="#474cb7"/>
+    <rect x="60" y="10"  width="10" height="10" fill="#4746aa"/>
+    <rect x="50" y="20"  width="10" height="10" fill="#4140b1"/>
+    <rect x="0"  y="50"  width="30" height="30" fill="#4746b7"/>
+    <rect x="10" y="50"  width="10" height="10" fill="#3146b7"/>
+    <rect x="0"  y="60"  width="10" height="10" fill="#474fb7"/>
+    <rect x="20" y="60"  width="10" height="10" fill="#4746a4"/>
+    <rect x="10" y="70"  width="10" height="10" fill="#4f4ebf"/>
+    <rect x="40" y="50"  width="30" height="30" fill="#4746b7"/>
+    <rect x="50" y="50"  width="10" height="10" fill="#1a46b7"/>
+    <rect x="40" y="60"  width="10" height="10" fill="#4755b7"/>
+    <rect x="60" y="60"  width="10" height="10" fill="#4746dc"/>
+    <rect x="50" y="70"  width="10" height="10" fill="#3b52c3"/>
+    <rect x="0"  y="100" width="30" height="30" fill="#4746b7"/>
+    <rect x="10" y="100" width="10" height="10" fill="#7d46b7"/>
+    <rect x="0"  y="110" width="10" height="10" fill="#4763b7"/>
+    <rect x="20" y="110" width="10" height="10" fill="#47467e"/>
+    <rect x="10" y="120" width="10" height="10" fill="#5f5e9f"/>
+    <rect x="40" y="100" width="30" height="30" fill="#4746b7"/>
+    <rect x="50" y="100" width="10" height="10" fill="#0046b7"/>
+    <rect x="40" y="110" width="10" height="10" fill="#478bb7"/>
+    <rect x="60" y="110" width="10" height="10" fill="#4746ff"/>
+    <rect x="50" y="120" width="10" height="10" fill="#187588"/>
+    <text font-size="6px"
+          text-anchor="middle"
+          dominant-baseline="middle">
+      <tspan x="15" y="38">ΔE = 1</tspan>
+      <tspan x="55" y="38">ΔE = 2</tspan>
+      <tspan x="15" y="88">ΔE = 3</tspan>
+      <tspan x="55" y="88">ΔE = 5</tspan>
+      <tspan x="15" y="138">ΔE = 10</tspan>
+      <tspan x="55" y="138">ΔE = 25</tspan>
+    </text>
+  </svg>
+</figure>
+
+<h3>Time and delta</h3>
+
+<p>When evaluating the methods two metrics were taken into account.  First one
+  was time to convert all 16 million colours into greyscale.  This metric is
+  quite noisy and shouldn’t be take literally.  Still it gives a sense of scale
+  to compare classes of algorithms.  The measurement has been performed on
+  a relatively modern and capable CPU, an i7-7600U processor at 2.8 GHz.  The
+  result will vary widely on different architectures so as usual it’s important
+  to make one’s own benchmarks to match one’s use case.
+
+<p>The second metric is ΔE.  As <a href="#distance">previously described</a>,
+  for each colour it’s the distance between it’s true grey version (as
+  calculated by going through L*a*b* colour space) and grey produced by the
+  algorithm being evaluated.  The common guide in interpreting the metric is
+  that ΔE of less than one is not perceptible by human eye, distance between one
+  and two requires close inspection, anything higher is noticeable at a glance
+  and anything below 50 indicates colours are more similar than dissimilar.
+  When evaluating the algorithms all 24-bit colours were tested and average,
+  maximum and histogram of delta values were collected.
+
+<p>Table below show the time as well as average and maximum ΔE values produced
+  by each algorithm.  The exact method is provided for reference to compare
+  time.
+
+<table>
+  <thead>
+    <tr><th><th>Time [ms]<th>Average ΔE<th>Max ΔE
+  <tbody class=r>
+    <tr><th>Average       <td>  29<td>8.7<td>44.5
+    <tr><th>2×Green       <td>  29<td>5.5<td>26.6
+    <tr><th>16-bit weights<td>  31<td>4.1<td>28.1
+    <tr><th>32-bit weights<td>  31<td>4.1<td>28.2
+    <tr><th>Float weights <td>  99<td>4.1<td>28.2
+    <tr><th>γ=2 (no fpu)  <td> 160<td>0.8<td> 4.3
+    <tr><th>γ=2.0         <td> 181<td>0.7<td> 4.0
+    <tr><th>γ=2.2         <td>1033<td>0.2<td> 2.1
+    <tr><th>Exact         <td> 993<td><td>
+</table>
+
+<p>The chart represents the same information showing maximum and average ΔE as
+  bars with scale on the left side and time as points on a line with scale on
+  the right side.
+
+<figure style="width: 90%; margin: 1em auto">
+  <svg style="width: 100%; height: auto" viewBox="0 0 14200 10600"
+       version="1.1" xmlns="http://www.w3.org/2000/svg"
+       stroke-width="28" font-size="353px" fill="#000">
+    <rect x="964" y="430" width="11977" height="7358" fill="#003"/>
+
+    <path fill="#fc8d62" d="M 11831,7758 h444 v  30 h-444 Z
+                            M 10501,7474 h444 v 314 h-444 Z
+                            M  9170,7192 h444 v 596 h-444 Z
+                            M  7840,7161 h444 v 627 h-444 Z
+                            M  6509,3635 h444 v4153 h-444 Z
+                            M  5178,3635 h444 v4153 h-444 Z
+                            M  3847,3645 h444 v4143 h-444 Z
+                            M  2516,3877 h444 v3911 h-444 Z
+                            M  1185,1240 h444 v6548 h-444 Z
+                            M 1500,10102 h800 v 211 h-800 Z"/>
+
+    <path fill="#8da0cb" d="M 12275,7776 h444 v  12 h-444 Z
+                            M 10944,7763 h444 v  25 h-444 Z
+                            M  9613,7688 h444 v 100 h-444 Z
+                            M  8283,7665 h444 v 123 h-444 Z
+                            M  6953,7181 h444 v 607 h-444 Z
+                            M  5622,7181 h444 v 607 h-444 Z
+                            M  4291,7182 h444 v 606 h-444 Z
+                            M  2960,6973 h444 v 815 h-444 Z
+                            M  1629,6509 h444 v1279 h-444 Z
+                            M 4500,10102 h800 v 211 h-800 Z"/>
+
+    <path fill="none" stroke="#66c2a5" stroke-width="80"
+          d="M 1629,7622 L 2960,7604 4291,7548 5622,7554 6953,7199 8283,6720 9613,6690 10944,1447 12275,1705
+             M 9500,10207 h 800"/>
+    <g fill="#66c2a5">
+      <circle cx="1629" cy="7622" r="140"/>
+      <circle cx="2960" cy="7604" r="140"/>
+      <circle cx="4291" cy="7548" r="140"/>
+      <circle cx="5622" cy="7554" r="140"/>
+      <circle cx="6953" cy="7199" r="140"/>
+      <circle cx="8283" cy="6720" r="140"/>
+      <circle cx="9613" cy="6690" r="140"/>
+      <circle cx="10944" cy="1447" r="140"/>
+      <circle cx="12275" cy="1705" r="140"/>
+      <circle cx="9900" cy="10207" r="140"/>
+    </g>
+
+    <text transform="rotate(-28 498 8903)"><tspan x="498" y="8903">Average</tspan></text>
+    <text transform="rotate(-28 1803 8914)"><tspan x="1803" y="8914">2×Green</tspan></text>
+    <text transform="rotate(-28 2312 9280)"><tspan x="2312" y="9280">16-bit weights</tspan></text>
+    <text transform="rotate(-28 3643 9280)"><tspan x="3643" y="9280">32-bit weights</tspan></text>
+    <text transform="rotate(-28 5072 9237)"><tspan x="5072" y="9237">Float weights</tspan></text>
+    <text transform="rotate(-28 6618 9140)"><tspan x="6618" y="9140">γ=2 (no fpu)</tspan></text>
+    <text transform="rotate(-28 8916 8710)"><tspan x="8916" y="8710">γ=2.0</tspan></text>
+    <text transform="rotate(-28 10247 8710)"><tspan x="10247" y="8710">γ=2.2</tspan></text>
+    <text transform="rotate(-28 11554 8720)"><tspan x="11554" y="8720">Exact</tspan></text>
+    <text font-family="'Noto Sans', Verdana, sans-serif">
+      <tspan x="529" y="7921">0</tspan>
+      <tspan x="529" y="7185">5</tspan>
+      <tspan x="344" y="6449">10</tspan>
+      <tspan x="344" y="5713">15</tspan>
+      <tspan x="344" y="4977">20</tspan>
+      <tspan x="344" y="4241">25</tspan>
+      <tspan x="344" y="3505">30</tspan>
+      <tspan x="344" y="2769">35</tspan>
+      <tspan x="344" y="2033">40</tspan>
+      <tspan x="344" y="1297">45</tspan>
+      <tspan x="344" y="562">50</tspan>
+      <tspan x="13191" y="7921">0</tspan>
+      <tspan x="13191" y="6694">200</tspan>
+      <tspan x="13191" y="5468">400</tspan>
+      <tspan x="13191" y="4241">600</tspan>
+      <tspan x="13191" y="3014">800</tspan>
+      <tspan x="13191" y="1788">1000</tspan>
+      <tspan x="13191" y="562">1200</tspan>
+      <tspan x="2500"  y="10300">Max ΔE</tspan>
+      <tspan x="5500"  y="10300">Average ΔE</tspan>
+      <tspan x="10500" y="10300">Time [ms]</tspan>
+    </text>
+  </svg>
+</figure>
+
+
+<h3>Histogram</h3>
+
+<p>Lastly, table and chart below shows a histogram of ΔE values.  It’s important
+  to note that ranges of delta values used in buckets are not the all the same
+  size.  Furthermore, the table represents a cumulative histogram.  Raw data
+  with equally-sized buckets is available
+  as <a href="https://pastebin.com/tfFZr884">a CSV
+  file</a>.  <a href="https://github.com/mina86/ansi_colours/blob/master/tools/src/bin/luminance.rs">The
+  benchmark</a> produces that data as well and can be further modified to
+  perform more detailed statistics.
+
+<table>
+  <thead>
+    <tr><th><th>% ΔE &lt; 1<th>% ΔE &lt; 2<th>% ΔE &lt; 5<th>% ΔE &lt; 10<th>% ΔE &lt; 30
+  <tbody class=r>
+    <tr><th>Average       <td> 7.3%<td> 14.5%<td> 36.1%<td>67.1%<td> 92.2%
+    <tr><th>2×Green       <td>13.3%<td> 26.4%<td> 57.3%<td>82.7%<td>100.0%
+    <tr><th>16-bit weights<td>23.1%<td> 41.0%<td> 71.2%<td>89.9%<td>100.0%
+    <tr><th>32-bit weights<td>23.3%<td> 41.3%<td> 71.0%<td>89.9%<td>100.0%
+    <tr><th>Float weights <td>23.3%<td> 41.3%<td> 71.0%<td>89.9%<td>100.0%
+    <tr><th>γ=2 (no fpu)  <td>74.8%<td> 90.6%<td>100.0%<td><td>
+    <tr><th>γ=2.0         <td>79.4%<td> 92.3%<td>100.0%<td><td>
+    <tr><th>γ=2.2         <td>99.7%<td>100.0%<td><td><td>
+</table>
+
+<figure style="width: 90%; margin: 1em auto">
+  <svg style="width: 100%; height: auto" viewBox="0 0 17400 10200"
+       version="1.1" xmlns="http://www.w3.org/2000/svg" stroke-width="28">
+    <rect x="2822" y="851" width="13820" height="8309" fill="#003"/>
+    <path fill="none" stroke="#e4f0ff"
+          d="M 2822,851 v 8309
+             m 1382,0   v-8309
+             m 1382,0   v 8309
+             m 1382,0   v-8309
+             m 1382,0   v 8309
+             m 1382,0   v-8309
+             m 1382,0   v 8309
+             m 1382,0   v-8309
+             m 1382,0   v 8309
+             m 1382,0   v-8309
+             m 1382,0   v 8309"/>
+
+    <path fill="#4d9221" d="M 2822, 1110 h 1010 v  520 H 2822 Z
+                            M 2822, 2149 h 1840 v  520 H 2822 Z
+                            M 2822, 3188 h 3191 v  520 H 2822 Z
+                            M 2822, 4226 h 3221 v  520 H 2822 Z
+                            M 2822, 5264 h 3221 v  520 H 2822 Z
+                            M 2822, 6303 h10339 v  520 H 2822 Z
+                            M 2822, 7342 h10975 v  520 H 2822 Z
+                            M 2822, 8380 h13775 v  520 H 2822 Z
+                            M 3196, 9782 h  211 v  211 h -211 Z"/>
+
+    <path fill="#b8e186" d="M 3832, 1110 h  998 v  520 h -998 Z
+                            M 4662, 2149 h 1802 v  520 H 4662 Z
+                            M 6013, 3188 h 2476 v  520 H 6013 Z
+                            M 6043, 4226 h 2488 v  520 H 6043 Z
+                            M 6043, 5264 h 2488 v  520 H 6043 Z
+                            M13161, 6303 h 2181 v  520 h-2181 Z
+                            M13797, 7342 h 1784 v  520 h-1784 Z
+                            M16597, 8380 h   45 v  520 h  -45 Z
+                            M 5008, 9782 h  211 v  211 h -211 Z"/>
+
+    <path fill="#fde0ef" d="M 4830, 1110 h 2976 v  520 H 4830 Z
+                            M 6464, 2149 h 4276 v  520 H 6464 Z
+                            M 8489, 3188 h 4172 v  520 H 8489 Z
+                            M 8531, 4226 h 4101 v  520 H 8531 Z
+                            M 8531, 5264 h 4101 v  520 H 8531 Z
+                            M15342, 6303 h 1301 v  520 h-1301 Z
+                            M15581, 7342 h 1062 v  520 h-1062 Z
+                            M16642, 8380 h    1 v  520 h   -1 Z
+                            M 7297, 9782 h  211 v  211 h -211 Z"/>
+
+    <path fill="#f1b6da" d="M 7806, 1110 h 4283 v  520 H 7806 Z
+                            M10740, 2149 h 3511 v  520 h-3511 Z
+                            M12661, 3188 h 2592 v  520 H 12661 Z
+                            M12632, 4226 h 2620 v  520 h-2620 Z
+                            M12632, 5264 h 2620 v  520 h-2620 Z
+                            M 9586, 9782 h  211 v  211 h -211 Z"/>
+
+    <path fill="#de77ae" d="M12089, 1110 h 4305 v  520 h-4305 Z
+                            M14251, 2149 h 2392 v  520 h-2392 Z
+                            M15253, 3188 h 1390 v  520 H 15253 Z
+                            M15252, 4226 h 1391 v  520 h-1391 Z
+                            M15252, 5264 h 1391 v  520 h-1391 Z
+                            M12059, 9782 h  211 v  211 h -211 Z"/>
+
+    <path fill="#c51b7d" d="M16394, 1110 h  249 v  520 h -249 Z
+                            M14718, 9782 h  211 v  211 h -211 Z"/>
+
+    <text font-size="353px" fill="#000" text-anchor="end">
+      <tspan x="2700" y="8773">γ=2.2</tspan>
+      <tspan x="2700" y="7734">γ=2.0</tspan>
+      <tspan x="2700" y="6696">γ=2 (no fpu)</tspan>
+      <tspan x="2700" y="5657">Float weights</tspan>
+      <tspan x="2700" y="4618">32-bit weights</tspan>
+      <tspan x="2700" y="3579">16-bit weights</tspan>
+      <tspan x="2700" y="2541">2×Green</tspan>
+      <tspan x="2700" y="1502">Average</tspan>
+    </text>
+    <text font-family="'Noto Sans', Verdana, sans-serif" font-size="353px"
+          fill="#000">
+      <tspan x="2570" y="523">0%</tspan>
+      <tspan x="3860" y="523">10%</tspan>
+      <tspan x="5242" y="523">20%</tspan>
+      <tspan x="6624" y="523">30%</tspan>
+      <tspan x="8006" y="523">40%</tspan>
+      <tspan x="9389" y="523">50%</tspan>
+      <tspan x="10771" y="523">60%</tspan>
+      <tspan x="12153" y="523">70%</tspan>
+      <tspan x="13535" y="523">80%</tspan>
+      <tspan x="14917" y="523">90%</tspan>
+      <tspan x="16207" y="523">100%</tspan>
+      <tspan x="3507" y="10019">ΔE &lt; 1</tspan>
+      <tspan x="5319" y="10019">1 ≤ ΔE &lt 2</tspan>
+      <tspan x="7608" y="10019">2 ≤ ΔE &lt 5</tspan>
+      <tspan x="9896" y="10019">5 ≤ ΔE &lt 10</tspan>
+      <tspan x="12370" y="10019">10 ≤ ΔE &lt 30</tspan>
+      <tspan x="15029" y="10019">30 &lt; ΔE</tspan>
+    </text>
+  </svg>
+</figure>
+
+
+<h2>Summary</h2>
+
+<p>As seen from the analysis the naïve method of calculating arithmetic mean of
+  red, green and blue components to get a shade of grey doesn’t have much going
+  for it.  Even if a quick, dirty and easy to remember method is needed, it’s
+  much better to use (r + 2g + b) / 4 formula but even that is best avoided.  Of
+  course the choice of method depends on application and trade-offs one is
+  willing to make.
+
+<p>If accuracy of the conversion is paramount and cannot be sacrificed there’s
+  only one possible algorithm.  <a href="#exact">The exact method</a> which
+  performs proper sRGB gamma correction and calculates the Y coordinate of the
+  colour.
+
+<p>If speed is an important factor to consider <a href="#gamma2">the γ = 2.0
+  approximation</a> can be used.  It is over 80% faster than the exact method
+  and even <a href="#isqrt">the variant using integer arithmetic</a> produces
+  ‘indistinguishable’ result for nearly 75% of the colours.
+
+<p>If accuracy isn’t that important, gamma correction step can be skipped
+  resulting in a weighted average.  The best choice here appears to be either
+  one of <a href="#bit">32-bit or 16-bit weights</a>.  Small, 16-bit platforms
+  might benefit from the former but other than that there’s really no reason to
+  shy away from the 32-bit variant.
+
+<p>No other methods are worth bothering with.  <a href="float">Float weights</a>
+  give virtually the same results as 32-bit weights but are considerably slower.
+  Similarly, <a href="#gamma22">the γ = 2.2 approximation</a> is slower than
+  doing gamma correction correctly so it’s better to do the precise calculation.
+  And lastly, plain average and average which takes green twice makes sense only
+  on the most constraint platforms (think 8-bit processor with kilobytes of
+  memory).
+
+
+<h2>Afterword</h2>
+
+<p>One final remark is that doing the ‘technically correct’ luminosity
+  calculation isn’t the only way to go about converting images to greyscale.
+  One other way to look at a problem is by designing a ‘contrast preserving’
+  algorithm.  Colours of the same luminosity are easy to distinguish so long as
+  their chromacity is sufficiently different.  For example, each colour of
+
+  <svg width="10em" height="1em" viewBox="-0.5 0 9.5 1"
+       version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="1" height="1" fill="#00a9ff"/>
+    <rect x="1" y="0" width="1" height="1" fill="#008aff"/>
+    <rect x="2" y="0" width="1" height="1" fill="#b900ff"/>
+    <rect x="3" y="0" width="1" height="1" fill="#009b74"/>
+    <rect x="4" y="0" width="1" height="1" fill="#777777"/>
+    <rect x="5" y="0" width="1" height="1" fill="#ff007d"/>
+    <rect x="6" y="0" width="1" height="1" fill="#009800"/>
+    <rect x="7" y="0" width="1" height="1" fill="#957400"/>
+    <rect x="8" y="0" width="1" height="1" fill="#ff0000"/>
+  </svg>
+
+  sequence is easy to pick out but the formulæ described here will map all of
+  them to the same shade of grey.  Especially in computer vision this may not be
+  the desired result, but it does represent what a black and white film would
+  capture.

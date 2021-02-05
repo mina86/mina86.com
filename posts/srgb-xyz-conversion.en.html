@@ -110,7 +110,7 @@
         &= 0.04044823627710785308233
   \end{align} $$
 
-<p>The formulas assume values are normalised to [0, 1] range.  This is not
+<p>The formulæ assume values are normalised to [0, 1] range.  This is not
   always how they are expressed so a scaling step might be necessary.
 
 
@@ -121,7 +121,7 @@
   bits per channel</a> which introduces a scaling step: \(E_8 = ⌊E × 255⌉\).  In
   an actual implementation, to increase efficiency and accuracy of gamma
   operations, it’s best to <em>fuse</em> the multiplication into aforementioned
-  formulas.  With that arguably obvious optimisation, the equations become:
+  formulæ.  With that arguably obvious optimisation, the equations become:
 
   $$ \begin{align}
     E_8 &= \begin{cases}
@@ -140,7 +140,7 @@
   16-bit <a href="https://en.wikipedia.org/wiki/High_color">high colour</a> uses
   five bits for red and blue channels while five or six for green producing
   different scaling factors for different primaries; and HDTV caps the range to
-  [16, 235].  Needless to say, correct formulas need to be chosen based on the
+  [16, 235].  Needless to say, correct formulæ need to be chosen based on the
   standard in question.
 
 
@@ -164,7 +164,7 @@
   <h2>Demonstration</h2>
 
   <p>And finally, for demonstration, the form below allows converting between
-  sRGB colours and their XYZ coördinates.  The table allows entry and performs
+  sRGB colours and their XYZ coordinates.  The table allows entry and performs
   automatic conversion between non-linear and linear red, green and blue
   values.  Observing how they relate to each other may help visualise the
   effects of gamma correction.
