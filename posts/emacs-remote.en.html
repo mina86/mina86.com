@@ -195,5 +195,8 @@ user@phobos$ <b>emacsclient -s earth -T /ssh:phobos: <var>filename</var></b>
 
 <pre>alias e='emacsclient -s earth -T /ssh:phobos:'</pre>
 
-<p>And that’s it. At least for now. I don’t use TRAMP myself as I find it too
-  slow. I employ sshfs instead but that will have to wait for another article.
+<p>And that’s it.  If you’re satisfied with TRAMP this is the entire setup and
+  there is no need to fiddle with it.  However, I found it to be a bit slow on
+  high-latency connections and use SSHFS instead.  I’ve described this
+  alternative approach in <a href="/2021/emacs-remote-sshfs/">another
+  article</a>.

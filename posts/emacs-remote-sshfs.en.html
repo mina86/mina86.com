@@ -1,0 +1,282 @@
+<!-- subject: Emacs remote file editing over SSHFS -->
+<!-- date: 2021-02-14 19:16:29 -->
+<!-- tags: emacs -->
+<!-- categories: Articles, English, Techblog -->
+
+<p>Previous article described <a href="/2021/emacs-remote/">how to use
+    emacsclient inside of an SSH session</a>.  While the solution mentioned
+    there relied on TRAMP, I’ve confessed that it isn’t what I’m actually using.
+    From my experience, TRAMP doesn’t cache as much information as it could and
+    as a result some operations are needlessly slow.  For example, delay of
+    find-file prompt completion is noticeable when working over connections with
+    latency in the range of tens of milliseconds or more.  Because for a long
+    while I’d been working on a workstation ‘in the cloud’ in a data centre in
+    another country, I’ve built my setup based on SSHFS instead.
+
+<p>It is important to note that TRAMP has myriad of features which won’t be
+  available with this alternative approach.  Most notably, it transparently
+  routes shell commands executed from Emacs through SSH which often results in
+  much faster execution than trying to do the same thing over SSHFS.
+  <code>grep</code> command in particular will avoid copying entire files over
+  network when done through TRAMP.
+
+<p>Depending on one’s workflow, either TRAMP-based or SSHFS-based solution may
+  be preferred.  If you are happy with TRAMP’s performance or rely on some of
+  its feature, there’s no reason to switch.  Otherwise, you might want to try an
+  alternative approach described below.
+
+<!-- EXCERPT -->
+
+<p>This article assumes remote editing over TRAMP is already configured,
+  i.e. <a href="/2021/emacs-remote/">the previous article</a> is a prerequisite
+  to this one.
+
+<h2>Testing SSHFS</h2>
+
+<p>SSHFS is a remote file system which transfers data over SSH.  It allows
+  directories from hosts one can ssh into to be mounted and accessed locally.
+  No special configuration on remote side is necessary (so long as SFTP is
+  supported) and no super user privileges are needed on local side (so long as
+  sshfs is installed).  The usage is simple and boils down to creating
+  a user-owned directory and mounting remote file system there:
+
+<pre>
+$ mkdir -p ~/.phobos
+$ sshfs -o idmap=user,transform_symlinks phobos.mars.uac:/ ~/.phobos
+</pre>
+
+<p>The above will make the entire Phobos’ file system accessible
+  under <code>~/.phobos</code> directory.  Mounting everything may seem
+  unnecessary but it simplifies emacsclient usage.  Having a path to a file on
+  remote machine it’s enough to add a fixed prefix to know how to access it
+  locally.  If only part of the remote file system was mounted, it would be more
+  complicated to figure out local equivalent of a remote path.
+
+<p>The command specifies two mount options.  The first
+  one, <code>idmap=user</code>, maps remote user and group ids to local ids in
+  case they are different.  <code>idmap</code> may also be set
+  to <code>file</code> for more detailed control of the translation.  In the
+  latter case further <code>uidfile=<var>path-to-uidfile</var></code>
+  and <code>gidfile=<var>path-to-gifdile</var></code> are needed where each file
+  contains <code>name:id</code> mappings.
+
+<p>The second option, <code>transform_symlinks</code> changes absolute symbolic
+  links to relative ones.  This is desired since absolute symlinks on remote
+  machine assume that they are anchored to that host’s root and will often break
+  if the root directory is changed.
+
+<p>Another option that could be useful is <code>reconnect</code>.  It won’t work
+  with password authentication though or even with an SSH key if it’s
+  password-protected and agent is not used.
+  Similarly, <code>delay_connect</code> may also be of use but once again
+  requires an automatic authentication method.
+
+<h3>Remote file systems in home directory</h3>
+
+<p>One note of caution: having a remote file system mounted in one’s home
+  directory may lead to some commands surprisingly taking a long time.  For
+  example, normally calling <code>du -hd1 ~</code> should be a relatively fast
+  operation.  Sure, it might take a while if one’s home directory has many
+  files, but operating on local disk the command should finish in acceptable
+  time.  Similarly, <code>find ~ -name '*some-name*'</code> shouldn’t take too
+  long.
+
+<p>However, once SSHFS mounts remote machine’s file system in user’s home
+  directory, those operations start to involve traversing the entirety of the
+  remote host.  There’s really no way to address this issue other than to
+  remember about the mount points and act accordingly.  In case
+  of <code>du</code> the <code>-x</code> option does the trick;
+  <code>find</code> has <code>-xdev</code> switch which will address the
+  problem.
+
+
+<h2>Automating SSHFS connection</h2>
+
+<p>It may be tempting to use
+  the <a href="/2021/emacs-remote/#alias"><code>phobos</code> SSH alias</a> that
+  has been established previously.  Sadly, SSHFS doesn’t play nicely with
+  control master or port forwarding.  This can be worked around but a cleaner
+  solution is to have a separate entry for the remote file system which
+  furthermore disables control master.  Something like the following added
+  to <code>~/.ssh/config</code>:
+
+<pre>
+Host phobos-sshfs
+    HostName phobos.mars.uac
+    ControlMaster no
+</pre>
+
+<p>Still, typing the entire sshfs invocation each time doesn’t sound fun.
+  Instead it’s a good idea to create a script which hides all the gory details.
+  For example, an executable file named <code>phobos</code> somewhere
+  in <code>$PATH</code> with the following content:
+
+<pre>
+#!/bin/sh
+dir=~/.phobos
+test -d "$dir" || mkdir -p "$dir"
+test -e "$dir/home" ||
+	sshfs -o idmap=user,transform_symlinks \
+	      phobos-sshfs:/ "$dir"
+exec ssh phobos "$@"
+</pre>
+
+<p>With this, rather than using <code>ssh phobos</code> to open a new SSH
+  session, <code>phobos</code> command can be used.  It will automatically mount
+  the remote file system if necessary and establish remote shell.
+
+
+<h2>Finishing up with emacsclient</h2>
+
+<p>Last step is to adjust how emacsclient is used on remote machine.  In last
+  article a <code>-T</code> switch was used to specify a TRAMP prefix.  The full
+  name of the switch is <code>--tramp</code> indicating that’s exactly what the
+  option is meant for.  In reality the name is a bit misleading since the option
+  can be used without TRAMP just as easily:
+
+<pre>alias e="emacsclient -s earth -T '/home/$(id -un)/.phobos'"</pre>
+
+<p>The above assumes user names on both machines are the same.  If that’s not
+  the case (or if Phobos’ file system is mounted some place other
+  than <code>~/.phobos</code>), the value for <code>-T</code> switch needs to be
+  adjusted accordingly.
+
+
+<h2>Teaching Emacs the file is remote</h2>
+
+<p>There are several things that Emacs dose differently when editing remote and
+  local files.  For example, auto-save files are always stored on local machine
+  and lock files are not created for remote files.  Often this is to avoid
+  network traffic so it is beneficial to teach Emacs that files accessed via
+  SSHFS mount should be treated as remote as well.
+
+<p>In truth, those steps are optional – especially on low-latency connections –
+  but may lead to reduction of network traffic and some delays when editing.
+
+
+<h3>Auto save</h3>
+
+<p>Where auto save files end up is governed by
+  the <code>auto-save-file-name-transforms</code> variable.  It contains rules
+  which match file names and indicate how to construct an auto save file name
+  for them.  To make Emacs handle data accessed over SSHFS like other remote
+  files the following needs to be added to one’s <code>init.el</code> file:
+
+<pre>
+(defconst mpn-file-remote-mount-points
+  (mapcar (lambda (d) (directory-file-name
+                       (expand-file-name d)))
+          '("~/.phobos"))
+  "List of locations where remote file systems have been mounted.
+Each directory listed must be an absolute expanded path and must
+not end with a slash.")
+
+(push (let ((re (regexp-opt mpn-file-remote-mount-points nil)))
+        (list (concat "\\`" re "\\(?:/\\|\\'\\)")
+              (concat temporary-file-directory "remote")
+              t))
+      auto-save-file-name-transforms)
+</pre>
+
+<p>This tells Emacs that if a file name starts
+  with <code>/home/<var>user</var>/.phobos</code>, it’s auto save file should be
+  put in <code>/tmp</code> directory.
+  The <code>mpn-file-remote-mount-points</code> constant can be extended to
+  include multiple paths in case there are several different locations to
+  consider (e.g. <code>~/.phobos</code> and <code>~/.deimos</code>).
+
+
+<h3>Lock files</h3>
+
+<p>To avoid conflicts when editing a file with multiple Emacs instances (or by
+  multiple people), Emacs
+  creates <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Interlocking.html">a lock
+  file</a> when buffer visiting a local file is modified.  Files opened via
+  TRAMP don’t get that treatment.  To prevent file accessible through network
+  file systems getting a lock file as well, the <code>create-lockfiles</code>
+  variable needs to be set to nil.  This time the code is a bit more
+  complicated:
+
+<pre>
+;;(defconst mpn-file-remote-mount-points
+;;  … defined as above …)
+
+(defun mpn-file-remote-mount-p (&amp;optional file-name)
+  "Return whether FILE-NAME is under a remote mount point.
+Use ‘buffer-file-name’ if FILE-NAME is not given.  List of remote
+mount points is defined in ‘mpn-file-remote-mount-points’
+variable."
+  (when-let ((name (or file-name buffer-file-name)))
+    (let ((dirs mpn-file-remote-mount-points)
+          (name-len (length name))
+          dir dir-len matched)
+      (while (and dirs (not matched))
+        (setq dir (car dirs)
+              dirs (cdr dirs)
+              dir-len (length dir)
+              matched (and (&gt; name-len dir-len)
+                           (eq ?/ (aref name dir-len))
+                           (eq t (compare-strings name 0 dir-len
+                                                  dir 0 dir-len)))))
+      matched)))
+
+(defun mpn-dont-lock-remote-files ()
+  "Set ‘create-lockfiles’ to nil if buffer opens a remote file.
+Use ‘mpn-file-remote-mount-p’ to determine whether opened file is
+remote or not.  Do nothing if ‘create-lockfiles’ is already nil."
+  (and create-lockfiles
+       (mpn-file-remote-mount-p)
+       (setq-local create-lockfiles nil)))
+
+(add-hook 'find-file-hook #'mpn-dont-lock-remote-files)
+</pre>
+
+<p>Functions added to <code>find-file-hook</code> are executed after opening
+  a file.  The above code introduces <code>mpn-dont-lock-remote-files</code>
+  which checks whether file visited in the buffer falls within a mount point of
+  a remote file system (as before, configured
+  in <code>mpn-file-remote-mount-points</code> list) and if so
+  sets <code>create-lockfiles</code> to nil to prevent lock file from being
+  created.
+
+
+<h3>Auto revert</h3>
+
+<p>Another difference is auto reverting.  Unless
+  an <code>auto-revert-remote-files</code> variable is non-nil, (global) auto
+  revert mode will not work on remote files.  Since those modes are disabled by
+  default, this section is not applicable unless the configuration has been
+  changed.  To disable auto reverting of files on remote file systems an
+  approach similar to the one for lock files can be utilised:
+
+<pre>
+;;(defconst mpn-file-remote-mount-points
+;;  … defined as above …)
+
+;; (defun mpn-file-remote-mount-p (&amp;optional file-name)
+;;  … defined as above …)
+
+(defun mpn-dont-auto-revert-remote-files ()
+  "Disable auto-revert if buffer opens a remote file.
+Use ‘mpn-file-remote-mount-p’ to determine whether opened file is
+remote or not."
+  (when (mpn-file-remote-mount-p)
+    (setq-local global-auto-revert-ignore-buffer t)
+    (auto-revert-mode -1)))
+
+(add-hook 'find-file-hook #'mpn-dont-auto-revert-remote-files t)
+</pre>
+
+
+<h3>Other differences</h3>
+
+<p>There may be other situations where Emacs treats local and remote files
+  differently.  As already mentioned there’s the case of TRAMP routing shell
+  commands through remote shell which would be tricky to achieve with SSHFS
+  mounts.  While one could try and identify all the places ultimately it might
+  not be worth it.  I’ve been using the SSHFS setup for years and haven’t run
+  into any issues with excess network traffic.  As a matter of fact, I’ve kept
+  auto-revert on finding it beneficial even with a small delays every now and
+  again.
+
+<p>With all that done, the setup is done.
