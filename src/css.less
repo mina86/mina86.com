@@ -12,7 +12,7 @@
  */
 
 /* I need something which will automatically choose IDs and classes. */
-/* id:  a     d e         j k       o p q r   t u v w x y z */
+/* id:  a     d e       i j k       o p q r   t u v w x y z */
 /* cls:     c   e     h   j k l m n o           u           */
 
 @head-id: #h;  /* Page header. */
@@ -47,7 +47,6 @@
 @contact-id: #n;  /* Contact section in the sidebar. */
 @categories-id: #l;  /* Categories section in the sidebar. */
 @feed-icon-cls: .f;  /* Class for the feed icon */
-@icons-id: #i;  /* Icons section at the bottom of the sidebar. */
 
 /* Octo, the GitHub corner */
 @octo-id: #g;
@@ -699,40 +698,6 @@ a@{facebook-cls} {
 	&:hover span, &:focus span, &:active span {
 		.grayscale-off();
 	}
-}
-
-/* Icons */
-@{icons-id} {
-	ul, li {
-		display: block;
-		margin: 0 auto;
-		text-align: center;
-		white-space: nowrap;
-	}
-	li {
-		display: inline-block;
-		margin: 0 2px;
-	}
-	a {
-		display: inline-block;
-		background: url(DATA<sprites.png>) no-repeat 5px 0;
-		width: 24px;
-		height: 24px;
-		.grayscale-on();
-		.text-off-screen();
-		&:hover, &:focus, &:active {
-			.grayscale-off();
-		}
-	}
-
-	/* FSF */
-	li:nth-child(1) a { background-position: -16px -19px; }
-	/* FSFE; position already set
-	li:nth-child(2) a { background-position:   5px   0px; } */
-	/* FSFE Fellowship */
-	li:nth-child(3) a { background-position: -45px   0px; }
-	/* Conservancy */
-	li:nth-child(4) a { background-position: -20px   5px; }
 }
 
 
