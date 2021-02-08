@@ -42,7 +42,7 @@ distclean:
 .tmp/%.js: src/%.js
 	@echo " MIN  $@"
 	@exec mkdir -p $(@D)
-	exec uglifyjs -c warnings,unsafe_undefined \
+	exec uglifyjs -c unsafe_undefined \
 		-m --mangle-props keep_quoted \
 		-o $@ $<
 
