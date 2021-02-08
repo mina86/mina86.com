@@ -7,7 +7,8 @@
 	    getRect = el => el.getBoundingClientRect(),
 	    sidebar = tmp('s'),
 	    header = tmp('h'),
-	    footer = tmp('f');
+	    footer = tmp('f'),
+	    strPx = 'px';
 
 	/* Third party scripts */
 	W['_gaq'] = [['_setAccount', 'UA-240278-1'], ['_trackPageview']];
@@ -31,34 +32,46 @@
 		appendHeadChild(tmp);
 	});
 
-	/* Sidebar pinning */
-	sidebar && header && footer && (W.onscroll = W.onresize = left => {
-		var sidebarRect = getRect(sidebar),
-		    docEl = D.documentElement,
-		    cls = sidebar.className.replace(/\s*\bv\b/, left = ''),
-		    top = sidebarRect.bottom - sidebarRect.top;
+	/* Sidebar pinning and top bar background fixing */
+	if (sidebar && header && footer) {
+		W.onscroll = lft => {
+			var rect = getRect(sidebar),
+			    docEl = D.documentElement,
+			    cls = sidebar.className.replace(
+				    /\s*\bv\b/, lft = ''),
+			    top = rect.bottom - rect.top;
 
-		/* For sidebar to be pinned the following must hold:
-		   - header must be off screen, i.e. it’s bottom must be
-		     non-positive in respect to view port and
-		   - sidebar’s height must be no greater than available client
-		     height. */
-		if (getRect(header).bottom > 0 ||
-		    top > docEl.clientHeight) {
-			top = left;
-		} else {
-			cls += ' v';
-			top = getRect(footer).top - top;
-			top = top < 0 ? top + 'px' : '0';
-			left = (W.pageXOffset || docEl.scrollLeft || 0) -
-				getRect(sidebar.parentElement).right +
-				sidebarRect.right + sidebarRect.left + 'px';
-		}
+			/* For sidebar to be pinned the following must hold:
+			   - header must be off screen, i.e. it’s bottom must be
+			     non-positive in respect to view port and
+			   - sidebar’s height must be no greater than available
+			     client height. */
+			if (getRect(header).bottom > 0 ||
+			    top > docEl.clientHeight) {
+				top = lft;
+			} else {
+				cls += ' v';
+				top = getRect(footer).top - top;
+				top = top < 0 ? top + strPx : 0;
+				lft = (W.pageXOffset || docEl.scrollLeft || 0) -
+					getRect(sidebar.parentElement).right +
+					rect.right + rect.left + strPx;
+			}
 
-		sidebar.className = cls;
-		sidebar.style.left = left;
-		sidebar.style.top = top;
-	})();
+			sidebar.className = cls;
+			sidebar.style.left = lft;
+			sidebar.style.top = top;
+		};
+		(W.onresize = rect => {
+			W.onscroll();
+			rect = getRect(header);
+			tmp = 1400 * rect.height / 475
+			tmp = rect.width < tmp ? tmp + strPx : '100%';
+			header.style.backgroundSize = tmp + ' auto';
+			header.style.backgroundAttachment = 'fixed';
+			header.style.positionX = 'center';
+		})();
+	}
 
 	/* WebP fallback */
 	if (header) {
