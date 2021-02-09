@@ -2,8 +2,6 @@
 
 /*
  * Classes:
- * - table.tb – add top and bottom border to each of table’s TBODY.
- * - .nb – no break
  * - p.nt – a note with some meta information (special licensing information,
  *   note about series, etc.)  Set with smaller font.
  * - p.ig – an image at the top of some posts (most notably news articles) and
@@ -59,14 +57,14 @@
 
 /* http://spencermortensen.com/articles/typographic-scale/
    ratio = 2, notes = 5 */
-@tiny:     round(pow(2rem, -0.4), 2);
-@small:    round(pow(2rem, -0.2), 2);
+@tiny:     round(pow(2em, -0.4), 2);
+@small:    round(pow(2em, -0.2), 2);
 @normal:   1.00rem;
 /*         one skipped */
-@large:    round(pow(2rem,  0.4), 2);
+@large:    round(pow(2em,  0.4), 2);
 /*         one skipped */
-@huge:     round(pow(2rem,  0.8), 2);
-@title:    2.00rem;
+@huge:     round(pow(2em,  0.8), 2);
+@title:    2.00em;
 
 @cosmic-latte: #fff8e7;  /* https://en.wikipedia.org/wiki/Cosmic_latte */
 @milky-way: #f9f1ff;  /* http://www.news.pitt.edu/milkywaycolor */
@@ -345,7 +343,7 @@ article {
 	}
 
 	p {
-		margin: 1rem 0;
+		margin: 1em 0;
 	}
 
 	@media screen, projection, tv, handheld {
@@ -430,8 +428,8 @@ pre, code, kbd {
 }
 pre {
 	font-family: @mono-font;
-	margin: 1rem 0;
-	padding: 1rem;
+	margin: 1em 0;
+	padding: 1em;
 	overflow-x: auto;
 	font-size: @small;
 	border: 1px solid #000;
@@ -476,37 +474,29 @@ pre {
 }
 
 /* Tables */
-/* Putting this outside of @{article-text-cls} breaks Google custom search
-   whose layout is based on tables.  *sighs* */
-@{article-text-cls} {
-	table, tr, th, td {
-		font-variant: lining-nums tabular-nums;
-		border-collapse: collapse;
-	}
-	th, td {
-		padding: 0.5em;
-	}
-	thead th, thead td {
-		padding: 0.2em 0.5em;
-	}
-	table {
-		font-variant-numeric: tabular-nums;
-		margin: 1em auto;
-	}
-	thead, .tb tbody, tfoot {
-		border-top: 1px solid #000;
-		border-bottom: 1px solid #000;
-	}
-	.tb tbody:last-child {
-		border: none;
-	}
+table, tr, th, td {
+	font-variant-numeric: tabular-nums;
+	font-variant: lining-nums tabular-nums;
+	border-collapse: collapse;
+}
+th, td {
+	padding: 0.5em;
+}
+thead th, thead td {
+	padding: 0.2em 0.5em;
+}
+table {
+	margin: 1em auto;
+}
+thead, tbody, tfoot {
+	border-top: 1px solid #000;
 }
 
 /* Misc */
 blockquote {
 	background: url(DATA<quote.svg>) no-repeat;
 	min-height: 2rem;
-	padding: 0.5rem 2rem 0.5rem;
+	padding: 0.5rem 2rem;
 	margin: 0.5rem 0;
 	font-size: @small;
 
@@ -808,6 +798,9 @@ a@{facebook-cls} {
 		a[href^="/"]:after {
 			content: " 〈mina86.com" attr(href) "〉";
 		}
+		a[href^="//"]:after {
+			content: " 〈https:" attr(href) "〉";
+		}
 	}
 
 	[data-email]::after {
@@ -826,8 +819,4 @@ a@{facebook-cls} {
 
 @{right-align-cls} {
 	text-align: right;
-}
-
-.nb {
-	white-space: nowrap;
 }
