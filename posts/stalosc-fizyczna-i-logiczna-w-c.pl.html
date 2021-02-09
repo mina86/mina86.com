@@ -55,7 +55,7 @@ const int *const *const ptrA;  /* Stały wskaźnik na stały wskaźnik
   lewej".</p>
 
 
-<h2>Stałość a modyfikowalność</h2>
+<h2 id=mutability>Stałość a modyfikowalność</h2>
 
 
 <p>Należy zwrócić uwagę, iż z faktu, że wskaźnik jest stałego typ nie
@@ -196,7 +196,7 @@ int *baz = const_cast&lt;int*&gt;(&amp;foo);  /* Błąd kompilacji. */</pre>
   to jednak, iż literały takie można modyfikować!  Następująca
   instrukcja powoduje niezdefiniowane zachowanie: <code>char *foo = "foo"; foo[0] =
   'F';</code> (problem ten został już poruszony przy
-  omawianiu <a href="#modyfikalności">modyfikowalności</a>)</p>
+  omawianiu <a href="#mutability">modyfikowalności</a>)</p>
 
 <p>Kolejnym aspektem, który może wydać się dziwny, jest fakt, iż
   konwersja <code>Foo**</code> do <code>const Foo**</code> <em>nie</em> jest

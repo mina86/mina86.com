@@ -560,13 +560,13 @@ fn grey_from_rgb_avg_32bit(r: u8, g: u8, b: u8) -&gt; u8 {
   might benefit from the former but other than that there’s really no reason to
   shy away from the 32-bit variant.
 
-<p>No other methods are worth bothering with.  <a href="float">Float weights</a>
-  give virtually the same results as 32-bit weights but are considerably slower.
-  Similarly, <a href="#gamma22">the γ = 2.2 approximation</a> is slower than
-  doing gamma correction correctly so it’s better to do the precise calculation.
-  And lastly, plain average and average which takes green twice makes sense only
-  on the most constraint platforms (think 8-bit processor with kilobytes of
-  memory).
+<p>No other methods are worth bothering with.  <a href="#float">Float
+  weights</a> give virtually the same results as 32-bit weights but are
+  considerably slower.  Similarly, <a href="#gamma22">the γ = 2.2
+  approximation</a> is slower than doing gamma correction correctly so it’s
+  better to do the precise calculation.  And lastly, plain average and average
+  which takes green twice makes sense only on the most constraint platforms
+  (think 8-bit processor with kilobytes of memory).
 
 
 <h2>Afterword</h2>

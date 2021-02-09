@@ -13,18 +13,22 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args: typing.Any, **kw: typing.Any):
         directory = os.path.realpath(os.path.join(os.path.dirname(__file__),
                                                   '../public/mina86.com'))
-        super().__init__(*args, directory=directory, **kw)
+        try:
+            super().__init__(*args, directory=directory, **kw)
+        except ConnectionResetError:
+            pass
 
     def translate_path(self, path: str) -> str:
          path = super().translate_path(path)
          if not os.path.exists(path):
-             for lang in ('', '.en'):
-                 for ext in ('.png', '.jpg', '.html', '.svg', '.css', '.js'):
-                     if os.path.exists(path + lang + ext):
-                         return path + lang + ext
+             for lang in ('.', '.en.'):
+                 for ext in ('html', 'png', 'jpg', 'svg', 'css', 'js', 'xml'):
+                     p = path + lang + ext
+                     if os.path.exists(p):
+                         return p
          elif os.path.isdir(path):
-             for lang in ('', '.en'):
-                 p = os.path.join(path, 'index' + lang + '.html')
+             for name in ('index.html', 'index.en.html'):
+                 p = os.path.join(path, name)
                  if os.path.exists(p):
                      return p
          return path

@@ -183,9 +183,9 @@
       <a
       href="https://github.com/git/git/commits?author=mina86">git</a>,
       <a
-      href="http://git.musicpd.org/cgit/master/mpd.git/log/?qt=author&amp;q=nazarewicz">mpd</a>,
+      href="https://github.com/MusicPlayerDaemon/MPD/commits/master?author=mina86">mpd</a>,
       <a
-      href="http://git.musicpd.org/cgit/master/mpc.git/log/?qt=author&amp;q=nazarewicz">mpc</a>,
+      href="https://github.com/MusicPlayerDaemon/mpc/commits/master?author=mina86">mpc</a>,
       <a
       href="http://git.notmuchmail.org/git/notmuch?a=search&amp;h=HEAD&amp;st=author&amp;s=nazarewicz">notmuch</a>
       and plethora of other small projects.</p>
