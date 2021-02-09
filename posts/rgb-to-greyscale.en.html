@@ -4,28 +4,37 @@
 <!-- categories: Articles, English, Techblog -->
 
 <p>While working on <a href=https://crates.io/crates/ansi_colours>ansi_colours
-  crate</a> I’ve learned about colour spaces things I’ve never thought I would.
-  One of those is intricacies of greyscale.  Or rather not so much greyscale
-  itself but conversion from sRGB.  ‘How hard can it be?’ one might ask, ‘Just
-  sum all components and divide by three!’ one might provide a helpful
-  suggestion.
+  crate</a> I’ve learned about colour spaces more than I’ve ever thought
+  I would.  One of the things were intricacies of greyscale.  Or rather not
+  greyscale itself but conversion from sRGB.  ‘How hard can it be?’ one might
+  ask following it up with a helpful suggestion to, ‘just sum all components and
+  divide by three!’
 
-<p>Taking an arithmetic mean of red, green and blue coordinates of the colour is
-  often mentioned method for conversion to greyscale.  Inaccuracy of the method
-  is usually acknowledged but justified by its simplicity and speed.  That’s
-  a fair trade-off except that equally simple and fast algorithm which is
-  noticeably more accurate exists.  It is built on an observation that green
-  contributes the most to the luminosity and that computers like powers of two.
-  The code reads as follows:
+<p>Taking an arithmetic mean of red, green and blue coordinates is an often
+  mentioned method.  Inaccuracy of the method is usually acknowledged and
+  justified by its simplicity and speed.  That’s a fair trade-off except that
+  equally simple and fast algorithms which are noticeably more accurate exist.
+  One such method it is built on an observation that green contributes the most
+  to the perceived brightens of a colour.  The formula is (r + 2g + b) / 4 and
+  it increases accuracy of the calculation by taking green channel twice and
+  speed by changing division operation into a bit shift.  But that’s not all.
+  Even if speed is an important factor, there are better algorithms.
 
-<pre id=2g>fn grey_from_rgb_avg_2g(r: u8, g: u8, b: u8) -&gt; u8 {
-    ((r as u16 + 2 * g as u16 + b as u16) / 4) as u8
-}</pre>
+<div style="font-size: 0.87em; margin: 1.5rem 2rem">
+  <h2>TL;DR</h2>
 
-<p>Taking the green channel twice increases accuracy of the transformation and
-  eliminates all division instruction (replacing it by a bit shift) making the
-  function superior in every respect.  However, even if speed is an important
-  factor, there are better algorithms.
+  <pre>
+fn grey_from_rgb_avg_32bit(r: u8, g: u8, b: u8) -&gt; u8 {
+    let y = 3567454 * r as u32 + 11998779 * g as u32 + 1210983 * b as u32;
+    ((y + (1 &lt;&lt; 23)) &gt;&gt; 24) as u8
+}
+  </pre>
+
+  <p>The above function implements the best algorithm for converting sRGB into
+    greyscale which does not involve gamma.  At the same time it’s practically
+    as fast as arithmetic mean.  That’s hardly the end of the story though as
+    slightly more complicated methods can increase accuracy much further.
+</div>
 
 <!-- EXCERPT -->
 
@@ -215,7 +224,7 @@ fn grey_from_rgb_avg_32bit(r: u8, g: u8, b: u8) -&gt; u8 {
 <dl>
   <dt>Average
   <dd>The simple arithmetic average of red, green and blue components.
-  <dt>2×Green <small>(<a href="#2g"><code>grey_from_rgb_avg_2g</code></a>)</small>
+  <dt>2×Green
   <dd>Weighted average where red and blue components have weight one while green
     two.
   <dt>16-bit weights <small>(<a href="#bit"><code>grey_from_rgb_avg_16bit</code></a>)</small>
@@ -562,26 +571,26 @@ fn grey_from_rgb_avg_32bit(r: u8, g: u8, b: u8) -&gt; u8 {
 
 <h2>Afterword</h2>
 
+
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+     width="2em" height="8em" viewBox="0 -0.5 2 8"
+     style="float: left">
+    <rect x="0" y="0" width="1" height="1" fill="#00a9ff"/>
+    <rect x="0" y="1" width="1" height="1" fill="#b900ff"/>
+    <rect x="0" y="2" width="1" height="1" fill="#008aff"/>
+    <rect x="0" y="3" width="1" height="1" fill="#ff007d"/>
+    <rect x="0" y="4" width="1" height="1" fill="#009b74"/>
+    <rect x="0" y="5" width="1" height="1" fill="#957400"/>
+    <rect x="0" y="6" width="1" height="1" fill="#ff0000"/>
+  </svg>
+
 <p>One final remark is that doing the ‘technically correct’ luminosity
   calculation isn’t the only way to go about converting images to greyscale.
   One other way to look at a problem is by designing a ‘contrast preserving’
   algorithm.  Colours of the same luminosity are easy to distinguish so long as
-  their chromacity is sufficiently different.  For example, each colour of
-
-  <svg width="10em" height="1em" viewBox="-0.5 0 9.5 1"
-       version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <rect x="0" y="0" width="1" height="1" fill="#00a9ff"/>
-    <rect x="1" y="0" width="1" height="1" fill="#008aff"/>
-    <rect x="2" y="0" width="1" height="1" fill="#b900ff"/>
-    <rect x="3" y="0" width="1" height="1" fill="#009b74"/>
-    <rect x="4" y="0" width="1" height="1" fill="#777777"/>
-    <rect x="5" y="0" width="1" height="1" fill="#ff007d"/>
-    <rect x="6" y="0" width="1" height="1" fill="#009800"/>
-    <rect x="7" y="0" width="1" height="1" fill="#957400"/>
-    <rect x="8" y="0" width="1" height="1" fill="#ff0000"/>
-  </svg>
-
-  sequence is easy to pick out but the formulæ described here will map all of
-  them to the same shade of grey.  Especially in computer vision this may not be
-  the desired result, but it does represent what a black and white film would
+  their chromacity is sufficiently different.  For example, each colour in the
+  sequence on the left is relatively easy to pick out (at least for a person
+  with normal colour vision) but the formulæ described here will map all of them
+  to the same shade of grey.  Especially in computer vision this may not be the
+  desired result, but it does represent what a black and white film would
   capture.
