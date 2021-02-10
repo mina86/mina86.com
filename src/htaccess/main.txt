@@ -45,7 +45,7 @@ AddType text/plain .pub
 AddType text/javascript .js
 
 # And lastly add proper type for atom files but don’t affect other XML files.
-<FilesMatch "^atom.xml">
+<FilesMatch "^atom.*[.]xml">
 	AddType application/atom+xml .xml
 </FilesMatch>
 
