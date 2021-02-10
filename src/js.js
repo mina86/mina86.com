@@ -14,12 +14,12 @@
 	W['_gaq'] = [['_setAccount', 'UA-240278-1'], ['_trackPageview']];
 	W['talkyardServerUrl'] = 'https://comments-for-mina86-com.talkyard.net';
 	[
-		'cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js',
-		'www.google-analytics.com/ga.js',
-		'c1.ty-cdn.net/-/talkyard-comments.min.js'
+		'cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml',
+		'www.google-analytics.com/ga',
+		'c1.ty-cdn.net/-/talkyard-comments.min'
 	].map(src => {
 		tmp = createElement('script');
-		tmp.src = 'https://' + src;
+		tmp.src = '//' + src + '.js';
 		appendHeadChild(tmp);
 	});
 
@@ -65,7 +65,7 @@
 		(W.onresize = rect => {
 			W.onscroll();
 			rect = getRect(header);
-			tmp = 1400 * rect.height / 475
+			tmp = 1400 * rect.height / 475;
 			tmp = rect.width < tmp ? tmp + strPx : '100%';
 			header.style.backgroundSize = tmp + ' auto';
 			header.style.backgroundAttachment = 'fixed';
