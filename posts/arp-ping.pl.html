@@ -9,24 +9,20 @@
   sprawdzenia skonfigurować sieć statycznie lub dynamicznie.
   Stosunkowo szybko doszedłem do wniosku, iż szczególną uwagę należy
   zwrócić na
-  protokół <a href=https://tools.ietf.org/html/rfc826><abbr lang=en
-  title="Address Resolution Protocol">ARP</abbr></a>.
+  protokół <a href=https://tools.ietf.org/html/rfc826>ARP</a>.
 
 <p>W protokole Ethernet urządzenia są rozpoznawane za pomocą
-  adresów <abbr lang=en title="Media Access Control">MAC</abbr>,
+  adresów MAC,
   a więc, aby móc wysłać pakiet do komputera
   o danym <span lang=en>IP</span> należy najpierw poznać jego adres
   sprzętowy.  Do tego właśnie służy protokół ARP (gwoli ścisłości,
   może on być wykorzystany również przy innych protokołach warstwy
   drugiej i trzeciej).
 
-<p>Jak to działa? Pierwsza strona rozsyła do wszystkich (na adres
-  broadcast, <abbr title="to jest">tj.</abbr> <code>FF:FF:FF:FF:FF:FF</code>) zapytanie, wypełniając
-  swój adres <abbr lang=en title="Internet Protocol">IP</abbr>
-  i <abbr lang=en title="Media Access Control">MAC</abbr> oraz
-  adres <abbr lang=en title="Internet Protocol">IP</abbr>, o który
-  chce się zapytać.  W odpowiedzi, druga strona wysyła ramkę z oboma
-  adresami, swoimi i komputera wysyłającego pytanie.
+<p>Jak to działa? Pierwsza strona rozsyła do wszystkich (na adres broadcast,
+  tj.q <code>FF:FF:FF:FF:FF:FF</code>) zapytanie, wypełniając swój adres IP
+  i MAC oraz adres IP, o który chce się zapytać.  W odpowiedzi, druga strona
+  wysyła ramkę z oboma adresami, swoimi i komputera wysyłającego pytanie.
 
 <p>Nie każdy zdaje sobie sprawę, iż protokół ten można wykorzystywać
   nawet jeżeli nie ma się swojego adresu sieciowego — wówczas
@@ -35,8 +31,7 @@
   jest wszak wykorzystywany.
 
 <p>Warto wspomnieć, iż mechanizm ten jest wykorzystywany przez
-  klienty <abbr lang=en title="Dynamic Host Configuration
-  Protocol">DHCP</abbr>, do sprawdzania (na wszelki wypadek), czy
+  klienty DHCP, do sprawdzania (na wszelki wypadek), czy
   adres im nadany jest faktycznie wolny — nazywa się to <a lang=en
   href=https://tools.ietf.org/html/rfc5227>Adress
   Conflict Detection</a>.

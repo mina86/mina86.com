@@ -100,6 +100,8 @@ def process_css(data: bytes, src_dir: str,
 _Attributes = typing.Sequence[typing.Tuple[str, typing.Optional[str]]]
 
 class HTMLMinParser(htmlmin.parser.HTMLMinParser):
+    _no_abbr_tag = None
+
     @staticmethod
     def _minify_css(data):
         # CSS style, remove unnecessary spaces after punctuation marks.
@@ -121,10 +123,17 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
         super().handle_startendtag(tag, attrs)
 
     def _transform_attrs(self, tag: str, attrs: _Attributes) -> None:
-        for i, (attr, value) in enumerate(attrs):
+        i = 0
+        while i < len(attrs):
+            attr, value = attrs[i]
+            if attr == 'no-abbr':
+                self._no_abbr_tag = tag
+                del attrs[i]
+                continue
             if value:
                 typing.cast(typing.List, attrs)[i] = (
                     attr, self._transform_attr(tag, attr, value))
+            i += 1
 
     def _transform_attr(self, tag: str, attr: str, value: str) -> str:
         if self._static_mappings:
@@ -152,11 +161,40 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
             value = value[6:]
         return value
 
+    _ABBR_RE = re.compile(r'\b(?:[A-Z]{3,}s?|sRGB|W3C|TL;DR|U\+[0-9A-F]{4,})\b')
+
+    @staticmethod
+    def _abbr_repl(m):
+        txt = m.group(0)
+        if txt.startswith('U+'):
+            # Unicode code points can fool the regex.
+            return txt
+        elif txt == 'sRGB':
+            return 's<abbr>RGB</abbr>'
+        elif txt.endswith('s'):
+            return '<abbr>{}</abbr>s'.format(txt[:-1])
+        else:
+            return '<abbr>{}</abbr>'.format(txt)
+
+    def _should_handle_abbr(self):
+        for s in self._tag_stack:
+            if s[0] == 'main':
+                return True
+            if s[0] in ('kbd', 'pre', 'code', 'abbr', self._no_abbr_tag):
+                break
+        return False
+
     def handle_data(self, data):
         if self._tag_stack and self._tag_stack[0][0] == 'style':
             self._data_buffer.append(self._minify_css(data))
-        else:
-            super().handle_data(data)
+            return
+        i = len(self._data_buffer)
+        super().handle_data(data)
+        if not self._in_pre_tag and self._should_handle_abbr():
+            for i in range(i, len(self._data_buffer)):
+                self._no_abbr_tag = None
+                self._data_buffer[i] = re.sub(self._ABBR_RE, self._abbr_repl,
+                                              self._data_buffer[i])
 
     def handle_comment(self, comment: str) -> None:
         if comment.startswith('[if '):

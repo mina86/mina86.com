@@ -4,13 +4,13 @@
 <!-- categories: Articles, Techblog -->
 
 <p>W artykule poniższym zamierzam opisać jak przywrócić
-<acronym title="LInux LOader" lang="en">LILO</acronym> jako bootloader w sytuacji, gdy został on
+LILO jako bootloader w sytuacji, gdy został on
 zastąpiony loaderem z Windowsów NT, co w efekcie powoduje niemożność
 uruchomienia GNU/Linuksa.  Zakładam, że na dysku zainstalowany jest
 zarówno GNU/Linux (którego nie można uruchomić) oraz Windows z serii
 NT (w szczególności Windows 2000 i Windows XP, przy pozostałych
 Windowsach NT sprawa może wyglądać trochę inaczej).  Co więcej, opis
-dotyczy <acronym title="LInux LOader" lang="en">LILO</acronym>, ale ogólna idea może zostać
+dotyczy LILO, ale ogólna idea może zostać
 zastosowana również w przypadku innych bootloaderów (zmieniają się
 jedynie pliki konfiguracyjne i polecenie updatowania
 bootloadera).</p>
@@ -18,17 +18,17 @@ bootloadera).</p>
 <!-- EXCERPT -->
 
 <p>Należy pamiętać, że mając płytę instalacyjną Windowsów (dotyczy to
-przynajmniej <abbr>Win2k</abbr>) można zawsze przywrócić stan MBR
+przynajmniej Win2k) można zawsze przywrócić stan MBR
 uruchamiający loadera Windowsów, więc w razie jakichś niepowodzeń
 można z tego skorzystać. Opisane jest to <a href="#winrescue">na
 końcu</a> artykułu.</p>
 
 <p>Informuje również, że opisuję tutaj sposób, który przez niektórych
-ludzi (nie wiem czemu) jest niezalecany.  <acronym>IMO</acronym> jest
+ludzi (nie wiem czemu) jest niezalecany.  IMO jest
 wygodniejszy, a wcale nie jest gorszy, chyba że ktoś często uruchamia
 Windowsa oraz ma włączone wyświetlanie menu Windowsów.  W takim
 przypadku będzie zmuszony najpierw przejść przez
-<acronym title="LInux LOader" lang="en">LILO</acronym> (czy inny bootloader Linuksa), a potem dopiero
+LILO (czy inny bootloader Linuksa), a potem dopiero
 wchodzi do menu Windowsów.  Inny sposób powoduje, że wszystko wygląda
 dokładnie na odwrót.</p>
 
@@ -38,20 +38,20 @@ jakiekolwiek szkody wynikające z korzystania z poniższego opisu.</p>
 <h2 id="livecd">LiveCD</h2>
 
 <p>Jeżeli w naszym posiadaniu istnieje jakaś dystrybucja GNU/Linuksa
-bootowalna bezpośrednio z <acronym title="Compact Disc" lang="en">CD</acronym> (<abbr title="na przykład">np.</abbr>
+bootowalna bezpośrednio z CD (np.
 Knoppix, LiveSlack), bądź przynajmniej płyta instalacyjna GNU/Linuksa
-(<abbr title="na przykład">np.</abbr> Slackware’a) to prawdopodobnie z dużym powodzeniem
+(np. Slackware’a) to prawdopodobnie z dużym powodzeniem
 można ją użyć do rozwiązania problemu.</p>
 
-<p>Jeśli przy bootowaniu z <acronym title="Compact Disc" lang="en">CD</acronym> odpala się
-<acronym title="LInux LOader" lang="en">LILO</acronym> i czeka na wpisanie magicznych parametrów lub
+<p>Jeśli przy bootowaniu z CD odpala się
+LILO i czeka na wpisanie magicznych parametrów lub
 wciśnięcie entera to jest duża szansa, że wystarczy wpisać:
 <code><i>&lt;kernel&gt;</i> root=/dev/<i>&lt;rootdev&gt;</i> ro
 noinitrd</code>, gdzie <i>&lt;kernel&gt;</i> to nazwa jądra (jaka
 konkretnie ma być powinno być gdzieś napisane na ekranie, przykładowo
 dla płytki instalacyjnej Slackware’a w 99% przypadków jest
 to <code>bare.i</code>), a <i>&lt;rootdev&gt;</i> to partycja, na której
-jest root file system (<abbr title="to jest">tj.</abbr> "<code>/</code>"; <abbr title="na przykład">np.</abbr>
+jest root file system (tj. "<code>/</code>"; np.
 u mnie jest to
 <code>hda1</code>).  Cała linijka może wyglądać tak: <code>bare.i
 root=/dev/hda1 ro noinitrd</code>.</p>
@@ -60,17 +60,17 @@ root=/dev/hda1 ro noinitrd</code>.</p>
 <i>&lt;rootdev&gt;</i> to na 99% gdzieś w <code>/etc/lilo.conf</code>
 (Zawczasu plik <code>/etc/lilo.conf</code> można bez większych problemów
 odczytać odpalając Linuksa z płyty.  Należy jedynie pamiętać, żeby
-potem odczytać prawidłowy plik (<abbr title="to jest">tj.</abbr> ten z dysku))
+potem odczytać prawidłowy plik (tj. ten z dysku))
 znajdziesz opcje root z odpowiednim wpisem.  Będzie ona poprzedzona
-wpisem <code>image = <i>&lt;costam&gt;</i></code>, <abbr title="na przykład">np.</abbr>:</p>
+wpisem <code>image = <i>&lt;costam&gt;</i></code>, np.:</p>
 
 <pre>
 image = /boot/bzImage
   root = /dev/hda1</pre>
 
-<p>Jeżeli po wciśnięciu ENTER wszystko będzie działać poprawnie i
+<p>Jeżeli po wciśnięciu Enter wszystko będzie działać poprawnie i
 odpali się zainstalowany na dysku GNU/Linux to można przejść do <a
-href="#liloinst">instalacji <acronym title="LInux LOader" lang="en">LILO</acronym></a>.  W przeciwnym
+href="#liloinst">instalacji LILO</a>.  W przeciwnym
 wypadku należy próbować innych sztuczek:</p>
 
 <h2 id="chroot">LiveCD i chroot</h2>
@@ -79,7 +79,7 @@ wypadku należy próbować innych sztuczek:</p>
 w trybie single lub przynajmniej w trybie tekstowym (chociaż prawdę
 mówiąc włączone iXy nie powinny mieć większego znaczenia).  Następnie
 (będąc zalogowanym jako root) zamontować gdzieś root file system
-z dysku (<abbr title="na przykład">np.</abbr> do <code>/mnt/root</code>) po czym "zchrootować"
+z dysku (np. do <code>/mnt/root</code>) po czym "zchrootować"
 do tego katalogu i na wszelki wypadek zamontować wszystkie partycje.
 Całość można wykonać następującym poleceniem: <code>mkdir /mnt/root
 &amp;&amp; mount /dev/<i>&lt;rootdev&gt;</i> /mnt/root &amp;&amp;
@@ -90,9 +90,9 @@ systemem).</p>
 <p>Jest pewne niezerowe prawdopodobieństwo (w gruncie rzeczy zawsze
 jest jakieś prawdopodobieństwo), że wszystko zadziała prawidłowo
 i jeśli tak to wystarczy już zainstalować to nieszczęsne
-<acronym title="LInux LOader" lang="en">LILO</acronym>.</p>
+LILO.</p>
 
-<h2 id="liloinst">Instalacja <acronym title="LInux LOader" lang="en">LILO</acronym></h2>
+<h2 id="liloinst">Instalacja LILO</h2>
 
 <p>Czas zmodyfikować plik <code>/etc/lilo.conf</code> (oczywiście wszystko
 należy wykonywać jako root).  Przede wszystkim należy upewnić się co
@@ -105,7 +105,7 @@ other = /dev/<i>&lt;windev&gt;</i>
   label = windows</pre>
 
 <p>gdzie <i>&lt;windev&gt;</i> to partycja z dyskiem C Windowsów
-(<abbr title="na przykład">np.</abbr> <code>hda2</code>).  Aby się upewnić co to tam jest
+(np. <code>hda2</code>).  Aby się upewnić co to tam jest
 można odpalić polecenie: <code>fdisk -l /dev/hda</code> i wyszukać
 pierwszą partycję, która w kolumnie System ma „Win95” lub „FAT16”.
 Dodatkowo, partycja ta powinna być oznaczona gwiazdką w kolumnie Boot.

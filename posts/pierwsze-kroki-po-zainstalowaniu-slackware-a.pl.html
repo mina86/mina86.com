@@ -43,8 +43,8 @@ nie będą mogli się logować do komputera (do grupy tej należy między
 innymi <code>root</code>).  Druga linijka zabrania logować się wszystkim
 oprócz użytkownika o podanym loginie.  Jeżeli więcej osób ma mieć
 możliwość logowania się (nie dotyczy to dostępu zdalnego
-<abbr title="na przykład">np.</abbr> przez <acronym title="Secure Shell" lang="en">SSH</acronym>) to można stworzyć grupę
-(<abbr title="na przykład">np.</abbr> <code>ttylogin</code>), a w omawianym pliku drugą
+np. przez SSH) to można stworzyć grupę
+(np. <code>ttylogin</code>), a w omawianym pliku drugą
 z podanych linijek zamienić na:</p>
 
 <pre>-:ALL EXCEPT ttylogin:ALL</pre>
@@ -72,7 +72,7 @@ zmian:</p>
   <th scope="row"><code>SU_WHEEL_ONLY</code></th>
   <td>Ustawiamy na <code>yes</code>.  W ten sposób z <code>su</code> będą
     mogli korzystać jedynie użytkownicy należący do grupy o numerze
-    zero, <abbr title="to jest">tj.</abbr> do grupy <code>root</code>.  Należy zauważyć,
+    zero, tj. do grupy <code>root</code>.  Należy zauważyć,
     że w niektórych systemach opcja ta ma nieco inne znaczenie,
     a mianowicie, zgodnie z nazwą, zezwala na logowanie jedynie
     użytkownikom z grupy <code>wheel</code> co trochę utrudnia sprawę,
@@ -102,10 +102,10 @@ zmian:</p>
  </tr>
 </table>
 
-<h2 id="ssh">Zabezpieczanie <acronym title="Secure Shell" lang="en">SSH</acronym></h2>
+<h2 id="ssh">Zabezpieczanie SSH</h2>
 
 <p>Logowanie z konsoli jest już zrobione to teraz należy
-zabezpieczyć <acronym title="Secure Shell" lang="en">SSH</acronym>.  Przede wszystkim, jeżeli nie
+zabezpieczyć SSH.  Przede wszystkim, jeżeli nie
 używamy <code>sshd</code> to warto ustawić, aby nie włączał się on
 automatycznie przy starcie (generalnie wszelkie nieużywane lub rzadko
 używane daemony nie powinny być uruchamiane przy starcie).  Aby tego
@@ -133,7 +133,7 @@ logować się zdalnie przy pomocy <code>ssh</code>.  Jeżeli więcej
 użytkowników ma mieć dostęp zdalny to wystarczy dopisać loginy do
 opcji <code>AllowUsers</code> oddzielając poszczególne nazwy spacjami.
 Jeżeli użytkowników miałoby być sporo to lepiej stworzyć nową
-grupę, <abbr title="na przykład">np.</abbr> <code>sshlogin</code>, do
+grupę, np. <code>sshlogin</code>, do
 pliku <code>sshd_config</code> dodać opcję <code>AllowGroups sshlogin</code>
 i dodawać użytkowników do tej grupy.</p>
 
@@ -204,7 +204,7 @@ if [ -x /etc/rc.d/rc.inet1 ]; then
   . /etc/rc.d/rc.inet1
 fi</pre>
 
-<p>dodać okrągły nawias otwierający, <abbr title="to jest">tj.</abbr>:</p>
+<p>dodać okrągły nawias otwierający, tj.:</p>
 
 <pre>
 (
@@ -293,7 +293,7 @@ fi</pre>
 systemowych.  Dzięki nim, użytkownicy z grupy <code>root</code> nie muszą
 korzystać z <code>su</code>, aby móc odpalić polecenia takie jak
 <code>/sbin/halt</code>.  Dalej włączane jest logowanie pakietów
-<acronym title="Internet Control Message Protocol" lang="en">ICMP</acronym>.  Następnie generowane są pliku
+ICMP.  Następnie generowane są pliku
 <code>/etc/issue</code> oraz <code>/etc/issue.net</code> po czym ustawiane są
 różne parametry dysku - prawdopodobnie będziesz chciał je zmodyfikować.
  Na koniec uruchamiany jest skrypt <code>/etc/cron.hourly/ntpsync</code>
@@ -302,7 +302,7 @@ o ile takowy istnieje.</p>
 <h3 id="rclasa"><code>rc.alsa</code></h3>
 
 <p>Ponieważ stosunkowo szybko przekompilowuję jądro i wkompilowuję
-w nim emulację <acronym>OSS</acronym> to nie ma potrzeby wczytywania
+w nim emulację OSS to nie ma potrzeby wczytywania
 żadnych modułów, więc w pliku <code>/etc/rc.d/rc.alsa</code> zmieniam
 definicję funkcji <code>load_alsa_oss_modules</code> na następującą:</p>
 
@@ -353,8 +353,8 @@ mu prawa wykonywania o następującej treści:</p>
 /usr/bin/find /tmp /var/tmp -atime +7 -exec rm -f -- {} + 2>/dev/null</pre>
 
 <p>I na koniec jeszcze warto odpalić <code>crontab -e</code> i pozmieniać
-godziny z 4.  w nocy na <abbr title="na przykład">np.</abbr> północ, chyba że nasza maszyna jest zazwyczaj na chodzie o 4. w nocy. Oczywiście obu utworzonym plikom nadajemy prawa do
-wykonywania, <abbr title="na przykład">np.</abbr>:</p>
+godziny z 4.  w nocy na np. północ, chyba że nasza maszyna jest zazwyczaj na chodzie o 4. w nocy. Oczywiście obu utworzonym plikom nadajemy prawa do
+wykonywania, np.:</p>
 
 <pre>chmod 700 /etc/cron.hourly/ntpsync /etc/cron.daily/cleanup</pre>
 
@@ -403,7 +403,7 @@ grpck</pre>
 dokładnie, czy dany użytkownik lub grupa nie jest jednak w systemie
 potrzebny/a.  W moim przypadku okazało się, że użytkownik
 <code>games</code> i <code>uucp</code> oraz grupa <code>uucp</code> były
-wykorzystywane (<abbr title="to jest">tj.</abbr> istniały pliki należące do tych
+wykorzystywane (tj. istniały pliki należące do tych
 użytkowników/grup) i z tego powodu tych użytkowników/grup nie usunąłem
 (co widać brakiem odpowiedniej pozycji w pętli for).</p>
 
@@ -443,8 +443,8 @@ Spowoduje to, że <code>root</code> oraz użytkownicy z grupy
 na partycjach <code>vfat</code>.  Jeżeli chcemy, żeby dodatkowo wszyscy
 mogli odczytywać pliki z partycji Windowsa wystarczy zmienić
 <code>umask=7</code> na <code>umask=2</code>.  Zmiana na <code>umask=0</code>
-spowoduje, że wszyscy będą mogli robić wszystko.  By mieć większą
-kontrolę, można stworzyć grupę (<abbr title="na przykład">np.</abbr>)
+spowoduje, że wszyscy będą mogli robić wszystko.  By mieć większą kontrolę,
+można stworzyć grupę
 <code>vfat</code>, <code>umask</code> ustawić na <code>7</code> i jeszcze
 dodać opcję <code>gid=<i>numer</i></code>, gdzie <i>numer</i> to
 identyfikator stworzonej grupy.  Spowoduje to, że tylko <code>root</code>
@@ -463,16 +463,15 @@ sed -e 's/\/mnt\//\/media\//' -i -- /etc/fstab</pre>
 <p>Co powoduje, że rzeczy takie jak CD-ROM czy dyskietki są montowane
 nie w katalogu <code>/mnt</code>, ale <code>/media</code>.</p>
 
-<h2 id="lilo"><acronym title="LInux LOader" lang="en">LILO</acronym></h2>
+<h2 id="lilo">LILO</h2>
 
-<p>Zawsze lubiłem, jak system szybko się ładował i zawsze denerwowały
-mnie długie opóźnienia powodowane przez boot loadery.  W związku
-z czym, w swoim <acronym title="LInux LOader" lang="en">LILO</acronym> dokonałem następujących
-zmian:</p>
+<p>Zawsze lubiłem, jak system szybko się ładował i zawsze denerwowały mnie
+  długie opóźnienia powodowane przez boot loadery.  W związku z czym, w swoim
+  LILO dokonałem następujących zmian:</p>
 
 <p>Po pierwsze, dodałem <code>lba32</code> i <code>compact</code>; po drugie,
 <code>timeout</code> ustawiłem na <code>5</code>
-(<abbr title="to jest">tj.</abbr> pół sekundy); po trzecie, <code>install</code> ustawiłem
+(tj. pół sekundy); po trzecie, <code>install</code> ustawiłem
 na <code>text</code>; po czwarte, dodałem opcję
 <code>single-key</code>, która powoduje, że system jest wybierany przez
 wciśnięcie pojedynczego klawisza; i po piąte, pozmieniałem wszędzie
@@ -518,7 +517,7 @@ nazwa_katalogu</code>.  W ten sposób otrzymuje błąd z informacją, że
 podany plik to katalog (jakie odkrywcze :P).  Jednakże jest bardzo
 łatwo nauczyć <code>less</code> listowania zawartości katalogu.  W tym
 celu otweiramy plik <code>/usr/bin/lesspipe.sh</code> i jego ostatnia
-linijkę (<abbr title="to jest">tj.</abbr> <code>lesspipe "$1"</code>) zamieniamy na:</p>
+linijkę (tj. <code>lesspipe "$1"</code>) zamieniamy na:</p>
 
 <pre>
 if [ -d "$1" ]; then

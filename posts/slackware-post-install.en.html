@@ -73,7 +73,7 @@ logging in to the machine still works.
 
 <h2>Remote login restrictions</h2>
 
-<p>With local logins taken care of, <abbr title="Secure Shell">SSH</abbr> is
+<p>With local logins taken care of, SSH is
 all that is left.  Its configuration is stored in
 <code>/etc/ssh/sshd_config</code> file.  To limit who can ssh in and
 increase security of SSH the following options need to be set:
@@ -140,7 +140,7 @@ the following changes should be applied:
 
 <h2>NTP</h2>
 
-<p>I usually do not set up <abbr title="Network Time Protocol">NTP</abbr>
+<p>I usually do not set up NTP
 daemon to run, but still want to have my clock synchronised, so instead I am
 using ntpdate to query for the time every hour.  This can be set up by
 invoking:
@@ -192,7 +192,7 @@ include a convenient clock:
 
 <pre>/usr/sbin/icmpinfo -vvv -s -l</pre>
 
-<p>Which will log any <abbr title="Internet Control Message Protocol">ICMP</abbr> packets sent to the host.  This may be noisy especially
+<p>Which will log any ICMP packets sent to the host.  This may be noisy especially
 for hosts that are connected directly to the Internet, i.e. without a router
 or a firewall which blocks most traffic.
 
@@ -217,7 +217,7 @@ arp -f
 # Make sure everything still works before proceeding
 echo 'arf -f' &gt;&gt;/etc/rc.d/rc.local</pre>
 
-<p>Block <abbr title="File Transfer Protocol">FTP</abbr> access to everyone
+<p>Block FTP access to everyone
 except for a single user:
 
 <pre>
@@ -232,8 +232,7 @@ cut -d: -f1 /etc/passwd |\
 in that files to comments.</p>
 
 <p>Finally, configure
-<a href=https://en.wikipedia.org/wiki/TCP_Wrapper><abbr title="Transmission
-Control Protocol">TCP</abbr> Wrapper</a> to prevent any services using
+<a href=https://en.wikipedia.org/wiki/TCP_Wrapper>TCP Wrapper</a> to prevent any services using
 them from accepting connections:
 
 <pre>
@@ -284,7 +283,7 @@ in the <code>/etc/fstab</code> file.  There are a few options that’s worth ad
 
 <h2>LILO</h2>
 
-<p>Slackware comes with a splash screen used in <abbr title="Linux Loader">LILO</abbr> and a 30-second prompt timeout.  For me both are just
+<p>Slackware comes with a splash screen used in LILO and a 30-second prompt timeout.  For me both are just
 annoyances.  To improve the situation, note down value of the <code>boot</code>
 option as well as <code>root</code> options for all the images, run <code>chmod 600
 /etc/lilo.conf</code>, and finally edit it to have the following content:
@@ -362,10 +361,8 @@ MOTD_FILE       /etc/motd</pre>
 ' C C M S "$(tr -dc a-z &lt;/dev/urandom |head -c2)" "$((RANDOM % 100))"
 </pre>
 
-<p>Any other <abbr title="American Standard Code for Information
-Interchange">ASCII</abbr> art</a> will do, and with
-<a href=https://en.wikipedia.org/wiki/ANSI_escape_code><abbr title="American
-National Standards Institute">ANSI</abbr> escape codes</a> even colours can be
+<p>Any other ASCII art</a> will do, and with
+<a href=https://en.wikipedia.org/wiki/ANSI_escape_code>ANSI escape codes</a> even colours can be
 added!
 
 <p>While on the topic of colours, I find blue to be too dark on my terminals

@@ -53,7 +53,7 @@ następujących oznaczeń:</p>
     klucz</dd>
 
   <dt><code>H()</code></dt>
-  <dd>funkcja skrótu (<abbr title="tak zwany">tzw.</abbr>
+  <dd>funkcja skrótu (tzw.
     <span lang="en">hash</span>)</dd>
   <dd>jeżeli przyjmuje dwa parametry, to drugim parametrem jest
     klucz</dd>
@@ -143,21 +143,18 @@ następująco:</p>
 
 <h2 id="podpis">Podpis cyfrowy</h2>
 
-<p>Algorytmy szyfrowania asymetrycznego mogą dodatkowo spełniać
-jeszcze jeden warunek.  Mianowicie: <code>dla każdego M,
-k<sub>pub</sub>,k<sub>priv</sub> zachodzi k<sub>pub</sub> i
-k<sub>priv</sub> stanowią parę ⇒ M = D( E( M, k<sub>priv</sub> ),
-k<sub>pub</sub>)</code>.  Czyli, że szyfrując wiadomość kluczem
-prywatnym będzie można ją rozszyfrować kluczem publicznym.  Własność
-taką posiada algorytm RSA i dzięki temu jest wykorzystywany w podpisie
-cyfrowym (<abbr title="also known as" lang="en">aka</abbr> podpisie elektronicznym, <abbr title="also known as" lang="en">aka</abbr>
-e-podpisie).  Tuż przed wysłaniem wiadomości, zostaje wyliczony jej
-hash (<abbr title="also known as" lang="en">aka</abbr> skrót), który jest następnie szyfrowany przy
-użyciu klucza prywatnego (matematycznie jest to wynik operacji: <code>ep
-= E( H(M), k<sub>priv</sub> )</code>).  Osoba, która odbiera wiadomość
-rozszyfrowuje tenże hash i porównuje go z hashem przez siebie
-wyliczonym.  Jeżeli są one różne, wiadomość została zmodyfikowana po
-podpisaniu.</p>
+<p>Algorytmy szyfrowania asymetrycznego mogą dodatkowo spełniać jeszcze jeden
+warunek.  Mianowicie: <code>dla każdego M, k<sub>pub</sub>,k<sub>priv</sub>
+zachodzi k<sub>pub</sub> i k<sub>priv</sub> stanowią parę ⇒ M = D( E( M,
+k<sub>priv</sub> ), k<sub>pub</sub>)</code>.  Czyli, że szyfrując wiadomość
+kluczem prywatnym będzie można ją rozszyfrować kluczem publicznym.  Własność
+taką posiada algorytm RSA i dzięki temu jest wykorzystywany w podpisie cyfrowym.
+Tuż przed wysłaniem wiadomości, zostaje wyliczony jej hash (lub bardziej po
+polsku skrót), który jest następnie szyfrowany przy użyciu klucza prywatnego
+(matematycznie jest to wynik operacji: <code>ep = E( H(M), k<sub>priv</sub>
+)</code>).  Osoba, która odbiera wiadomość rozszyfrowuje tenże hash i porównuje
+go z hashem przez siebie wyliczonym.  Jeżeli są one różne, wiadomość została
+zmodyfikowana po podpisaniu.</p>
 
 <h2 id="hash">Hash</h2>
 
@@ -165,7 +162,7 @@ podpisaniu.</p>
 z łańcucha o dowolnej długości generuje łańcuch o określonej długości.
 Dodatkowo algorytm generowania tego hasha powinien być taki, że przy
 zmianie jednego bitu wiadomości hash się zmienia w dość dużym stopniu
-(<abbr title="to znaczy">tzn.</abbr> każdy bit wiadomości wpływa na conajmniej kilka
+(tzn. każdy bit wiadomości wpływa na conajmniej kilka
 bitów hasha).  Co więcej powinno być praktycznie niemożliwe stworzenie
 dwóch różnych łańcuchów o takim samym hashu.</p>
 

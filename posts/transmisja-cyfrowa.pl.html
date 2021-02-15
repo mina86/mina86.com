@@ -37,20 +37,14 @@ odwrót jest już kwestią wtórną.</p>
 i średni? Oczywiście można.  Wówczas transmisja przebiegałaby
 szybciej, ale za to byłaby bardziej podatna na zakłócenia.</p>
 
-<p>Dodatkowo sygnał cyfrowy, w przeciwieństwie do analogowego,
-umożliwia zastosowanie kodów wykrywających błędy.  Dość prymitywną
-metodą, ukazującą jednak sens, jest suma wszystkich słów o zadanej
-długości modulo jakaś wartość.  Bardziej zaawansowaną metodą są
-kody <acronym title="Cyclic redundancy check" lang="en">CRC</acronym>
-(dodawane przecież do ramek ethernetowych, <acronym title="Internet
-Protocol" lang="en">IP</acronym>v4 i <acronym title="Transmission
-Control Protocol" lang="en">TCP</acronym>) projektowane specjalnie dla
-tego celu. Aby wykryć błąd w transmisji można również użyć innych
-funkcji mieszających takich jak np. <acronym title="Message-Digest
-algorithm 5" lang="en">MD5</acronym> (stosowane przy ściąganiu plików;
-tak jakby ktoś nie wiedział o co biega z tymi
-plikami <code>CHECKSUM.md5</code>) czy <acronym title="Secure Hash
-Algorithm 1" lang="en">SHA1</acronym>.</p>
+<p>Dodatkowo sygnał cyfrowy, w przeciwieństwie do analogowego, umożliwia
+zastosowanie kodów wykrywających błędy.  Dość prymitywną metodą, ukazującą
+jednak sens, jest suma wszystkich słów o zadanej długości modulo jakaś wartość.
+Bardziej zaawansowaną metodą są kody CRC (dodawane przecież do ramek
+ethernetowych, IPv4 i TCP) projektowane specjalnie dla tego celu. Aby wykryć
+błąd w transmisji można również użyć innych funkcji mieszających takich jak
+np. MD5 (stosowane przy ściąganiu plików; tak jakby ktoś nie wiedział o co biega
+z tymi plikami <code>CHECKSUM.md5</code>) czy SHA1.
 
 <p>Ponadto, można zastosować kody korekcyjne umożliwiające odtworzenie
 zakłóconej (do pewnego stopnia przynajmniej) transmisji.  Najprostszym

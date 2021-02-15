@@ -99,7 +99,7 @@ const_cast&lt;char*&gt;("bar")[2] = 'z'; /* niezdefiniowane zachowanie */</pre>
   stałych nie wpływa na zewnętrzne zachowanie funkcji, gdyż i tak argumenty przekazywane są
   przez wartość (o ile nie jest to referencja).  Można to jednak
   stosować, aby zapobiec zmianie wartości argumentów, co jest zalecaną
-  przez niektórych praktyką, <abbr title="na przyklad">np.</abbr>:</p>
+  przez niektórych praktyką, np.:</p>
 
 <pre>
 int add(const int a, const int b) {
@@ -110,10 +110,10 @@ int add(const int a, const int b) {
 <p>Deklarowanie typów wskazywanych przez funkcje jako stałe ma za to
   duży wpływ na zachowanie zewnętrzne programu
   i <strong>należy</strong> je stosować wszędzie tam, gdzie jest to
-  możliwe.  <abbr title="to znaczy">Tzn.</abbr> jeżeli jakaś funkcja
+  możliwe.  Tzn. jeżeli jakaś funkcja
   przyjmuje wskaźnik lub referencję na argument, którego nie zamierza
   modyfikować powinna wskazywany typ zadeklarować jako stały,
-  <abbr title="na przyklad">np.</abbr>:</p>
+  np.:</p>
 
 <pre>
 int sum(unsigned n, const int *nums) {
@@ -132,7 +132,7 @@ sum(sizeof nums / sizeof *nums, nums);   /* gdyby w prototypie funkcja
 
 <p>Ponadto, często o wiele lepiej przekazywać argument przez stałą
   referencję zamiast przez wartość, gdyż nie wymaga to kopiowania
-  całego obiektu, <abbr title="na przyklad">np.</abbr>:</p>
+  całego obiektu, np.:</p>
 
 <pre>
 int foo(const std::vector&lt;int&gt; &amp;vec) {
@@ -245,8 +245,7 @@ const Foo baz = { 42 };
 baz.bar = 666;</pre>
 
 <p>Jednakże, jeżeli elementem struktury (klasy) jest wskaźnik jedynie
-  on sam staje się stały, ale wartość wskazywana nie, <abbr title="na
-  przyklad">np.</abbr>:</p>
+  on sam staje się stały, ale wartość wskazywana nie, np.:</p>
 
 <pre>
 struct Foo {
@@ -286,10 +285,10 @@ private:
 };</pre>
 
 <p>Czasami bywa tak, że metoda ma swoją wersję stałą i niestałą, które
-  robią identyczną rzecz, ale <abbr title="na przykład">np.</abbr>
+  robią identyczną rzecz, ale np.
   jedna zwraca wskaźnik do stałego obiektu, a druga do niestałego
   obiektu.  Aby nie musieć pisać dwa razy tego samego kodu można
-  zastosować rzutowanie, <abbr title="na przykład">np.</abbr>:</p>
+  zastosować rzutowanie, np.:</p>
 
 <pre>
 struct Foo {
@@ -384,8 +383,7 @@ struct Complex {
 };</pre>
 
 <p>W tym przypadku zadeklarowanie jakiejś zmiennej jako stałej
-  gwarantuje nam stałość logiczną, <abbr title="na
-  przykład">np.</abbr>:</p>
+  gwarantuje nam stałość logiczną, np.:</p>
 
 <pre>
 double abs(const Complex &amp;c) {
@@ -393,8 +391,7 @@ double abs(const Complex &amp;c) {
 }</pre>
 
 <p>Jednak w bardzo rzadkich przypadkach stałość fizyczna może
-  być <i>nadgorliwa</i>, <abbr title="na przykład">np.</abbr> jeżeli
-  cacheujemy wyniki:</p>
+  być <i>nadgorliwa</i>, np. jeżeli cacheujemy wyniki:</p>
 
 <pre>
 struct Complex {
