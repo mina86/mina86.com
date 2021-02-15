@@ -25,16 +25,16 @@
 <p>Bet let’s crank it up to eleven.  The largest cryptosetup supports
   (and will
   likely <a href="http://security.stackexchange.com/questions/6141/amount-of-simple-operations-that-is-safely-out-of-reach-for-all-humanity/6149#6149">ever
-  need to support</a>) are 512-bit keys¹.  No matter how enormous
+  need to support</a>) are 512-bit keys†.  No matter how enormous
   encryption password is, ultimately at most 512 bits will be used.
   In other words, if key file is bigger it becomes easier to attack
   the derived encryption key instead.
 
 <p>And since
   <a href="http://security.stackexchange.com/questions/6141/amount-of-simple-operations-that-is-safely-out-of-reach-for-all-humanity/6149#6149">brute-forcing
-  512-bit key would require roughly 2²⁸⁷ solar systems worth of
+    512-bit key would require roughly 2<sup>287</sup> solar systems worth of
   energy</a>
-  (or <a href="http://www.space.com/25959-how-many-stars-are-in-the-milky-way.html">2²⁵⁰
+  (or <a href="http://www.space.com/25959-how-many-stars-are-in-the-milky-way.html">2<sup>250</sup>
   Milky Way galaxies</a>) a motivated adversary will focus on
   <a href="https://xkcd.com/538/">other methods</a> of obtaining the
   password.
@@ -60,7 +60,7 @@
   a binary key file for a LUKS container, 64 bytes is plenty and even
   half of that is more than enough.
 
-<p>¹ 512-bit encryption key is used for 256-bit block ciphers in XTS
+<p>† 512-bit encryption key is used for 256-bit block ciphers in XTS
   mode.  And even here the doubling of the size appears to be caused
   by misunderstanding of XEX algorithm rather than need for better
   security,

@@ -45,7 +45,7 @@ $ emacsclient -e '
 <p>There
   are <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html">other
   ways to start a server</a>.  Whichever method one picks, the important points
-  are to ⅰ) make sure TCP is not used and ⅱ) note where the UNIX-domain socket
+  are to i) make sure TCP is not used and ii) note where the UNIX-domain socket
   is created.  The former is the case if <code>server-use-tcp</code>
   is <code>nil</code>; the later is indicated by <code>server-socket-dir</code>
   and <code>server-name</code> variables.  Their values can be inspected by
@@ -93,8 +93,8 @@ $ emacsclient -e '
 <p>To allow emacsclient running on Phobos to communication with Emacs back on
   Earth, socket created by the edit server needs to be forwarded.  Fortunately,
   analogous to TCP, OpenSSH supports UNIX-domain socket forwarding.  To know
-  what to forward, two paths need to be determined: ⅰ) location of the
-  UNIX-domain socket which local Emacs is listening on; and ⅱ) path where remote
+  what to forward, two paths need to be determined: i) location of the
+  UNIX-domain socket which local Emacs is listening on; and ii) path where remote
   emacsclient will look for a socket.  Both typically lay under user’s XDG
   runtime directory and thus can be determined with a little help from
   xdg-user-dir tool:

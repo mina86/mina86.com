@@ -27,22 +27,23 @@ levels.
   around to scale number’s <em>absolute</em> precision while
   maintaining <em>relative</em> precision.  This allows very large as well as
   very small numbers to be represented.  For example, while an IEEE 754 double
-  precision number can encode 2¹⁰⁰ and 2⁻¹⁰⁰, it cannot represent their sum.
+  precision number can encode 2<sup>100</sup> and 2<sup>-100</sup>, it cannot
+  represent their sum.
 
-<p>This impacts how densely ‘representable’ integers are distributed
-  on a number line.  All positive integers less than 2⁵³ can be
-  represented, but then only every second integer in [2⁵³, 2⁵⁴) range
-  can; only fourth in [2⁵⁴, 2⁵⁵); and so on.
+<p>This impacts how densely ‘representable’ integers are distributed on a number
+  line.  All positive integers less than 2<sup>53</sup> can be represented, but
+  then only every second integer in [2<sup>53</sup>, 2<sup>54</sup>) range can;
+  only fourth in [2<sup>54</sup>, 2<sup>55</sup>); and so on.
 
-<p>The effect is that when a random 64-bit unsigned integer is
-  converted into a double, some numbers are more probably than others.
-  For example, 2⁶³ is 2048 times more likely to be choose than 1.
+<p>The effect is that when a random 64-bit unsigned integer is converted into
+  a double, some numbers are more probably than others.  For example,
+  2<sup>63</sup> is 2048 times more likely to be choose than 1.
 
-<p>This isn’t yet a reason to run in circles while screaming in panic.
-  We quickly convince ourselves that (sufficiently
-  large) <em>ranges</em> behave correctly.  There may be fewer
-  distinct values in the [2⋅2⁶², 3⋅2⁶²) range but over all it’ll end
-  up with the same number of ‘hits’ as the [0, 2⁶²) range.
+<p>This isn’t yet a reason to run in circles while screaming in panic.  We
+  quickly convince ourselves that (sufficiently large) <em>ranges</em> behave
+  correctly.  There may be fewer distinct values in the [2⋅2<sup>62</sup>,
+  3⋅2<sup>62</sup>) range but over all it’ll end up with the same number of
+  ‘hits’ as the [0, 2<sup>62</sup>) range.
 
 <figure style="width: 50%; padding: 1rem; margin-left: 1rem; float: right; font-size: 0.87em">
   <svg viewBox="0 0 16000 8000" style="width: 100%; height: auto"
@@ -67,15 +68,16 @@ levels.
 
 <h2>Non-uniform distribution</h2>
 
-<p>The density would behave correctly if bits lost during conversion
-  were zeroed.  In that scenario, all integers from [2⁶³, 2⁶³+2047]
-  range map to its beginning equating the probability of an integer
-  from [0, 2047] being chosen.
+<p>The density would behave correctly if bits lost during conversion were
+  zeroed.  In that scenario, all integers from [2<sup>63</sup>,
+  2<sup>63</sup>+2047] range map to its beginning equating the probability of an
+  integer from [0, 2047] being chosen.
 
 <p>The problem is that the default (and sometimes the only
   accessible) <a href="http://www.gnu.org/s/libc/manual/html_node/Rounding.html">rounding
-  mode</a> is to round towards nearest.  Because 2⁶³+2047 is closer to
-  2⁶³+2048 than to 2⁶³, it will get rounded to the former.
+  mode</a> is to round towards nearest.  Because 2<sup>63</sup>+2047 is closer
+  to 2<sup>63</sup>+2048 than to 2<sup>63</sup>, it will get rounded to the
+  former.
 
 <pre>
 $ gcc -std=c99 -o rounding -x c - &lt;&lt;EOF && ./rounding
@@ -93,16 +95,16 @@ EOF
 <strong>2048</strong>
 </pre>
 
-<p>In other words, roughly half of the integers in [2⁶³, 2⁶³+2047]
-  range end up mapped to 2⁶³+2048 instead of 2⁶³.  Fortunately the
-  latter gets some numbers from the previous range, [2⁶³-2048, 2⁶³-1],
-  so it’s not totally extorted.
+<p>In other words, roughly half of the integers in [2<sup>63</sup>,
+  2<sup>63</sup>+2047] range end up mapped to 2<sup>63</sup>+2048 instead of
+  2<sup>63</sup>.  Fortunately the latter gets some numbers from the previous
+  range, [2<sup>63</sup>-2048, 2<sup>63</sup>-1], so it’s not totally extorted.
 
-<p>It still isn’t treated fairly.  2⁶³-2048 is a 63-bit number and the
-  precision loss is ten bits (compared to eleven for 2⁶³+2048) which
-  in turn means that only the top fourth of the [2⁶³-2048, 2⁶³-1]
-  range maps to 2⁶³.  Overall, 2⁶³ ‘gets’ roughly 1537 integers mapped
-  to it while 2⁶³+2048 gets 2047.
+<p>It still isn’t treated fairly.  2<sup>63</sup>-2048 is a 63-bit number and
+  the precision loss is ten bits (compared to eleven for 2<sup>63</sup>+2048)
+  which in turn means that only the top fourth of the [2<sup>63</sup>-2048,
+  2<sup>63</sup>-1] range maps to 2<sup>63</sup>.  Overall, 2<sup>63</sup>
+  ‘gets’ roughly 1537 integers mapped to it while 2<sup>63</sup>+2048 gets 2047.
 
 <p>This behaviour favours large numbers and penalises powers of two
   especially strongly.  Even still, the bias isn’t huge and for many
