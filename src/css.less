@@ -4,14 +4,11 @@
  * Classes:
  * - p.nt – a note with some meta information (special licensing information,
  *   note about series, etc.)  Set with smaller font.
- * - p.ig – an image at the top of some posts (most notably news articles) and
- *   attribution that follows it (two separate paragraphs which *must* follow
- *   each other).
  */
 
 /* I need something which will automatically choose IDs and classes. */
 /* id:  a     d e       i j k       o p q r   t u v w x y z */
-/* cls:     c   e     h   j k l m n o           u           */
+/* cls:     c   e     h   j k l m   o           u           */
 
 @head-id: #h;  /* Page header. */
 @body-id: #b;  /* Page body (article text, comments, sidebar etc). */
@@ -53,6 +50,7 @@
 
 /* Generic stuff */
 @right-align-cls: .r;
+@news-image: .n;
 
 
 /* http://spencermortensen.com/articles/typographic-scale/
@@ -398,14 +396,14 @@ p.nt {
 	font-style: italic;
 }
 
-p.ig, figure {
+p@{news-image}, figure {
 	text-align: center;
 	img {
 		max-width: 100%;
 		height: auto;
 	}
 }
-p.ig + p.ig {
+p@{news-image} + p@{news-image} {
 	text-align: right;
 	margin-top: -1em;
 	font-size: @tiny;

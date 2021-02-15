@@ -15,12 +15,10 @@
 <!-- EXCERPT -->
 
 <style>
-span.hisur { text-decoration: overline; background: #FFD }
-span.losur { text-decoration: underline; background: #DFF }
-span.xxsur { text-decoration: line-through; background: #DDD }
-span.chsur { background: #FDE }
-span.clsur { background: #EDF }
-span.udesc { font-variant: all-small-caps }
+.hi { text-decoration: overline }
+.lo { text-decoration: underline }
+.xx { text-decoration: line-through }
+.ud { font-variant: all-small-caps }
 </style>
 
 
@@ -41,32 +39,32 @@ span.udesc { font-variant: all-small-caps }
   total — encodes a single code point outside of BMP.
 
 <p>The encoding method is relatively simple.  For example, to
-  represent U+1F574: <span class=udesc>man in business suit
+  represent U+1F574: <span class=ud>man in business suit
   levitating</span> (🕴 — does your browser support it yet?)
   one would:
 
 <ol>
   <li>
-    <p>Subtract 10000<sub>16</sub> from the code point to produce a 20-bit
+    <p>Subtract 10000 <sub>16</sub> from the code point to produce a 20-bit
       number.
-    <p>1F574<sub>16</sub> - 10000<sub>16</sub> = F574<sub>16</sub>
-      = <span class=hisur>0000111101</span><span class=losur>0101110100</span><sub>2</sub>
+    <p>1F574 <sub>16</sub> - 10000 <sub>16</sub> = F574 <sub>16</sub>
+      = <span class=hi>0000111101</span> <span class=lo>0101110100</span> <sub>2</sub>
   <li>
-    <p>Add D800<sub>16</sub> to the ten most significant bits of that
+    <p>Add D800 <sub>16</sub> to the ten most significant bits of that
       number — that’s the high surrogate.
-    <p>D800<sub>16</sub> + <span class=hisur>0000111101</span><sub>2</sub>
-      = <span class=chsur>110110</span><span class=xxsur>0000000000</span><sub>2</sub>
-      + <span class=hisur>0000111101</span><sub>2</sub>
-      = <span class=chsur>110110</span><span class=hisur>0000111101</span><sub>2</sub>
-      = D83D<sub>16</sub>
+    <p>D800 <sub>16</sub> + <span class=hi>0000111101</span> <sub>2</sub>
+      = 110110 <span class=xx>0000000000</span> <sub>2</sub>
+      + <span class=hi>0000111101</span> <sub>2</sub>
+      = 110110 <span class=hi>0000111101</span> <sub>2</sub>
+      = D83D <sub>16</sub>
   <li>
-    <p>Add DC00<sub>16</sub> to the ten least significant bits of the same
+    <p>Add DC00 <sub>16</sub> to the ten least significant bits of the same
       number — that’s the low surrogate.
-    <p>DC00<sub>16</sub> + <span class=losur>0101110100</span><sub>2</sub>
-      = <span class=clsur>110111</span><span class=xxsur>0000000000</span><sub>2</sub>
-      + <span class=losur>0101110100</span><sub>2</sub>
-      = <span class=clsur>110111</span><span class=losur>0101110100</span><sub>2</sub>
-      = DD74<sub>16</sub>
+    <p>DC00 <sub>16</sub> + <span class=lo>0101110100</span> <sub>2</sub>
+      = 110111 <span class=xx>0000000000</span> <sub>2</sub>
+      + <span class=lo>0101110100</span> <sub>2</sub>
+      = 110111 <span class=lo>0101110100</span> <sub>2</sub>
+      = DD74 <sub>16</sub>
   <li>
     <p>Output the high surrogate followed by low surrogate.
     <p>UTF-16 encoding of U+1F574 is U+D83D U+DD74.
@@ -85,14 +83,14 @@ span.udesc { font-variant: all-small-caps }
 
 <p>In case this isn’t confusing enough, strings may get shorter as
   well.  ‘I◌̇stanbul’ (which starts with capital I followed by
-  U+0307: <span class=udesc>combining dot above</span>) becomes
+  U+0307: <span class=ud>combining dot above</span>) becomes
   ‘istanbul’ when lower cased.  One code point fewer.
 
 <p>Below is a table of some of the corner cases.  Firefox fails at
   İstanbul when spelled using combining dot above character, while
   Chrome and Opera fail to properly capitalise ‘ﬁlm’.
 
-<table class="tb" no-abbr>
+<table no-abbr>
   <thead>
     <tr><th>Operation<th>Expected<th>Browser’s handling
     <tr><th colspan=3>Notes
@@ -169,7 +167,7 @@ span.udesc { font-variant: all-small-caps }
   a fancy way of writing ‘ss’? ‘sz’? What of ligatures and digraphs?
   But at least everyone agrees ‘é’ is a single letter, right?  Here it
   is again: ‘é’, except this time it’s a regular letter e followed by
-  U+0301: <span class=udesc>combining acute accent</span>, i.e. ‘e◌́’.
+  U+0301: <span class=ud>combining acute accent</span>, i.e. ‘e◌́’.
 
 <p>The former, single-code-point representation, is
   called <dfn>precomposed</dfn> (or <dfn>composed</dfn>) while the
@@ -180,8 +178,8 @@ span.udesc { font-variant: all-small-caps }
   behaviour (e.g. when selecting text).
 
 <p>In addition to the above, Polish ‘ą’ ≈ ‘a◌̨’, Korean ‘한’ ≈ ‘ㅎㅏㄴ’,
-  ‘Ω’ (U+2126: <span class=udesc>Ohm sign</span>) ≈ ‘Ω’
-  (U+03A9: <span class=udesc>Greek capital letter omega</span>), Hebrew
+  ‘Ω’ (U+2126: <span class=ud>Ohm sign</span>) ≈ ‘Ω’
+  (U+03A9: <span class=ud>Greek capital letter omega</span>), Hebrew
   ‘שׂ‎’ ≈ ‘ש‎◌‎ׂ’ and more.
 
 <p>Based on canonical equivalence, Unicode defines a Normalised Form
@@ -189,7 +187,7 @@ span.udesc { font-variant: all-small-caps }
   precomposed while the latter uses decomposed representation of
   characters.
 
-<p>Oh, and by the way, aforementioned <span class=udesc>Ohm
+<p>Oh, and by the way, aforementioned <span class=ud>Ohm
   sign</span> is <dfn>a singleton</dfn> which means that it disappears
   from the text after any kind of normalisation.  There’s a bunch of
   those.
@@ -204,18 +202,18 @@ span.udesc { font-variant: all-small-caps }
   ‘<span dir=ltr>ש◌ׂ</span>’ but what’s more interesting is that
   the latter is in NFC.  Yes, even thought precomposed
   character exists, decomposed representation is in NFC.  In fact, for
-  <span class=udesc>Hebrew letter shin with sin dot</span> normalised
+  <span class=ud>Hebrew letter shin with sin dot</span> normalised
   forms C and D are the same.
 
 <p>As to not leave an impression that NFC is the odd ball here, even
   though NFD usually decomposes precomposed characters, it not always
-  does so. ‘ø’ (U+00F8: <span class=udesc>Latin small letter o with
+  does so. ‘ø’ (U+00F8: <span class=ud>Latin small letter o with
   stroke</span>) is in its NFD (as a single code-point) even though
   a decomposed representation with a combining stroke also exists.
 
 <p>There’s also a <dfn>compatibility equivalence</dfn> which can be
   thought of as covering ‘meaning’ of strings.  For example ‘ﬁ’
-  (U+FB01: <span class=udesc>Latin small ligature fi</span>) means the
+  (U+FB01: <span class=ud>Latin small ligature fi</span>) means the
   same thing as ‘f + i’, ‘ǆ ∼ d + z + ◌̌’ etc.  This is a bit simplified
   view though since ‘5²’ has a distinct meaning from ‘52’ yet the
   sequences are in the same compatibly equivalence class.
@@ -310,7 +308,7 @@ span.udesc { font-variant: all-small-caps }
 
 <h2>There is no Apple logo in Unicode</h2>
 
-<p>Total of 137 468 code points (U+E000…U+F8FF in BMP, U+F0000…U+FFFFD
+<p>Total of 137 468 code points (U+E000…U+F8FF in BMP, U+F0000…U+FFFFD
   in plane 15 and U+100000…U+10FFFD in plane 16) are reserved for
   private use.  In other words, the standard will never assign any
   meaning to them.  If used in a data being interchanged, all parties
@@ -325,8 +323,8 @@ span.udesc { font-variant: all-small-caps }
 <p>In other words, just don’t use U+F8FF.
 
 <p>Fruit fans should not despair though but rather find consolation in
-a <span class=udesc>red apple</span> (🍎, U+1F34E), a <span class=udesc>green
-apple</span> (🍏, U+1F34F) and even a <span class=udesc>pineapple</span> (🍍,
+a <span class=ud>red apple</span> (🍎, U+1F34E), a <span class=ud>green
+apple</span> (🍏, U+1F34F) and even a <span class=ud>pineapple</span> (🍍,
 U+1F34D which isn’t even an apple nor grows on pine trees).
 
 
