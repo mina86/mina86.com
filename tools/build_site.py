@@ -56,6 +56,7 @@ TRANSLATIONS = {
     'Articles': {'pl': 'Artykuły'},
     'Downloads': {'pl': 'Do pobrania'},
     'English': {'pl': 'Po angielsku'},
+    'Polish': {'pl': 'Po polsku'},
     'Misc': {'pl': 'Różne'},
     'Reviews': {'pl': 'Recenzje'},
     'Site News': {'pl': 'Aktualności'},
@@ -322,6 +323,7 @@ class Site(object):
         for permalink, versions in itertools.groupby(
                 entries, key=lambda d: d['__permalink__']):
             versions = list(versions)
+            langs = frozenset(d['__lang__'] for d in versions)
 
             kw = {}
             for attr, f in (('categories', Category),
@@ -331,6 +333,14 @@ class Site(object):
                     text = d.get(attr)
                     if text:
                         groups.update(t.strip() for t in text.split(','))
+
+                if attr == 'categories' and factory == Post:
+                    groups.discard('English')
+                    if 'en' in langs:
+                        groups.add('English')
+                    if 'pl' in langs:
+                        groups.add('Polish')
+
                 g = getattr(self, '_' + attr)
                 kw[attr] = [g.setdefault(t, f(t)) for t in groups]
                 kw[attr].sort()
