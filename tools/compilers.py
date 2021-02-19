@@ -196,15 +196,6 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
                 self._data_buffer[i] = re.sub(self._ABBR_RE, self._abbr_repl,
                                               self._data_buffer[i])
 
-    def handle_comment(self, comment: str) -> None:
-        if comment.startswith('[if '):
-            comment = re.sub(
-                r'"(/d/[^"]*)"',
-                lambda m: self._static_mappings.get(m.group(1), m.group(1)),
-                comment)
-        super().handle_comment(comment)
-
-
 
 def minify_html(data: str, **kw: typing.Any) -> str:
     block = '(?:%s)' % '|'.join((
