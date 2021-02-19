@@ -671,6 +671,14 @@
 	}
 
 
+	/* April 1st */
+	if ((x = new Date()).getDate() == 1 && x.getMonth() == 3) {
+		doc.querySelectorAll('.y').forEach(byline => {
+			byline.innerHTML = byline.innerHTML.replace(/(Michał) .mina86. (Nazarewicz)/, (isPL ? 'Hrabia' : 'Count') + ' $1 P. $2');
+		});
+	}
+
+
 	/* Decorate the main content by adding ABBR elements for acronyms. */
 	processAbbr(query('#b'));
 })();
