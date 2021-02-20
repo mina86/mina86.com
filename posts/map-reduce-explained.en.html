@@ -134,8 +134,8 @@ for nick, count in reduce(aggregate, sys.stdin, {}).iteritems():
 <p>But again, only one CPU does the work while all the others are
   slacking off.  This time, each step depends on the result of the
   previous one, so they cannot be run independently of one another,
-  they have to be run in sequence.  Fortunately, result for nick “foo”
-  does not depend on results for nick “bar” so there could be
+  they have to be run in sequence.  Fortunately, result for nick ‘foo’
+  does not depend on results for nick ‘bar’ so there could be
   a separate reduce processes for each nick.
 
 <p>The result of map phase is not split by usernames though.  This is

@@ -4,17 +4,17 @@
 <!-- categories: Articles, Techblog -->
 
 <p>This is an extended version of <a href="https://lwn.net/Articles/486301/">an
-  LWN article on CMA</a>.  It contains more detail on how to use CMA and a lot
+  LWN article on CMA</a>.  It contains more detail on how to use CMA and a lot
   of boring code samples.
 
 <p><a href=http://thread.gmane.org/gmane.linux.kernel.mm/76241>Contiguous
 Memory Allocator</a> (or CMA) has been developed to allow big
 physically contiguous memory allocations.  By initialising early at
 boot time and with some fairly intrusive changes to Linux memory
-management, it is able to allocate big memory chunks without a need to
+management, it is able to allocate big memory chunks without a need to
 grab memory for exclusive use.
 
-<p>Simple in principle, it grew to be a quite complicated system which
+<p>Simple in principle, it grew to be a quite complicated system which
 requires cooperation between boot-time allocator, buddy system, DMA
 subsystem, and some architecture-specific code.  Still, all that
 complexity is usually hidden away and normal users won’t be exposed to
@@ -37,7 +37,7 @@ was designed to deal with.  Lastly, it is more flexible and allows
 allocations in atomic contexts (e.g. interrupt handler) and creation
 of memory pools, which are well suited for small allocations.
 
-<p>For a quick example, this is how allocation might look like:
+<p>For a quick example, this is how allocation might look like:
 
 <pre>
 dma_addr_t dma_addr;
@@ -46,15 +46,15 @@ void *virt_addr =
 if (!virt_addr)
 	return -ENOMEM;</pre>
 
-<p>Provided that <code>dev</code> is a pointer to a valid <code>struct
+<p>Provided that <code>dev</code> is a pointer to a valid <code>struct
 device</code>, the above code will allocate 100 MiB of memory.  It may
-or may not be a CMA memory, but it is a portable way to get buffers.
+or may not be a CMA memory, but it is a portable way to get buffers.
 The following can be used to free it:
 
 <pre>dma_free_coherent(dev, 100 &lt;&lt; 20, virt_addr, dma_addr);</pre>
 
 <p><a href=http://thread.gmane.org/gmane.linux.kernel/1263136>Barry Song has
-posted a simple test driver</a> which uses those two to allocate DMA memory.
+posted a simple test driver</a> which uses those two to allocate DMA memory.
 
 <p>More information about the DMA API can be found in <a
 href="https://git.kernel.org/?p=linux/kernel/git/torvalds/linux.git;a=blob;f=Documentation/core-api/dma-api.rst"><code>Documentation/core-api/dma-api.rst</code></a>
@@ -66,7 +66,7 @@ usage examples.
 <h2>Integration with architecture code</h2>
 
 <p>Obviously, CMA has to be integrated with given architecture’s DMA
-subsystem beforehand.  This is performed in a few, fairly easy steps.
+subsystem beforehand.  This is performed in a few, fairly easy steps.
 <a href=http://thread.gmane.org/gmane.linux.kernel.mm/76241>The CMA
 patchset</a> integrates it with
 <a href=http://article.gmane.org/gmane.linux.kernel.mm/76245>x86</a>
@@ -127,8 +127,8 @@ diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
  	/*
  	 * NOTE: On x86-32, only from this point on, fixmaps are ready for use.</pre>
 
-<p>The amount of reserved memory depends on a few Kconfig options and
-a <code>cma</code> kernel parameters which will be <a href=#size>describe
+<p>The amount of reserved memory depends on a few Kconfig options and
+a <code>cma</code> kernel parameters which will be <a href=#size>describe
 later on</a>.
 
 <h3>Architecture specific memory preparations</h3>
@@ -169,7 +169,7 @@ dma_contiguous_early_fixup(phys_addr_t base, unsigned long size)
 #endif</pre>
 
 <p>ARM <a href="https://lwn.net/Articles/450286/">requires some work
-modifying mappings</a> and so it provides a full definition of this
+modifying mappings</a> and so it provides a full definition of this
 function:
 
 <pre>
@@ -225,15 +225,15 @@ struct page *dma_alloc_from_contiguous(
 of.  The second one specifies <em>number of pages</em> (not bytes or
 order) to allocate.
 
-<p>The third argument is the alignment expressed as a page order.  It
+<p>The third argument is the alignment expressed as a page order.  It
 enables allocation of buffers which are aligned to at least
 2<sup><code>align</code></sup> pages.  To avoid fragmentation, if at all
-possible, pass zero here.  It is worth noting that there is a Kconfig
+possible, pass zero here.  It is worth noting that there is a Kconfig
 option (<code>CONFIG_CMA_ALIGNMENT</code>) which specifies maximal
 alignment accepted by the function.  By default, its value is 8
 meaning an alignment of 256 pages.
 
-<p>The return value is the first of a sequence of <code>count</code>
+<p>The return value is the first of a sequence of <code>count</code>
 allocated pages.
 
 <p>Here’s how allocation looks on x86:
@@ -297,43 +297,42 @@ diff --git a/arch/x86/kernel/pci-dma.c b/arch/x86/kernel/pci-dma.c
 
 <p>Beware that <code>dma_alloc_from_contiguous</code> may not be called
 from atomic context (e.g. when spin lock is hold or in an interrupt).
-It performs some “heavy” operations such as page migration, direct
+It performs some ‘heavy’ operations such as page migration, direct
 reclaim, etc., which may take a while.  Because of that, to
 make <code>dma_alloc_coherent</code> and co. work as advertised,
-architecture needs to have a different method of allocating memory in
+architecture needs to have a different method of allocating memory in
 atomic context.
 
-<p>The simplest solution is to put aside a bit of memory at boot time
+<p>The simplest solution is to put aside a bit of memory at boot time
 and perform atomic allocations from it.  This is in fact what ARM is
-doing.  Existing architectures most likely have a special path for
+doing.  Existing architectures most likely have a special path for
 atomic allocations already.
 
 <h3>Special memory requirements</h3>
 
-<p>At this point, most of the drivers should “just work”.  They use
+<p>At this point, most of the drivers should ‘just work’.  They use
 the DMA API which calls CMA.  Life is beautiful.  Except some devices
-may have special memory requirements.  For instance, Samsung’s
-Multi-format codec (MFC) requires different types of buffers to be
+may have special memory requirements.  For instance, Samsung’s Multi-format codec (MFC) requires different types of buffers to be
 located in different memory banks (which allows reading them through
 two memory channels, thus increasing memory bandwidth).  Furthermore,
 one may want to separate some device’s allocations from others as to
 limit fragmentation within CMA areas.
 
-<p>As mentioned earlier, CMA operates on contexts describing a portion
+<p>As mentioned earlier, CMA operates on contexts describing a portion
 of system memory to allocate buffers from.  One global area is created
-to be used by devices by default, but if a device needs to use
-a different area, it can easily be done.
+to be used by devices by default, but if a device needs to use
+a different area, it can easily be done.
 
-<p>There is a many-to-one mapping between <code>struct device</code>
+<p>There is a many-to-one mapping between <code>struct device</code>
 and <code>struct cma</code> (ie. CMA context).  This means, that if
-a single device driver needs to use more than one CMA area, it has to
+a single device driver needs to use more than one CMA area, it has to
 have separate <code>struct device</code> objects.  At the same time,
 several <code>struct device</code> objects may point to the same CMA
 context.
 
-<h3>Assigning CMA area to a single device</h3>
+<h3>Assigning CMA area to a single device</h3>
 
-<p>To assign a CMA area to a device, all one needs to do is call:
+<p>To assign a CMA area to a device, all one needs to do is call:
 
 <pre>
 int dma_declare_contiguous(
@@ -345,7 +344,7 @@ int dma_declare_contiguous(
 <p><a href=#reserve_mem>As with
 <code>dma_contiguous_reserve</code></a>, this needs to be called after
 memblock initializes but before too much memory gets grabbed from it.
-For ARM platforms, a convenient place to put invocation of this
+For ARM platforms, a convenient place to put invocation of this
 function is machine’s <code>reserve</code> callback.
 
 <p>The first argument of the function is the device that the new
@@ -353,11 +352,10 @@ context is to be assigned to.  The second is its <em>size in
 bytes</em> (not in pages).  The third is physical address of the area
 or zero.  The last one has the same meaning as <code>limit</code> argument
 to <code>dma_contiguous_reserve</code>.  The return value is either zero
-(on success) or a negative error code.
+(on success) or a negative error code.
 
-<p>For an example, one can take a look at the code called from
-<a href=http://article.gmane.org/gmane.linux.kernel.mm/76246>Samsung’s
-S5P platform’s <code>reserve</code> callback</a>.  It creates two CMA
+<p>For an example, one can take a look at the code called from
+<a href=http://article.gmane.org/gmane.linux.kernel.mm/76246>Samsung’s S5P platform’s <code>reserve</code> callback</a>.  It creates two CMA
 contexts for the MFC driver:
 
 <pre>
@@ -380,7 +378,7 @@ diff --git a/arch/arm/plat-s5p/dev-mfc.c b/arch/arm/plat-s5p/dev-mfc.c
 +		       rsize, (unsigned long) rbase);
  }</pre>
 
-<p>There is a limit to how many “private” areas can be declared,
+<p>There is a limit to how many ‘private’ areas can be declared,
 namely <code>CONFIG_CMA_AREAS</code>.  Its default value is seven but it
 can be safely increased if need arises.  Called more times,
 <code>dma_declare_contiguous</code> function will print an error
@@ -388,9 +386,9 @@ message and return <code>-ENOSPC</code>.
 
 <h3>Assigning CMA area to multiple devices</h3>
 
-<p>Things get a bit more complicated if the same (not default) CMA
+<p>Things get a bit more complicated if the same (not default) CMA
 context needs to be used by two or more devices.  The current API does
-not provide a trivial way to do that.  What can be done is
+not provide a trivial way to do that.  What can be done is
 use <code>dev_get_cma_area</code> to figure out CMA area one device is
 using, and <code>dev_set_cma_area</code> to set the same context to
 another device.  This sequence must be called no sooner than
@@ -417,7 +415,7 @@ allocation after area change.
 
 <h2>No default context</h2>
 
-<p>As a matter of fact, there is nothing special about the default
+<p>As a matter of fact, there is nothing special about the default
 context that is created by <code>dma_contiguous_reserve</code> function.
 It is in no way required and system may work without it.
 
@@ -432,20 +430,20 @@ context.
 
 <h2 id=size>Size of the default context</h2>
 
-<p><code>dma_contiguous_reserve</code> does not take a size as an
-argument, which brings a question of how does it know how much memory
+<p><code>dma_contiguous_reserve</code> does not take a size as an
+argument, which brings a question of how does it know how much memory
 should be reserved.  There are two sources this information comes
 from.
 
-<p>First of all, there is a set of Kconfig options, which specify the
+<p>First of all, there is a set of Kconfig options, which specify the
 default size of the reservation.  All of those options are located
-under “Device Drivers” » “Generic Driver Options” » “Contiguous Memory
-Allocator” in the Kconfig menu.  They allow specifying one of four
+under ‘Device Drivers’ » ‘Generic Driver Options’ » ‘Contiguous Memory
+Allocator’ in the Kconfig menu.  They allow specifying one of four
 possible ways of calculating the size: it can be an absolute size in
-megabytes, a percentage of total memory, the lower of the two, or the
+megabytes, a percentage of total memory, the lower of the two, or the
 larger of the two.  By default is to allocate 16 MiB of memory.
 
-<p>Second of all, there is a <code>cma</code> kernel command line option.
+<p>Second of all, there is a <code>cma</code> kernel command line option.
 It lets one specify the size of the area at boot time without the need
 to recompile the kernel.  This option specifies the size in bytes and
 accepts the usual suffixes.
@@ -478,7 +476,7 @@ refer to the original email.
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>I’m unaware of any specific fixes for MIPS architecture. To best of my knowledge, the steps described in “Integration with architecture code” should apply to that architecture as well, but it is likely that something needs to be done (just like in ARM’s case) with reserved memory for it to work as CMA region.</p>
+<p>I’m unaware of any specific fixes for MIPS architecture. To best of my knowledge, the steps described in ‘Integration with architecture code’ should apply to that architecture as well, but it is likely that something needs to be done (just like in ARM’s case) with reserved memory for it to work as CMA region.</p>
 
 <p>And sorry about part two, I’ve never gotten to finalising the draft. It lays somewhere on my disk, but unfortunately it’s not fit for publication.</p>
 

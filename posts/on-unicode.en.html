@@ -3,13 +3,13 @@
 <!-- tags: unicode, utf-8, utf-16, cjk -->
 <!-- categories: Articles, Techblog -->
 
-<p>There are <em>a lot</em> of misconceptions about Unicode.  Most are there
+<p>There are <em>a lot</em> of misconceptions about Unicode.  Most are there
   because people assume what they know about ASCII or ISO-8859-* is true about
   Unicode.  They are usually harmless but they tend to creep into minds of
   people who work with text which leads to badly designed software and technical
   decisions made based on false information.
 
-<p>Without further ado, here’s a few facts about Unicode that might
+<p>Without further ado, here’s a few facts about Unicode that might
   surprise you.
 
 <!-- EXCERPT -->
@@ -22,21 +22,21 @@
 </style>
 
 
-<h2>UTF-16 is <em>not</em> a fixed-width encoding</h2>
+<h2>UTF-16 is <em>not</em> a fixed-width encoding</h2>
 
 <p>Unicode defines 17 <dfn>planes</dfn> (most famous being plane zero,
   the Basic Multilingual Plane or BMP).  Each plane consists of
   65 536 <dfn>code points</dfn>.  Quick multiplication unveils
   staggering number of 1 114 112 entries.  It quickly becomes obvious
-  that 16 bits, which is the size of a single UTF-16 <dfn>code
+  that 16 bits, which is the size of a single UTF-16 <dfn>code
   unit</dfn>, aren’t enough to identify each code point uniquely.
 
-<p>To solve that problem, a somehow awkward concept of surrogate pairs
+<p>To solve that problem, a somehow awkward concept of surrogate pairs
   has been introduced.  (On unrelated note, is it just me who finds
   spelling of ‘awkward’ so <em>meta</em>?) Anyway, 2048 code points
   have been carved out to make room for high and low surrogates.  In
-  UTF-16, a high surrogate followed by a low surrogate — four octets
-  total — encodes a single code point outside of BMP.
+  UTF-16, a high surrogate followed by a low surrogate — four octets
+  total — encodes a single code point outside of BMP.
 
 <p>The encoding method is relatively simple.  For example, to
   represent U+1F574: <span class=ud>man in business suit
@@ -45,7 +45,7 @@
 
 <ol>
   <li>
-    <p>Subtract 10000 <sub>16</sub> from the code point to produce a 20-bit
+    <p>Subtract 10000 <sub>16</sub> from the code point to produce a 20-bit
       number.
     <p>1F574 <sub>16</sub> - 10000 <sub>16</sub> = F574 <sub>16</sub>
       = <span class=hi>0000111101</span> <span class=lo>0101110100</span> <sub>2</sub>
@@ -73,20 +73,20 @@
 
 <h2>Case change is not reversible and may change length</h2>
 
-<p>German speakers probably recognise ß, a small letter sharp s.  It
-  is a bit of a unique snowflake in Latin alphabets in that it has no
+<p>German speakers probably recognise ß, a small letter sharp s.  It
+  is a bit of a unique snowflake in Latin alphabets in that it has no
   corresponding upper case form.  Or rather, even though capital sharp
-  s exists, the correct, according to German orthography, way to
+  s exists, the correct, according to German orthography, way to
   capitalise ß is by replacing it with two letters S.  Similarly, an
   ﬁ ligature becomes FI.  Other characters, such as ŉ, need to be
   decomposed producing ʼN.
 
 <p>In case this isn’t confusing enough, strings may get shorter as
-  well.  ‘I◌̇stanbul’ (which starts with capital I followed by
+  well.  ‘I◌̇stanbul’ (which starts with capital I followed by
   U+0307: <span class=ud>combining dot above</span>) becomes
   ‘istanbul’ when lower cased.  One code point fewer.
 
-<p>Below is a table of some of the corner cases.  Firefox fails at
+<p>Below is a table of some of the corner cases.  Firefox fails at
   İstanbul when spelled using combining dot above character, while
   Chrome and Opera fail to properly capitalise ‘ﬁlm’.
 
@@ -140,7 +140,7 @@
       <td lang=el style="text-transform:lowercase">ΌΣΟΣ
     <tr>
       <td colspan=3 style=padding-left:2em>Lower case sigma is ‘σ’ in
-        the middle but ‘ς’ at the end of a word.
+        the middle but ‘ς’ at the end of a word.
   <tbody>
     <tr>
       <td scope=row>uc(‘<span lang=tr>istanbul</span>’)
@@ -155,18 +155,18 @@
       <td lang=tr>ırmak</td>
       <td lang=tr style="text-transform:lowercase">IRMAK
     <tr>
-      <td colspan=3 style=padding-left:2em>Turkish has a dot-less
+      <td colspan=3 style=padding-left:2em>Turkish has a dot-less
         (a.k.a. closed) and dotted ‘i’.
 </table>
 
 
 <h2>Single letter may map to multiple code points</h2>
 
-<p>Above examples show that concepts of a letter or a character may be
-  blurry and confusing.  Is aforementioned ‘ß’ a letter or just
-  a fancy way of writing ‘ss’? ‘sz’? What of ligatures and digraphs?
-  But at least everyone agrees ‘é’ is a single letter, right?  Here it
-  is again: ‘é’, except this time it’s a regular letter e followed by
+<p>Above examples show that concepts of a letter or a character may be
+  blurry and confusing.  Is aforementioned ‘ß’ a letter or just
+  a fancy way of writing ‘ss’? ‘sz’? What of ligatures and digraphs?
+  But at least everyone agrees ‘é’ is a single letter, right?  Here it
+  is again: ‘é’, except this time it’s a regular letter e followed by
   U+0301: <span class=ud>combining acute accent</span>, i.e. ‘e◌́’.
 
 <p>The former, single-code-point representation, is
@@ -182,40 +182,40 @@
   (U+03A9: <span class=ud>Greek capital letter omega</span>), Hebrew
   ‘שׂ‎’ ≈ ‘ש‎◌‎ׂ’ and more.
 
-<p>Based on canonical equivalence, Unicode defines a Normalised Form
-  C (NFC) and Normalised Form D (NFD).  The former often uses
+<p>Based on canonical equivalence, Unicode defines a Normalised Form
+  C (NFC) and Normalised Form D (NFD).  The former often uses
   precomposed while the latter uses decomposed representation of
   characters.
 
 <p>Oh, and by the way, aforementioned <span class=ud>Ohm
   sign</span> is <dfn>a singleton</dfn> which means that it disappears
-  from the text after any kind of normalisation.  There’s a bunch of
+  from the text after any kind of normalisation.  There’s a bunch of
   those.
 
-<p>‘Converting to NFC’, a hopeful programmer will say, ‘guarantees that a single
+<p>‘Converting to NFC’, a hopeful programmer will say, ‘guarantees that a single
   letter maps to no more than one code point!’ Alas, no… For example, no Unicode
-  character for ‘ḍ̇’ (i.e. letter d with dot above and below) exists.  No matter
+  character for ‘ḍ̇’ (i.e. letter d with dot above and below) exists.  No matter
   what form is used, the character must take more than one code point.
 
-<p>NFC is not even guaranteed to be the shortest representation of a given string.  We’ve already seen that
+<p>NFC is not even guaranteed to be the shortest representation of a given string.  We’ve already seen that
   ‘<span dir=ltr>שׂ</span>’ is canonically equivalent to
   ‘<span dir=ltr>ש◌ׂ</span>’ but what’s more interesting is that
   the latter is in NFC.  Yes, even thought precomposed
   character exists, decomposed representation is in NFC.  In fact, for
   <span class=ud>Hebrew letter shin with sin dot</span> normalised
-  forms C and D are the same.
+  forms C and D are the same.
 
 <p>As to not leave an impression that NFC is the odd ball here, even
   though NFD usually decomposes precomposed characters, it not always
-  does so. ‘ø’ (U+00F8: <span class=ud>Latin small letter o with
-  stroke</span>) is in its NFD (as a single code-point) even though
-  a decomposed representation with a combining stroke also exists.
+  does so. ‘ø’ (U+00F8: <span class=ud>Latin small letter o with
+  stroke</span>) is in its NFD (as a single code-point) even though
+  a decomposed representation with a combining stroke also exists.
 
-<p>There’s also a <dfn>compatibility equivalence</dfn> which can be
+<p>There’s also a <dfn>compatibility equivalence</dfn> which can be
   thought of as covering ‘meaning’ of strings.  For example ‘ﬁ’
   (U+FB01: <span class=ud>Latin small ligature fi</span>) means the
-  same thing as ‘f + i’, ‘ǆ ∼ d + z + ◌̌’ etc.  This is a bit simplified
-  view though since ‘5²’ has a distinct meaning from ‘52’ yet the
+  same thing as ‘f + i’, ‘ǆ ∼ d + z + ◌̌’ etc.  This is a bit simplified
+  view though since ‘5²’ has a distinct meaning from ‘52’ yet the
   sequences are in the same compatibly equivalence class.
 
 
@@ -245,8 +245,8 @@
   unit, it often more than makes up for octets ‘lost’ when encoding
   ideographs.
 
-<p>To see just how big of a role this effect plays in real life
-  I looked at a bunch of websites popular in China, Japan and South
+<p>To see just how big of a role this effect plays in real life
+  I looked at a bunch of websites popular in China, Japan and South
   Korea and compared their size (in kibibytes) when different
   encodings were used.  The results are as follows:
 
@@ -277,7 +277,7 @@
 <p>Yes, in the worst case, baidu.com’s size nearly <em>doubled</em>
   when using UTF-16.
 
-<p>If size is a concern, one might decide to use a dedicated encoding
+<p>If size is a concern, one might decide to use a dedicated encoding
   such us Shift_JIS, version of EUC or GB2312.  And indeed, some sites
   did that, but even then advantage over UTF-8 was minimal:
 
@@ -297,11 +297,11 @@
     <tr><td>taobao.com    (gbk)      <td class=r> 39<td class=r> 40<td class=r>1.8%
 </table>
 
-<p>Truth of the matter is that to save space a technique independent
+<p>Truth of the matter is that to save space a technique independent
   of Unicode should be used.  One that has been around for years and
   any modern browser supports: compression.  And this is also true for
-  storage.  Even with a dense file with virtually no markup
-  (e.g. a double newline separating paragraphs as the only ASCII
+  storage.  Even with a dense file with virtually no markup
+  (e.g. a double newline separating paragraphs as the only ASCII
   characters) it is far better to simply compress the file then try to
   mess around with encoding.
 
@@ -311,30 +311,30 @@
 <p>Total of 137 468 code points (U+E000…U+F8FF in BMP, U+F0000…U+FFFFD
   in plane 15 and U+100000…U+10FFFD in plane 16) are reserved for
   private use.  In other words, the standard will never assign any
-  meaning to them.  If used in a data being interchanged, all parties
-  must agree on a common interpretation or else unexpected results
+  meaning to them.  If used in a data being interchanged, all parties
+  must agree on a common interpretation or else unexpected results
   (maybe even corrupted data) may happen.
 
 <p>This describes situation with Apple logo.  When within realms of
   Cupertino controlled software, U+F8FF is an Apple logo, but outside
-  in the world of the free (or at least freer) it’s usually a code
+  in the world of the free (or at least freer) it’s usually a code
   point with no representation or meaning.
 
 <p>In other words, just don’t use U+F8FF.
 
 <p>Fruit fans should not despair though but rather find consolation in
-a <span class=ud>red apple</span> (🍎, U+1F34E), a <span class=ud>green
-apple</span> (🍏, U+1F34F) and even a <span class=ud>pineapple</span> (🍍,
+a <span class=ud>red apple</span> (🍎, U+1F34E), a <span class=ud>green
+apple</span> (🍏, U+1F34F) and even a <span class=ud>pineapple</span> (🍍,
 U+1F34D which isn’t even an apple nor grows on pine trees).
 
 
 <h2>Shortening text isn’t quite as easy as you might think</h2>
 
 <p>Speaking of Apple, removing characters from the end of Unicode string may
-  expand its rendered representation.  Tom Scott made a video about it so rather
+  expand its rendered representation.  Tom Scott made a video about it so rather
   than duplicating all of his observations, I’ll just point to
   <a href="https://www.youtube.com/watch?v=hJLMSllzoLA">his work on
-  the subject</a>.  It’s not a long video and is worth the watch.
+  the subject</a>.  It’s not a long video and is worth the watch.
 
 
 <h2>Conclusion</h2>
@@ -343,7 +343,7 @@ U+1F34D which isn’t even an apple nor grows on pine trees).
   of emojis and skin tone modifiers makes the standard so much more…
   interesting to name just one aspect.
 
-<p>But even with a limited exposure to the standard this article
+<p>But even with a limited exposure to the standard this article
   showed Unicode is like localisation: it’s complicated, hard to get
   right and best left to professionals.  And said poor souls, when
   implement Unicode text handling, should remember to
@@ -352,12 +352,12 @@ U+1F34D which isn’t even an apple nor grows on pine trees).
 <p>Next, accessing code points by index never makes sense.  Code point
   at position <var>n</var> does <em>not</em> correspond
   to <var>n</var>th character nor does it correspond to <var>n</var>th
-  glyph.  To take a sub-string of a Unicode text it needs to be
+  glyph.  To take a sub-string of a Unicode text it needs to be
   interpreted from the beginning and having random access to each code
   point doesn’t speed anything up.
 
 <p>And finally, don’t be fooled by false UTF-16 propaganda.  The encoding
   combines disadvantages of UTF-8 (being variable-length) with
-  disadvantages of UTF-32 (taking up a lot of space) and as such is
+  disadvantages of UTF-32 (taking up a lot of space) and as such is
   the worst possible solution for Unicode text.  Just use UTF-8
   everywhere and be done with it.

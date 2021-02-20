@@ -4,7 +4,7 @@
 <!-- categories: Articles, Misc, Techblog -->
 
 <p>Anyone working in a big corporation must have been hit by some
-“funny” mail from a coworker that helps everyone gets through the
+‘funny’ mail from a coworker that helps everyone gets through the
 day.  No different at my office — at one point all
 engineers have been challenged to write the shortest code in
 C that prints all prime numbers (and only prime numbers) less
@@ -14,7 +14,7 @@ than a hundred each on separate line.</p>
 may choose to think about it while <a
 href="http://xkcd.com/303/">their code’s compiling</a>.</p>
 
-<p>Of course, a “C program” needs not to be taken too seriously —
+<p>Of course, a ‘C program’ needs not to be taken too seriously —
 depending on not too far fetched undefined behaviours of given
 implementation is all right (but please do not use <code>system</code>
 or <code>exec</code> family of calls ;) ).</p>
@@ -51,7 +51,7 @@ language.</p>
 actually quite all right since C89 defaults function’s return type to
 <code>int</code>.</p>
 
-<p><b>Old function prototype</b>.  This is not the only “problem” with
+<p><b>Old function prototype</b>.  This is not the only ‘problem’ with
 the function though.  <code>main</code>’s prototype lacks also argument
 types.  This is also a perfectly valid C syntax.  In original design
 types were not part of function declaration and, not to break old code,
@@ -112,7 +112,7 @@ int main(void);</pre>
 defined as having type <code>int</code>.  This is the first place were
 undefined behaviour is introduced.  Theoretically, undefined behaviour
 can lead to anything, including daemons coming out of your nose, but
-because in most (for some definitions of “most”) implementations
+because in most (for some definitions of ‘most’) implementations
 <code>sizeof(int)</code> is no smaller than <code>sizeof(char *)</code>,
 passing convention for the two type is compatible and <code>int</code> has
 no trap representations, we are in the clear.</p>
@@ -165,9 +165,9 @@ int main(void) {
 
 <p><b>Lack of return</b>.  The last issue with the prime number
 printing code is the lack of return statement.  C99 specifies that
-“reaching the <code>}</code> that terminates the <code>main</code> function
-returns a value of zero.”  One cannot hide behind C99 though since the
-code uses various C89 only “features” (implicit type, implicit
+‘reaching the <code>}</code> that terminates the <code>main</code> function
+returns a value of zero.’  One cannot hide behind C99 though since the
+code uses various C89 only ‘features’ (implicit type, implicit
 function declaration, etc).  Yes, this is another undefined behaviour
 in the code.</p>
 
@@ -210,7 +210,7 @@ entry.</p>
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Ha! Actually, modifying your code I got down to 60. ;) Hint: Does you need the literal “1” value in the source code?</p>
+<p>Ha! Actually, modifying your code I got down to 60. ;) Hint: Does you need the literal <code>1</code> value in the source code?</p>
 
 <!-- COMMENT -->
 <!-- date: 2010-12-13 11:54:38 -->

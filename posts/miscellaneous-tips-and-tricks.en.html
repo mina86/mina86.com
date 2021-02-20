@@ -5,32 +5,32 @@
 
 <p>Don’t you hate when you need to do something you had done before,
 but cannot remember how exactly?  I’ve been in that situation several
-times and sometimes looking up for a correct method turned out
+times and sometimes looking up for a correct method turned out
 considerably harder than it should.  To alleviate the need for future
-Googling, here’s a bag of notes I can reference easily:
+Googling, here’s a bag of notes I can reference easily:
 
 <ul>
   <li><a href=/2014/miscellaneous-tips-and-tricks/#chrome>Getting past Chrome certificate error</a>
-  <li><a href=/2014/miscellaneous-tips-and-tricks/#gitgc>“Compressing” git repository</a>
+  <li><a href=/2014/miscellaneous-tips-and-tricks/#gitgc>‘Compressing’ git repository</a>
   <li><a href=/2014/miscellaneous-tips-and-tricks/#author>Changing commits author</a>
-  <li><a href=/2014/miscellaneous-tips-and-tricks/#letter>How to start a letter in English</a>
-  <li><a href=/2014/miscellaneous-tips-and-tricks/#sum>Summing numbers in a column in Emacs</a>
+  <li><a href=/2014/miscellaneous-tips-and-tricks/#letter>How to start a letter in English</a>
+  <li><a href=/2014/miscellaneous-tips-and-tricks/#sum>Summing numbers in a column in Emacs</a>
 </ul>
 
 <p>Looking for Python stuff?  Those are now in separate post:
 <ul>
   <li><a href=/2016/python-tricks/#date>Converting date to timestamp</a>
   <li><a href=/2016/python-tricks/#rise>Re-rising Python exception preserving back-trace</a>
-  <li><a href=/2016/python-tricks/#flatten>Flattening a list in Python</a>
+  <li><a href=/2016/python-tricks/#flatten>Flattening a list in Python</a>
 </ul>
 
 <!-- EXCERPT -->
 
 <h2 id=chrome>Getting past Chrome certificate error</h2>
 
-<p>Chrome does not let people go to websites with invalid certificates.  Proper web browsers usually have an “I know, get me there anyway” button, but Chrome makes this option a little more hidden. If you ever find a need to visit a site without valid certificate, on the Chrome error message screen <b>type “proceed”</b> or if that does not work <b>type “danger”</b>. Which word needs to by typed depends on kind of error I think. Whatever, just try both.
+<p>Chrome does not let people go to websites with invalid certificates.  Proper web browsers usually have an ‘I know, get me there anyway’ button, but Chrome makes this option a little more hidden. If you ever find a need to visit a site without valid certificate, on the Chrome error message screen <b>type “proceed”</b> or if that does not work <b>type “danger”</b>. Which word needs to by typed depends on kind of error I think. Whatever, just try both.
 
-<h2 id=gitgc>“Compressing” git repository</h2>
+<h2 id=gitgc>‘Compressing’ git repository</h2>
 
 <p>By now everyone should know that the <code>--aggressive</code> flag of <code>git gc</code> is not to be used. In general git should handle pack file effectively, but what if you <em>really</em> want to try and squeeze every byte out of it?
 
@@ -44,28 +44,28 @@ Googling, here’s a bag of notes I can reference easily:
 
 <h2 id=author>Changing commit author</h2>
 
-<p>On the topic of git, to change author of a commit simply run:
+<p>On the topic of git, to change author of a commit simply run:
 
 <pre>git commit --amend --author "Jane Doe &lt;jane@doe.com&gt;"</pre>
 
-<p>(Yeah, I know, this is obvious, but I keep forgetting that <code>--author</code> option exists).</p>
+<p>(Yeah, I know, this is obvious, but I keep forgetting that <code>--author</code> option exists).</p>
 
-<h2 id=letter>How to start a letter in English</h2>
+<h2 id=letter>How to start a letter in English</h2>
 
-<p>This one is hard to find because the Internet is filled with pages that give too much information where all I need to know is proper salutation and valediction.  Here it is: If you <strong>do not know</strong> the name of the person you are writing to:
+<p>This one is hard to find because the Internet is filled with pages that give too much information where all I need to know is proper salutation and valediction.  Here it is: If you <strong>do not know</strong> the name of the person you are writing to:
 
 <blockquote><p>Dear Sir or Madam,
-<p>I am writing to inform you of a fire that has broken out on the premises of 123 Cavendon Road…
+<p>I am writing to inform you of a fire that has broken out on the premises of 123 Cavendon Road…
 <p>Yours faithfully,<br>John Smith</blockquote>
 
 <p>If you <strong>know the name</strong> of the person you are writing to:
 
 <blockquote><p>Dear Ms. Doe,
-<p>I am writing to inform you of a fire that has broken out on the premises of 123 Cavendon Road…
+<p>I am writing to inform you of a fire that has broken out on the premises of 123 Cavendon Road…
 <p>Yours sincerely,<br>John Smith</blockquote>
 
-<p>Polish speakers might note that — since English has a nonsensical typography and orthography rules — the salutation finishes with a comma even though the next paragraph starts with a capital letter.  In languages which make more sense (e.g. Polish), the salutation is closed with a period.
+<p>Polish speakers might note that — since English has a nonsensical typography and orthography rules — the salutation finishes with a comma even though the next paragraph starts with a capital letter.  In languages which make more sense (e.g. Polish), the salutation is closed with a period.
 
-<h2 id=sum>Summing numbers in a column in Emacs</h2>
+<h2 id=sum>Summing numbers in a column in Emacs</h2>
 
 <p>Select column containing the numbers to sum and simply invoke <code>C-u C-x * :</code>.
