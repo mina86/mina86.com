@@ -1,0 +1,90 @@
+<!-- subject: Reading stdin with Emacs Client -->
+<!-- date: 2021-02-21 17:17:03 -->
+<!-- tags: emacs -->
+<!-- categories: Articles, Techblog -->
+
+<p>One feature Emacs doesn’t have out of the box is reading data from standard
+  input.  Trying to open <code>-</code> (e.g. <code>echo stdin | emacs -</code>)
+  results in Emacs complaining about unknown option (if it ends up starting in
+  graphical mode) or that ‘standard input is not a tty’ (when starting in
+  terminal).
+
+<p>With sufficiently advanced shell one potential solution is
+  the <code>--insert</code> flag paired with command substitution: <code>echo
+  stdin | emacs --insert &lt;(cat)</code>.  Sadly, it’s not a panacea.  It
+  messes up initial buffer (and thus may break setups with
+  custom <code>initial-buffer-choice</code>) and doesn’t address the issue of
+  standard input not being a tty when running Emacs in terminal.
+
+<p>For me the biggest problem though is that it isn’t available when using
+  emacsclient.  Fortunately, as <a href=/2021/emacs-remote/#security>previously
+  mentioned</a> the Emacs Server protocol allows for far more than just
+  instructions to open a file.  Indeed, my solution to the problem revolves
+  around the use of <code>--eval</code> option:
+
+<pre>
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+my @args = @ARGV;
+if (!@args) {
+	my $data;
+	$data = join '', &lt;STDIN&gt;;
+	$data =~ s/\\/\\\\/g;
+	$data =~ s/"/\\"/g;
+	$data = &lt;&lt;ELISP;
+(let ((buf (generate-new-buffer "*stdin*")))
+  (switch-to-buffer buf)
+  (insert "$data")
+  (goto-char (point-min))
+  (x-focus-frame nil)
+  (buffer-name buf))
+ELISP
+	@args = ('-e', $data);
+}
+
+exec 'emacsclient', @args;
+die "emacsclient: $!\n";
+</pre>
+
+<p>People allergic to Perl may find this Python version more palatable:
+
+<!-- EXCERPT -->
+
+<pre>
+#!/usr/bin/python3
+
+import os
+import re
+import sys
+
+args = sys.argv[1:]
+if not args:
+        data = sys.stdin.read()
+        data = data.replace('\\', '\\\\').replace('"', '\\"')
+        data = ('(let ((buf (generate-new-buffer "*stdin*")))'
+                '(switch-to-buffer buf)'
+                '(insert "' + data + '")'
+                '(goto-char (point-min))'
+                '(x-focus-frame nil)'
+                '(buffer-name buf))')
+        args = ('-e', data)
+
+os.execlp('emacsclient', 'emacsclient', *args)
+</pre>
+
+<p>Usage is straightforward.  When called without arguments, the script will
+  read standard input and insert it’s content into a fresh <code>*pipe*</code>
+  Emacs buffer.  When called with arguments, they are passed unchanged to
+  emacsclient.
+
+<p>This isn’t the only approach of course and it is limited to how large the
+  input can be.  On Linux the maximum it can cope is roughly 131 kB.  That
+  should be plenty for many use cases but it case it’s not a different way to
+  deal with the issue would be to store standard input in a temporary file.
+  While it may even be more efficient,
+  I often <a href="/2021/emacs-remote-sshfs/">use Emacs from remote hosts</a>
+  and not having to deal with path name confusion is an advantage of the above
+  scripts.
