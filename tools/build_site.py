@@ -55,8 +55,8 @@ TRANSLATIONS = {
     'Everything': {'pl': 'Wszystko'},
     'Articles': {'pl': 'Artykuły'},
     'Downloads': {'pl': 'Do pobrania'},
-    'English': {'pl': 'Po angielsku'},
-    'Polish': {'pl': 'Po polsku'},
+    'In English': {'pl': 'Po angielsku'},
+    'In Polish': {'pl': 'Po polsku'},
     'Misc': {'pl': 'Różne'},
     'Reviews': {'pl': 'Recenzje'},
     'Site News': {'pl': 'Aktualności'},
@@ -168,6 +168,10 @@ class _Group(_Addresable, str):
 
 class Category(_Group):
     _subdir = 'c'
+
+    @property
+    def lang(self):
+        return {'In English': 'en', 'In Polish': 'pl'}.get(self)
 
 
 class Tag(_Group):
@@ -335,11 +339,10 @@ class Site(object):
                         groups.update(t.strip() for t in text.split(','))
 
                 if attr == 'categories' and factory == Post:
-                    groups.discard('English')
                     if 'en' in langs:
-                        groups.add('English')
+                        groups.add('In English')
                     if 'pl' in langs:
-                        groups.add('Polish')
+                        groups.add('In Polish')
 
                 g = getattr(self, '_' + attr)
                 kw[attr] = [g.setdefault(t, f(t)) for t in groups]
@@ -547,6 +550,15 @@ def generate(writer, site):
 
         # Generate category pages
         for cat in site.categories:
+            # When generating pages for In English or In Polish categories,
+            # prefer entries in those languages.  This avoids situation where
+            # posts available in both languages are confusingly shown in the one
+            # preferred by the user (according to their browser configuration)
+            # rather than the one corresponding to the category.  There may
+            # still be a bit of confusion if user clicks on the entry since then
+            # it’ll use their preferred language regardless.
+            Post.PREFERRED_LANGUAGE = cat.lang or lang
+
             filename = cat.filename_for_lang(lang)
             entries = sorted(cat.entries, key=lambda p: p.date, reverse=True)
             write_html(filename, 'index', {
@@ -564,6 +576,7 @@ def generate(writer, site):
                        cat.permalink)
             writer.write_atom(filename, entries, href=cat.href, feed_id=feed_id,
                               title=T(cat))
+        Post.PREFERRED_LANGUAGE = lang
 
         # Generate pagination pages (10 entries per page)
         i = 0
