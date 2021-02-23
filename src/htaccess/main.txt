@@ -31,7 +31,8 @@ RewriteRule ^(?:apple-)?touch-icon.png(?:-precomposed)?$ \
 Options +MultiViews
 DirectoryIndex index
 
-LanguagePriority pl en
+LanguagePriority en pl
+ForceLanguagePriority Prefer Fallback
 AddLanguage pl .pl
 
 # Serve proper charset information
