@@ -1,7 +1,6 @@
 {%- extends 'base.html' -%}
 
 {%- block main -%}
-  {{ prev_next() }}
   {% for entry in entries %}
     {{ post(entry, false) }}
   {% endfor %}

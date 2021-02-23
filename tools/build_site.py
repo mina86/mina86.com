@@ -69,18 +69,17 @@ TRANSLATIONS = {
     # Text in templates
     'Contact': {'pl': 'Kontakt'},
     'Categories': {'pl': 'Kategorie'},
-    'Atom feed': {'pl': 'Kanał Atom'},
 
-    '<u>p</u>revious:': {'pl': '<u>p</u>oprzedni wpis:'},
-    '<u>p</u>revious page': {'pl': '<u>p</u>oprzedna strona'},
-    '<u>n</u>ext:': {'pl': '<u>n</u>astępny wpis:'},
-    '<u>n</u>ext page': {'pl': '<u>n</u>astępna strona'},
+    'previous page': {'pl': 'poprzedna strona'},
+    'next page': {'pl': 'następna strona'},
 
     'Permanent link to the entry.': {'pl': 'Stabilny link do wpisu.'},
     'See comments': {'pl': 'Zobacz komentarze'},
     'Continue reading': {'pl': 'Czytaj dalej'},
     'In categories:': {'pl': 'Kategorie:'},
     'Tagged with:': {'pl': 'Tagi:'},
+
+    'Resume': {'pl': 'CV'},
 
     # Social
     'Tweet': {'pl': 'Ćwierknij'},
@@ -100,9 +99,7 @@ MONTHS_PL = (None, 'stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca',
 
 
 def format_byline(lang, author, email, date):
-    author = '<span data-email="{}">{}</span>'.format(
-        email.replace('<', '&lt').replace('&', '&amp;'),
-        author.replace('<', '&lt').replace('&', '&amp;'))
+    author = author.replace('&', '&amp;').replace('<', '&lt')
 
     day = date.day
     month = date.month

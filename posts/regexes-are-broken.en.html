@@ -11,12 +11,12 @@
 
 <figure>
   <svg width="32em" height="5.6em" viewBox="0 0 320 56" style="max-width: 90%"
-       stroke-width="2" stroke="currentcolor">
+       stroke-width="2" stroke="var(--e)">
     <path d="M 14,28 h 100  c 10,0 10,-15 20,-15  h 52
                             c 10,0 10, 15 20, 15  h 100
              M 114,28       c 10,0 10, 15 20, 15  h 52
                             c 10,0 10,-15 20,-15" fill="none" />
-    <g stroke-width="1" fill="#b6ccee">
+    <g stroke-width="1" fill="var(--j)">
       <rect x="142" y="1"  width="36" height="24" rx="3" ry="3" />
       <rect x="134" y="31" width="52" height="24" rx="3" ry="3" />
     </g>
@@ -27,7 +27,7 @@
       <tspan x="160" y="44">foobar</tspan>
     </text>
     <circle cx="8"   cy="28" r="6" fill="none"/>
-    <circle cx="312" cy="28" r="6" fill="#004a17"/>
+    <circle cx="312" cy="28" r="6" fill="var(--e)"/>
   </svg>
 </figure>
 
@@ -63,38 +63,38 @@
 <table>
   <thead><th>Tool<th>Result
   <tbody>
-    <tr><th class=lt>BusyBox 1.29 AWK, grep &amp; sed
+    <tr><th class=l>BusyBox 1.29 AWK, grep &amp; sed
         <td>✓ Pass, with and without <code>-E</code>
-    <tr><th class=lt>GNU AWK 5.1, grep 3.6 &amp; sed 4.7
+    <tr><th class=l>GNU AWK 5.1, grep 3.6 &amp; sed 4.7
         <td>✓ Pass, with and without <code>-E</code>
-    <tr><th class=lt>GNU grep 3.6 with <code>-P</code> <small>(PCRE)</small>
+    <tr><th class=l>GNU grep 3.6 with <code>-P</code> <small>(PCRE)</small>
         <td>✗ Failure
   <tbody>
-    <tr><th class=lt>Emacs 28.0.50                     <td>✗ Failure
+    <tr><th class=l>Emacs 28.0.50                     <td>✗ Failure
   <tbody>
-    <tr><th class=lt>C (<code>regex.h</code>, glibc 2.31)
+    <tr><th class=l>C (<code>regex.h</code>, glibc 2.31)
         <td>✓ Pass, with and without <code>REG_EXTENDED</code>
-    <tr><th class=lt>C++ (libstdc++ 10.2 &amp; libc++ 10.0)
+    <tr><th class=l>C++ (libstdc++ 10.2 &amp; libc++ 10.0)
         <td>✗ Failure when using the default (<code>ECMAScript</code>)<br>
             ✓ Pass when using other formats
-    <tr><th class=lt>C++ RE2                       <td>✗ Failure
-    <tr><th class=lt>Java (OpenJDK 11)             <td>✗ Failure
-    <tr><th class=lt>Rust (<code>regex</code> 1.4) <td>✗ Failure
+    <tr><th class=l>C++ RE2                       <td>✗ Failure
+    <tr><th class=l>Java (OpenJDK 11)             <td>✗ Failure
+    <tr><th class=l>Rust (<code>regex</code> 1.4) <td>✗ Failure
   <tbody>
-    <tr><th class=lt>JavaScript Carakan <small>(Opera 12.16)</small>      <td>✗ Failure
-    <tr><th class=lt>JavaScript Chakra <small>(Edge 90)</small>           <td>✗ Failure
-    <tr><th class=lt>JavaScript SpiderMonkey <small>(Firefox 78)</small>  <td>✗ Failure
-    <tr><th class=lt>JavaScript V8 <small>(Chromium 88, Opera 74)</small> <td>✗ Failure
+    <tr><th class=l>JavaScript Carakan <small>(Opera 12.16)</small>      <td>✗ Failure
+    <tr><th class=l>JavaScript Chakra <small>(Edge 90)</small>           <td>✗ Failure
+    <tr><th class=l>JavaScript SpiderMonkey <small>(Firefox 78)</small>  <td>✗ Failure
+    <tr><th class=l>JavaScript V8 <small>(Chromium 88, Opera 74)</small> <td>✗ Failure
   <tbody>
-    <tr><th class=lt>CPython 2.7 &amp; 3.9         <td>✗ Failure
-    <tr><th class=lt>PyPy 7.2 (Python 2 &amp; 3)   <td>✗ Failure
-    <tr><th class=lt>Jython 2.7                    <td>✗ Failure
+    <tr><th class=l>CPython 2.7 &amp; 3.9         <td>✗ Failure
+    <tr><th class=l>PyPy 7.2 (Python 2 &amp; 3)   <td>✗ Failure
+    <tr><th class=l>Jython 2.7                    <td>✗ Failure
   <tbody>
-    <tr><th class=lt>PHP 8.0 &amp; 5.6 <code>preg</code>    <td>✗ Failure
-    <tr><th class=lt>PHP 8.0 &amp; 5.6 <code>mb_ereg</code> <td>✗ Failure
-    <tr><th class=lt>PHP 5.6 <code>ereg</code>              <td>✓ Pass
+    <tr><th class=l>PHP 8.0 &amp; 5.6 <code>preg</code>    <td>✗ Failure
+    <tr><th class=l>PHP 8.0 &amp; 5.6 <code>mb_ereg</code> <td>✗ Failure
+    <tr><th class=l>PHP 5.6 <code>ereg</code>              <td>✓ Pass
   <tbody>
-    <tr><th class=lt>Ruby 2.7                          <td>✗ Failure
+    <tr><th class=l>Ruby 2.7                          <td>✗ Failure
 </table>
 
 <p>PHP’s <code>ereg</code> stands out with it passing the checks.  That is to be

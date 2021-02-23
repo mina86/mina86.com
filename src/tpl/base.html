@@ -15,76 +15,64 @@
 
 {%- macro link(rel, href, title='') -%}
   {%- if href -%}
-    <link rel="{{ rel }}" href="{{ href }}"
-          {%- if title %} title="{{ title }}"
-          {%- endif %}>
+    <link rel="{{ rel }}" href="{{ href }}" {{ attr('title', title) }}>
   {%- endif -%}
 {%- endmacro -%}
 
 {%- macro social(entry) -%}
-  <div class="s">
-    <a href="https://twitter.com/intent/tweet?text={{
-         entry.subject | urlencode
-       }}&amp;url=https://mina86.com{{
-         entry.href | urlencode
-       }}{% if entry.tags -%}
-         &amp;hashtags={{ entry.tags | join(',') | urlencode }}
-       {%- endif -%}" target=_blank rel=noopener class=x>{{ T('Tweet') }}</a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=https://mina86.com{{
-         entry.href | urlencode
-       }}" target=_blank rel=noopener class=y>{{ T('Share') }}</a>
-  </div>
+  <ul class="f">
+    <li><a href="https://twitter.com/intent/tweet?text={{
+        entry.subject | urlencode
+      }}&amp;url=https://mina86.com{{
+        entry.href | urlencode
+      }}{% if entry.tags -%}
+        &amp;hashtags={{ entry.tags | join(',') | urlencode }}
+        {%- endif -%}" class=x>{{ T('Tweet') }}</a>
+    <li><a href="https://www.facebook.com/sharer/sharer.php?u=https://mina86.com{{
+        entry.href | urlencode
+      }}" class=z>{{ T('Share') }}</a>
+  </ul>
 {%- endmacro -%}
 
-{%- set _prev_next_accesskeys = [ 1 ] -%}
 {%- macro prev_next() -%}
   {% if prev or next %}
-    <nav class="p">
-      <ul>
-        {%- if prev -%}
-          <li><a href="{{ prev.href }}" rel="prev"
-                   {{ attr('accesskey', 'P', _prev_next_accesskeys[0]) }}
-                   {{ attr('title', prev.title, not prev.subject) }}
-                 >« {% if prev.subject -%}{{
-                          T('<u>p</u>revious:') | safe
-                       }} <i>{{ prev.subject | safe }}</i>
-                    {%- else %} {{ T('<u>p</u>revious page') | safe }}
-                    {%- endif -%}</a>
-        {%- endif -%}
-        {%- if next -%}
-          <li class="r"><a href="{{ next.href }}" rel="next"
-                   {{ attr('accesskey', 'N', _prev_next_accesskeys[0]) }}
-                   {{ attr('title', next.title, not next.subject) }}
-                 >{%- if next.subject -%}{{
-                           T('<u>n</u>ext:') | safe
-                       }} <i>{{ next.subject | safe }}</i>
-                  {%- else %}{{ T('<u>n</u>ext page') | safe }}
-                  {%- endif %} »</a>
-         {%- endif -%}
-      </ul>
-    </nav>
-    {%- set _ = _prev_next_accesskeys.__setitem__(0, 0) -%}
+    <ul id=p>
+      {%- if next -%}
+        <li><a href="{{ next.href }}" rel="next"
+                 {{ attr('title', next.title, not next.subject) }}
+               >« {% if next.subject -%}<i>{{ next.subject | safe }}</i>
+                  {%- else %}{{ T('next page') | safe }}
+                  {%- endif %}</a>
+       {%- endif -%}
+      {%- if prev -%}
+        <li class="r"><a href="{{ prev.href }}" rel="prev"
+                 {{ attr('title', prev.title, not prev.subject) }}
+               >{% if prev.subject -%}<i>{{ prev.subject | safe}}</i>
+                {%- else %} {{ T('previous page') | safe }}
+                {%- endif %} »</a>
+      {%- endif -%}
+    </ul>
   {% endif %}
 {%- endmacro -%}
 
 {%- macro post(entry, post_page) -%}
 {%- set full = post_page or not entry.body.has_excerpt -%}
-  <article {{ attr('class', 'q', full) }}
-           self="{% if not post_page %}{{ entry.href }}{% endif %}">
-
-    <h1><a lang="{{ entry.lang }}" href=/self
+  <article self="{% if not post_page %}{{ entry.href }}{% endif %}">
+    <h1><a lang="{{ entry.lang }}" href="{{ entry.href }}"
            title="{{ T('Permanent link to the entry.') }}">{{
         entry.subject | safe }}</a></h1>
 
-    <p class="b">{{ byline('Michał ‘mina86’ Nazarewicz', 'mina86@mina86.com',
+    <p class="y">{{ byline('Michał ‘mina86’ Nazarewicz', 'mina86@mina86.com',
                            entry.date) }}
 
-    <div class=t lang="{{ entry.lang }}">{{ entry.body.html(post_page) }}
+    <div class="{% if full %}q {% endif %} t" lang="{{ entry.lang }}">{{
+      entry.body.html(post_page)
+    }}</div>
 
-    <footer class="g">
+    <aside>
       {%- if not post_page -%}
         {%- if entry.body.has_excerpt -%}
-          <a href="{{ entry.href }}#m">{{ T('Continue reading') }} »</a>
+          <a href="{{ entry.href }}">{{ T('Continue reading') }} »</a>
         {%- else -%}
           <a href="{{ entry.href }}#c">{{ T('See comments') }} »</a>
         {%- endif -%}
@@ -92,36 +80,37 @@
 
       {{ social(entry) }}
 
-      <div class="i">
+      {%- if entry.categories -%}
         <ul>
-          <li><a href=/self title="Permanent link to the entry.">permlink</a>
-        </ul>
-        <p>{{ T('In categories:') }}
-        <ul>
-          {% for cat in entry.categories %}
+          <li class=lb>{{ T('In categories:') }}
+          {%- for cat in entry.categories -%}
             <li><a href="{{ cat.href }}" rel="category">{{ T(cat) }}</a>
-          {% endfor %}
+          {%- endfor -%}
         </ul>
-        {% if entry.tags %}
-          <p>{{ T('Tagged with:') }}
-          <ul>
-            {% for tag in entry.tags %}<li>{{ tag }}{% endfor %}
-          </ul>
-         {% endif %}
-      </div>
-
-    </footer>
-
+      {%- endif %}
+      {%- if entry.tags -%}
+        <ul>
+          <li class=lb>{{ T('Tagged with:') }}
+          {%- for tag in entry.tags %}<li>{{ tag }}{% endfor -%}
+        </ul>
+      {%- endif -%}
+    </aside>
   </article>
 {%- endmacro -%}
 
 <!DOCTYPE html>
 <!--!github.com/mina86/mina86.com-->
 <html lang={{ lang }}>
+<!-- As part of updating the scheme we store the style of HTML element in
+     localStorage.  Read it and apply it as early as possible to avoid page
+     blinking. -->
+<script>document.documentElement.style=localStorage.getItem('c')||'';</script>
 <meta charset=UTF-8>
-<meta name=viewport content="width=device-width, initial-scale=1">
+<meta name=viewport content="width=device-width,initial-scale=1">
 <title>{% if title %}{{ title | striptags }} ― {% endif %}mina86.com</title>
 <link rel="stylesheet" href="/d/css.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="/d/head-font.woff2" as=font crossorigin>
 <link rel="icon" sizes="192x192" href="/d/192.png">
 {% block meta_links %}
   {{ link('home', '/', 'mina86.com') }}
@@ -136,42 +125,48 @@
   }}{% endif %}
 {% endblock %}
 <script defer src=/d/js.js></script>
+<script defer src=/d/g></script>
 {%- if (entry and entry.body.needs_math) or
        (entries and (entries | selectattr('body.excerpt_needs_math') | first)) -%}
-<script defer
+<script async
         src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js></script>
 {%- endif -%}
 
-<header id="h">
-  <div class=w>
-    <h1 role=presentation><a href="/"><span>mina86</span>.com</a></h1>
-    <nav>
-      <ul>
-        {%- if lang == 'pl' -%}
-          <li><a accesskey="H" href="/">Główna</a>
-          <li><a accesskey="D" href="https://github.com/mina86/">Ko<u>d</u></a>
-          <li><a accesskey="F" href="/c/downloads/">Pliki</a>
-          <li class=d><a accesskey="N" href=#n>Ko<u>n</u>takt</a>
-          <li class=d><a accesskey="C" href=#l>Kategorie</a>
-        {%- else -%}
-          <li><a accesskey="H" href="/"><u>H</u>ome</a>
-          <li><a accesskey="D" href="https://github.com/mina86/">Co<u>d</u>e</a>
-          <li><a accesskey="F" href="/c/downloads/"><u>F</u>iles</a>
-          <li class=d><a accesskey="N" href=#n>Co<u>n</u>tact</a>
-          <li class=d><a accesskey="C" href=#l><u>C</u>ategories</a>
-        {%- endif -%}
-      </ul>
-    </nav>
-  </div>
+<header id=h>
+  <ul>
+    <li class=d><h1><a href="/">mina86.com</a></h1>
+    <li class=b><a href="#k">{{ T('Categories') }}</a>
+    <li class=b><a href="https://github.com/mina86">{{ T('Code') }}</a>
+    <li class=b><a href="#n">{{ T('Contact') }}</a>
+  </ul>
 </header>
 
+<main id=b>{% block main %}{% endblock %}</main>
 
-<div id=b>
-  <div class=w>
-    <main id=m>{% block main %}{% endblock %}</main>
-    <nav id=s>{% include '_sidebar.html' %}</nav>
+<nav id=v>
+  <h1>Navigation</h1>
+  <div>
+  <section id="k">
+    <h2>{{ T('Categories') }}</h2>
+    <ul class="m k">
+      {% for cat in categories %}
+      <li>
+        <a href="{{ cat.href }}"
+           {{ attr('class', cat.lang) }}>{{ cat.desc }}</a>
+        <small>({{ cat.count }})</small>
+        {% if cat.feed %}
+        <a href="{{ cat.feed }}" class="a">feed</a>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </section>
+
+
+  <section id=n>
+    <h2>{{ T('Contact') }}</h2><ul class="m n"><li><strong>Michał Nazarewicz</strong><li><a href=mailto:mina86@mina86.com>mina86@mina86.com</a><li><a href=//matrix.to/#/@mina86:matrix.org>@mina86:matrix.org</a><li class=np><a href=/cv>{{ T('Resume') }}</a>  <a href="https://www.linkedin.com/in/mina86/" class=i>LinkedIn</a>
+  </ul></section>
   </div>
-</div>
+</nav>
 
 
 <footer id=f>

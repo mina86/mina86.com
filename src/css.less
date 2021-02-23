@@ -1,57 +1,108 @@
 /*!github.com/mina86/mina86.com*/
 
-/*
- * Classes:
- * - p.nt – a note with some meta information (special licensing information,
- *   note about series, etc.)  Set with smaller font.
- */
+/**** Classes ****/
 
-/* I need something which will automatically choose IDs and classes. */
-/* id:  a     d e       i j k       o p q r   t u v w x y z */
-/* cls:     c   e     h   j k l m   o           u           */
+@atom-cls:             .a; /* Feed links in Categories */
+@header-link-li-cls:   .b; /* LIs in the header excluding site name and cog */
+@header-cog-li-cls:    .c; /* LI in the header with the cog settings link */
+@header-site-li-cls:   .d; /* LI in the header with the H1 with site name */
+/* e */
+@social-links-cls:     .f;
+@code-dd-ul-cls:       .g;
+/* h */
+@linked-in-link-cls:   .i;
+/* j */
+@categories-dd-ul-cls: .k;
+@left-align-cls:       .l; /* text-align: left */
+@drop-down-ul-cls:     .m;
+@contact-dd-ul-cls:    .n;
+/* o, p */
+@full-text-shown-cls:  .q;
+@right-align-cls:      .r; /* text-align: right */
+@selected-dd-lnk-cls:  .s;
+@article-text-cls:     .t;
+/* u, v */
+@hue-slide-cls:        .w;
+@tweet-link-cls:       .x;
+@byline-cls:           .y;
+@fb-link-cls:          .z;
 
-@head-id: #h;  /* Page header. */
-@body-id: #b;  /* Page body (article text, comments, sidebar etc). */
-@foot-id: #f;  /* Page footer. */
+@float-right-cls:      .fr;
+@float-left-cls:       .fl;
+@meta-label-cls:       .lb; /* The ‘In categories:’ / ‘Tagged with:’ label */
+@small-cls:            .sm; /* font-size: @small */
+@news-image-cls:       .nw; /* FIGURE on Site News pages */
+@unicode-name:         .ud;
+@toggle-cls:           .tg;
+@dark-toggle-cls:      .td;
+@contrast-toggle-cls:  .tc;
+@no-print-cls:         .np; /* Don’t print. */
 
-@main-id: #m;  /* Article, comments etc.  In other words, body sans sidebar. */
-@side-id: #s;  /* Sidebar. */
-@pin-cls: .v;  /* Sidebar pinned to the side. */
+/**** Identifiers ****/
 
-@wrap-cls: .w;  /* Wrapper DIV inside @head-id and @body-id elements which
-                   exists to limit the ‘usable’ width. */
+@main-id:          #b; /* The MAIN element */
+@comments-id:      #c; /* Comments under a post */
+@dark-theme-id:    #d; /* ID set on HTML when dark theme is used */
+@foot-id:          #f; /* The footer at the very bottom of the page */
+@head-id:          #h; /* The header */
+@categories-id:    #k; /* The Categories section in bottom nav */
+/* Reserve #m for more links if those ever come back. */
+@contact-id:       #n; /* The Contact section in bottom nav */
+@pagination-id:    #p; /* Pagination at the bottom of a page */
+@shade-id:         #s; /* ID of the shade over the page when drop down shown. */
+@high-contrast-id: #t; /* ID set on BODY when high contrast scheme is used */
+@nav-id:           #v; /* The bottom navigation section */
 
-@dagger-link: #f1;
-@dagger-back-link: #b1;
 
-/* Header elements: */
-/* Last links in header which are hidden when side bar is on the side. */
-@hidden-links-cls: .d;
+/**** Variables ****/
+@bg-colour:           var(--a); @bg-colour-var: --a;
+/* b */
+@fg-low-colour:       var(--c);
+/* d */
+@border-colour:       var(--e);
+@link-colour:         var(--f);
+@visited-colour:      var(--g);
+@hover-colour:        var(--h);
+@code-colour:         var(--i);
+@acc-bg-colour:       var(--j);
+@head-bg-colour:      var(--k);
+@head-colour:         var(--l);
+@nav-bg-colour:       var(--m);
+@nav-colour:          var(--n);
+/* o */
+@nav-link-colour:     @head-colour;
+@nav-hover-colour:    var(--p); @nav-hover-colour-var: --p;
+@nav-header-colour:   var(--q);
+@foot-bg-colour:      var(--r);
+@foot-colour:         var(--s);
+@foot-acc-colour:     var(--t);
+/* u, v */
+@float-with:          var(--w);
+@slide-position:      var(--x, 66%);
+/* y */
+@slide-colour:        var(--z);
 
-/* Main content elements: */
-@pagination-cls: .p;  /* Pagination table. */
-@qed-cls: .q;  /* Article is shown in its entirety. */
-@byline-cls: .b;  /* Byline paragraph. */
-@article-text-cls: .t;  /* Text of the article. */
-@comments-id: #c;  /* Comments  (on pages which have comments). */
-
-@meta-cls: .g;
-@social-cls: .s;
-@tweet-cls: .x;
-@facebook-cls: .y;
-@cats-and-tags-cls: .i;
-
-/* Sidebar sections: */
-@contact-id: #n;  /* Contact section in the sidebar. */
-@categories-id: #l;  /* Categories section in the sidebar. */
-@feed-icon-cls: .f;  /* Class for the feed icon */
-
-/* Generic stuff */
-@right-align-cls: .r;
-@left-align-cls: .lt;
-@news-image: .n;
-@unicode-name: .ud;
-
+@media print {
+	body {
+		color: #000;
+		--a: #fff;
+		--c: #444;
+		--e: #000;
+		--f: #000;
+		--g: #000;
+		--h: #000;
+		--i: #000;
+		--j: #ddd;
+		--m: #fff;
+		--n: #444;
+		--l: #444;
+		--p: #444;
+		--q: #000;
+		--r: #fff;
+		--s: #666;
+		--t: #444;
+	}
+}
 
 /* Sizes based on five-note typographic scale with ratio of two (see
    <http://spencermortensen.com/articles/typographic-scale/>).  Numbers are
@@ -61,56 +112,33 @@
    dimensions. */
 @tiny:     0.75em;   /* =  6/8 ≈ 2^-0.4 */
 @small:    0.875em;  /* =  7/8 ≈ 2^-0.2 */
-@normal:   1em;
 @large:    1.25em;   /* = 10/8 ≈ 2^0.4 */
 @huge:     1.75em;   /* = 14/8 ≈ 2^0.8 */
 @title:    2em;
+@logo:     2.5em;
 
-@cosmic-latte: #fff8e7;  /* https://en.wikipedia.org/wiki/Cosmic_latte */
-@milky-way: #f9f1ff;  /* http://www.news.pitt.edu/milkywaycolor */
 
-// @header-bg: #0844a2;  /* Average of /d/top-img.webp */
-// @bg: @cosmic-latte;
-// @even-bg: @milky-way;
-// @sidebar-bg: #fff;
-// @footer-bg: @header-bg;
+/**** Fonts ****/
 
-/* http://davidjohnstone.net/pages/lch-lab-colour-gradient-picker is quite
-   useful. */
-
-@head-bg: #0844a2;  /* Average colour of /d/top-img.webp */
-@body-bg: #e4f0ff;  /* L* = 95, same a* and b* as @head-bg */
-@side-bg: #b6ccee;  /* Step between @head-bg and @body-bg. */
-
-@text-color: #000000;
-@code-color: #004a17;  /* L* = 20 which is the same as of #333 */
+@body-font: Libre Baskerville, Georgia, Charter, Utopia, serif;
+@mono-font: DejaVu Sans Mono, Source Code Pro, Liberation Mono, Courier New, monospace;
+@sans-font: DejaVu Sans, Noto Sans, Verdana, sans-serif;
+@head-font: M, cursive;
+@icon-font: M, var(--S);
 
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Noto+Sans:ital,wght@0,400;0,700;1,400&display=swap');
 
-@body-font: 'Libre Baskerville', Georgia, Charter, Utopia, serif;
-@mono-font: 'DejaVu Sans Mono', 'Source Code Pro', 'Liberation Mono', 'Courier New', monospace;  /* for <pre> */
-@code-font: 'Noto Sans', Verdana, sans-serif;  /* for <code> and <kbd> */
-@head-font: @code-font;
-@sidebar-width: 14em;
-@content-width: 50em;
-@wrap-width: (@sidebar-width + @content-width);
-
-
-.text-off-screen() {
-	text-indent: 100%;
-	white-space: nowrap;
-	overflow: hidden;
+@font-face {
+	font-family: M;
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url(FIEJygQR.woff2) format('woff2');
+	unicode-range: U+0020-U+007E,U+2304,U+238B,U+1F424;
 }
 
-.grayscale-on() {
-	-webkit-filter: grayscale(1);
-	filter: grayscale(1);
-}
 
-.grayscale-off() {
-	-webkit-filter: none;
-	filter: none;
-}
+/**** Utility mixins ****/
 
 .no-print() {
 	@media print {
@@ -125,481 +153,525 @@
 	padding: 0;
 }
 
+@{drop-down-ul-cls}, @{shade-id} {
+	transition: opacity 0.5s;
+}
+@{shade-id} {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: #0008;
+	opacity: 0;
+	z-index: 5;
+}
 
-html {
-	@media screen, projection, tv, handheld {
-		color: @text-color;
-		background: @body-bg;
-	}
-	font-family: @body-font;
+
+body {
+	background: @bg-colour;
+
+	--S: @sans-font;
+	--B: @body-font;
+	font-family: var(--B);
 	font-variant: common-ligatures oldstyle-nums proportional-nums;
 	text-rendering: optimizelegibility;
-	line-height: 1.5;
+}
+
+text {
+	fill: currentcolor;
 }
 
 
 /**** Page layout ****/
+@media screen {
+	@{main-id} a:after,
+	@{foot-id} a:after,
+	@{header-link-li-cls} > a:after,
+	@{atom-cls},
+	@{linked-in-link-cls},
+	@{code-dd-ul-cls} li::marker {
+		font-family: @icon-font;
+		font-weight: 400;
+	}
 
-@media screen, projection, tv, handheld {
 	html {
 		height: 100%;
+		scrollbar-color: @nav-bg-colour @bg-colour;
+	}
+	body::-webkit-scrollbar {
+		width: .5em;
+	}
+	body::-webkit-scrollbar-track {
+		background: @bg-colour;
+	}
+	body::-webkit-scrollbar-thumb {
+		background: @nav-bg-colour;
+		border-radius: .2rem;
+		border: 1px solid @bg-colour;
 	}
 	body {
 		display: flex;
 		flex-direction: column;
+		align-items: stretch;
 		min-height: 100%;
-	}
-	@{body-id} {
-		flex: 1;
 	}
 
 	@{head-id} {
-		height: 14em;
-	}
-	@{head-id} @{wrap-cls} {
-		height: 100%;
-	}
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
 
-	@{main-id}, @{side-id} section {
-		padding: 1em;
-		max-width: @content-width;
-		margin: 0 auto;
-	}
-	@{side-id} {
-		padding-top: 1em;
-		padding-bottom: 5em;
-	}
+		font-family: var(--S);
+		background: @head-bg-colour;
+		color: @head-colour;
 
-	/* Annoyingly, this rule has to be specified here because if it goes
-	   below where other sidebar rules are, the ‘background: none’ property
-	   in @media just below won’t clear it. */
+		box-shadow: 0 0 0.5rem 0 #000;
 
-	@{side-id} {
-		background: @side-bg;
-	}
-
-	@media (min-width: @wrap-width) {
-		@{wrap-cls} {
-			min-width: @wrap-width;
-			width: 90%;
-			max-width: (@wrap-width + 5em);
-			margin: 0 auto;
-		}
-
-		@{main-id} {
-			float: left;
-			width: @content-width;
-			max-width: @content-width;
-		}
-
-		@{main-id} @{wrap-cls} {
-			padding: 0;
-		}
-
-		@{side-id} {
-			float: right;
-			width: @sidebar-width;
-			background: none;
-			padding: 0;
-		}
-		@{side-id}@{pin-cls} {
-			position: fixed;
-		}
-
-		@{side-id} section {
-			padding: 1em 0.5em;
-		}
-
-		@{body-id} {
-			overflow: auto;
-			padding-bottom: 5em;
-		}
-
-		/* Sticking those here helps with minification: */
-		@{contact-id} li:first-child span { display: block; }
-		@{head-id} li@{hidden-links-cls} { display: none; }
+		height: 4em;
 	}
 }
 
-@{side-id} {
-	a img {
-		.grayscale-on();
-	}
-	a:hover, a:focus {
-		img {
-			.grayscale-off();
-		}
-	}
-}
 
 /**** Links ****/
 
-h1, h2, h3 {
-	page-break-after: avoid;
-	a, a:link, a:hover, a:focus, a:visited {
+a {
+	color: @link-colour;
+	text-decoration: none;
+	border-radius: 4px;
+	text-underline-offset: 0.125rem;
+}
+a:visited {
+	color: @visited-colour;
+}
+a:hover, a:focus {
+	color: @hover-colour;
+}
+h1 a:visited, h1 a:hover, h1 a:focus {
+	color: inherit;
+}
+
+@media screen {
+	@{article-text-cls} a {
+		text-decoration: underline dotted;
+	}
+	article h1 a {
+		text-decoration: none;
 		color: inherit;
+	}
+	main a:hover {
+		text-decoration: underline;
+	}
+	@{article-text-cls}, @{foot-id} {
+		a[href^="https://"]:after,
+		a[href^="http://"]:after,
+		a[href^="//"]:after {
+			content: '⎋';
+			opacity: .75;
+		}
 	}
 }
 
-a {
-	text-decoration: none;
-	color: #00f;
-}
-a:visited {
-	color: #63c;
-}
-a:hover, a:focus {
-	color: #09f;
-	text-decoration: underline;
-}
 
-
-/**** Page header ****/
+/**** Header ****/
 
 @{head-id} {
-	background: @head-bg;
-	font-family: @head-font;
+	.no-print();
+
+	z-index: 9;
+	h1 {
+		font-family: @head-font;
+		font-weight: 400;
+		/* This uses ‘em’ so that it scales as font-size of the header
+		   is changed when page scrolls.  Header’s font-size varies
+		   from 1rem to 0.5rem. */
+		font-size: @logo;
+	}
+	a {
+		color: inherit;
+	}
+	a:hover {
+		color: @nav-colour;
+	}
+	a:focus {
+		outline: none;
+		box-shadow: 0 0 0 2px @head-bg-colour,
+			    0 0 1px 4px @nav-colour;
+	}
+	& > ul {
+		height: 4em;
+		display: flex;
+		align-items: center;
+		width: 60rem;
+		max-width: 100%;
+		margin: 0 auto;
+		& > li {
+			display: inline-block;
+			margin: 0 1rem;
+		}
+		/* Upcase all but the first link.  This works because the first
+		   link has an H1 in between LI and A so this rule doesn’t
+		   match. */
+		& > li > a {
+			font-weight: bold;
+			text-transform: uppercase;
+			font-size: 1rem;
+		}
+	}
+
+	@{header-link-li-cls}:last-child {
+		margin-right: 0;
+	}
+	@{header-site-li-cls} {
+		width: 15rem;
+		margin-right: 2rem;
+	}
+	@{header-cog-li-cls} {
+		margin-left: auto;
+	}
+	/* Hide Code if too narrow */
+	@media (max-width: 45em) {
+		@{header-link-li-cls}:nth-child(3) {
+			display: none;
+		}
+	}
+	/* Hide site name but show Code if even more narrow. */
+	@media (max-width: 35em) {
+		@{header-site-li-cls} {
+			display: none;
+		}
+		@{header-link-li-cls}:nth-child(3) {
+			display: block;
+		}
+	}
+	/* Hide site name and Code if even more narrow. */
+	@media (max-width: 25em) {
+		@{header-link-li-cls}:nth-child(3) {
+			display: none;
+		}
+	}
+
+	@{header-link-li-cls} > a {
+		white-space: nowrap;
+	}
+	@{header-link-li-cls} > a:after {
+		content: ' ⌄';
+	}
+
+	@{header-link-li-cls} a@{selected-dd-lnk-cls}:after {
+		visibility: hidden;
+	}
+}
+
+@{head-id} @{drop-down-ul-cls} {
+	opacity: 0;
+	width: max-content;
+	position: fixed;
+	top: max(3.5em, 2rem);
+	padding: 1rem;
+	box-shadow: 0 0 0.5rem 0.2rem #000;
+	li {
+		font-size: 1rem;
+	}
+}
+
+
+/**** Main ****/
+
+@{main-id} {
+	margin: 5rem auto 8rem;
+	line-height: 2;
+	@media print {
+		margin: 0 0 2rem;
+		line-height: 1.5;
+	}
 
 	h1 {
 		font-size: @title;
-	}
-	h1 span {
-		font-variant: small-caps;
-	}
-
-	@media screen, projection, tv, handheld {
-		background: @head-bg url(/d/top-img.webp) no-repeat;
-		background-size: cover;
-		/* filter: brightness(1.2) blur(5px); */
-
-		@{wrap-cls} {
-			position: relative;
-		}
-
-		h1 {
-			position: absolute;
-			color: @body-bg;
-			top: 20%;
-			left: 2%;
-		}
-
-		nav {
-			position: absolute;
-			bottom: 20%;
-			left: 2%;
-		}
-
-		li {
-			display: inline-block;
-			margin: 0.25em;
-		}
-
-		ul a, ul a:link, ul a:visited {
-			display: inline-block;
-			padding: 0.5em 1em;
-			color: #333;
-			font-weight: 700;
-			white-space: nowrap;
-			background: #fff;
-			background: rgba(255, 255, 255, 0.5);
-			text-decoration: none;
-			border-radius: 0.3em;
-		}
-
-		ul a:hover, ul a:focus {
-			color: #00f;
-			background: -webkit-linear-gradient(bottom, #cff, rgba(255, 255, 255, 0.4));
-			background: -moz-linear-gradient(bottom, #cff, rgba(255, 255, 255, 0.4));
-			background: -o-linear-gradient(bottom, #cff, rgba(255, 255, 255, 0.4));
-			background: rgba(255, 255, 255, 0.4);
-			text-shadow: #000 0.5em 0.5em 1em;
+		font-style: italic;
+		line-height: 1;
+		@media screen {
+			text-shadow: 2px 2px 3px @fg-low-colour;
 		}
 	}
+	h1 code {
+		color: inherit;
+	}
 
-	.no-print();
+	a:focus {
+		outline: none;
+		box-shadow: 0 0 0 2px @bg-colour,
+			    0 0 1px 4px @hover-colour;
+	}
+}
+article, @{main-id} > div, @{pagination-id} {
+	width: min(50rem, 100vw);
+	margin-left: auto;
+	margin-right: auto;
 }
 
+@{byline-cls} {
+	font-size: @small;
+	font-style: italic;
+	color: @fg-low-colour;
+	break-before: avoid;
+}
 
-/**** Main content, text of the article and such ****/
-
+article, aside {
+	clear: both;
+	padding: 0 0.5em;
+}
 article {
-	padding: 2em 0;
-	position: relative;
-
-	& + &:before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 15%;
-		width: 70%;
-		height: 0;
-		border-top: 1px solid shade(@body-bg, 20%);
-	}
-
-	@media screen, projection, tv, handheld {
-		text-shadow: 1px 1px #D9D9E6;
-	}
-
-	h1, h2, h3 {
-		a, a:hover, a:focus {
-			border: none;
+	padding-top: 3em;
+}
+@media screen {
+	article + article {
+		position: relative;
+		padding-top: 6em;
+		&::before {
+			position: absolute;
+			top: 2em;
+			left: 0;
+			right: 0;
+			height: 1em;
+			content: "";
+			color: @border-colour;
+			background: @bg-colour url(DATA<separator.svg>) 50% 50% / 6.45em 1em no-repeat;
+			background-blend-mode: luminosity;
+			opacity: 0.5;
 		}
-	}
-	h1 {
-		font-size: @huge;
-		font-style: italic;
-	}
-	h2 {
-		font-size: @large;
-		margin: 1.5em 0 0.75em;
-	}
-	h3 {
-		font-size: @normal;
-		margin: 1em 0;
 	}
 }
 
 @{article-text-cls} {
-	line-height: 1.75;
+	h2 {
+		font-size: @huge;
+		margin: (round(1em / @huge, 2)) 0;
+	}
+	h3 {
+		font-size: @large;
+		margin: (round(1em / @large, 2)) 0;
+	}
+	ul, ol, dl, p {
+		font-size: 1em;
+		margin: 1em 0;
+	}
+	li {
+		margin: 1em 0 1em 2em;
+	}
+	li::marker {
+		color: @fg-low-colour;
+	}
 
 	p, dd, li {
 		text-align: justify;
-		hanging-punctuation: first allow-end last;
 		hyphens: auto;
 	}
-	p {
-		margin: 1em 0;
+
+	@media screen {
+		&@{full-text-shown-cls} > p:last-child:after {
+			font-family: cursive;
+			color: @fg-low-colour;
+			content: ' ~30~';
+		}
 	}
-	small {
-		font-size: @small;
-	}
+}
+
+/* Meta and Social */
+aside {
+	overflow: auto;
+	break-inside: avoid;
+	padding: 1em;
+	font-style: italic;
+	line-height: 1.5;
+
 	a {
-		border-bottom: 1px dotted #99f;
+		border-style: none;
 	}
-	a:hover, a:focus {
+
+	/* ‘See comments’/‘Continue reading’ link */
+	& > a {
+		float: left;
+		margin-bottom: 0.5em;
+	}
+
+	ul {
+		display: block;
+		font-size: @tiny;
+		text-align: right;
+		margin: 0.5em 0;
+	}
+	li {
+		display: inline;
+		margin-left: 1em;
+	}
+	@media screen {
+		li@{meta-label-cls} {
+			display: none;
+		}
+	}
+	li:before {
+		content: '» ';
+	}
+	@{meta-label-cls}:before, @{social-links-cls} li:before {
+		content: '';
+	}
+}
+@{social-links-cls} {
+	.no-print();
+	margin-bottom: 1em;
+}
+@{social-links-cls} a {
+	font: bold 1em 'Helvetica Neue', var(--S);
+	background: var(--g);
+	color: @head-colour;
+	border-radius: 3px;
+	padding: 1px 8px;
+	&:before {
+		font-family: @icon-font;
+		font-weight: 400;
+		content: var(--c);
+		color: #fff;
+	}
+	&:focus, &:hover {
 		text-decoration: none;
-		border-bottom-style: solid;
-		borter-bottom-color: #09f;
+		background-color: var(--h);
+		color: #fff;
 	}
 }
-/* Byline etc */
-@{byline-cls} {
-	font-style: italic;
-	font-weight: 300;
-	color: #666;
-	page-break-before: avoid;
-	page-break-after: avoid;
+@{tweet-link-cls} {
+	--g: #1b95e0;
+	--h: #0c7abf;
+	--c: '🐤 ';
+}
+@{fb-link-cls} {
+	--g: #577fbc;
+	--h: #3871C6;
+	--c: 'f ';
 }
 
-p.nt {
-	font-size: @tiny;
-	margin-left: 30%;
-	text-align: left;
-	hyphens: manual;
-	font-style: italic;
+/* Comments */
+@{comments-id} {
+	margin-top: 1rem;
 }
 
-p@{news-image}, figure {
-	text-align: center;
-	img {
-		max-width: 100%;
-		height: auto;
-	}
-}
-p@{news-image} + p@{news-image} {
-	text-align: right;
-	margin-top: -1em;
-	font-size: @tiny;
-	page-break-before: avoid;
-}
-
-/* Code */
-code, kbd {
-	font-family: @code-font;
-	font-weight: normal;
-	color: @code-color;
-}
+/* Misc formatting */
 pre, code, kbd {
 	font-variant: lining-nums slashed-zero;
-	text-shadow: none;
-	page-break-inside: avoid;
+	break-inside: avoid;
+}
+code, kbd {
+	font-family: var(--S);
+	font-weight: 400;
+	color: @code-colour;
 	hyphens: manual;
-	@media print {
-		color: inherit;
-	}
+}
+pre, pre code, pre kbd {
+	font-family: @mono-font;
+	color: inherit;
 }
 pre {
-	font-family: @mono-font;
-	margin: 1em 0;
-	padding: 1em;
-	overflow-x: auto;
 	font-size: @small;
-	border: 1px solid #000;
+	margin: (round(1em / @small, 2)) 0;
+	padding: (round(1em / @small, 2));
+	line-height: 1.375;
+	overflow-x: auto;
+	border: 1px solid @border-colour;
 	border-style: solid none;
-	background: #fff;
-	color: #151515;  /* Same contrast as between @body-bg and #000 */
+	background: @acc-bg-colour;
 	i {
 		font-style: normal;
 		font-family: @body-font;
 	}
 }
 
-@media screen, projection, tv, handheld {
-	@{qed-cls} @{article-text-cls} > p:last-child:after {
-		color: #999;
-		font-size: @tiny;
-		content: ' -30-';
-	}
-}
-
-/* Lists */
-@{article-text-cls} {
-	ul, ol, dl {
-		margin: 1em 0;
-	}
-	li {
-		margin: 0 0 0 2em;
-		/* Less' data-uri is way over-zealous when URL encoding data
-		   URIs which is why I’m sticking to my own. */
-		list-style: url(DATA<dot.svg>);
-	}
-	dt, dd {
-		padding: 0;
-		margin-top: .25em;
-	}
-	dd {
-		margin-left: 1.5625em;
-	}
-	dd + dt {
-		margin-top: 1em;
-	}
-}
-
-/* Tables */
-table {
-	margin: 1em auto;
-	font-variant-numeric: tabular-nums;
-	font-variant: lining-nums tabular-nums;
-	border-collapse: collapse;
-}
-th, td {
-	padding: 0.25em 0.5em;
-}
-th small {
-	font-weight: normal;
-}
-thead, tfoot, thead + tbody, tbody + tbody {
-	border-top: 1px solid #000;
-}
-
-/* Misc */
 blockquote {
-	background: url(DATA<quote.svg>) 1.5em 0 / 2em 2em no-repeat;
 	min-height: 2em;
-	padding: 0 4em;
-	margin: 1em 0;
+	margin: 0.5rem 2em;
+	padding-left: 2em;
 	font-size: @small;
-}
-@{article-text-cls} blockquote {
-	p, dd, li {
-		text-align: left;
-		hyphens: manual;
-	}
+	background: @bg-colour url(DATA<quote.svg>) 0 0 / 2em 2em no-repeat;
+	background-blend-mode: luminosity;
 }
 blockquote > :first-child { margin-top: 0; }
 blockquote > :last-child { margin-bottom: 0; }
 
-/* Meta information, social etc. */
-@{meta-cls} {
-	overflow: auto;
-	page-break-inside: avoid;
-	margin-top: 2em;
-	font-style: italic;
+/* Tables */
+table {
+	font-variant-numeric: tabular-nums;
+	font-variant: lining-nums tabular-nums;
+	border-collapse: collapse;
+	margin: 1em auto;
+}
+thead {
+	background: @acc-bg-colour;
+}
+th, td {
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+}
+th small {
+	font-weight: 400;
+}
+thead, tfoot, thead + tbody, tbody + tbody {
+	border-top: 1px solid @border-colour;
+}
 
-	& > a {
-		float: left;
-		margin-bottom: 0.5em;
+/* Lists */
+ol li {
+	list-style: lower-roman;
+}
+dt, dd {
+	padding: 0;
+	margin: 0;
+}
+dd {
+	margin-left: 2em;
+}
+dd + dt {
+	margin-top: 0.5em;
+}
+
+/* Figures */
+figure {
+	text-align: center;
+	img, svg {
+		max-width: 100%;
+		height: auto;
 	}
-
-	& > ul li + li {
-		.no-print();
+	break-inside: avoid;
+}
+@{news-image-cls} {
+	margin: 1em auto;
+	figcaption {
+		margin-top: -1em;
+		text-align: right;
+		font-size: @tiny;
 	}
 }
 
-@{social-cls} {
-	min-height: 20px;  /* Height of G+ and Twitter buttons */
-	font-size: @tiny;
-	text-align: right;
+/* Flags */
+
+.en, .pl {
+	background: url(DATA<pl.svg>) 0 50% / 1.12em .7em no-repeat;
+	text-indent: 1.25em;
+}
+.en {
+	background-image: url(DATA<uk.svg>);
+}
+
+
+/* Pagination */
+@{pagination-id} {
 	.no-print();
-	a {
-		display: inline-block;
-		font: bold 11px/18px 'Helvetica Neue', Arial, sans-serif;
-		color: #fff;
-		height: 20px;
-		overflow: hidden;
-		border-radius: 3px;
-		text-decoration: none;
-		text-shadow: none;
-		padding: 1px 8px 1px 20px;
-	}
-}
-a@{tweet-cls} {
-	background: #1b95e0 url(DATA<tweet.svg>) no-repeat;
-	&:focus, &:hover {
-		background-color: #0c7abf;
-	}
-}
-a@{facebook-cls} {
-	background: #577fbc url(DATA<fb.svg>) no-repeat;
-	&:focus, &:hover {
-		background-color: #3871C6;
-	}
-}
-@{cats-and-tags-cls} {
-	font-size: @tiny;
-	text-align: right;
-	.no-print();
 
-	ul {
-		display: block;
-		list-style: none;
-	}
-	li {
-		display: inline;
-		list-style: none;
-		margin: 0.5em;
-		margin-right: 0;
-	}
-	li:before {
-		content: '» ';
-	}
-	li:after {
-		content: ' ';
-	}
-	@media screen, projection, tv, handheld {
-		p {
-			/* Hide ‘In categories’ and ‘Tagged with:’
-			   introductions. */
-			display: none;
-		}
-		ul:first-child {
-			/* Hide permlink */
-			display: none;
-		}
-	}
-}
-
-/* Pagination table */
-@{pagination-cls} {
-	width: 100%;
+	clear: both;
+	width: min(60rem, 95%);
 	display: table;
 	table-layout: fixed;
-	margin: 1em 0;
-	.no-print();
-
-	ul {
-		display: table-row;
-	}
+	margin: 4rem auto 0;
+	font-size: @small;
 	li {
 		display: table-cell;
 	}
@@ -609,142 +681,320 @@ a@{facebook-cls} {
 }
 
 
-/**** Sidebar ****/
+/**** Bottom Navigation and Drop Downs ****/
 
-@{side-id} {
-	a, a:link, a:visited {
-		color: #009;
-	}
-	a:hover, a:focus {
-		color: #069;
-	}
-
-	h1 {
-		display: none;
-	}
-
-	h2 {
-		font-size: @large;
-		text-align: center;
-		margin-bottom: 1em;
-	}
-
-	ul, li {
-		list-style: none;
-	}
-
-	.no-print();
+@{nav-id}, @{drop-down-ul-cls} {
+	font-family: var(--S);
+	background: @nav-bg-colour;
+	color: @nav-colour;
 }
 
-/* Contact */
-@{contact-id} {
-	margin-top: 0;
+@media screen {
+	@{nav-id} {
+		font-size: @small;
+		& > div {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-around;
+			width: 60rem;
+			max-width: 100%;
+			margin: 0 auto;
+		}
 
-	h2 {
-		display: none;
+		h1 {
+			display: none;
+		}
+		h2 {
+			text-align: center;
+			display: block;
+			font-weight: bold;
+			font-size: @large;
+			border-bottom: 2px dotted currentcolor;
+			color: @nav-header-colour;
+		}
+
+		@{drop-down-ul-cls} {
+			line-height: 2;
+		}
+
+		section {
+			width: 15rem;
+			margin: 3rem 2rem;
+		}
 	}
-	ul {
-		display: block;
-	}
-	li {
-		display: block;
-		text-align: center;
-		margin: .5em 0;
-		line-height: 1.25;
-	}
-	li:first-child {
-		font-weight: bold;
-		margin: 1em 0;
+
+	@{nav-id}, @{head-id} @{drop-down-ul-cls} {
+		a {
+			color: @nav-link-colour;
+		}
+		a:hover, a:focus {
+			color: @nav-hover-colour;
+		}
+		a:hover {
+			text-decoration: underline;
+		}
+		a:focus {
+			outline: none;
+			box-shadow: 0 0 0 2px @nav-bg-colour,
+				    0 0 1px 4px @nav-hover-colour;
+		}
 	}
 }
-.in {
-	vertical-align: bottom;
-	fill: currentcolor;
-}
-.in:hover {
-	fill: #0977b5;
-}
+
 
 /* Categories */
-@{categories-id} {
-	ul {
-		display: table;
-		width: 100%;
-	}
+@{categories-dd-ul-cls} {
+	display: table;
+	margin: 0 auto;
 	li {
 		display: table-row;
 	}
-	a {
+	a, small {
 		display: table-cell;
-		padding: 0.25em 0;
 	}
 	small {
-		display: table-cell;
 		text-align: right;
 		font-size: @tiny;
-		padding: 0 0.5em;
-		color: #555;
+		padding: 0 (round(1.5em / @tiny, 2))
+			 0 (round(3em / @tiny, 2));
 	}
 }
-@{feed-icon-cls} {
-	width: 16px;
-	span {
+@{atom-cls} {
+	@{nav-hover-colour-var}: #ea7d31;
+}
+
+/* Code */
+@{code-dd-ul-cls} {
+	font-weight: 400;
+	margin: 0 auto;
+	width: max-content;
+	li {
+		margin-left: 2em;
+	}
+	li::marker {
+		content: 'git ';
+	}
+	li:last-child {
+		text-align: center;
+	}
+	li:last-child::marker {
+		content: '';
+	}
+
+	a {
+		display: inline-block;
+		width: 100%;
+	}
+}
+
+/* Contact */
+@{contact-dd-ul-cls} {
+	list-style: none;
+	text-align: center;
+	line-height: 1.5;
+	li {
+		font-size: 1rem;
+	}
+	strong {
+		font-size: @large;
+	}
+	@{head-id} & strong {
+		color: @nav-header-colour;
+	}
+}
+@{linked-in-link-cls} {
+	@{nav-hover-colour-var}: #0977b5;
+}
+@{contact-id} {
+	display: flex;
+	flex-direction: column;
+}
+@{contact-id} @{contact-dd-ul-cls} {
+	margin-bottom: auto;
+}
+@{contact-id} @{contact-dd-ul-cls} + h2 {
+	margin-top: 2em;
+}
+
+/* Settings */
+@{header-cog-li-cls} {
+	ul, li {
 		display: block;
-		background: url(DATA<feed.svg>) no-repeat;
-		width: 1rem;
-		height: 1rem;
-		.grayscale-on();
-		.text-off-screen();
+		font-weight: bold;
 	}
-	&:hover span, &:focus span {
-		.grayscale-off();
+	li {
+		margin: 0.5em 0;
+		text-align: center;
+	}
+	li:nth-child(2) {
+		cursor: pointer;
+		border: 2px solid #000;
 	}
 }
 
+@{toggle-cls} {
+	font-size: @large;
+	font-weight: bold;
+	line-height: 1;
 
-/**** Footer ****/
+	position: relative;
+	display: inline-block;
+	width: 1.3em;
+	height: 0.45em;
+	border-radius: (0.45em / 2);
+	background: @slide-colour;
+	margin-left: 1.2em;
+	cursor: pointer;
+
+	&:before {
+		box-sizing: border-box;
+
+		display: block;
+		position: absolute;
+		left: -1.35em;
+	}
+
+	&:after {
+		content: '';
+
+		box-sizing: border-box;
+
+		display: block;
+		position: absolute;
+		top:  ((0.45em - 0.8em) / 2);
+		left: (-0.8em / 2 + 0.1em);
+		width:  0.8em;
+		height: 0.8em;
+		border-radius: (0.8em / 2);
+		border: 2px solid @nav-link-colour;
+		background: @nav-link-colour;
+		transition: left 0.3s;
+	}
+	&:hover:after {
+		background: @nav-hover-colour;
+	}
+	&:focus {
+		background: @nav-header-colour;
+	}
+}
+div:focus {
+	outline: none;
+	box-shadow: 0 0 0 2px @nav-bg-colour,
+		    0 0 1px 4px @nav-link-colour;
+}
+
+@{dark-toggle-cls}:before     {
+	content: '☀';
+	top: -.3em;
+	@{dark-theme-id} & { content: '☾'; }
+}
+@{contrast-toggle-cls}:before {
+	content: '◐';
+	top: -.4em;
+}
+
+@{dark-theme-id} @{dark-toggle-cls}:after,
+@{high-contrast-id} @{contrast-toggle-cls}:after {
+	left: (1.3em - (0.8em / 2) - 0.1em);
+}
+
+@{hue-slide-cls} {
+	position: relative;
+	height: 1.5em;
+}
+@{hue-slide-cls} div {
+	position: absolute;
+	width: 10px;
+	top: -5px;
+	bottom: -5px;
+	border: 2px solid #000;
+	background: @slide-colour;
+	left: calc(@slide-position - 5px);
+}
+
+
+
+
+@{float-right-cls}, @{float-left-cls} {
+	clear: both;
+	width: var(--w,20em);
+	margin: 1em ~"clamp(calc(max(-10em,5em - var(--w,20em))),calc(31em - 50vw),1em)";
+	max-width: 100%;
+}
+@{float-right-cls} {
+	float: right;
+	margin-left: 1em;
+}
+@{float-left-cls} {
+	float: left;
+	margin-right: 1em;
+}
+
+@{right-align-cls} {
+	text-align: right;
+}
+@{left-align-cls} {
+	text-align: left;
+}
+
+@{small-cls} {
+	font-size: @small;
+}
+
+abbr, @{unicode-name} {
+	font-variant: all-small-caps;
+}
+
+
+
 
 @{foot-id} {
-	color: #bbb;
-	background: @head-bg;
-	border-top: 1px dotted #ddf;
-	font-size: @tiny;
-	padding: 1em 0;
-	text-align: center;
+	margin-top: auto;
 
-	a, a:link, a:visited, a:hover, a:focus {
-		color: #acd;
+	font-family: var(--S);
+	font-size: @tiny;
+	background: @foot-bg-colour;
+	color: @foot-colour;
+
+	@media screen {
+		box-shadow: inset 0 0.55em 0.3em -0.3em #000;
 	}
 
-	@media print {
-		color: #333;
-		background: #fff;
-		border-top: 1px dotted #ddd;
+	p {
+		text-align: center;
+		max-width: 100rem;
+		margin: 1rem auto;
+		padding: 0 5rem;
+	}
+	a {
+		color: @foot-acc-colour;
+	}
+	a:hover {
+		text-decoration: underline;
+	}
+	a:focus {
+		outline: none;
+		box-shadow: 0 0 0 2px @foot-bg-colour,
+			    0 0 1px 4px @foot-acc-colour;
 	}
 }
 
 
-/**** Print ****/
+
 
 @media print {
-	body, html {
-		color: #000;
-		background: #fff;
-	}
-
-	a, a:link, a:visited, a:hover, a:focus {
-		text-decoration: none !important;
-		border: none !important;
-		color: inherit !important;
+	@{no-print-cls} {
+		display: none;
 	}
 
 	a:after {
-		color: #333 !important;
-		font-weight: normal;
-		font-size: @tiny;
+		color: inherit;
+		font-weight: 400;
+		font-style: italic;
+		font-size: unit(@tiny, rem);
 	}
 
-	@{article-text-cls}, @{meta-cls} {
+	@{article-text-cls}, @{foot-id} {
 		a[href^="http://"]:after, a[href^="https://"]:after {
 			content: " 〈" attr(href) "〉";
 		}
@@ -755,36 +1005,21 @@ a@{facebook-cls} {
 			content: " 〈https:" attr(href) "〉";
 		}
 	}
-
-	[data-email]::after {
-		content: " 〈" attr(data-email) "〉";
-		font-size: @tiny;
-	}
-
-	article h1 a[href^="/"]:after {
+	@{main-id} h1 a[href^="/"]:after {
 		content: "https://mina86.com" attr(href);
 		display: block;
+		color: @fg-low-colour;
 	}
-}
 
+	@{nav-id} section, @{nav-id} h1, @{nav-id} h2 {
+		display: none;
+	}
+	@{nav-id} @{contact-id} {
+		display: block;
+		margin: 0 auto 2rem;
+	}
 
-/**** Generic stuff ****/
-
-@{right-align-cls} {
-	text-align: right;
-}
-@{left-align-cls} {
-	text-align: left;
-}
-@{unicode-name}, abbr {
-	font-variant: all-small-caps
-}
-
-
-.en, .pl {
-	background: url(DATA<pl.svg>) 0 50% / 1.12em .7em no-repeat;
-	text-indent: 1.25em;
-}
-.en {
-	background-image: url(DATA<uk.svg>);
+	@{float-right-cls}, @{float-left-cls} {
+		margin: 1rem 0;
+	}
 }

@@ -6,10 +6,8 @@
     {{ post(entry, true) }}
   {%- endblock -%}
 
-  <div id=c>
-    <div class="talkyard-comments"
-         data-discussion-id="{{ entry.permalink }}"></div>
-  </div>
+  <div id=c class="talkyard-comments"
+       data-discussion-id="{{ entry.permalink }}"></div>
 
   {{ prev_next() }}
 

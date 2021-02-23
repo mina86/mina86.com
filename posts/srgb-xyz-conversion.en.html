@@ -36,11 +36,8 @@
 
 <!-- EXCERPT -->
 
-<figure style="float: right; margin: 1em">
-  <svg width="4.5em" height="16.5em" viewBox="0 0 3 11" fill="#000">
-    <style>
-      text { text-anchor: end }
-    </style>
+<figure class=fr style="--w:4.5em">
+  <svg width="4.5em" height="16.5em" viewBox="0 0 3 11" text-anchor=end>
     <path d="M0,0  h2 v1 h-2 z" fill="#0f0"    />
     <path d="M0,1  h1 v1 h-1 z" fill="#00e500" />
     <path d="M0,2  h1 v1 h-1 z" fill="#0c0"    />
@@ -79,10 +76,10 @@
       <text y="10">0.0</text>
     </g>
 
-    <g transform="rotate(-90)" font-size=".5">
-      <text x="-.3" y=".6">Encoded</text>
-      <text x="-.3" y="1.8">Intensity</text>
-    </g>
+    <text transform="rotate(-90)" font-size=".5" style="fill:#000"
+      ><tspan x="-.3" y=".6">Encoded</tspan
+      ><tspan x="-.3" y="1.8">Intensity</tspan
+      ></text>
   </svg>
 </figure>
 

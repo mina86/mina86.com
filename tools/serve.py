@@ -46,7 +46,7 @@ def get_certfile() -> str:
 
 def main():
     port = 4443
-    httpd = http.server.HTTPServer(('127.0.0.1', port), Handler)
+    httpd = http.server.HTTPServer(('0.0.0.0', port), Handler)
     httpd.socket = ssl.wrap_socket(
         httpd.socket, server_side=True, certfile=get_certfile())
     print('https://127.0.0.1:{}/'.format(port))

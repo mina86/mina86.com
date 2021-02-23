@@ -3,31 +3,21 @@
 <!-- tags: linux, unix, chmod -->
 <!-- categories: Articles, Techblog -->
 
-<p>I’ve been reading tutorials on using key files for disk encryption.
-  Common approach for creating such a file is:
+<p>I’ve been reading tutorials on using key-files for disk encryption.  Common
+  approach for generating such files is to create it using something similar
+  to <code>head -c 4096 /dev/urandom &gt;key-file</code> and only then change
+  it’s permissions (usually with a plain <code>chmod 400 key-file</code>) to
+  prevent others from reading it.
 
-<blockquote style="background-color: #fcc; border-radius: 0.5em">
-  <p>Step 1: Create a random key file
-  <pre>head -c 4096 /dev/urandom &gt;keyfile</pre>
-  <p>Step 2: Make the file readable by owner only
-  <pre>chmod 400 keyfile</pre>
-</blockquote>
+<p><em>Please</em>, stop doing this and spreading that method.  The correct way
+  of achieving the effect is:
 
-<p><i>*sighs*</i> <em>Please</em>, stop doing this and spreading that
-  method.  The correct way of achieving the effect is:
-
-<blockquote>
-  <p>Step 1: Create a random key file readable by owner only
-  <pre>(umask 077; head -c 64 /dev/random &gt;keyfile)</pre>
-</blockquote>
+<pre>(umask 077; head -c 64 /dev/random &gt;key-file)</pre>
 
 <p>Or if the file needs to be created as root while command is run by
-  a different user:
+  a different user:
 
-<blockquote>
-  <p>Step 1: Create a random key file readable by root only
-  <pre>sudo sh -c 'umask 077; head -c 64 /dev/random &gt;keyfile'</pre>
-</blockquote>
+<pre>sudo sh -c 'umask 077; head -c 64 /dev/random &gt;key-file'</pre>
 
 <p id=b2>The first method creates the file as
   world-readable<a href=/self#f2>†</a> and before its permission are
@@ -41,8 +31,8 @@
   are tightened.  For example in situation such as:
 
 <pre>
-exec 3&gt;keyfile
-chmod 400 keyfile
+exec 3&gt;key-file
+chmod 400 key-file
 head -c 64 /dev/random >&amp;3
 exec 3&gt;&amp;-
 </pre>
@@ -52,7 +42,7 @@ exec 3&gt;&amp;-
   <code>chmod</code> command they can keep it open and wait for the
   data to trickle in.
 
-<p>This may sound like a theoretical exercise which has no barring on
+<p>This may sound like a theoretical exercise which has no barring on
   reality but the proper way of doing things is so trivial there’s no
   reason not to go with it.  Indeed, it’s actually <em>shorter</em>.
 
@@ -61,3 +51,7 @@ exec 3&gt;&amp;-
   Some <del>paranoid</del> security-conscious users may already have
   <code>umask</code> set to <code>077</code> but beware
   that <code>sudo</code> resets it to the default <code>022</code>.
+
+<p>PS. If anyone wonders while I also changed the key-file’s size from 4096 to
+  just 64 bytes I’ve <a href="/2017/key-file-size/">explained it in another
+  article</a>.
