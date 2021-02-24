@@ -567,26 +567,25 @@ fn grey_from_rgb_avg_32bit(r: u8, g: u8, b: u8) -&gt; u8 {
   (think 8-bit processor with kilobytes of memory).
 
 
-<h2>Afterword</h2>
 
-
-<svg width="2em" height="8em" viewBox="0 -0.5 2 8" style="float: left">
-    <rect x="0" y="0" width="1" height="1" fill="#00a9ff"/>
-    <rect x="0" y="1" width="1" height="1" fill="#b900ff"/>
-    <rect x="0" y="2" width="1" height="1" fill="#008aff"/>
-    <rect x="0" y="3" width="1" height="1" fill="#ff007d"/>
-    <rect x="0" y="4" width="1" height="1" fill="#009b74"/>
-    <rect x="0" y="5" width="1" height="1" fill="#957400"/>
-    <rect x="0" y="6" width="1" height="1" fill="#ff0000"/>
-  </svg>
+<h2><svg width="8.5em" height="2em" viewBox="0.5 0.5 8.5 2"
+         style="float: right; clear: both">
+    <rect x="1" y="1" width="1" height="1" fill="#d96f84"/>
+    <rect x="2" y="1" width="1" height="1" fill="#c18400"/>
+    <rect x="3" y="1" width="1" height="1" fill="#8f9800"/>
+    <rect x="4" y="1" width="1" height="1" fill="#27a62f"/>
+    <rect x="5" y="1" width="1" height="1" fill="#00ab9c"/>
+    <rect x="6" y="1" width="1" height="1" fill="#009fda"/>
+    <rect x="7" y="1" width="1" height="1" fill="#9384ed"/>
+    <rect x="8" y="1" width="1" height="1" fill="#cf6bce"/>
+  </svg>Afterword</h2>
 
 <p>One final remark is that doing the ‘technically correct’ luminosity
   calculation isn’t the only way to go about converting images to greyscale.
-  One other way to look at a problem is by designing a ‘contrast preserving’
-  algorithm.  Colours of the same luminosity are easy to distinguish so long as
-  their chromacity is sufficiently different.  For example, each colour in the
-  sequence on the left is relatively easy to pick out (at least for a person
-  with normal colour vision) but the formulæ described here will map all of them
-  to the same shade of grey.  Especially in computer vision this may not be the
-  desired result, but it does represent what a black and white film would
-  capture.
+  Another way to look at the problem is by designing a ‘contrast preserving’
+  algorithm.  For a person with normal vision, colours of the same luminosity
+  are easy to distinguish so long as their chromacity is sufficiently different.
+  For example, each colour in the sequence on the right above this paragraph is
+  easy to pick out but the formulæ described here will map all of them to the
+  same shade of grey.  Especially in computer vision this may not be the desired
+  result, but it does represent what a black and white film would capture.
