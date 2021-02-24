@@ -1,0 +1,133 @@
+#!/usr/local/bin/python3
+
+import gzip
+import json
+import os
+import os.path
+import sys
+import tempfile
+import time
+import typing
+import urllib.request
+
+
+def fetch() -> typing.Sequence[typing.Tuple[str, str]]:
+        req = urllib.request.Request(
+                'https://api.github.com/users/mina86/repos?sort=updated',
+                headers={'Accept': 'application/vnd.github.v3+json'})
+        with urllib.request.urlopen(req) as res:
+                data = res.read()
+
+        def make_pair(repo):
+                name = repo['name']
+                desc = repo.get('description')
+                if 'mina86.com' in name or repo.get('archived'):
+                        return None
+                elif desc:
+                        return (name, desc)
+                else:
+                        return (name,)
+
+        repos: typing.Sequence[typing.Tuple[str, str]] = tuple(
+                filter(None, map(make_pair, json.loads(data))))[:10]
+        if len(repos) < 3:
+                sys.exit('Got only {} repositories'.format(len(repos)))
+        return repos
+
+
+def needs_update(filename: str) -> bool:
+        try:
+                st = os.stat(filename)
+        except FileNotFoundError:
+                return True
+        return time.time() - st.st_mtime > 24 * 3600
+
+
+
+class AtomicFile:
+        def __init__(self, filename: str):
+                self._dest = filename
+                self._tmp: typing.Optional[typing.IO[bytes]] = \
+                        tempfile.NamedTemporaryFile(
+                                dir=os.path.dirname(filename),
+                                delete=False)
+
+        def write(self, data: bytes):
+                assert self._tmp
+                self._tmp.write(data)
+
+        def done(self,
+                 ok: bool=True,
+                 times: typing.Optional[typing.Tuple[float, float]]=None):
+                if not self._tmp:
+                        return
+                self._tmp.close()
+                name = self._tmp.name
+                self._tmp = None
+                try:
+                        if ok:
+                                ok = False
+                                os.chmod(name, 0o644)
+                                if times is not None:
+                                        try:
+                                                os.utime(name, times=times)
+                                        except:
+                                                pass
+                                os.rename(name, self._dest)
+                                ok = True
+                finally:
+                        if not ok:
+                                os.unlink(name)
+
+        def __enter__(self) -> 'AtomicFile':
+                return self
+
+        def __exit__(self, *args):
+                self.done(False);
+
+
+
+def main(argv: typing.Sequence[str]):
+        force = dry = False
+        i = 1
+        while i < len(argv):
+                if argv[i] in ('-f', '--force'):
+                        force = True
+                elif argv[i] in ('-n', '--dry-run'):
+                        dry = True
+                else:
+                        break
+                i = i + 1
+        if i >= len(argv):
+                sys.exit('usage: {} [-f | -n] <output-file-name>'.format(
+                        argv[0]))
+        filename = argv[i]
+
+        now = time.time()
+        if not (force or needs_update(filename)):
+                if dry:
+                        sys.stderr.write(
+                                'File {} up-to-date\n'.format(filename))
+                return
+
+        repos = fetch()
+        data = 'G({});'.format(json.dumps(repos, ensure_ascii=False,
+                                          separators=(',', ':'))).encode('utf-8')
+        now = time.time()
+        data_gz = gzip.compress(data, mtime=now)
+
+        with AtomicFile(filename) as fd, AtomicFile(filename + '.gz') as gz:
+                fd.write(data)
+                gz.write(data_gz)
+                gz.done(not dry, times=(now, now))
+                fd.done(not dry, times=(now, now))
+
+        if dry:
+                sys.stderr.write('Would write to {1} bytes to {0} '
+                                 'and {2} to {0}.gz\n'.format(
+                                         filename, len(data), len(data_gz)))
+                sys.stdout.write(data.decode('utf-8'))
+
+
+if __name__ == '__main__':
+        main(sys.argv)

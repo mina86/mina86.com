@@ -69,7 +69,9 @@ static/cv/index.html: cv/cv.xml cv/cv.xsl tools/embed-images.py \
 upload: public
 	@echo " UP   *.mina86.com"
 	rsync -mrltvze ssh --delete-after --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r \
-	       -f'P .well-known/***' --progress $^ nfs:/home/
+	       -f'P .well-known/***' \
+	       -f'- mina86.com/d/g.js*' \
+	       --progress $^ nfs:/home/
 
 .DELETE_ON_ERROR:
 .PHONY: public public/mina86.com touch clean distclean upload
