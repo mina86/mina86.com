@@ -161,12 +161,25 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
             value = value[6:]
         return value
 
-    _ABBR_RE = re.compile(r'\b(?:[A-Z]{3,}s?|sRGB|W3C|TL;DR|U\+[0-9A-F]{4,})\b')
+    _ABBR_RE = re.compile(r'\b(?:' + '|'.join((
+        # Special case for GNU/Linux which should not get the treatment either
+        # since it looks awkward with only GNU in small caps.  This needs to be
+        # in front because order of elements in regex alternatives apparently
+        # matters.
+        'GNU/Linux',
+        # At least three character long.
+        '([A-Z]{3,} +)*[A-Z]{3,}s?',
+        # Special case for things which would not normally match because they
+        # are not all uppercase letters.
+        'sRGB', 'W3C', 'TL;DR',
+        # Special case for Unicode U+#### which should not get the treatment.
+        r'U\+[0-9A-F]{4,}',
+    )) + r')\b')
 
     @staticmethod
     def _abbr_repl(m):
         txt = m.group(0)
-        if txt.startswith('U+'):
+        if txt.startswith('U+') or txt == 'GNU/Linux':
             # Unicode code points can fool the regex.
             return txt
         elif txt == 'sRGB':
