@@ -1,0 +1,306 @@
+<!-- subject: Will the real <code>ARG_MAX</code> please stand up? Part 1 -->
+<!-- date: 2021-03-14 23:42:44 -->
+<!-- tags: arg_max, unix, linux -->
+<!-- categories: Articles, Techblog -->
+
+<p>arg max is a set of values from function’s domain at which said function
+  reaches its maxima.  That’s certainly <em>an</em> arg max but spelled without
+  an underscore thus not the one we are searching for.  No, this article is
+  regarding the <code>ARG_MAX</code> that limits the length of arguments to an
+  executable.
+
+<p>Or in other words, why you are getting:
+
+<pre>
+bash: <var>command</var>: Argument list too long
+</pre>
+
+<!-- EXCERPT -->
+
+<p>The <code>ARG_MAX</code> parameter is common among UNIX-like platforms but
+  since most such systems have fallen into obscurity, are BSD or rubbish
+  systems, herein I will focus on a GNU/Linux environment running on a x86_64
+  platform.  While this limits the applicability of the information, many
+  concepts will apply to other systems and architectures as well.
+
+
+<h2>Experimentation</h2>
+
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between">
+  <div style="flex:.8 20rem">
+    <p style="margin-top:0">The value of <code>ARG_MAX</code> is no secret and
+      can be retrieve with <code>getconf</code> utility.  On x86_64 platform
+      it’s 2097152 (or 2 MiB) by default.  To test this limit we can use pretty
+      much any command; <code>echo</code> should do.  A simple experiment (as
+      shown in the listing on the side) confirms that the tool can be called
+      with a one-million-character-long argument.  On the other hand, further
+      investigation demonstrates that an argument three times as long works just
+      as well which shouldn’t be the case.
+
+    <p style="margin-bottom:0">Turns out that even in minimal shells such as
+      dash and posh the <code>echo</code> command is a built-in.  Its execution
+      is performed entirely within the shell and as such isn’t subject to
+      kernel-imposed limitations.  For the <code>ARG_MAX</code> limit to take
+      effect the <code>execve</code> system call has to be used.  This can be
+      done by executing the <code>/bin/echo</code> binary instead.
+  </div>
+
+  <pre style="height:max-content;margin:0 0 0 auto">
+$ getconf ARG_MAX
+2097152
+
+$ echo '
+head -c "${1?}" /dev/zero |tr "\0" A
+' >gen-str
+$ chmod 755 gen-str
+$ s=$(./gen-str 1000000)
+$ echo ${#s}
+1000000
+
+$ echo "$s" |wc -c
+1000001
+$ echo "$s$s$s" |wc -c
+3000001
+$ type echo
+echo is a shell builtin
+
+$ /bin/echo "$s"
+sh: /bin/echo: Argument list too long
+  </pre>
+</div>
+
+<p>But this time, after redoing the experiment with that executable, the command
+  fails even for mere one million characters which should be within
+  the <code>ARG_MAX</code> limit.  Has <code>getconf</code> lied to us?  Is the
+  limit some other value?  With some trial and error we can determined that the
+  longest argument the kernel will accept is 131072 bytes long including the
+  terminating NUL byte.  However, that’s clearly not the end of the story since
+  it’s easy to see that while <em>a single argument</em> is limited to 128
+  KiB, <em>the whole command line</em> is not.
+
+<pre>
+$ /bin/echo "$(./gen-str 131072)"
+sh: /bin/echo: Argument list too long
+$ s=$(./gen-str 131071)
+$ /bin/echo "$s" |wc -c
+131072
+$ /bin/echo "$s" "$s" "$s" |wc -c
+393216
+
+$ /bin/echo "$s" "$s" "$s" "$s" "$s" "$s" "$s" "$s" \
+            "$s" "$s" "$s" "$s" "$s" "$s" "$s" "$s"
+sh: /bin/echo: Argument list too long
+$ t=$(./gen-str $((131071 - 3422)))
+$ /bin/echo "$s" "$s" "$s" "$s" "$s" "$s" "$s" "$s" \
+            "$s" "$s" "$s" "$s" "$s" "$s" "$s" "$t" |wc -c
+2093730
+</pre>
+
+<p>Do determine the apparent limit we can try passing more and more arguments
+  until we get the ‘Argument list too long’ error message.  As we’ll see the one
+  gets is highly dependent on the environment.  In the shell session shown in
+  listing above, I got a limit of 2093730 characters which is only 3422 bytes
+  shy of the 2 MiB we got as the value <code>ARG_MAX</code>.  What could account
+  for this difference?
+
+<p>Since <code>echo</code> prints a white-space character after each argument,
+  the number reported by <code>wc -c</code> does effectively count NUL bytes so
+  that cannot be where the missing bytes went.  There’s one other aspect of
+  command line arguments that has been overlooked so far.  By UNIX convention,
+  the first argument of a program is its name.  In the above case
+  that’s <code>/bin/echo</code> which accounts for ten characters (again, NUL
+  byte is counted).  While it’s something, it still leaves 3412 bytes
+  unaccounted for.
+
+<p>The next breakthrough comes once we realise that command line arguments are
+  not the only way information is passed to an application.  The other, commonly
+  overlooked method, is environment variables such
+  as <code>PATH</code>, <code>TERM</code> or <code>USER</code>.  All of them
+  contribute to the limit in the same way command line arguments do.  To measure
+  just how much, we can simply invoke <code>env |wc</code> which will produce
+  the number as well as total length of all the variables.  This isn’t robust
+  against variables containing newline characters, but other than that it
+  correctly measures used space including NUL bytes terminating each value.
+
+<pre>
+$ env |wc
+     45      45    2906
+</pre>
+
+<p>Environment variables explain further 2906 bytes which gets the discrepancy
+  down to 506 bytes.  Close but no cigar just yet.
+
+<p>Third thing to consider is how arguments and environment variables are passed
+  to an application.  They end up in <code>argv</code> and <code>environ</code>
+  arrays respectively which take up space.  In the example above there are 17
+  arguments and 45 environment variables (as seen from the output of <code>env
+  |wc</code>) so total of 62 strings.  Each requires an eight-byte pointer in
+  corresponding array which in total amounts to 496 bytes.  This <em>still</em>
+  leaves 10 bytes.  The <code>argv</code> and <code>environ</code> arrays are
+  NULL-terminated but that is <em>not</em> counted against the limit — if we
+  were to include those NULL pointers we would overshoot the tally by 6 bytes.
+  Something else is afoot.
+
+<p>The final bit of the puzzle is the auxiliary vector.  A Linux-specific
+  mechanism which kernel uses to pass additional information to the user space.
+  One of the pieces of data this vector includes is the path used to launch the
+  executable.  In the example above this path is once
+  again <code>/bin/echo</code> and thus perfectly accounts for the remaining ten
+  bytes.
+
+
+<h3>Verification</h3>
+
+<p>To verify all the findings we can try calling different binaries with and
+  without environment variables present.  When doing that from a shell it’s
+  important to take note of any variables that the shell might automatically
+  create when calling programs.  I’ve found that posh is particularly well
+  behaved in this regard.  While it makes sure a <code>PATH</code> variable is
+  present when it starts, it lets user remove it and later doesn’t try to create
+  any more variables when invoking commands.
+
+<pre>
+$ env -i posh
+$ unset PATH; env
+$ s=$(./gen-str 131071)
+$ check() {
+    "$1" "$s" "$s" "$s" "$s" "$s" "$s" "$s" "$s" \
+         "$s" "$s" "$s" "$s" "$s" "$s" "$s" \
+         "$(./gen-str $2)"
+}
+
+<i># 17 arguments, 8 bytes per pointer</i>
+<i># 10-byte-long path, once in argv and once in auxv</i>
+$ check /bin/echo  $((131071 - 17*8 - 2*10)) |wc -c
+2096996
+$ check /bin/false $((131071 - 17*8 - 2*10))
+posh: /bin/false: Argument list too long
+<i># this time 11-byte-long path</i>
+$ check /bin/false $((131071 - 17*8 - 2*11)))
+
+$ foo=bar; export foo
+$ check /bin/echo  $((131071 - 17*8 - 2*10))
+posh: /bin/echo: Argument list too long
+<i># Additional 8-byte pointer in environ array plus</i>
+<i># ‘foo=bar’ (inc. NUL byte) takes another 8 bytes</i>
+$ check /bin/echo  $((131071 - 17*8 - 1*8 - 2*10 - 8)) |wc -c
+2096980
+</pre>
+
+<p>Calling programs whose paths have different lengths with and without
+  environment variables present is in fact consistent with all the rules
+  analysed earlier.
+
+
+<h2>Pushing the limits</h2>
+
+<p>Knowing the limit, the next step is to understand how, if at all, can it be
+  changed.  There’s no <code>setconf</code> counterpart to
+  the <code>getconf</code> tool which would allow setting the parameter.
+  Indeed, we could search far and wide for a method to directly
+  change <code>ARG_MAX</code> and not find anything.  Alas, there is a way to
+  influence the value on Linux.
+
+<p>To realise how we should consider what do all of the objects counted in the
+  limit — command line arguments, environment variables and auxiliary
+  vector — have in common.  More specifically, where are they located.  With
+  address space randomisation the exact addresses will vary even between runs of
+  the same application, but looking at an example addresses proves helpful
+  nonetheless:
+
+  <table>
+    <thead>
+      <tr><th>Expression                       <th>Result
+    <tbody>
+      <tr><td><code>getauxval(AT_EXECFN)</code><td><code>0x7fffac2fcfed</code>
+      <tr><td><code>environ[0]</code>          <td><code>0x7fffac2fc473</code>
+      <tr><td><code>argv[0]</code>             <td><code>0x7fffac2fc468</code>
+    <tbody>
+      <tr><td><code>sbrk(0)</code>             <td><code>0x555bd584a000</code>
+      <tr><td><code>&amp;global</code>         <td><code>0x555bd4c6a040</code>
+  </table>
+
+<p>Yes, that’s it.  All objects of interest are stored on the stack.  It stands
+  to reason then that changing the maximum stack size might
+  influence <code>ARG_MAX</code> value.  This hypothesis can be tested with the
+  help of <code>ulimit</code> built-in which allows reading and modifying
+  resource limits such as the maximum stack size.
+
+<pre>
+$ ulimit -Ss 1024; getconf ARG_MAX
+262144     <i># 256 KiB</i>
+$ ulimit -Ss  512; getconf ARG_MAX
+131072     <i># 128 KiB</i>
+$ ulimit -Ss  256; getconf ARG_MAX
+131072     <i># 128 KiB</i>
+
+$ ulimit -Ss $((1024 * 1024)); getconf ARG_MAX
+268435456  <i># 256 GiB</i>
+</pre>
+
+<p>Correlating maximum stack size with value of the <code>ARG_MAX</code> limit
+  we can easily see that the latter is set to one fourth of the former with
+  additional restriction that <code>ARG_MAX</code> is no lower than 128 KiB.
+  Upper limit on the other hand does not seem to exist.  Or does it?  Let’s try
+  a stack size of 42 MiB:
+
+<pre>
+$ ulimit -Ss $((42 * 1024))
+$ getconf ARG_MAX
+11010048
+$ s=$(./gen-str 131071)
+$ /bin/true "$s" "$s" "$s" "$s" "$s" "$s" "$s" "$s" \
+            "$s" "$s" "$s" "$s" "$s" "$s" "$s" "$s" \
+            "$s" "$s" "$s" "$s" "$s" "$s" "$s" "$s" \
+            "$s" "$s" "$s" "$s" "$s" "$s" "$s" "$s" \
+            "$s" "$s" "$s" "$s" "$s" "$s" "$s" "$s" \
+            "$s" "$s" "$s" "$s" "$s" "$s" "$s" "$s"
+sh: /bin/true: Argument list too long
+</pre>
+
+<p>Turns out even if the kernel returns a large value of <code>ARG_MAX</code>,
+  the limit is always capped at 6 MiB.
+
+<p>On the other end, even if kernel reports <code>ARG_MAX</code> to be 128 KiB,
+  that effective limit will never reach more than the maximum stack size.  For
+  example:
+
+<pre>$ ulimit -Ss 100
+$ exec env -i posh
+$ unset PATH
+$ getconf ARG_MAX
+131072
+$ /bin/true "$(../gen-str 102400)"
+posh: /bin/true: Argument list too long
+</pre>
+
+
+<h2>The real argument limit</h2>
+
+<p>To quickly recap all the information:
+<ul>
+  <li>The maximum length of the arguments to the <code>execve</code> syscall is
+    the smallest of <code>ARG_MAX</code>, the maximum stack size† or 6 MiB
+    where <code>ARG_MAX</code> is the biggest of one fourth of the maximum stack
+    size or 128 KiB.
+  <li>The limit covers: i) all command line arguments, ii) all environment
+    variables, iii) pointers to the former two present in <code>argv</code>
+    and <code>environ</code> arrays and iv) the path to the executable used to
+    run the program.
+  <li>In addition, regardless of how high the limit is, a single command line
+    argument and environment variable cannot exceed 128 KiB.  Length of
+    environment variable is calculated as the size
+    of <code><var>name</var>=<var>value</var></code> string.
+</ul>
+
+<p>And that’s it for now.  In the next episode we’re going to look at the kernel
+  code responsible for implementing the limit so stay tuned (or should I say
+  smash that Atom feed button?).
+
+<p>† Roughly speaking.  It’s of course impossible to use the entire stack for
+  arguments and environment variables since there would be no space left for any
+  other information or setting up stack frame.  As such, the actual arg limit is
+  capped at less than maximum stack size.
+
+<p style="margin-top: 2em">PS. By the way, despite all the BSD influences in
+  XNU, I don’t consider macOS to be a BSD.
