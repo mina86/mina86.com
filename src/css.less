@@ -45,6 +45,7 @@
 
 /* Generic stuff */
 @right-align-cls: .r;
+@left-align-cls: .lt;
 @news-image: .n;
 
 
@@ -408,6 +409,7 @@ p@{news-image} + p@{news-image} {
 /* Code */
 code, kbd {
 	font-family: @code-font;
+	font-weight: normal;
 	color: @code-color;
 }
 pre, code, kbd {
@@ -467,19 +469,17 @@ pre {
 }
 
 /* Tables */
-table, tr, th, td {
+table {
+	margin: 1em auto;
 	font-variant-numeric: tabular-nums;
 	font-variant: lining-nums tabular-nums;
 	border-collapse: collapse;
 }
 th, td {
-	padding: 0.5em;
-}
-thead th, thead td {
 	padding: 0.2em 0.5em;
 }
-table {
-	margin: 1em auto;
+th small {
+	font-weight: normal;
 }
 thead, tbody, tfoot {
 	border-top: 1px solid #000;
@@ -761,6 +761,9 @@ a@{facebook-cls} {
 
 @{right-align-cls} {
 	text-align: right;
+}
+@{left-align-cls} {
+	text-align: left;
 }
 
 abbr {

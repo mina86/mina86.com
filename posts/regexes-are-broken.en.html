@@ -1,0 +1,115 @@
+<!-- subject: Regular expressions are broken -->
+<!-- date: 2021-02-28 00:00:00 -->
+<!-- tags: regex, regular expression, short -->
+<!-- categories: Articles, Techblog -->
+
+<p>Quick! What does <code>re.search('foo|foobar', 'foobarbaz').group()</code>
+  produce?  Or for those not fluent in Python, how
+  about <code>/foo|foobar/.exec('foobarbaz')</code>?  Or to put it into words,
+  what part of string <code>foobarbaz</code> will a <code>foo|foobar</code>
+  regular expression match?
+
+<figure>
+  <svg width="32em" height="5.6em" viewBox="0 0 320 56" style="max-width: 90%"
+       stroke-width="2" stroke="currentcolor">
+    <path d="M 14,28 h 100  c 10,0 10,-15 20,-15  h 52
+                            c 10,0 10, 15 20, 15  h 100
+             M 114,28       c 10,0 10, 15 20, 15  h 52
+                            c 10,0 10,-15 20,-15" fill="none" />
+    <g stroke-width="1" fill="#b6ccee">
+      <rect x="142" y="1"  width="36" height="24" rx="3" ry="3" />
+      <rect x="134" y="31" width="52" height="24" rx="3" ry="3" />
+    </g>
+    <text font-family="Noto Sans, Verdana, sans-serif" font-size="12"
+          text-anchor="middle" dominant-baseline="middle"
+          fill="currentcolor" stroke="none">
+      <tspan x="160" y="14">foo</tspan>
+      <tspan x="160" y="44">foobar</tspan>
+    </text>
+    <circle cx="8"   cy="28" r="6" fill="none"/>
+    <circle cx="312" cy="28" r="6" fill="#004a17"/>
+  </svg>
+</figure>
+
+<p>Perhaps it’s just me, but I expected the result to be <code>foobar</code>.
+  That is, for the regular expression to match the longest leftmost substring.
+  Alas, that’s not what is happening.  Instead, Python’s and JavaScript’s regex
+  engine will only match <code>foo</code> prefix.
+
+<p>Knowing that, what does <code>re.search('foobar|foo',
+  'foobarbaz').group()</code> produce (notice the subexpressions in the
+  alternation are swapped).  This can be reasoned in two ways: either order of
+  branches in the alternation doesn’t matter — in which case the result should
+  be the same as before, i.e. <code>foo</code> — or it does matter — and now the
+  result will be <code>foobar</code>.
+
+<p id=rr>A computer scientist might lean towards the first option but a software
+  engineer will know it’s the second.
+
+<script>(o=>{var a=o.querySelector("#rr"),f=o.createElement("pre"),r,e=o=>{r=o.exec("foobarbaz");return r?"['"+r[0]+"']":"null"};f.innerHTML="/foo|foobar/.exec('foobarbaz') → "+e(/foo|foobar/)+"\n/foobar|foo/.exec('foobarbaz') → "+e(/foobar|foo/);a.innerText+=" Here’s a live demonstration of this browsers handling of those cases:";a.parentNode.appendChild(f)})(document);</script>
+
+<!-- EXCERPT -->
+
+<p>I’ve decided to check a whole bunch of tools, languages and libraries to see
+  how they all behave.  For those curious, code for all tests is of
+  course <a href="https://github.com/mina86/regexes-arebroken">available in
+  a source repository</a>.  Various UNIX utilities passed the verification so
+  long as they did not use Perl Compatible Regular Expressions
+  (PCRE).  <dfn>Passed</dfn> here means they produced the same result regardless
+  of the order of the subexpressions in the alternation.  Anything claiming to
+  be using compatible engine (e.g. <code>std::regex::extended</code> form C++)
+  worked correctly as well.  The rest didn’t bode so well.
+
+<table>
+  <thead><th>Tool<th>Result
+  <tbody>
+    <tr><th class=lt>BusyBox 1.29 AWK, grep &amp; sed
+        <td>✓ Pass, with and without <code>-E</code>
+    <tr><th class=lt>GNU AWK 5.1, grep 3.6 &amp; sed 4.7
+        <td>✓ Pass, with and without <code>-E</code>
+    <tr><th class=lt>GNU grep 3.6 with <code>-P</code> <small>(PCRE)</small>
+        <td>✗ Failure
+  <tbody>
+    <tr><th class=lt>Emacs 28.0.50                     <td>✗ Failure
+  <tbody>
+    <tr><th class=lt>C (<code>regex.h</code>, glibc 2.31)
+        <td>✓ Pass, with and without <code>REG_EXTENDED</code>
+    <tr><th class=lt>C++ (libstdc++ 10.2 &amp; libc++ 10.0)
+        <td>✗ Failure when using the default (<code>ECMAScript</code>)<br>
+            ✓ Pass when using other formats
+    <tr><th class=lt>C++ RE2                       <td>✗ Failure
+    <tr><th class=lt>Java (OpenJDK 11)             <td>✗ Failure
+    <tr><th class=lt>Rust (<code>regex</code> 1.4) <td>✗ Failure
+  <tbody>
+    <tr><th class=lt>JavaScript Carakan <small>(Opera 12.16)</small>      <td>✗ Failure
+    <tr><th class=lt>JavaScript Chakra <small>(Edge 90)</small>           <td>✗ Failure
+    <tr><th class=lt>JavaScript SpiderMonkey <small>(Firefox 78)</small>  <td>✗ Failure
+    <tr><th class=lt>JavaScript V8 <small>(Chromium 88, Opera 74)</small> <td>✗ Failure
+  <tbody>
+    <tr><th class=lt>CPython 2.7 &amp; 3.9         <td>✗ Failure
+    <tr><th class=lt>PyPy 7.2 (Python 2 &amp; 3)   <td>✗ Failure
+    <tr><th class=lt>Jython 2.7                    <td>✗ Failure
+  <tbody>
+    <tr><th class=lt>PHP 8.0 &amp; 5.6 <code>preg</code>    <td>✗ Failure
+    <tr><th class=lt>PHP 8.0 &amp; 5.6 <code>mb_ereg</code> <td>✗ Failure
+    <tr><th class=lt>PHP 5.6 <code>ereg</code>              <td>✓ Pass
+  <tbody>
+    <tr><th class=lt>Ruby 2.7                          <td>✗ Failure
+</table>
+
+<p>PHP’s <code>ereg</code> stands out with it passing the checks.  That is to be
+  expected since the <code>ereg</code> family of functions is based
+  on <code>regex.h</code>.  Sadly it has been removed in PHP 7.0 leaving only
+  PCRE and <code>mb_ereg</code> left.  The latter (which is a multibyte variant)
+  does not share its namesake’s behaviour.
+
+<p>Rust’s <code>regex</code> crate is noteworthy for another reason.  It
+  includes a <code>shortest_match</code> method which turns out to be a lie.
+  Rather than returning the <em>shortest</em> match it’s just an optimisation
+  returning position of the end of the matching substring.  It’s a step between
+  answering whether regex matched at all and returning full capture group
+  information.  While it may be useful, the name is confusing.
+
+<p>And there you have it.  Another one to the ‘regular expressions are weird’
+  box giving some more credence to the old adage: ‘A man had a problem and
+  decided to use a regex.  Now he has two problems.’
