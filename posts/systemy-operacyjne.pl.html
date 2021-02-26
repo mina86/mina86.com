@@ -419,7 +419,7 @@ void test(int n) {
   <dt>Skrypt, który przyjmuje jako argument id użytkownika
     i wypisuje na stdin nazwę użytkownika,</dt>
   <dd><pre>
-#! /bin/sh
+#!/bin/sh
 while IFS=: read nick pass uid other; do
     if [ X"$1" = X"$uid" ]; then
         echo "$nick"
@@ -431,7 +431,7 @@ exit 1</pre></dd>
   <dt>Skrypt zamieniający w nazwach wszystkich plików z bieżącego
     katalogu litery z dużych na małe.</dt>
   <dd><pre>
-#! /bin/sh
+#!/bin/sh
 for i in *; do
     n=`printf '%s\n' "$i" | tr '[A-Z]' '[a-z]'`
     if [ X"$i" != X"$n" ]; then
@@ -442,7 +442,7 @@ done</pre></dd>
   <dt> Skrypt wypisujący przyjęte argumenty w odwrotnej
     kolejności.</dt>
   <dd><pre>
-#! /bin/sh
+#!/bin/sh
 OUTPUT=$1
 while [ $# -gt 1 ]; do
     shift

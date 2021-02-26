@@ -45,12 +45,12 @@ func Bytes(str string) []byte {
       <th><code>String(bytes)</code> [ns]
       <th><code>string(bytes)</code> [ns]
       <th>
-  <tbody>
-    <tr class=r><td>0       <td>1.86<td>      3.08<td>1.7✕
-    <tr class=r><td>10      <td>1.86<td>      9.75<td>5.2✕
-    <tr class=r><td>1000    <td>1.86<td>    232.<span style="opacity:0">00</span><td>124.<span style="opacity:0">7</span>✕
-    <tr class=r><td>100000  <td>1.89<td>  13981.<span style="opacity:0">00</span><td>7397.<span style="opacity:0">4</span>✕
-    <tr class=r><td>10000000<td>1.88<td>1126164.<span style="opacity:0">00</span><td>599023.<span style="opacity:0">4</span>✕
+  <tbody class=r>
+    <tr><td>0       <td>1.86<td>      3.08<td>1.7✕
+    <tr><td>10      <td>1.86<td>      9.75<td>5.2✕
+    <tr><td>1000    <td>1.86<td>    232.  <td>124. ✕
+    <tr><td>100000  <td>1.89<td>  13981.  <td>7397. ✕
+    <tr><td>10000000<td>1.88<td>1126164.  <td>599023. ✕
 </table>
 
 <table>
@@ -60,12 +60,12 @@ func Bytes(str string) []byte {
       <th><code>Bytes(str)</code> [ns]
       <th><code>[]byte(str)</code> [ns]
       <th>
-  <tbody>
-    <tr class=r><td>0       <td>1.86<td>      6.24<td>3.4✕
-    <tr class=r><td>10      <td>1.86<td>      7.31<td>3.9✕
-    <tr class=r><td>1000    <td>1.85<td>    230.<span style="opacity:0">00</span><td>124.<span style="opacity:0">3</span>✕
-    <tr class=r><td>100000  <td>1.86<td>  15198.<span style="opacity:0">00</span><td>8171.<span style="opacity:0">0</span>✕
-    <tr class=r><td>10000000<td>1.89<td>1141424.<span style="opacity:0">00</span><td>603928.<span style="opacity:0">0</span>✕
+  <tbody class=r>
+    <tr><td>0       <td>1.86<td>      6.24<td>3.4✕
+    <tr><td>10      <td>1.86<td>      7.31<td>3.9✕
+    <tr><td>1000    <td>1.85<td>    230.  <td>124. ✕
+    <tr><td>100000  <td>1.86<td>  15198.  <td>8171. ✕
+    <tr><td>10000000<td>1.89<td>1141424.  <td>603928. ✕
 </table>
 
 <p>As expected, unsafe variant stays constant since it always

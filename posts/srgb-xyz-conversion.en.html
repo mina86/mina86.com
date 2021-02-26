@@ -34,55 +34,55 @@
 
 <!-- EXCERPT -->
 
-<div style="float: right; margin: 1em">
-  <svg width="4.5em" height="16.5em" viewBox="0 0 3 11">
+<figure style="float: right; margin: 1em">
+  <svg width="4.5em" height="16.5em" viewBox="0 0 3 11" fill="#000">
     <style>
-      text { text-anchor: end; fill: #000 }
+      text { text-anchor: end }
     </style>
-    <rect fill="#0f0"    width="2" height="1"        />
-    <rect fill="#00e500" width="1" height="1" y="1"  />
-    <rect fill="#0c0"    width="1" height="1" y="2"  />
-    <rect fill="#00b200" width="1" height="1" y="3"  />
-    <rect fill="#090"    width="1" height="1" y="4"  />
-    <rect fill="#007f00" width="1" height="1" y="5"  />
-    <rect fill="#060"    width="1" height="1" y="6"  />
-    <rect fill="#004c00" width="1" height="1" y="7"  />
-    <rect fill="#030"    width="1" height="1" y="8"  />
-    <rect fill="#001a00" width="1" height="1" y="9"  />
-    <rect fill="#000"    width="2" height="1" y="10" />
+    <path d="M0,0  h2 v1 h-2 z" fill="#0f0"    />
+    <path d="M0,1  h1 v1 h-1 z" fill="#00e500" />
+    <path d="M0,2  h1 v1 h-1 z" fill="#0c0"    />
+    <path d="M0,3  h1 v1 h-1 z" fill="#00b200" />
+    <path d="M0,4  h1 v1 h-1 z" fill="#090"    />
+    <path d="M0,5  h1 v1 h-1 z" fill="#007f00" />
+    <path d="M0,6  h1 v1 h-1 z" fill="#060"    />
+    <path d="M0,7  h1 v1 h-1 z" fill="#004c00" />
+    <path d="M0,8  h1 v1 h-1 z" fill="#030"    />
+    <path d="M0,9  h1 v1 h-1 z" fill="#001a00" />
+    <path d="M0,10 h2 v1 h-2 z" fill="#000"    />
 
     <g transform="translate(1)">
-      <rect fill="#00f200" width="1" height="1" y="1" />
-      <rect fill="#00e800" width="1" height="1" y="2" />
-      <rect fill="#00d900" width="1" height="1" y="3" />
-      <rect fill="#0c0"    width="1" height="1" y="4" />
-      <rect fill="#00bd00" width="1" height="1" y="5" />
-      <rect fill="#00ab00" width="1" height="1" y="6" />
-      <rect fill="#009400" width="1" height="1" y="7" />
-      <rect fill="#007a00" width="1" height="1" y="8" />
-      <rect fill="#005900" width="1" height="1" y="9" />
+      <path fill="#00f200" d="M0,1 h1 v1 h-1 z" />
+      <path fill="#00e800" d="M0,2 h1 v1 h-1 z" />
+      <path fill="#00d900" d="M0,3 h1 v1 h-1 z" />
+      <path fill="#0c0"    d="M0,4 h1 v1 h-1 z" />
+      <path fill="#00bd00" d="M0,5 h1 v1 h-1 z" />
+      <path fill="#00ab00" d="M0,6 h1 v1 h-1 z" />
+      <path fill="#009400" d="M0,7 h1 v1 h-1 z" />
+      <path fill="#007a00" d="M0,8 h1 v1 h-1 z" />
+      <path fill="#005900" d="M0,9 h1 v1 h-1 z" />
     </g>
 
-    <g transform="translate(3)" font-size=".4">
-      <text y=".6"  >1.0</text>
-      <text y="1.6" >0.9</text>
-      <text y="2.6" >0.8</text>
-      <text y="3.6" >0.7</text>
-      <text y="4.6" >0.6</text>
-      <text y="5.6" >0.5</text>
-      <text y="6.6" >0.4</text>
-      <text y="7.6" >0.3</text>
-      <text y="8.6" >0.2</text>
-      <text y="9.6" >0.1</text>
-      <text y="10.6">0.0</text>
+    <g transform="translate(3,.6)" font-size=".4">
+      <text       >1.0</text>
+      <text y="1" >0.9</text>
+      <text y="2" >0.8</text>
+      <text y="3" >0.7</text>
+      <text y="4" >0.6</text>
+      <text y="5" >0.5</text>
+      <text y="6" >0.4</text>
+      <text y="7" >0.3</text>
+      <text y="8" >0.2</text>
+      <text y="9" >0.1</text>
+      <text y="10">0.0</text>
     </g>
 
-    <text transform="rotate(-90)" font-size=".5"
-          ><tspan x="-.3" y=".6">Encoded</tspan
-          ><tspan x="-.3" y="1.8">Intensity</tspan
-          ></text>
+    <g transform="rotate(-90)" font-size=".5">
+      <text x="-.3" y=".6">Encoded</text>
+      <text x="-.3" y="1.8">Intensity</text>
+    </g>
   </svg>
-</div>
+</figure>
 
 <p>Many RGB systems use a simple \(S = E^\gamma\) expansion formula, where \(E\)
   is the encoded (or non-linear) value.  With decoding \(\gamma\) approximating

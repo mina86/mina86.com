@@ -130,6 +130,11 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
                 self._no_abbr_tag = tag
                 del attrs[i]
                 continue
+            if (tag in ('path', 'text', 'use', 'rect', 'circle') and
+                attr in ('x', 'cx', 'y', 'cy') and
+                value == '0'):
+                del attrs[i]
+                continue
             if value:
                 typing.cast(typing.List, attrs)[i] = (
                     attr, self._transform_attr(tag, attr, value))
@@ -210,16 +215,48 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
                                               self._data_buffer[i])
 
 
-def minify_html(data: str, **kw: typing.Any) -> str:
-    block = '(?:%s)' % '|'.join((
-        'body', 'br', 'col', 'div', 'form', 'h[1-6]', 'head', 'html', 'link',
-        'meta', 'p', 'script', 'table', 't[dhr]', 'textarea', 'title', '[ou]l',
-        '[A-Z_][A-Z_]*', 'section', 'header', 'aside', 'article', 'nav',
-        'footer', 'style',
-        # SVG elements:
-        'svg', 'rect', 'g',
-    ))
+def _html_tag_re(tag, **kw):
+    is_open = kw.get('open')
+    is_close = kw.get('close')
+    assert not (is_open and is_close)
 
+    fmt = r'</{tag}>' if is_close else r'<{slash}{tag}\b[^>]*>'
+    return fmt.format(slash='' if is_open else '/?', tag=tag)
+
+
+_MINIFY_HTML_RE = re.compile(r'''
+      {space} ( {block_tag}  ) {space}?
+    |         ( {block_tag}  ) {space}
+    | {space} ( {text_open}  )
+    |         ( {text_close} ) {space}
+    | {space} ( {pre_open}   ) {blank}*
+    |         ( {pre_open}   ) {blank}+
+    | \s+     ( {pre_close}  ) {space}?
+    |         ( {pre_close}  ) {space}
+'''.format(
+    space=r'\ ',
+    blank=r'(?:[ \t]*\n)',
+
+    block_tag=_html_tag_re('(?:%s)' % '|'.join((
+        'address', 'article', 'aside', 'base', 'blockquote', 'body', 'br',
+        'canvas', 'caption', 'col(?:group)?', 'd[dlt]', 'div',
+        'fig(?:caption|ure)', 'footer', 'form', 'h[1-6r]', 'head(?:er)?',
+        'hgroup', 'iframe', 'li(?:nk)?', 'main', 'meta', 'nav', 'noscript',
+        '[ou]l', 'opt(?:group|ion)', 'p', 'script', 'section', 'style',
+        't(?:able|head|body|foot|[dhr]|itle)',
+
+        # SVG elements:
+        'svg', 'rect', 'circle', 'g', 'path',
+    ))),
+    text_open=_html_tag_re('text', open=True),
+    text_close=_html_tag_re('text', close=True),
+    pre_open='{pre}(?:{code})?'.format(pre=_html_tag_re('pre', open=True),
+                                       code=_html_tag_re('code', open=True)),
+    pre_close='(?:{code})?{pre}'.format(pre=_html_tag_re('pre', close=True),
+                                        code=_html_tag_re('code', close=True)),
+), re.VERBOSE)
+
+def minify_html(data: str, **kw: typing.Any) -> str:
     def make_parser(*args: typing.Any, **kwargs: typing.Any) -> HTMLMinParser:
         kwargs.update(kw)
         return HTMLMinParser(*args, **kwargs)
@@ -233,10 +270,11 @@ def minify_html(data: str, **kw: typing.Any) -> str:
                           remove_optional_attribute_quotes=True,
                           cls=make_parser).strip()
 
-    data = re.sub(r'\s+(</?(?:%s|pre)\b)' % block, r'\1', data)
-    data = re.sub(r'(</pre>)\s+', r'\1', data)
-    data = re.sub('(<pre>)(?:[ \t]*\n)+', r'\1', data)
-    data = re.sub(r'(</?%s\b[^>]*>)\s+' % block, r'\1', data)
-    data = re.sub(r'\s+<text\b', '<text', data)
+    def pick_group(m):
+        for i in range(1, m.lastindex + 1):
+            if (grp := m.group(i)) is not None:
+                return grp
+
+    data = _MINIFY_HTML_RE.sub(pick_group, data)
 
     return data
