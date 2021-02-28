@@ -509,21 +509,27 @@ def generate(writer, site):
             })
 
         # Figure out links to category pages
-        categories = [
-            {
+        def cat_sort_key(cat):
+            cat_lang = cat.lang
+            if cat_lang == lang:
+                lang_key = 0
+            elif cat_lang:
+                lang_key = 1
+            else:
+                lang_key = 2
+            return (lang_key, -len(cat.entries), T(cat).lower())
+        categories = [{
                 'href': '/',
                 'desc': T('Everything'),
                 'count': len(posts),
                 'feed': '/atom',
-            }
-        ]
-        for cat in sorted(site.categories, key=lambda v: T(v).lower()):
-            categories.append({
-                'href': cat.href,
-                'desc': T(cat),
-                'count': len(cat.entries),
-                'feed': '/c/%s/atom' % cat.permalink,
-            })
+        }] + [{
+            'href': cat.href,
+            'desc': T(cat),
+            'count': len(cat.entries),
+            'feed': '/c/%s/atom' % cat.permalink,
+            'lang': cat.lang,
+        } for cat in sorted(site.categories, key=cat_sort_key)]
 
         # Generate archive pages
         for i in range(len(years)):

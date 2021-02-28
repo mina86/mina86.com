@@ -18,7 +18,9 @@
   <ul>
     {% for cat in categories %}
       <li>
-        <a href="{{ cat.href }}">{{ cat.desc }}</a>
+        <a href="{{ cat.href }}" {{ attr('class', cat.lang) }}>{{
+          cat.desc
+        }}</a>
         <small>({{ cat.count }})</small>
         {% if cat.feed %}
           <a href="{{ cat.feed }}"
