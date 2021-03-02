@@ -448,6 +448,7 @@ class Writer(object):
                   <id>%(id)s</id>
                   <link rel="alternate" type="text/html" href="%(url)s"/>
                   <published>%(date)s</published>
+                  <updated>%(date)s</updated>
                   %(author)s
                   <content type="html" xml:lang="%(lang)s">%(body)s</content>
                 </entry>

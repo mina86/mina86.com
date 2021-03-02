@@ -143,9 +143,9 @@
   }}{% endif %}
 {% endblock %}
 
-<header id="h" role=banner>
+<header id="h">
   <div class=w>
-    <h1><a href="/" role=presentation><span>mina86</span>.com</a></h1>
+    <h1 role=presentation><a href="/"><span>mina86</span>.com</a></h1>
     <nav>
       <ul>
         {%- if lang == 'pl' -%}
@@ -163,7 +163,6 @@
         {%- endif -%}
       </ul>
     </nav>
-    <gcse:search></gcse:search>
   </div>
 </header>
 
@@ -176,7 +175,7 @@
 </div>
 
 
-<footer id=f role=contentinfo>
+<footer id=f>
   <p>© {% if entry and entry.date %} {{ entry.date.year }}
        {% endif %} Michał Nazarewicz.
 
