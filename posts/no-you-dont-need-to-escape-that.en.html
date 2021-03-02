@@ -1,0 +1,174 @@
+<!-- subject: HTML: No, you don’t need to escape that -->
+<!-- date: 2021-03-07 14:55:20 -->
+<!-- tags: html, escaping, minimising -->
+<!-- categories: Articles, Techblog -->
+
+<p>This website being my personal project allows me to experiment and do things
+  I’d never do in professional settings.  Most notably, I’m rather found of
+  trying everything I can to reduce the size of the page.  This goes beyond mere
+  minification and eventually lead me to wonder if all those characters I’ve
+  been escaping in HTML code really need such treatment.
+
+<p>Libraries offering HTML support will typically provide a function to
+  indiscriminately replace all ampersands, quote characters, less-than and
+  greater-then signs with their corresponding HTML-safe representation.  This
+  allows the result to be used in any context in the document and is a good
+  choice for user-input validation.  It’s a different matter when it comes to
+  squeezing every last byte.  Herein I will explore just which characters and
+  when exactly really need to be escaped in an HTML document.
+
+<!-- EXCERPT -->
+
+
+<h2>Greater- and less-than signs</h2>
+
+<p>U+003E <span class=ud>greater-than sign</span> is a deeply misunderstood
+  character.  All it really wants is to be left alone to live in peace.  Sadly,
+  all those pesky web developers keep escaping it and replacing
+  with <code>&amp;gt;</code> even though in vast majority of cases it’s not
+  necessary.  U+003C <span class=ud>less-than sign</span>, greater-than sign’s
+  little brother, has a slightly easier life.  While people indiscriminately
+  escape it as well, this time it’s somewhat justifiable.
+
+<p>Greater-than sign has no special meaning in HTML data.  It’s therefore valid
+  and correct to write HTML code such as <code>&lt;p&gt;Linux > Windows >
+  macOS</code>.  Less-than sign on the other has a special meaning — it’s what
+  starts a tag after all — and as such must be escaped when outside of a tag.
+  In other words HTML agrees, <code>&lt;p&gt;Windows &lt; macOS</code> is not
+  a valid statement.
+
+<p>What’s also not alright is using either of those characters in an unquoted
+  attribute value.  For example <code>&lt;em title=Rust>Go>this
+  code&lt;/em></code> would be rendered as a single EM element with ‘Rust’ title
+  and ‘Go>this code’ text.  If that’s not the intention, the value has to be
+  escaped.  This is hardly a legitimate use-case though.  Rather than escaping
+  the characters it’s better to quote the value.  The code ends up shorter and
+  easier to read as evident by <code>&lt;em title="PW>UW">this
+  code&lt;/em></code>.
+
+
+<h2>Ampersand</h2>
+
+<p>U+0026 <span class=ud>ampersand</span>, is a whole other story.  She leads
+  a tumultuous life full of change and adventure where in the end no one really
+  knows what she wants.  Life was simple in the olden days.  Ampersand had to be
+  escaped in every context.  But HTML5 has complicated things quite a bit.
+
+<p>First of all, an ampersand which is not followed by an alphanumeric character
+  or a hash does not need to be escape.  <code>Steinway & Sons</code> is
+  therefore perfectly fine just like <code>curlun &&
+  !fsg_lun_is_open(curlun)</code>.
+
+<p>It would make sense to conclude that escaping is required if an
+  ampersand <em>is</em> followed by one of those characters, which is probably
+  why this is not the case.  <code>&lt;p&gt;Copy&amp;paste</code> for example is
+  a perfectly valid code because there’s no character reference named ‘paste’
+  (or any which would be a prefix of that string).  When processing named
+  character references the standard requires that the longest possible match is
+  made but if none can be found the characters are treated verbatim.
+  Furthermore, the semicolon ending the reference is part of that matching and
+  some <a href="https://html.spec.whatwg.org/multipage/named-characters.html">references
+  are defined</a> with and some without the semicolon.
+
+<p>As a consequence, <code>&lt;p>&amp;pi &amp;notin &amp;Qopf</code> ends up
+  rendered as ‘&amp;pi ¬in &amp;Qopf’.  To understand why this is the case one
+  needs to realise that there <em>is</em> a named character reference
+  named <code>not</code> (without a semicolon) while there <em>isn’t</em> one
+  called <code>notin</code>.  When the browser
+  encounters <code>&amp;notin</code> the longest string it can match
+  is <code>not</code> and thus it interprets <code>&amp;not</code> as
+  a U+00AC <span class=ud>not sign</span> leaving <code>in</code> intact.
+  Correct way to write the statement is <code>&lt;p>&amp;pi; &amp;notin;
+  &amp;Qopf;</code> which yields ‘π ∉ ℚ’ as expected.  Adding semicolons fixes
+  the code because <code>pi;</code>, <code>notin;</code> and <code>Qopf;</code>
+  (with semicolons) character references are all defined.
+
+<p>That could lead to a conclusion that ampersand does not need escaping unless
+  it’s followed by a hash or a defined named character reference.  That’s not
+  quite the case though since there’s also such a thing
+  as <a href="https://html.spec.whatwg.org/multipage/syntax.html#syntax-ambiguous-ampersand">an
+  ambiguous ampersand</a>:
+
+<blockquote>
+  <p>An <dfn>ambiguous
+      ampersand</dfn> is an U+0026 <span class=ud>AMPERSAND</span> character
+      (&) that is followed by one or more ASCII alphanumerics, followed by
+      a U+003B <span class=ud>semicolon</span> character (;), where these
+      characters do not match any of the names given in the named character
+      references section.
+</blockquote>
+
+<p>In other words, while <code>copy&paste</code> is valid because there’s no
+  named character reference
+  called <code>paste</code>, <code>copy&amp;paste;</code> isn’t because there’s
+  no named character reference called <code>paste;</code>… Confused yet?
+  There’s more.
+
+<p>Another exception introduced in HTML5 is treatment of ampersand in
+  attributes.  While in data state — when reading code outside of
+  tags — semicolon is not always required, when parsing attribute values a named
+  character reference must be terminated by a semicolon or else it will be taken
+  verbatim.  For example, <code>&lt;a
+  href="/?book=Ecc&amp;sect=1&amp;para=2">/?book=Ecc&amp;sect=1&amp;para=2&lt;/a></code>
+  defines a link whose hypertext reference is ‘/?book=Ecc&amp;sect=1&amp;para=2’
+  but whose text is ‘/?book=Ecc§=1¶=2’ (despite the same code being used for
+  both strings).
+
+<p>As inconsistent as all of it sounds, this is what browsers were often doing
+  anyway even before the behaviour was codified.  They always tried to be
+  accommodating to errors in the document and would therefore accept entity
+  references with missing semicolon and try to interpret them the way author
+  intended rather than strictly adhere to the standard.  HTML5 simply got all
+  browsers in line and made it possible to copy URLs into attributes without
+  worry.
+
+
+<h2>Honourable mentions</h2>
+
+<p>For the sake of completeness, last thing to mention are a few more characters
+  which need to be escaped in attribute values.  First of all, in an unquoted
+  attribute white-space characters (tab, line feed, form feed or space),
+  U+0022 <span class=ud>quotation mark</span>,
+  U+0027 <span class=ud>apostrophe</span>, U+003D <span class=ud>equals
+  sign</span> and U+0060 <span class=ud>grave accent</span> all need to be
+  escaped in addition to the three characters discussed earlier.  The usual way
+  of dealing with that is of course quoting the value at which point only
+  quotation mark (a.k.a. double quote) or apostrophe (a.k.a. single quote) needs
+  escaping depending which of the two is used to quote the string.
+
+
+<h2>Summary</h2>
+
+<p>What exactly are the rules for escaping characters in HTML?  Below is a quick
+  recap:
+
+<dl>
+  <dt><span class=ud>greater-than sign</span> (&gt;)
+  <dd>Must be escaped in unquoted attribute only.
+
+  <dt><span class=ud>less-than sign</span> (&lt;)
+  <dd>Must be escaped in data and unquoted attribute.
+
+  <dt><span class=ud>ampersand</span> (&amp;)
+  <dd>Simple rule of thumb is that the character must be escaped if it’s
+    followed by a hash or an alphanumeric character.  The actual, more complex,
+    rule is that it must be escaped if i) it is followed by a hash, ii) it is
+    followed by sequence of alphanumeric characters followed by a semicolon or
+    iii) if it’s outside of an attribute and is followed
+    by <a href="https://html.spec.whatwg.org/multipage/named-characters.html">a named
+    character reference defined by the standard</a>.  If decision needs to be
+    made without access to the list of named character references, one helpful
+    observation is that no defined name starts with a digit so unless an
+    ambiguous ampersand would be formed an ampersand followed by a digit does
+    not need escaping.
+
+  <dt><span class=ud>quotation mark</span> (")
+  <dt><span class=ud>apostrophe</span> (')
+  <dd>Must be escaped in unquoted attribute and in quoted one if it was the
+    character used to quote the value.
+
+  <dt>White-space (tab, line feed, form feed or space)
+  <dt><span class=ud>equals sign</span> (=)
+  <dt><span class=ud>grave accent</span> (`)
+  <dd>Must be escaped in unquoted attribute.
+</dl>

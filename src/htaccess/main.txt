@@ -27,6 +27,12 @@ RewriteRule ^(?:apple-)?touch-icon-[0-9]+x([0-9]+(?:-precomposed)?\.png)$ \
 RewriteRule ^(?:apple-)?touch-icon.png(?:-precomposed)?$ \
             /d/192.png          [END,R=temp]
 
+# no-you-dont-need-to-escape-that Easter egg
+RewriteCond %{QUERY_STRING}       book=Ecc&sect=1&para=2
+RewriteRule ^$                    http://tiny.cc/wy9rtz  [END,R=temp]
+RewriteCond %{QUERY_STRING}       book=Ecc%[Cc]2%[Aa]7=1%[Cc]2%[Bb]6=2
+RewriteRule ^$                    http://tiny.cc/vy9rtz  [END,R=temp]
+
 # If browser supports gzip and we have compressed file, send it.
 Options +MultiViews
 DirectoryIndex index
