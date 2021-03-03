@@ -47,7 +47,7 @@
                    {{ attr('title', prev.title, not prev.subject) }}
                  >« {% if prev.subject -%}{{
                           T('<u>p</u>revious:') | safe
-                       }} <i>{{ prev.subject }}</i>
+                       }} <i>{{ prev.subject | safe }}</i>
                     {%- else %} {{ T('<u>p</u>revious page') | safe }}
                     {%- endif -%}</a>
         {%- endif -%}
@@ -57,7 +57,7 @@
                    {{ attr('title', next.title, not next.subject) }}
                  >{%- if next.subject -%}{{
                            T('<u>n</u>ext:') | safe
-                       }} <i>{{ next.subject }}</i>
+                       }} <i>{{ next.subject | safe }}</i>
                   {%- else %}{{ T('<u>n</u>ext page') | safe }}
                   {%- endif %} »</a>
          {%- endif -%}
@@ -73,7 +73,7 @@
 
     <h1><a href="{{ entry.href }}"
            title="{{ T('Permanent link to the entry.') }}">{{
-        entry.subject }}</a></h1>
+        entry.subject | safe }}</a></h1>
 
     <p class="b">{{ byline('Michał ‘mina86’ Nazarewicz', 'mina86@mina86.com',
                            entry.date) }}
@@ -124,7 +124,7 @@
 <!--!github.com/mina86/mina86.com-->
 <html lang={{ lang }}>
 <meta charset=UTF-8>
-<title>{% if title %}{{ title }} ― {% endif %}mina86.com</title>
+<title>{% if title %}{{ title | striptags }} ― {% endif %}mina86.com</title>
 <meta name=viewport content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="/d/css.css">
 <link rel="shortcut icon" href="/favicon.ico">
