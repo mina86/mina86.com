@@ -100,7 +100,6 @@ def process_css(data: bytes, src_dir: str,
 _Attributes = typing.Sequence[typing.Tuple[str, typing.Optional[str]]]
 
 class HTMLMinParser(htmlmin.parser.HTMLMinParser):
-    _no_abbr_tag = None
 
     @staticmethod
     def _minify_css(data):
@@ -126,10 +125,6 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
         i = 0
         while i < len(attrs):
             attr, value = attrs[i]
-            if attr == 'no-abbr':
-                self._no_abbr_tag = tag
-                del attrs[i]
-                continue
             if (tag in ('path', 'text', 'use', 'rect', 'circle') and
                 attr in ('x', 'cx', 'y', 'cy') and
                 value == '0'):
@@ -166,53 +161,11 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
             value = value[6:]
         return value
 
-    _ABBR_RE = re.compile(r'\b(?:' + '|'.join((
-        # Special case for GNU/Linux which should not get the treatment either
-        # since it looks awkward with only GNU in small caps.  This needs to be
-        # in front because order of elements in regex alternatives apparently
-        # matters.
-        'GNU/Linux',
-        # At least three character long.
-        '([A-Z]{3,} +)*[A-Z]{3,}s?',
-        # Special case for things which would not normally match because they
-        # are not all uppercase letters.
-        'sRGB', 'W3C', 'TL;DR',
-        # Special case for Unicode U+#### which should not get the treatment.
-        r'U\+[0-9A-F]{4,}',
-    )) + r')\b')
-
-    @staticmethod
-    def _abbr_repl(m):
-        txt = m.group(0)
-        if txt.startswith('U+') or txt == 'GNU/Linux':
-            # Unicode code points can fool the regex.
-            return txt
-        elif txt == 'sRGB':
-            return 's<abbr>RGB</abbr>'
-        elif txt.endswith('s'):
-            return '<abbr>{}</abbr>s'.format(txt[:-1])
-        else:
-            return '<abbr>{}</abbr>'.format(txt)
-
-    def _should_handle_abbr(self):
-        for s in self._tag_stack:
-            if s[0] == 'main':
-                return True
-            if s[0] in ('kbd', 'pre', 'code', 'abbr', self._no_abbr_tag):
-                break
-        return False
-
     def handle_data(self, data):
         if self._tag_stack and self._tag_stack[0][0] == 'style':
             self._data_buffer.append(self._minify_css(data))
             return
-        i = len(self._data_buffer)
         super().handle_data(data)
-        if not self._in_pre_tag and self._should_handle_abbr():
-            for i in range(i, len(self._data_buffer)):
-                self._no_abbr_tag = None
-                self._data_buffer[i] = re.sub(self._ABBR_RE, self._abbr_repl,
-                                              self._data_buffer[i])
 
 
 def _html_tag_re(tag, **kw):
