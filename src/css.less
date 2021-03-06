@@ -49,16 +49,18 @@
 @news-image: .n;
 
 
-/* http://spencermortensen.com/articles/typographic-scale/
-   ratio = 2, notes = 5 */
-@tiny:     round(pow(2em, -0.4), 2);
-@small:    round(pow(2em, -0.2), 2);
-@normal:   1.00rem;
-/*         one skipped */
-@large:    round(pow(2em,  0.4), 2);
-/*         one skipped */
-@huge:     round(pow(2em,  0.8), 2);
-@title:    2.00em;
+/* Sizes based on five-note typographic scale with ratio of two (see
+   <http://spencermortensen.com/articles/typographic-scale/>).  Numbers are
+   rounded to be multiple of 1/8 so that whatever they are they give an integer
+   when multiple by 16px default font-size used by browsers.  Other sizes in
+   this CSS are kept to be multiples of 1/8 as well to minimise non-integer
+   dimensions. */
+@tiny:     0.75em;   /* =  6/8 ≈ 2^-0.4 */
+@small:    0.875em;  /* =  7/8 ≈ 2^-0.2 */
+@normal:   1em;
+@large:    1.25em;   /* = 10/8 ≈ 2^0.4 */
+@huge:     1.75em;   /* = 14/8 ≈ 2^0.8 */
+@title:    2em;
 
 @cosmic-latte: #fff8e7;  /* https://en.wikipedia.org/wiki/Cosmic_latte */
 @milky-way: #f9f1ff;  /* http://www.news.pitt.edu/milkywaycolor */
@@ -120,7 +122,7 @@
 }
 
 
-html, body {
+html {
 	@media screen, projection, tv, handheld {
 		color: @text-color;
 		background: @body-bg;
@@ -128,7 +130,7 @@ html, body {
 	font-family: @body-font;
 	font-variant: common-ligatures oldstyle-nums proportional-nums;
 	text-rendering: optimizelegibility;
-	line-height: 1.5em;
+	line-height: 1.5;
 }
 
 
@@ -219,7 +221,7 @@ html, body {
 	a img {
 		.grayscale-on();
 	}
-	a:hover, a:focus, a:active {
+	a:hover, a:focus {
 		img {
 			.grayscale-off();
 		}
@@ -230,7 +232,7 @@ html, body {
 
 h1, h2, h3 {
 	page-break-after: avoid;
-	a, a:link, a:hover, a:active, a:focus, a:visited {
+	a, a:link, a:hover, a:focus, a:visited {
 		color: inherit;
 	}
 }
@@ -242,7 +244,7 @@ a {
 a:visited {
 	color: #63c;
 }
-a:hover, a:focus, a:active {
+a:hover, a:focus {
 	color: #09f;
 	text-decoration: underline;
 }
@@ -285,7 +287,7 @@ a:hover, a:focus, a:active {
 
 		li {
 			display: inline-block;
-			margin: 0.2em;
+			margin: 0.25em;
 		}
 
 		ul a, ul a:link, ul a:visited {
@@ -300,7 +302,7 @@ a:hover, a:focus, a:active {
 			border-radius: 0.3em;
 		}
 
-		ul a:hover, ul a:active, ul a:focus {
+		ul a:hover, ul a:focus {
 			color: #00f;
 			background: -webkit-linear-gradient(bottom, #cff, rgba(255, 255, 255, 0.4));
 			background: -moz-linear-gradient(bottom, #cff, rgba(255, 255, 255, 0.4));
@@ -330,53 +332,54 @@ article {
 		border-top: 1px solid shade(@body-bg, 20%);
 	}
 
-	p, dd, li {
-		text-align: justify;
-		hanging-punctuation: first allow-end last;
-		hyphens: auto;
-	}
-
-	p {
-		margin: 1em 0;
-	}
-
 	@media screen, projection, tv, handheld {
 		text-shadow: 1px 1px #D9D9E6;
 	}
 
 	h1, h2, h3 {
-		margin: 1rem 0;
-		a, a:hover, a:focus, a:active {
+		a, a:hover, a:focus {
 			border: none;
 		}
 	}
 	h1 {
 		font-size: @huge;
 		font-style: italic;
-		margin-top: 0;
 	}
 	h2 {
 		font-size: @large;
-		margin-top: 2rem;
+		margin: 1.5em 0 0.75em;
 	}
 	h3 {
 		font-size: @normal;
+		margin: 1em 0;
 	}
 }
 
 @{article-text-cls} {
+	line-height: 1.75;
+
+	p, dd, li {
+		text-align: justify;
+		hanging-punctuation: first allow-end last;
+		hyphens: auto;
+	}
+	p {
+		margin: 1em 0;
+	}
+	small {
+		font-size: @small;
+	}
 	a {
 		border-bottom: 1px dotted #99f;
 	}
-
-	a:hover, a:focus, a:active {
+	a:hover, a:focus {
 		text-decoration: none;
 		border-bottom-style: solid;
 		borter-bottom-color: #09f;
 	}
 }
 /* Byline etc */
-p@{byline-cls} {
+@{byline-cls} {
 	font-style: italic;
 	font-weight: 300;
 	color: #666;
@@ -461,7 +464,7 @@ pre {
 		margin-top: .25em;
 	}
 	dd {
-		margin-left: 1.59em;
+		margin-left: 1.5625em;
 	}
 	dd + dt {
 		margin-top: 1em;
@@ -476,7 +479,7 @@ table {
 	border-collapse: collapse;
 }
 th, td {
-	padding: 0.2em 0.5em;
+	padding: 0.25em 0.5em;
 }
 th small {
 	font-weight: normal;
@@ -487,12 +490,13 @@ thead, tbody, tfoot {
 
 /* Misc */
 blockquote {
-	background: url(DATA<quote.svg>) no-repeat;
-	min-height: 2rem;
-	padding: 0.5rem 2rem;
-	margin: 0.5rem 0;
+	background: url(DATA<quote.svg>) 1.5em 0 / 2em 2em no-repeat;
+	min-height: 2em;
+	padding: 0 4em;
+	margin: 1em 0;
 	font-size: @small;
-
+}
+@{article-text-cls} blockquote {
 	p, dd, li {
 		text-align: left;
 		hyphens: manual;
@@ -537,13 +541,13 @@ blockquote > :last-child { margin-bottom: 0; }
 }
 a@{tweet-cls} {
 	background: #1b95e0 url(DATA<tweet.svg>) no-repeat;
-	&:active, &:focus, &:hover {
+	&:focus, &:hover {
 		background-color: #0c7abf;
 	}
 }
 a@{facebook-cls} {
 	background: #577fbc url(DATA<fb.svg>) no-repeat;
-	&:active, &:focus, &:hover {
+	&:focus, &:hover {
 		background-color: #3871C6;
 	}
 }
@@ -607,7 +611,7 @@ a@{facebook-cls} {
 	a, a:link, a:visited {
 		color: #009;
 	}
-	a:hover, a:focus, a:active {
+	a:hover, a:focus {
 		color: #069;
 	}
 
@@ -642,7 +646,7 @@ a@{facebook-cls} {
 		display: block;
 		text-align: center;
 		margin: .5em 0;
-		line-height: 1.2;
+		line-height: 1.25;
 	}
 	li:first-child {
 		font-weight: bold;
@@ -668,7 +672,7 @@ a@{facebook-cls} {
 	}
 	a {
 		display: table-cell;
-		padding: 0.2em 0;
+		padding: 0.25em 0;
 	}
 	small {
 		display: table-cell;
@@ -680,7 +684,7 @@ a@{facebook-cls} {
 }
 .en, .pl {
 	background: url(DATA<pl.svg>) 0 0.5em / 1.12em .7em no-repeat;
-	text-indent: 1.2em;
+	text-indent: 1.25em;
 }
 .en {
 	background-image: url(DATA<uk.svg>);
@@ -695,7 +699,7 @@ a@{facebook-cls} {
 		.grayscale-on();
 		.text-off-screen();
 	}
-	&:hover span, &:focus span, &:active span {
+	&:hover span, &:focus span {
 		.grayscale-off();
 	}
 }
@@ -711,7 +715,7 @@ a@{facebook-cls} {
 	padding: 1em 0;
 	text-align: center;
 
-	a, a:link, a:visited, a:hover, a:active, a:focus {
+	a, a:link, a:visited, a:hover, a:focus {
 		color: #acd;
 	}
 
@@ -731,7 +735,7 @@ a@{facebook-cls} {
 		background: #fff;
 	}
 
-	a, a:link, a:visited, a:hover, a:focus, a:active {
+	a, a:link, a:visited, a:hover, a:focus {
 		text-decoration: none !important;
 		border: none !important;
 		color: inherit !important;

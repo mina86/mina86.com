@@ -20,7 +20,7 @@
   speed by changing division operation into a bit shift.  But that’s not all.
   Even if speed is an important factor, there are better algorithms.
 
-<div style="font-size: 0.87em; margin: 1.5rem 2rem">
+<div style="font-size: 0.85em; margin: 0 4em">
   <h2>TL;DR</h2>
 
   <pre>
@@ -30,10 +30,13 @@ fn grey_from_rgb_avg_32bit(r: u8, g: u8, b: u8) -&gt; u8 {
 }
   </pre>
 
-  <p>The above function implements the best algorithm for converting sRGB into
-    greyscale which does not involve gamma.  At the same time it’s practically
-    as fast as arithmetic mean.  That’s hardly the end of the story though as
-    slightly more complicated methods can increase accuracy much further.
+  <p>The above implements the best algorithm for converting sRGB into greyscale
+    if speed and simplicity is main concern.  It does not involve gamma thus
+    forgoes most complicated and time-consuming arithmetic.  It’s much more
+    precise and as fast as arithmetic mean.
+
+  <p>That’s hardly the end of the story though as slightly more complicated
+    methods can increase accuracy much more.
 </div>
 
 <!-- EXCERPT -->
