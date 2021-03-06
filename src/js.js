@@ -1,5 +1,5 @@
 (img => {
-	var D = document, W = window;
+	var D = document;
 	var tmp = id => D.getElementById(id),
 	    createElement = tag => D.createElement(tag),
 	    appendHeadChild = el => D.head.appendChild(el),
@@ -70,8 +70,8 @@
 	};
 
 	/* Third party scripts */
-	W['_gaq'] = [['_setAccount', 'UA-240278-1'], ['_trackPageview']];
-	W['talkyardServerUrl'] = 'https://comments-for-mina86-com.talkyard.net';
+	_gaq = [['_setAccount', 'UA-240278-1'], ['_trackPageview']];
+	talkyardServerUrl = 'https://comments-for-mina86-com.talkyard.net';
 	[
 		'cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml',
 		'www.google-analytics.com/ga',
@@ -93,7 +93,7 @@
 
 	/* Sidebar pinning and top bar background fixing */
 	if (sidebar && header && footer) {
-		W.onscroll = lft => {
+		onscroll = lft => {
 			var rect = getRect(sidebar),
 			    docEl = D.documentElement,
 			    cls = sidebar.className.replace(
@@ -112,7 +112,7 @@
 				cls += ' v';
 				top = getRect(footer).top - top;
 				top = top < 0 ? top + 'px' : 0;
-				lft = (W.pageXOffset || docEl.scrollLeft || 0) -
+				lft = (pageXOffset || docEl.scrollLeft || 0) -
 					getRect(sidebar.parentElement).right +
 					rect.right + rect.left + 'px';
 			}
@@ -121,8 +121,8 @@
 			sidebar.style.left = lft;
 			sidebar.style.top = top;
 		};
-		(W.onresize = rect => {
-			W.onscroll();
+		(onresize = rect => {
+			onscroll();
 			rect = getRect(header);
 			tmp = 1400 * rect.height / 475;
 			tmp = rect.width < tmp ? tmp + 'px' : '100%';
