@@ -35,12 +35,12 @@
   has been introduced.  (On unrelated note, is it just me who finds
   spelling of ‘awkward’ so <em>meta</em>?) Anyway, 2048 code points
   have been carved out to make room for high and low surrogates.  In
-  UTF-16, a high surrogate followed by a low surrogate — four octets
-  total — encodes a single code point outside of BMP.
+  UTF-16, a high surrogate followed by a low surrogate — four octets
+  total — encodes a single code point outside of BMP.
 
 <p>The encoding method is relatively simple.  For example, to
   represent U+1F574: <span class=ud>man in business suit
-  levitating</span> (🕴 — does your browser support it yet?)
+  levitating</span> (🕴 — does your browser support it yet?)
   one would:
 
 <ol>
@@ -51,7 +51,7 @@
       = <span class=hi>0000111101</span> <span class=lo>0101110100</span> <sub>2</sub>
   <li>
     <p>Add D800 <sub>16</sub> to the ten most significant bits of that
-      number — that’s the high surrogate.
+      number — that’s the high surrogate.
     <p>D800 <sub>16</sub> + <span class=hi>0000111101</span> <sub>2</sub>
       = 110110 <span class=xx>0000000000</span> <sub>2</sub>
       + <span class=hi>0000111101</span> <sub>2</sub>
@@ -59,7 +59,7 @@
       = D83D <sub>16</sub>
   <li>
     <p>Add DC00 <sub>16</sub> to the ten least significant bits of the same
-      number — that’s the low surrogate.
+      number — that’s the low surrogate.
     <p>DC00 <sub>16</sub> + <span class=lo>0101110100</span> <sub>2</sub>
       = 110111 <span class=xx>0000000000</span> <sub>2</sub>
       + <span class=lo>0101110100</span> <sub>2</sub>

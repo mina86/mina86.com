@@ -112,8 +112,8 @@ public static char[] toChars(final String string) {
   earlier versions.
 
 <p>Until Java 7u6, <code>String::substring</code> created objects which shared
-  character array with the ‘parent’ string.  This had some advantages — the
-  operation was constant time and constant memory operation — but could lead to
+  character array with the ‘parent’ string.  This had some advantages — the
+  operation was constant time and constant memory operation — but could lead to
   memory leaks (if the base string got garbage collected its entire contents
   would remain in memory even if the substring needed just a small portion of
   it) and complicated the <code>String</code> class (by requiring offset and

@@ -20,18 +20,18 @@ propaganda.</p>
 
 <p>First of all, if you don’t use Caps Lock at all why waste space on
 the keyboard?  Honestly!  Personally I don’t even remember when I used
-Caps Lock last time — have I ever used it at all?  If you feel the
+Caps Lock last time — have I ever used it at all?  If you feel the
 same way you should definitely go for it! Caps Lock+s is way easier to
 press then Ctrl+s and that’s a key binding often used on various
 systems.</p>
 
 <p>If, on the other hand, you do use Caps Lock you need to analyse how
-often — if rarely I still say go for it!  Requirement to press Shift
+often — if rarely I still say go for it!  Requirement to press Shift
 a little more is minor annoyance compared to benefits which came from
 not having to stretch your little finger so much.</p>
 
-<p>But, if you use Caps Lock all the time, then still — go for it and
-stop SCREAMING on IRC and in mails so much! No, honestly — flame wars
+<p>But, if you use Caps Lock all the time, then still — go for it and
+stop SCREAMING on IRC and in mails so much! No, honestly — flame wars
 are not good for you health.</p>
 
 <p>I’ve basically forced this settings on one of my colleagues at work
@@ -48,7 +48,7 @@ those key as Ctrl.  But I say no!</p>
 
 <p>Caps Lock is so rarely used that whenever it is it wasts space and
 I find some of the key shortcuts to be typed easier with lower left
-Ctrl (but that may be only a habit) — in particular all the
+Ctrl (but that may be only a habit) — in particular all the
 Ctrl+Shift+whatever bindings.</p>
 
 <p>Moreover, old habits die hard and so you’d make too many mistakes
@@ -58,7 +58,7 @@ if you’d place Caps Lock where you’re used to have Ctrl.</p>
 <h3>Other Systems</h3>
 
 <p>Usually, with modifications like that an argument of other people’s
-computers comes in mind — what if I have to do something on some
+computers comes in mind — what if I have to do something on some
 machine without those modifications?</p>
 
 <p>This is a perfectly valid argument but you need to ask
@@ -67,8 +67,7 @@ control over configuration of?  In my case it’s a small fraction
 of a per cent so I decided not to bother.</p>
 
 <p>Of course, even if you are going to spend significant amount of
-time on other people’s computers you can still consider the change —
-it’s up to you.</p>
+time on other people’s computers you can still consider the change — it’s up to you.</p>
 
 
 
@@ -76,12 +75,12 @@ it’s up to you.</p>
 
 <p>Lets start with widely used in *nix word X-Window system.  First of
 all, if you are using KDE or Gnome you might try looking into
-keyboard’s configuration applets of those desktops — there may be an
+keyboard’s configuration applets of those desktops — there may be an
 option to configure modifiers map.</p>
 
 <p>Should you not find an option you’ll have to change some files by
 hand.  As mentioned above I advocate using Caps Lock as another Ctrl
-and so examples will feature <code>ctrl:nocaps</code> option — if you’d
+and so examples will feature <code>ctrl:nocaps</code> option — if you’d
 rather swap the two keys use <code>ctrl:swapcaps</code> instead.  You can
 of course specify several options if you have some already by
 separating them with colons.</p>
@@ -148,7 +147,7 @@ the <code>XkbOptions</code> option.</p>
 <h3>Xkb, HAL</h3>
 
 <p>It may happen that there is no <i>InputDevice</i> section for your
-keyboard — that’s actually all right.  Newer versions of XOrg may use
+keyboard — that’s actually all right.  Newer versions of XOrg may use
 HAL to determine available input devices in which case you need to
 instruct it to pass proper options.  First find proper policy file
 somewhere in <code>/etc/hal/policy</code> directory (under Slackware it’s
@@ -197,7 +196,7 @@ add Lock = Control_L</pre>
 ~/.Xmodmap</code>.  If you got your desired effect then everything
 should work next time you restart X session.  If <code>~/.Xmodmap</code>
 does not get applied automatically you should consult your
-distribution’s documentation — it’s possible you’ll need to edit (or
+distribution’s documentation — it’s possible you’ll need to edit (or
 even creat) an <code>~/.xinit</code> file (you might <a
 href="https://github.com/mina86/dot-files/blob/master/x/xinitrc">take
 a look at mine</a> if you want).</p>
@@ -213,13 +212,12 @@ First of all, however, I must admit that even thought I’m
 reffering to "Unix Console" I’m not sure if what I’m going to
 write here is going to work for all kinds of *nix systems.</p>
 
-<p>To avoid confusion I need to make it clear that console (or virtual
-terminal or vtt) is not what you get in graphical interface
+<p>To avoid confusion I need to make it clear that console (or virtual terminal
+or vtt) is not what you get in graphical interface
 (<code><i>?</i>term</code>, <code>konsole</code>, <code>gnome-terminal</code>,
-etc.).  On some GNU/Linux distributions users may not even see it —
-a funky bootsplash can hide it pretty well.  If you don’t know what it
-is just skip this section — you probably don’t need that
-knowledge.</p>
+etc.).  On some GNU/Linux distributions users may not even see it — a funky
+bootsplash can hide it pretty well.  If you don’t know what it is just skip this
+section — you probably don’t need that knowledge.</p>
 
 
 <h3>Debian &amp; Debian-based (like Ubuntu)</h3>
@@ -252,8 +250,8 @@ emacs2</code> command in the console.  If either of the two is what you
 want configure your system to use it by default.</p>
 
 <p>Under Slackware you need to edit <code>/etc/rc.d/rc.keymap</code> file.
-Under Gentoo try <code>/etc/conf.d/keymaps</code>.  On other systems —
-sorry, your on your own but it shouldn’t be hard.</p>
+Under Gentoo try <code>/etc/conf.d/keymaps</code>.  On other systems — sorry,
+your on your own but it shouldn’t be hard.</p>
 
 
 <h3>setkeycodes</h3>
@@ -269,10 +267,10 @@ Ctrl will give you their keycodes (58 and 29).  Then invoke
 If the numbers were different change the <code>setkeycodes</code> command
 accordingly.</p>
 
-<p>If you have found command which works for you it’ll be enough to
-put that somewhere in start scripts.  Under Slackware logical choice
-would be the end of <code>/etc/rc.d/rc.keymap</code> file.  Other systems
-usually have a ‘local’ start script which one can edit — try
+<p>If you have found command which works for you it’ll be enough to put that
+somewhere in start scripts.  Under Slackware logical choice would be the end
+of <code>/etc/rc.d/rc.keymap</code> file.  Other systems usually have a ‘local’
+start script which one can edit — try
 <code>/etc/rc.d/rc.local</code> or <code>/etc/rc.local</code> (you should
 refer to distribution’s documentation).</p>
 
@@ -298,10 +296,10 @@ sed	-e 's/keycode[[:space:]][[:space:]]*58[[:space:]][[:space:]]*=[[:space:]][[:
 	-e 's/keycode[[:space:]][[:space:]]*29[[:space:]][[:space:]]*=[[:space:]][[:space:]]*Control/keycode  29 = Caps_Lock/' \
 	| gzip -9 &gt;<i>kaymap</i>-my.map.gz</pre>
 
-<p>You can use a bit more descriptive suffix instead of <code>-my</code> —
-for instance <code>-nocaps</code> or <code>-swapcaps</code>.  Also this will
-swap the Caps Lock and Ctrl key — if you’d rather use two Ctrls skip
-the second <code>-e</code> line.</p>
+<p>You can use a bit more descriptive suffix instead of <code>-my</code> — for
+instance <code>-nocaps</code> or <code>-swapcaps</code>.  Also this will swap
+the Caps Lock and Ctrl key — if you’d rather use two Ctrls skip the
+second <code>-e</code> line.</p>
 
 <p>If you can’t seem to find proper map file invoke <code>dumpkeys</code>
 instead of <code>gzip -d &lt;<i>kaymap</i>.map.gz</code> in the above
@@ -309,7 +307,7 @@ command.</p>
 
 <p>After you’ve created your new keymap test it with <code>loadkeys
 <i>keymap</i>-my</code> command.  If that’s what you want instruct your
-system to use it permanently — refer to <a href="#us_layout">US
+system to use it permanently — refer to <a href="#us_layout">US
 layout</a> section.</p>
 
 
@@ -483,7 +481,7 @@ XKBOPTIONS="ctrl:nocaps"</p>
 
 <p>As of remiq’s proposal I have thought at one time of an article describing how to turn any key into any other key so maybe in the future.</p>
 
-<p>If you get into more details you can make a single key produce several characters as well — for instance, I have created a <a href="https://pastebin.com/f60a1b70c" rel="nofollow">pl(dvp) keyboard layout</a> (which is <a href="http://www.kaufmann.no/roland/dvorak/" rel="nofollow">Porgrammer Dvorak</a> with Polish characters) plus <a href="https://pastebin.com/f2476bc31" rel="nofollow">accompanying ~/.XCompose</a> such that pressing Alt+&lt; produces "&lt;=".</p>
+<p>If you get into more details you can make a single key produce several characters as well — for instance, I have created a <a href="https://pastebin.com/f60a1b70c" rel="nofollow">pl(dvp) keyboard layout</a> (which is <a href="http://www.kaufmann.no/roland/dvorak/" rel="nofollow">Porgrammer Dvorak</a> with Polish characters) plus <a href="https://pastebin.com/f2476bc31" rel="nofollow">accompanying ~/.XCompose</a> such that pressing Alt+&lt; produces "&lt;=".</p>
 
 <p>Anyhow, if someone is more interested in creating custom keyboard
 layout under X the following link may be
