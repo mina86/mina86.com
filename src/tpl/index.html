@@ -1,13 +1,5 @@
 {%- extends 'base.html' -%}
 
-{% block meta_links %}
-  {{ super() }}
-  {% if not next %}
-    {{ link('prefetch', entries[0].href) }}
-    {{ link('prerender', entries[0].href) }}
-  {% endif %}
-{% endblock %}
-
 {%- block main -%}
   {{ prev_next() }}
   {% for entry in entries %}

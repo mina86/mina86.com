@@ -86,6 +86,22 @@
 		tmp.href = '/d/' + w + '.png';
 	});
 
+	/* Prefetch and prerender links */
+	tmp = document.querySelectorAll('article h1 a');
+	if (tmp.length > 1 && !document.querySelector('.p .r')) {
+		/* If there are multiple articles we’re on an index page (this
+		   may yield false negative on last index page if there’s only
+		   one entry but we don’t care about last page anyway.  And
+		   then, if there’s no right-aligned link in pagination table
+		   than we’re on the first index page. */
+		tmp = tmp[0].href;
+		['prefetch', 'prerender'].map((rel, el) => {
+			el = createElement('link', D.head);
+			el.rel = rel;
+			el.href = tmp;
+		});
+	}
+
 	/* Sidebar pinning and top bar background fixing */
 	if (sidebar && header && footer) {
 		onscroll = lft => {
