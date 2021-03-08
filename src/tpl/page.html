@@ -7,9 +7,7 @@
          title="{{ T('Permanent link to the entry.') }}">{{
       entry.subject }}</a></h2>
 
-  <div class=t>
-    {{ entry.body | safe }}
-  </div>
+  <div class=t>{{ entry.body.html(True) }}</div>
 
   <footer class="g">
     {{ social(entry) }}

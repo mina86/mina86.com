@@ -78,20 +78,15 @@
     <p class="b">{{ byline('Michał ‘mina86’ Nazarewicz', 'mina86@mina86.com',
                            entry.date) }}
 
-    <div class=t lang="{{ entry.lang }}">
-      {% if full %}
-        {{ entry.body | safe }}
-      {% else %}
-        {{ entry.body.short | safe }}
-      {% endif %}
-    </div>
+    <div class=t lang="{{ entry.lang }}">{{ entry.body.html(post_page) }}
 
     <footer class="g">
-      {%- if post_page -%}
-      {%- elif full -%}
-        <a href="{{ entry.href }}#c">{{ T('See comments') }} »</a>
-      {%- else -%}
-        <a href="{{ entry.href }}#m">{{ T('Continue reading') }} »</a>
+      {%- if not post_page -%}
+        {%- if entry.body.has_excerpt -%}
+          <a href="{{ entry.href }}#m">{{ T('Continue reading') }} »</a>
+        {%- else -%}
+          <a href="{{ entry.href }}#c">{{ T('See comments') }} »</a>
+        {%- endif -%}
       {%- endif -%}
 
       {{ social(entry) }}

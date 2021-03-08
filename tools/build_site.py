@@ -180,19 +180,25 @@ class Tag(_Group):
 
 class Body(object):
 
-    __slots__ = ('excerpt', 'more')
+    __slots__ = ('__parts',)
 
     def __init__(self, excerpt, more):
-        self.excerpt = excerpt
-        self.more = more
+        if excerpt:
+            self.__parts = (excerpt, more)
+        else:
+            self.__parts = (more,)
+
+    def html(self, full=True):
+        if full:
+            html = ' '.join(self.__parts)
+        else:
+            html = self.__parts[0]
+        return jinja2.utils.Markup(html)
 
     def __str__(self):
-        if self.excerpt:
-            return '%s\n%s' % (self.excerpt, self.more)
-        return self.more
+        return ' '.join(self.__parts)
 
-    short = property(lambda self: self.excerpt or self.more)
-    full = property(__str__)
+    has_excerpt = property(lambda self: len(self.__parts) > 1)
 
 
 class Post(_Addresable):
@@ -460,7 +466,7 @@ class Writer(object):
                   date=entry.date,
                   lang=entry.lang or 'en',
                   body=e(compilers.minify_html(
-                      entry.body.full, static_mappings=self._static_mappings)))
+                      str(entry.body), static_mappings=self._static_mappings)))
         write('</feed>')
 
         self.write_file(filename, fd.getvalue())
