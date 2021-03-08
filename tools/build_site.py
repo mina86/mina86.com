@@ -179,26 +179,28 @@ class Tag(_Group):
 
 
 class Body(object):
+    __slots__ = ('__parts', '__excerpt_math', '__full_math')
 
-    __slots__ = ('__parts',)
-
-    def __init__(self, excerpt, more):
-        if excerpt:
-            self.__parts = (excerpt, more)
-        else:
-            self.__parts = (more,)
+    def __init__(self, excerpt, more, needs_math=False):
+        self.__parts = parts = (excerpt, more) if excerpt else (more,)
+        self.__excerpt_math = needs_math and self.__check_math(parts[0])
+        self.__full_math = self.__excerpt_math or (
+            needs_math and len(parts) > 1 and self.__check_math(parts[1]))
 
     def html(self, full=True):
-        if full:
-            html = ' '.join(self.__parts)
-        else:
-            html = self.__parts[0]
+        html = ' '.join(self.__parts) if full else self.__parts[0]
         return jinja2.utils.Markup(html)
 
     def __str__(self):
         return ' '.join(self.__parts)
 
     has_excerpt = property(lambda self: len(self.__parts) > 1)
+    excerpt_needs_math = property(lambda self: self.__excerpt_math)
+    needs_math = property(lambda self: self.__full_math)
+
+    @staticmethod
+    def __check_math(text):
+        return '\\(' in text or '$$' in text
 
 
 class Post(_Addresable):
@@ -298,7 +300,8 @@ def read_entry(fd, dirname):
         else:
             sys.stderr.write('Unexpected directive: ' + line)
 
-    d['__body__'] = Body(excerpt, content)
+    d['__body__'] = Body(excerpt, content,
+                         needs_math=d.pop('math', None) == 'true')
     return d
 
 

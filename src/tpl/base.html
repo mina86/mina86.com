@@ -68,7 +68,7 @@
 {%- endmacro -%}
 
 {%- macro post(entry, post_page) -%}
-{%- set full = post_page or not entry.body.excerpt -%}
+{%- set full = post_page or not entry.body.has_excerpt -%}
   <article {{ attr('class', 'q', full) }}>
 
     <h1><a lang="{{ entry.lang }}" href="{{ entry.href }}"
@@ -119,8 +119,8 @@
 <!--!github.com/mina86/mina86.com-->
 <html lang={{ lang }}>
 <meta charset=UTF-8>
-<title>{% if title %}{{ title | striptags }} ― {% endif %}mina86.com</title>
 <meta name=viewport content="width=device-width, initial-scale=1">
+<title>{% if title %}{{ title | striptags }} ― {% endif %}mina86.com</title>
 <link rel="stylesheet" href="/d/css.css">
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" sizes="192x192" href="/d/192.png">
@@ -137,6 +137,12 @@
     link('next', next.href, next.title | default(next.subject, true))
   }}{% endif %}
 {% endblock %}
+<script defer src=/d/js.js></script>
+{%- if (entry and entry.body.needs_math) or
+       (entries and (entries | selectattr('body.excerpt_needs_math') | first)) -%}
+<script defer
+        src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js></script>
+{%- endif -%}
 
 <header id="h">
   <div class=w>
@@ -195,5 +201,3 @@
 
     {% endif %}
 </footer>
-
-<script src=/d/js.js></script>

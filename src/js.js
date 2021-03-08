@@ -1,9 +1,12 @@
 (img => {
 	var D = document;
-	var tmp = id => D.getElementById(id),
-	    createElement = tag => D.createElement(tag),
-	    appendHeadChild = el => D.head.appendChild(el),
-	    getRect = el => el.getBoundingClientRect();
+	var tmp = id => D.getElementById(id);
+	var createElement = (el, parent) => {
+		el = D.createElement(el);
+		parent.appendChild(el);
+		return el;
+	};
+	var getRect = el => el.getBoundingClientRect();
 	var sidebar = tmp('s'), header = tmp('h'), footer = tmp('f');
 
 	var processAbbrText = (parent, node) => {
@@ -41,9 +44,7 @@
 			if (tmp) {
 				pos = match.index + tmp.length;
 				matched = true;
-				fragment.appendChild(
-					match = createElement('abbr'));
-				match.innerText = tmp;
+				createElement('abbr', fragment).innerText = tmp;
 			} else if (matched) {
 				pos = fragment.childNodes.length;
 				parent.replaceChild(fragment, node);
@@ -71,24 +72,18 @@
 
 	/* Third party scripts */
 	_gaq = [['_setAccount', 'UA-240278-1'], ['_trackPageview']];
-	talkyardServerUrl = 'https://comments-for-mina86-com.talkyard.net';
+	talkyardServerUrl = '//comments-for-mina86-com.talkyard.net';
 	[
-		'cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml',
-		'www.google-analytics.com/ga',
-		'c1.ty-cdn.net/-/talkyard-comments.min'
-	].map(src => {
-		tmp = createElement('script');
-		tmp.src = '//' + src + '.js';
-		appendHeadChild(tmp);
-	});
+		'//www.google-analytics.com/ga.js',
+		tmp('c') && '//c1.ty-cdn.net/-/talkyard-comments.min.js'
+	].map(src => src && (createElement('script', D.head).src = src));
 
 	/* Apple touch icon */
 	[192, 180, 152, 120, 76].map(w => {
-		tmp = createElement('link');
+		tmp = createElement('link', D.head);
 		tmp.rel = 'apple-touch-icon';
 		tmp.sizes = w + 'x' + w;
 		tmp.href = '/d/' + w + '.png';
-		appendHeadChild(tmp);
 	});
 
 	/* Sidebar pinning and top bar background fixing */

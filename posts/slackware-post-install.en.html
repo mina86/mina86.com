@@ -150,8 +150,8 @@ cat &gt;/etc/cron.hourly/ntpsync &lt;&lt;EOF
 #!/bin/sh
 # Change to two-letter code of the country the machine is in.
 country=<var>us</var>
-exec /usr/sbin/ntpdate -u -s 0.$$country.pool.ntp.org \
-	1.$$country.pool.ntp.org 2.$$country.pool.ntp.org
+exec /usr/sbin/ntpdate -u -s 0.\$country.pool.ntp.org \
+	1.\$country.pool.ntp.org 2.\$country.pool.ntp.org
 EOF
 chmod 755 /etc/cron.hourly/ntpsync
 /etc/cron.hourly/ntpsync</pre>
