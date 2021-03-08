@@ -7,12 +7,12 @@
 a decade (once to turn it on and then to turn it off), is in such
 a lucrative position on the keyboard? And how about Ctrl?
 Compared to Caps Lock it seems like miles away.  If you think about it
-old unix keyboards with those keys swapped seem to got it right.</p>
+old unix keyboards with those keys swapped seem to got it right.
 
 <p>I’ve gone one step further and recommend turning Caps Lock into
 Ctrl key altogether.  In this article I will describe how to
 do that in various systems and platforms.  But lets start with some
-propaganda.</p>
+propaganda.
 
 <!-- EXCERPT -->
 
@@ -23,51 +23,51 @@ the keyboard?  Honestly!  Personally I don’t even remember when I used
 Caps Lock last time — have I ever used it at all?  If you feel the
 same way you should definitely go for it! Caps Lock+s is way easier to
 press then Ctrl+s and that’s a key binding often used on various
-systems.</p>
+systems.
 
 <p>If, on the other hand, you do use Caps Lock you need to analyse how
 often — if rarely I still say go for it!  Requirement to press Shift
 a little more is minor annoyance compared to benefits which came from
-not having to stretch your little finger so much.</p>
+not having to stretch your little finger so much.
 
 <p>But, if you use Caps Lock all the time, then still — go for it and
 stop SCREAMING on IRC and in mails so much! No, honestly — flame wars
-are not good for you health.</p>
+are not good for you health.
 
 <p>I’ve basically forced this settings on one of my colleagues at work
 (he asked me for help and I kept toggling Caps Lock when
 I wanted to press Ctrl so I’ve made the change) who was not
-pleased at first but then seemed to like it.</p>
+pleased at first but then seemed to like it.
 
 
 <h3>Swap?</h3>
 
 <p>If you made a decision to give it a try you’ll probably wondering
 that swapping Caps Lock and left Ctrl is better idea then using both
-those key as Ctrl.  But I say no!</p>
+those key as Ctrl.  But I say no!
 
 <p>Caps Lock is so rarely used that whenever it is it wasts space and
 I find some of the key shortcuts to be typed easier with lower left
 Ctrl (but that may be only a habit) — in particular all the
-Ctrl+Shift+whatever bindings.</p>
+Ctrl+Shift+whatever bindings.
 
 <p>Moreover, old habits die hard and so you’d make too many mistakes
-if you’d place Caps Lock where you’re used to have Ctrl.</p>
+if you’d place Caps Lock where you’re used to have Ctrl.
 
 
 <h3>Other Systems</h3>
 
 <p>Usually, with modifications like that an argument of other people’s
 computers comes in mind — what if I have to do something on some
-machine without those modifications?</p>
+machine without those modifications?
 
 <p>This is a perfectly valid argument but you need to ask
 yourself how often do you work on computers you don’t own or have
 control over configuration of?  In my case it’s a small fraction
-of a per cent so I decided not to bother.</p>
+of a per cent so I decided not to bother.
 
 <p>Of course, even if you are going to spend significant amount of
-time on other people’s computers you can still consider the change — it’s up to you.</p>
+time on other people’s computers you can still consider the change — it’s up to you.
 
 
 
@@ -76,14 +76,14 @@ time on other people’s computers you can still consider the change — it�
 <p>Lets start with widely used in *nix word X-Window system.  First of
 all, if you are using KDE or Gnome you might try looking into
 keyboard’s configuration applets of those desktops — there may be an
-option to configure modifiers map.</p>
+option to configure modifiers map.
 
 <p>Should you not find an option you’ll have to change some files by
 hand.  As mentioned above I advocate using Caps Lock as another Ctrl
 and so examples will feature <code>ctrl:nocaps</code> option — if you’d
 rather swap the two keys use <code>ctrl:swapcaps</code> instead.  You can
 of course specify several options if you have some already by
-separating them with colons.</p>
+separating them with colons.
 
 
 <h3>Xkb, Debian &amp; Debian-based (like Ubuntu)</h3>
@@ -91,25 +91,25 @@ separating them with colons.</p>
 <p>If you are using Debian or Debian-based Linux distribution (such as
 Ubuntu) and you are lucky all you need to do is to edit
 <code>/etc/default/console-setup</code> file.  It has a line that
-says</p>
+says
 
 <pre>XKBOPTIONS=""</pre>
 
-<p>First modify it to:</p>
+<p>First modify it to:
 
 <pre>XKBOPTIONS="ctrl:nocaps"</pre>
 
 <p>and then force dpkg to integrate your configuration by
-invoking as root:</p>
+invoking as root:
 
 <pre>dpkg-reconfigure console-setup</pre>
 
-<p>I’ve been told it should work (ie. that’s what console-setup package is for) but if it does not for you (didn’t for me) just move to the next section.</p>
+<p>I’ve been told it should work (ie. that’s what console-setup package is for) but if it does not for you (didn’t for me) just move to the next section.
 
 <h3>XKb, Configuration file</h3>
 
 <p>If you’re not on Debian-based distribution or the above method
-failed you might try fidling with X11 configuration.</p>
+failed you might try fidling with X11 configuration.
 
 <p>First of, check if your system contains
 <code>/usr/share/X11/xorg.conf.d</code> and <code>/etc/X11/xorg.conf.d</code>
@@ -117,7 +117,7 @@ directories (this is the case with Slackware starting with
 version 13.37).  If it does, the former will most likely contain
 a file with ‘keyboard’ or ‘layout’ in its name such as
 <code>90-keyboard-layout.conf</code>.  If it does all you need to do is
-copy it to the latter directory:</p>
+copy it to the latter directory:
 
 <pre>
 cp -i	/usr/share/X11/xorg.conf.d/90-keyboard-layout.conf \
@@ -125,7 +125,7 @@ cp -i	/usr/share/X11/xorg.conf.d/90-keyboard-layout.conf \
 
 <p>Once the file is copied, either add or modify the <code>XkbOptions</code>
   option by adding <code>ctrl:nocaps</code>code&gt;.  For instance, the file
-  could look something like this:</p>
+  could look something like this:
 
 <pre>
 Section "InputClass"
@@ -142,7 +142,7 @@ EndSection</pre>
 edit X configuration file located at<code>/etc/X11/xorg.conf</code> or
 <code>/etc/X11/XF86Config</code> on older systems.  Like before, if there’s an
 <i>InputDevice</i> section for your keyboard it’s enough to add/modify
-the <code>XkbOptions</code> option.</p>
+the <code>XkbOptions</code> option.
 
 <h3>Xkb, HAL</h3>
 
@@ -153,7 +153,7 @@ instruct it to pass proper options.  First find proper policy file
 somewhere in <code>/etc/hal/policy</code> directory (under Slackware it’s
 <code>10-keymap.fdi</code>).  Inside change <code>merge</code> element with
 <i>input.xkb.options</i> key by adding <code>ctrl:nocaps</code> to the
-value.  For instance here’s my file:</p>
+value.  For instance here’s my file:
 
 <pre>
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
@@ -180,13 +180,13 @@ value.  For instance here’s my file:</p>
 <p>If all of that fails or you don’t have super user privileges
 you may need to use xmodmap.  Usually it’ll be enough to create
 a <code>.Xmodmap</code> file in your home directory with the
-following content:</p>
+following content:
 
 <pre>
 remove Lock = Caps_Lock
 add Control = Caps_Lock</pre>
 
-<p>And to further turn left Ctrl to Caps Lock:</p>
+<p>And to further turn left Ctrl to Caps Lock:
 
 <pre>
 remove Control = Control_L
@@ -199,7 +199,7 @@ does not get applied automatically you should consult your
 distribution’s documentation — it’s possible you’ll need to edit (or
 even creat) an <code>~/.xinit</code> file (you might <a
 href="https://github.com/mina86/dot-files/blob/master/x/xinitrc">take
-a look at mine</a> if you want).</p>
+a look at mine</a> if you want).
 
 
 
@@ -210,14 +210,14 @@ a look at mine</a> if you want).</p>
 <code>startx</code> you may skip this section but otherwise read on.
 First of all, however, I must admit that even thought I’m
 reffering to "Unix Console" I’m not sure if what I’m going to
-write here is going to work for all kinds of *nix systems.</p>
+write here is going to work for all kinds of *nix systems.
 
 <p>To avoid confusion I need to make it clear that console (or virtual terminal
 or vtt) is not what you get in graphical interface
 (<code><i>?</i>term</code>, <code>konsole</code>, <code>gnome-terminal</code>,
 etc.).  On some GNU/Linux distributions users may not even see it — a funky
 bootsplash can hide it pretty well.  If you don’t know what it is just skip this
-section — you probably don’t need that knowledge.</p>
+section — you probably don’t need that knowledge.
 
 
 <h3>Debian &amp; Debian-based (like Ubuntu)</h3>
@@ -225,16 +225,16 @@ section — you probably don’t need that knowledge.</p>
 <p>According to <a
 href="https://www.emacswiki.org/emacs/MovingTheCtrlKey">Moving the Ctrl
 Key</a> under Debian and Debian based distributions it’s enough to add
-the following line to <code>/etc/console-tools/remap</code>:</p>
+the following line to <code>/etc/console-tools/remap</code>:
 
 <pre>s/keycode[[:space:]][[:space:]]*58[[:space:]][[:space:]]*=[[:space:]][[:space:]]*Caps_Lock/keycode  58 = Control/</pre>
 
-<p>and make it effective by invoking:</p>
+<p>and make it effective by invoking:
 
 <pre>sudo invoke-rc.d console-screen.sh restart</pre>
 
 <p>If you also want to have Caps Lock under Ctrl add the following
-line as well:</p>
+line as well:
 
 <pre>s/keycode[[:space:]][[:space:]]*29[[:space:]][[:space:]]*=[[:space:]][[:space:]]*Control/keycode  29 = Caps_Lock/</pre>
 
@@ -243,36 +243,36 @@ line as well:</p>
 
 <p>If you are using an US layout you might give <code>emacs</code> or
 <code>emacs2</code> layouts a try.  Personally I’ve never tried those
-but they may be what makes the trick for you.</p>
+but they may be what makes the trick for you.
 
 <p>To test them invoke <code>loadkeys emacs</code> or <code>loadkeys
 emacs2</code> command in the console.  If either of the two is what you
-want configure your system to use it by default.</p>
+want configure your system to use it by default.
 
 <p>Under Slackware you need to edit <code>/etc/rc.d/rc.keymap</code> file.
 Under Gentoo try <code>/etc/conf.d/keymaps</code>.  On other systems — sorry,
-your on your own but it shouldn’t be hard.</p>
+your on your own but it shouldn’t be hard.
 
 
 <h3>setkeycodes</h3>
 
 <p>If all of the above fails, you have a non-USB kayboard and you
 need a quick and dirty solution try <code>setkeycodes 0x3a 29</code>
-(plus <code>setkeycodes 0x1d 58</code> if you want to swap).</p>
+(plus <code>setkeycodes 0x1d 58</code> if you want to swap).
 
 <p>If it does not work try to verify the numbers.  To do that run
 <code>showkey</code> command in the console.  Pressing Caps Lock and
 Ctrl will give you their keycodes (58 and 29).  Then invoke
 <code>showkey -s</code>.  Now you’ll be given scancodes (0x3a and 0x1d).
 If the numbers were different change the <code>setkeycodes</code> command
-accordingly.</p>
+accordingly.
 
 <p>If you have found command which works for you it’ll be enough to put that
 somewhere in start scripts.  Under Slackware logical choice would be the end
 of <code>/etc/rc.d/rc.keymap</code> file.  Other systems usually have a ‘local’
 start script which one can edit — try
 <code>/etc/rc.d/rc.local</code> or <code>/etc/rc.local</code> (you should
-refer to distribution’s documentation).</p>
+refer to distribution’s documentation).
 
 
 <h3>Keymap</h3>
@@ -285,9 +285,9 @@ page to find you where keymaps are saved on your systems
 directories for various architectures in which there are directories
 for keyboard types and finally there are <code>.map.gz</code> files
 describing keymap.  For instance, I use
-<code>/usr/share/kbd/keymaps/i386/qwerty/pl2.map.gz</code> keymap.</p>
+<code>/usr/share/kbd/keymaps/i386/qwerty/pl2.map.gz</code> keymap.
 
-<p>After you have located your keymap all you have to do is:</p>
+<p>After you have located your keymap all you have to do is:
 
 <pre>
 cd /path/to/keymap/directory  # eg. cd /usr/share/kbd/keymaps/i386/qwerty
@@ -299,16 +299,16 @@ sed	-e 's/keycode[[:space:]][[:space:]]*58[[:space:]][[:space:]]*=[[:space:]][[:
 <p>You can use a bit more descriptive suffix instead of <code>-my</code> — for
 instance <code>-nocaps</code> or <code>-swapcaps</code>.  Also this will swap
 the Caps Lock and Ctrl key — if you’d rather use two Ctrls skip the
-second <code>-e</code> line.</p>
+second <code>-e</code> line.
 
 <p>If you can’t seem to find proper map file invoke <code>dumpkeys</code>
 instead of <code>gzip -d &lt;<i>kaymap</i>.map.gz</code> in the above
-command.</p>
+command.
 
 <p>After you’ve created your new keymap test it with <code>loadkeys
 <i>keymap</i>-my</code> command.  If that’s what you want instruct your
 system to use it permanently — refer to <a href="#us_layout">US
-layout</a> section.</p>
+layout</a> section.
 
 
 <h3>NetBSD console</h3>
@@ -319,24 +319,24 @@ I found out that under NetBSD creating
 a <code>/usr/share/wscons/keymaps/pckbd.c2c</code> file with
 a single <code>keysym Caps_Lock = Control_L</code> entry and adding
 <code>mapfile /usr/share/wscons/keymaps/pckbd.c2c</code> to
-<code>/etc/wscons.conf</code> should do the trick.</p>
+<code>/etc/wscons.conf</code> should do the trick.
 
 
 <h3>Man Pages</h3>
 
 <p>In case you’d like to find out more about Unix and
-X applications mentioned try man pages:</p>
+X applications mentioned try man pages:
 <ul>
-  <li><a href="http://linux.die.net/man/5/xorg.conf">xorg.conf(5)</a></li>
-  <li><a href="http://linux.die.net/man/8/hald">hald(8)</a></li>
-  <li><a href="http://linux.die.net/man/1/xmodmap">xmodmap(1)</a></li>
-  <li><a href="http://linux.die.net/man/1/setxkbmap">setxkbmap(1)</a></li>
-  <li><a href="http://linux.die.net/man/1/showkey">showkey</a></li>
-  <li><a href="http://linux.die.net/man/8/setkeycodes">setkeycodes(8)</a></li>
-  <li><a href="http://linux.die.net/man/1/loadkeys">loadkeys(1)</a></li>
-  <li><a href="http://linux.die.net/man/1/dumpkeys">dumpkeys(1)</a></li>
-  <li><a href="http://linux.die.net/man/5/keymaps">keympas(5)</a></li>
-  <li><a href="https://www.daemon-systems.org/man/wscons.conf.5.html">wscons.conf(5)</a></li>
+  <li><a href="http://linux.die.net/man/5/xorg.conf">xorg.conf(5)</a>
+  <li><a href="http://linux.die.net/man/8/hald">hald(8)</a>
+  <li><a href="http://linux.die.net/man/1/xmodmap">xmodmap(1)</a>
+  <li><a href="http://linux.die.net/man/1/setxkbmap">setxkbmap(1)</a>
+  <li><a href="http://linux.die.net/man/1/showkey">showkey</a>
+  <li><a href="http://linux.die.net/man/8/setkeycodes">setkeycodes(8)</a>
+  <li><a href="http://linux.die.net/man/1/loadkeys">loadkeys(1)</a>
+  <li><a href="http://linux.die.net/man/1/dumpkeys">dumpkeys(1)</a>
+  <li><a href="http://linux.die.net/man/5/keymaps">keympas(5)</a>
+  <li><a href="https://www.daemon-systems.org/man/wscons.conf.5.html">wscons.conf(5)</a>
 </ul>
 
 
@@ -344,17 +344,17 @@ X applications mentioned try man pages:</p>
 <h2>MS Windows</h2>
 
 <p>Unfortunately, the world is not all Unix but even Microsoft Windows
-users can help their little finger.</p>
+users can help their little finger.
 
 
 <h3>Windows NT, Scancode Map</h3>
 
 <p>Under Windows NT an entry in the registry should suffice.  Simply
 create or download certain .reg file, apply it by double clicking and
-finally restart the system for changes to take effect.</p>
+finally restart the system for changes to take effect.
 
 <p>The files are <a
-href="https://ftp.gnu.org/old-gnu/emacs/windows/docs/ntemacs/contrib/caps-as-ctrl.reg">caps-as-ctrl.reg</a>:</p>
+href="https://ftp.gnu.org/old-gnu/emacs/windows/docs/ntemacs/contrib/caps-as-ctrl.reg">caps-as-ctrl.reg</a>:
 
 <pre>
 REGEDIT4
@@ -362,7 +362,7 @@ REGEDIT4
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]
 "Scancode Map"=hex:00,00,00,00,00,00,00,00,02,00,00,00,1d,00,3a,00,00,00,00,00</pre>
 
-<p>and <a href="https://ftp.gnu.org/old-gnu/emacs/windows/docs/ntemacs/contrib/caps-ctrl-swap.reg">caps-ctrl-swap.reg</a>:</p>
+<p>and <a href="https://ftp.gnu.org/old-gnu/emacs/windows/docs/ntemacs/contrib/caps-ctrl-swap.reg">caps-ctrl-swap.reg</a>:
 
 <pre>
 REGEDIT4
@@ -377,7 +377,7 @@ archived <a
 href="https://www.microsoft.com/whdc/archive/w2kscan-map.mspx">Scan
 Code Mapper</a> article at <a
 href="https://www.microsoft.com/">microsoft.com</a> which describes how
-<i>Scancode Map</i> works in case you are interested.</p>
+<i>Scancode Map</i> works in case you are interested.
 
 
 
@@ -389,7 +389,7 @@ href="http://doc.sch130.nsc.ru/www.sysinternals.com/ntw2k/source/ctrl2cap.shtml"
 href="https://technet.microsoft.com/en-us/sysinternals/bb897578.aspx">mirror</a>)
 utility a try.  Unzip <a
 href="http://doc.sch130.nsc.ru/www.sysinternals.com/files/ctrl2cap.zip">it</a>
-  and run <code>ctrl2cap /install</code> to install the driver.</p>
+  and run <code>ctrl2cap /install</code> to install the driver.
 
 <p>There’s also <a
 href="http://doc.sch130.nsc.ru/www.sysinternals.com/win9x/utilities/ctrl2cap95.shtml">Ctrl2Cap95</a>
@@ -397,12 +397,12 @@ for Windows 9x/Me.  Installation is a bit more difficult but
 still easy.  Again unzip <a
 href="http://doc.sch130.nsc.ru/www.sysinternals.com/files/c2cap95.zip">it</a>
 and add the following line in the <code>[386enh]</code> section of
-<code>System.ini</code> file:</p>
+<code>System.ini</code> file:
 
 <pre>device=&lt;path&gt;\ctrl2cap.vxd</pre>
 
 <p>where &lt;path&gt; represents the directory where you have placed
-Ctrl2Cap.</p>
+Ctrl2Cap.
 
 
 
@@ -412,11 +412,11 @@ Ctrl2Cap.</p>
 <p>If you happen to use MacOS X and want to configure your Caps
 Lock key you shall go to <i>Keyboard &amp; Mouse</i> panel in
 <i>System Preferences</i>.  When there, select <i>Keyboard</i> tab and
-press <i>Modifier Keys</i> and make desired changes.</p>
+press <i>Modifier Keys</i> and make desired changes.
 
 <p>There’s also a <a
 href="http://gnufoo.org/ucontrol/">uControl</a> tool which lets you
-make the changes.</p>
+make the changes.
 
 
 
@@ -425,23 +425,23 @@ make the changes.</p>
 <p>Using Caps Lock as another Ctrl key is not the only thing you can
 do.  <a href="https://colemak.com/">Colemak</a>’s authors decided it’s
 better used as another Backspace.  Personally I use Ctrl+H
-instead of Backspace so I prefer having Ctrl there.</p>
+instead of Backspace so I prefer having Ctrl there.
 
 <p>I’ve heard Vim users like to use Caps Lock as another Escape but
 since Escape is the same as Ctrl+[ again maybe having another Control
-there is better?</p>
+there is better?
 
 <p>With a little research and modifications you can, of course, use Caps Lock as
 anything you like.  In my opinion, thought, what everyone should realise is that
 Caps Lock is useless and at the same time occupy an easy-to-reach position on
-the keyboard so why waste space?</p>
+the keyboard so why waste space?
 
 <!-- COMMENT -->
 <!-- date: 2009-10-12 08:30:15 -->
 <!-- nick: remiq -->
 <!-- nick_url: http://remiq.jogger.pl -->
 
-<p>Idea for a new article: Using Scroll Lock as Enter key.</p>
+<p>Idea for a new article: Using Scroll Lock as Enter key.
 
 <!-- COMMENT -->
 <!-- date: 2009-10-12 13:42:16 -->
@@ -449,47 +449,47 @@ the keyboard so why waste space?</p>
 <!-- nick_url: http://gim.jogger.pl -->
 
 <p>I’ve switched ctrl+caps about two years ago, and can’t live with that.<br />
-Under Xorg I’m using xmodmap, under Vista I’m using described registry-based solution</p>
+Under Xorg I’m using xmodmap, under Vista I’m using described registry-based solution
 
 <!-- COMMENT -->
 <!-- date: 2009-10-12 15:12:09 -->
 <!-- nick: Nowaker -->
 <!-- nick_url: https://www.nowaker.net/ -->
 
-<p>Your solution for Debian/Ubuntu does not work.</p>
+<p>Your solution for Debian/Ubuntu does not work.
 
 <p>(c:0j:0)[nowaker@nwkr-tux:~]% cat /etc/default/console-setup | grep XKBOPT<br />
-XKBOPTIONS="ctrl:nocaps"</p>
+XKBOPTIONS="ctrl:nocaps"
 
-<p>Then reconfigured console-setup and restarted X server. Caps lock still alive.</p>
+<p>Then reconfigured console-setup and restarted X server. Caps lock still alive.
 
 <!-- COMMENT -->
 <!-- date: 2009-10-12 15:16:05 -->
 <!-- nick: Nowaker -->
 <!-- nick_url: https://www.nowaker.net/ -->
 
-<p>On the other hand, the solution with xmodmap works perfectly.</p>
+<p>On the other hand, the solution with xmodmap works perfectly.
 
 <!-- COMMENT -->
 <!-- date: 2009-10-12 21:35:35 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>I’m quite sure I tested the Debian solution at one point but maybe some other option was in effect. I’ll try testing it further next time I’ll get access to Debian system.</p>
+<p>I’m quite sure I tested the Debian solution at one point but maybe some other option was in effect. I’ll try testing it further next time I’ll get access to Debian system.
 
-<p>Other ways of modifying Xkb options (xorg.conf or HAL’s policy) should work properly though so you might want to give them a try if you’d prefer them.</p>
+<p>Other ways of modifying Xkb options (xorg.conf or HAL’s policy) should work properly though so you might want to give them a try if you’d prefer them.
 
-<p>As of remiq’s proposal I have thought at one time of an article describing how to turn any key into any other key so maybe in the future.</p>
+<p>As of remiq’s proposal I have thought at one time of an article describing how to turn any key into any other key so maybe in the future.
 
-<p>If you get into more details you can make a single key produce several characters as well — for instance, I have created a <a href="https://pastebin.com/f60a1b70c" rel="nofollow">pl(dvp) keyboard layout</a> (which is <a href="http://www.kaufmann.no/roland/dvorak/" rel="nofollow">Porgrammer Dvorak</a> with Polish characters) plus <a href="https://pastebin.com/f2476bc31" rel="nofollow">accompanying ~/.XCompose</a> such that pressing Alt+&lt; produces "&lt;=".</p>
+<p>If you get into more details you can make a single key produce several characters as well — for instance, I have created a <a href="https://pastebin.com/f60a1b70c" rel="nofollow">pl(dvp) keyboard layout</a> (which is <a href="http://www.kaufmann.no/roland/dvorak/" rel="nofollow">Porgrammer Dvorak</a> with Polish characters) plus <a href="https://pastebin.com/f2476bc31" rel="nofollow">accompanying ~/.XCompose</a> such that pressing Alt+&lt; produces "&lt;=".
 
 <p>Anyhow, if someone is more interested in creating custom keyboard
 layout under X the following link may be
 useful: <a href="http://michal.kosmulski.org/computing/articles/custom-keyboard-layouts-xkb.html"
-rel="nofollow">http://michal.kosmulski.org/computing/articles/custom-keyboard-layouts-xkb.html</a>.</p>
+rel="nofollow">http://michal.kosmulski.org/computing/articles/custom-keyboard-layouts-xkb.html</a>.
 
 <!-- COMMENT -->
 <!-- date: 2015-05-03 13:46:13 -->
 <!-- nick: enobil -->
 
-<p>It is very useful for the left pinky. The default position of lctrl key makes the finger overstretch. It’s so apparent. I use with both windows and linux.</p>
+<p>It is very useful for the left pinky. The default position of lctrl key makes the finger overstretch. It’s so apparent. I use with both windows and linux.

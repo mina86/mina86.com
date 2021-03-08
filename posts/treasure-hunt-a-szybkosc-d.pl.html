@@ -11,7 +11,7 @@
   dlatego, że zacząłem od zadania sieci, które jest co najmniej denne.
   Archiwum też nie napawało optymizmem, już zacząłem się zastanawiać,
   czy wszystkie będą tak prymitywne — na szczęście nie
-  były.</p>
+  były.
 
 <!-- EXCERPT -->
 
@@ -20,7 +20,7 @@
   lekcjach rachunku prawdopodobieństwa z umiłowaniem wyliczaliśmy
   na ile sposób można dojść z jednego rogu do drugiego albo ile
   jest <var>n</var> elementowych ciągów o wyrazach naturalnych,
-  których suma wynosi <var>m</var>.</p>
+  których suma wynosi <var>m</var>.
 
 <p>Na stworzenie tego wpisu zdecydowałem się jednak nie po to, aby się
   chwalić jaki to jestem mądry.  Sprowokowało mnie do tego
@@ -28,7 +28,7 @@
   czwartego zadania</a>, w którym GiM wydawał się sugerować
   jakoby język D był niezmiernie szybki.  Cóż… niechaj mój
   pomiar mówi sam za siebie (program napisany w C, procesor
-  Sempron 2500+ 1,4GHz):</p>
+  Sempron 2500+ 1,4GHz):
 
 <pre>
 $ <i>time ./sieve 20000000</i>
@@ -44,10 +44,10 @@ sys     0m0.077s</pre>
 
 <p>Jak widać na wolniejszym komputerze program znalazł przeszło
   3 razy więcej liczb pierwszych w czasie krótszym od
-  programu GiMa.</p>
+  programu GiMa.
 
 <p>Teraz tylko zachodzę w głowę o co biega z tą
-  koszulką, co to GiM ją niby dostał… ;)</p>
+  koszulką, co to GiM ją niby dostał… ;)
 
 <!-- COMMENT -->
 <!-- date: 2009-01-10 12:42:28 -->
@@ -55,95 +55,95 @@ sys     0m0.077s</pre>
 <!-- nick_url: http://caladan.jogger.pl -->
 
 <p>A jakbyś to jeszcze w aśmie napisał… ;)<br />
-Nie dajcie sie oszukać, Java, Python i D nie będą szybsze od przemyślanego C nigdy ;)</p>
+Nie dajcie sie oszukać, Java, Python i D nie będą szybsze od przemyślanego C nigdy ;)
 
 <!-- COMMENT -->
 <!-- date: 2009-01-10 12:58:06 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Paradoksalnie program napisany w assemblerze mógłby działać wolniej z tej prostej przyczyny, że nie udałoby się tak dobrze dobrać rejestrów tudzież nie znam wielu technik optymalizacji, z których korzysta kompilator.</p>
+<p>Paradoksalnie program napisany w assemblerze mógłby działać wolniej z tej prostej przyczyny, że nie udałoby się tak dobrze dobrać rejestrów tudzież nie znam wielu technik optymalizacji, z których korzysta kompilator.
 
-<p>Jeśli chodzi o Javę, to ponoć w pewnych specyficznych warunkach może być szybsza od skompilowanego programu — osobiście nie za bardzo w to wierzę (podejrzewam, że jeżeli taki wynik komuś udało się uzyskać to zapewne były to całkiem teoretyczne pomiary oderwane od rzeczywistości). Teoria za tym stojąca jest taka, że program może być modyfikowany w trakcie działania co pozwala optymalizować skoki itp.</p>
+<p>Jeśli chodzi o Javę, to ponoć w pewnych specyficznych warunkach może być szybsza od skompilowanego programu — osobiście nie za bardzo w to wierzę (podejrzewam, że jeżeli taki wynik komuś udało się uzyskać to zapewne były to całkiem teoretyczne pomiary oderwane od rzeczywistości). Teoria za tym stojąca jest taka, że program może być modyfikowany w trakcie działania co pozwala optymalizować skoki itp.
 
-<p>Python jako interpretowany język skryptowy z dynamicznymi typami ma faktycznie niewielkie szanse być szybszy od programów skompilowanych, ale też nie o to w nim do chodzi.</p>
+<p>Python jako interpretowany język skryptowy z dynamicznymi typami ma faktycznie niewielkie szanse być szybszy od programów skompilowanych, ale też nie o to w nim do chodzi.
 
-<p>Ale jeśli już mowa o D, to może on dorównywać innym językom (GC może coś komplikować co prawda), ale mam wrażenie, iż jego kompilator zwyczajnie nie jest w stanie zoptymalizować kod tak dobrze jak kompilatory C/C++ i mam pewne wątpliwości czy będzie kiedykolwiek umiał, bo jednak język D to margines i mało osób zajmuje się ulepszaniem kompilatora tego języka.</p>
+<p>Ale jeśli już mowa o D, to może on dorównywać innym językom (GC może coś komplikować co prawda), ale mam wrażenie, iż jego kompilator zwyczajnie nie jest w stanie zoptymalizować kod tak dobrze jak kompilatory C/C++ i mam pewne wątpliwości czy będzie kiedykolwiek umiał, bo jednak język D to margines i mało osób zajmuje się ulepszaniem kompilatora tego języka.
 
 <!-- COMMENT -->
 <!-- date: 2009-01-12 19:40:47 -->
 <!-- nick: GiM -->
 <!-- nick_url: http://gim.jogger.pl -->
 
-<p>Nie ma wątpliwości, że to co zabiera większość czasu to wygenerowanie sita.</p>
+<p>Nie ma wątpliwości, że to co zabiera większość czasu to wygenerowanie sita.
 
 <p>Zwróć uwagę, że w statycznym konstruktorze jest byle-jak<br />
-napisana pętla for z użytym ~= co raczej sporo spowalnia wykonanie. Pętle tę można prosto poprawić, a szybki test mówi mi, że przyśpieszenie jest wówczas prawie 3-krotne.</p>
+napisana pętla for z użytym ~= co raczej sporo spowalnia wykonanie. Pętle tę można prosto poprawić, a szybki test mówi mi, że przyśpieszenie jest wówczas prawie 3-krotne.
 
 <p>Nie zmienia to faktu, że i tak wygenerowanie tablicy wielkości jak twoja, zajmuje mu prawie 2x więcej.<br />
-[jeśli rozumiem 2.000.000 elementów]</p>
+[jeśli rozumiem 2.000.000 elementów]
 
-<p>Przydałoby się sprawdzić z użyciem gdc, bo często ma lepsze optymalizacje, ale nie mam pod ręką.</p>
+<p>Przydałoby się sprawdzić z użyciem gdc, bo często ma lepsze optymalizacje, ale nie mam pod ręką.
 
 <p>Ważniejszą rzeczą natomiast jest to, ile zajęłoby Ci napisanie tego nie mając pierwowzoru :)<br />
-Bo zdaje się, że w treasure-huncie brali pod uwagę czas pomiędzy opublikowaniem zadania a nadesłaniem odpowiedzi :)</p>
+Bo zdaje się, że w treasure-huncie brali pod uwagę czas pomiędzy opublikowaniem zadania a nadesłaniem odpowiedzi :)
 
-<p>Pewnie, że mógłbym to napisać w C i pewnie nawet napisałbym szybciej niż to co napisałem w D, ale chciałem „poćwiczyć”, poza tym porównać jak się ma BitArray z tango do boola.</p>
+<p>Pewnie, że mógłbym to napisać w C i pewnie nawet napisałbym szybciej niż to co napisałem w D, ale chciałem „poćwiczyć”, poza tym porównać jak się ma BitArray z tango do boola.
 
-<p>[Wszystko to to i tak nic w porównaniu z rozwiązaniem znajomego w Haskellu, które jest dosłownie zapisaniem postawionego problemu, mieści się w jakichś 10 linijkach, oczywiście nie ma sensu mówić tu o czasie wykonania, skoro czas napisania (tego w Haskellu) był nieporównywalnie krótszy :&gt;]</p>
+<p>[Wszystko to to i tak nic w porównaniu z rozwiązaniem znajomego w Haskellu, które jest dosłownie zapisaniem postawionego problemu, mieści się w jakichś 10 linijkach, oczywiście nie ma sensu mówić tu o czasie wykonania, skoro czas napisania (tego w Haskellu) był nieporównywalnie krótszy :&gt;]
 
 <!-- COMMENT -->
 <!-- date: 2009-01-12 19:52:55 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Zależy jak na sprawę patrzeć. W kontekście GTH zapewne, to czy będzie liczyć pół sekundy czy pięć sekund dużego znaczenia nie ma, ale w ogólności takie różnice są istotne — wyobraź sobie co byś zrobił, gdyby Twój telefon komórkowy włączał się minutę (ostatnio coś podobnego analizowałem w pracy).</p>
+<p>Zależy jak na sprawę patrzeć. W kontekście GTH zapewne, to czy będzie liczyć pół sekundy czy pięć sekund dużego znaczenia nie ma, ale w ogólności takie różnice są istotne — wyobraź sobie co byś zrobił, gdyby Twój telefon komórkowy włączał się minutę (ostatnio coś podobnego analizowałem w pracy).
 
-<p>Tak czy owak, pozwoliłem sobie w ten zakamuflowany sposób wyrazić moją opinię, iż język D nie ma przyszłości. ;)</p>
+<p>Tak czy owak, pozwoliłem sobie w ten zakamuflowany sposób wyrazić moją opinię, iż język D nie ma przyszłości. ;)
 
-<p>(Gwoli wyjaśnienia: mój program szukał liczb pierwszych mniejszych lub równych 20 mln i znalazł ich ponad milion).</p>
+<p>(Gwoli wyjaśnienia: mój program szukał liczb pierwszych mniejszych lub równych 20 mln i znalazł ich ponad milion).
 
 <!-- COMMENT -->
 <!-- date: 2009-01-12 22:30:56 -->
 <!-- nick: GiM -->
 <!-- nick_url: http://gim.jogger.pl -->
 
-<p>Uch, ciut za dużo generowałem, po poprawce, generowanie w D zabiera trochę ponad sekundę (używając dmd, gdc nie mam pod ręką nadal).</p>
+<p>Uch, ciut za dużo generowałem, po poprawce, generowanie w D zabiera trochę ponad sekundę (używając dmd, gdc nie mam pod ręką nadal).
 
-<p>Programuję na co dzień w C, ale zysk jaki daje w tym przypadku nie jest dla mnie zbyt wymierny…</p>
+<p>Programuję na co dzień w C, ale zysk jaki daje w tym przypadku nie jest dla mnie zbyt wymierny…
 
-<p>A czy ma przyszłość, cóż czas pokaże. ;)</p>
+<p>A czy ma przyszłość, cóż czas pokaże. ;)
 
-<p>Jeszcze małe btw: OIMW, na chwilę obecną rozwijane są 3 (albo 4 (status tego 4. jest mi nieznany)) kompilatory D.</p>
+<p>Jeszcze małe btw: OIMW, na chwilę obecną rozwijane są 3 (albo 4 (status tego 4. jest mi nieznany)) kompilatory D.
 
 <!-- COMMENT -->
 <!-- date: 2009-01-12 22:49:06 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Hmm… Może faktycznie przesadziłem. Skoro jest moduł do GCC, to może rzeczywiście idzie to jakoś optymalizować. ;)</p>
+<p>Hmm… Może faktycznie przesadziłem. Skoro jest moduł do GCC, to może rzeczywiście idzie to jakoś optymalizować. ;)
 
-<p>Nadal uważam jednak, że język nie ma świetlanej przyszłości — C++ (pomimo odczapowych szablonów) już się dobrze zadomowiło i trudno, żeby nagle miliardy linii kodu przerabiać na D, a tysiące programistów wysyłać na szkolenia.  Gdyby D był rozszerzeniem na C++ to mogłoby być lepiej, ale takie rozwiązanie miałoby inne wady.</p>
+<p>Nadal uważam jednak, że język nie ma świetlanej przyszłości — C++ (pomimo odczapowych szablonów) już się dobrze zadomowiło i trudno, żeby nagle miliardy linii kodu przerabiać na D, a tysiące programistów wysyłać na szkolenia.  Gdyby D był rozszerzeniem na C++ to mogłoby być lepiej, ale takie rozwiązanie miałoby inne wady.
 
-<p>Zresztą patrząc na C++0x C++ idzie w dobrym kierunku (co prawda niektóre aspekty nowego standardu mnie się nie podobają) i powodów przejścia na D może być coraz mniej, szczególnie, że jak czytam opis na wiki to wygląda na to, że D wcale nie jest pozbawiony wad. ;)</p>
+<p>Zresztą patrząc na C++0x C++ idzie w dobrym kierunku (co prawda niektóre aspekty nowego standardu mnie się nie podobają) i powodów przejścia na D może być coraz mniej, szczególnie, że jak czytam opis na wiki to wygląda na to, że D wcale nie jest pozbawiony wad. ;)
 
 <!-- COMMENT -->
 <!-- date: 2009-01-13 11:17:36 -->
 <!-- nick: GiM -->
 <!-- nick_url: http://gim.org.pl -->
 
-<p>Ja czekam, kiedy D 2.x bo jak dla mnie C++0x to próba dogonienia D 1.x i Javy ;)</p>
+<p>Ja czekam, kiedy D 2.x bo jak dla mnie C++0x to próba dogonienia D 1.x i Javy ;)
 
-<p>Nie namwiam nikogo do przerabiania kodu na D, przepisywanie kodu z języka na język z reguły jest pozbawione sensu (pomijam to, że często jest to koszmarna kalka, którą w innym języku dałoby się/powinno się zrobić lepiej/inaczej).</p>
+<p>Nie namwiam nikogo do przerabiania kodu na D, przepisywanie kodu z języka na język z reguły jest pozbawione sensu (pomijam to, że często jest to koszmarna kalka, którą w innym języku dałoby się/powinno się zrobić lepiej/inaczej).
 
-<p>Co do wad, to zależy, które masz na myśli.</p>
+<p>Co do wad, to zależy, które masz na myśli.
 
 <!-- COMMENT -->
 <!-- date: 2009-01-13 11:29:43 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>O nie… C++ nie musi nikogo gonić. Ma wiele mechanizmów, których programiści Javy mogą tylko pozazdrościć. Z pobierznej analizy D odniosłem wrażenie, że jedyne co ten język oferuje to łatwiejsze metaprogramowanie, a poza tym to czysty „syntetic sugar”. Z wad, jak czytam w wikipedii, mam na myślni niemożność zwracania referencji oraz dziwne zasady stałości (to drugie ma się ponoć zmienić w D 2.0).</p>
+<p>O nie… C++ nie musi nikogo gonić. Ma wiele mechanizmów, których programiści Javy mogą tylko pozazdrościć. Z pobierznej analizy D odniosłem wrażenie, że jedyne co ten język oferuje to łatwiejsze metaprogramowanie, a poza tym to czysty „syntetic sugar”. Z wad, jak czytam w wikipedii, mam na myślni niemożność zwracania referencji oraz dziwne zasady stałości (to drugie ma się ponoć zmienić w D 2.0).
 
 <!-- COMMENT -->
 <!-- date: 2009-01-13 12:20:43 -->
@@ -153,17 +153,17 @@ Bo zdaje się, że w treasure-huncie brali pod uwagę czas pomiędzy opublikowan
 <p>No problemy z const to były/są przy pracach na D 2.x, ale standard D 2.x jest jeszcze nieustalony, więc nie wiadomo co to będzie.<br />
 Co do tych referencji, dla mnie to nie jest jakiś problem, tym bardziej, że już w tej chwili linia 2.x ma obsługę domknięć, których raczej w C++ próżno oczekiwać.<br />
 Co do opisanego na wiki opIndexAssign, to akurat mi się podoba, bo wymusza pisanie blah+=1; ;)<br />
-Oczywiście miłoby było, gdyby dało się używać przeciążonych operatorów typu zwróconej referencji, ale do tej pory nie było mi to jakoś specjalnie potrzebne.</p>
+Oczywiście miłoby było, gdyby dało się używać przeciążonych operatorów typu zwróconej referencji, ale do tej pory nie było mi to jakoś specjalnie potrzebne.
 
-<p>Co do syntactic sugar — TAK! Ten syntactic sugar sprawia, że pisze mi się łatwiej, szybciej i przyjemniej (mówię całkiem poważnie).</p>
+<p>Co do syntactic sugar — TAK! Ten syntactic sugar sprawia, że pisze mi się łatwiej, szybciej i przyjemniej (mówię całkiem poważnie).
 
-<p>Druga sprawa, że syntaktyka jest tak pomyślana, żeby usprawnić działanie kompilatora języka, dzięki czemu projekt (nie mówię tu o hello world) przerobiony z C++ na D kompiluje się nawet 10x szybciej (wystarczy się przegrzebać przez grupy digitalmarsowe, oidp conajmniej kilka osób opisywało takie doświadczenia, zresztą ja mam podobne).</p>
+<p>Druga sprawa, że syntaktyka jest tak pomyślana, żeby usprawnić działanie kompilatora języka, dzięki czemu projekt (nie mówię tu o hello world) przerobiony z C++ na D kompiluje się nawet 10x szybciej (wystarczy się przegrzebać przez grupy digitalmarsowe, oidp conajmniej kilka osób opisywało takie doświadczenia, zresztą ja mam podobne).
 
-<p>(Jeszcze btw, kompilacja projektów w C++ to koszmar, kawę nie tylko zdążę zrobić ale i wypić, ale zrzucam to na to, że C++ niestety odziedziczył takie cudowne rzeczy jak #include i cały preprocesor ;/).</p>
+<p>(Jeszcze btw, kompilacja projektów w C++ to koszmar, kawę nie tylko zdążę zrobić ale i wypić, ale zrzucam to na to, że C++ niestety odziedziczył takie cudowne rzeczy jak #include i cały preprocesor ;/).
 
 <!-- COMMENT -->
 <!-- date: 2009-01-17 18:48:54 -->
 <!-- nick: mina86.com -->
 <!-- nick_url: https://mina86.com/2009/treasure-hunt-w-prologu/ -->
 
-<p>W poprzednim moim wpisie pisałem o Google Treasure Hunt, a w szczególności o zadaniu czwartym.  Teraz, w ramach przygotowań do kolokwium z języka Prolog postanowiłem napisać w nim rozwiązanie postawionego problemu.</p>
+<p>W poprzednim moim wpisie pisałem o Google Treasure Hunt, a w szczególności o zadaniu czwartym.  Teraz, w ramach przygotowań do kolokwium z języka Prolog postanowiłem napisać w nim rozwiązanie postawionego problemu.

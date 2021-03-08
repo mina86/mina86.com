@@ -3,7 +3,7 @@
 <!-- tags: sygnał cyfrowy, teoria sygnałów, kody korekcyjne -->
 <!-- categories: Articles, Techblog -->
 
-<p>Zainspirowany wpisem Michała Górnego postanowiłem napisać coś o transmisji cyfrowej.  Wszak wielkości w naturze rzadko kiedy występują w postaci cyfrowej--aby się takiej doszukać należy zejść aż do poziomu cząstek elementarnych i analizowanie spinów i innych niezrozumiałych dla zwykłego człowieka parametrów.  Jak więc to się dzieje, że komputer operuje na bitach? Co to w ogóle ta telewizja cyfrowa?</p>
+<p>Zainspirowany wpisem Michała Górnego postanowiłem napisać coś o transmisji cyfrowej.  Wszak wielkości w naturze rzadko kiedy występują w postaci cyfrowej--aby się takiej doszukać należy zejść aż do poziomu cząstek elementarnych i analizowanie spinów i innych niezrozumiałych dla zwykłego człowieka parametrów.  Jak więc to się dzieje, że komputer operuje na bitach? Co to w ogóle ta telewizja cyfrowa?
 
 <!-- EXCERPT -->
 
@@ -15,7 +15,7 @@ analogowymi.  Umówmy się na początek, iż sygnał będziemy kodować za
 pomocą napięcia i załóżmy jednocześnie, że wszystko jest tak zrobione,
 iż w kablu naszym występują napięcia zero 0–5 woltów.  Teraz wystarczy
 jedno proste założenie: Niech wszystko poniżej 1,5 wolta oznacza stan
-niski, a wszystko powyżej 3,5 woltów oznacza stan wysoki i gotowe!</p>
+niski, a wszystko powyżej 3,5 woltów oznacza stan wysoki i gotowe!
 
 <p>A co z takim razie z wartościami pomiędzy 1,5 a 3,5 wolta? Są to
 poziomy niedozwolone i sygnalizujące błąd transmisji.  Podejście takie
@@ -31,11 +31,11 @@ nadawca wysyłał stan niski jako pół, a stan wysoki jako 4,5 wolta
 i wówczas nawet zakłócenia o wartości jednego wolta nie będą w stanie
 zaburzyć transmisji, a zakłócenia o wartości do 3 woltów będzie można
 wykryć.  To czy stan wysoki oznacza jedynkę, a stan niski zero czy na
-odwrót jest już kwestią wtórną.</p>
+odwrót jest już kwestią wtórną.
 
 <p>A czy możnaby ustalić więcej niż dwa zakresy? Np. wysoki, niski
 i średni? Oczywiście można.  Wówczas transmisja przebiegałaby
-szybciej, ale za to byłaby bardziej podatna na zakłócenia.</p>
+szybciej, ale za to byłaby bardziej podatna na zakłócenia.
 
 <p>Dodatkowo sygnał cyfrowy, w przeciwieństwie do analogowego, umożliwia
 zastosowanie kodów wykrywających błędy.  Dość prymitywną metodą, ukazującą
@@ -52,7 +52,7 @@ przykładem jest wysyłanie każdego bitu trzy razy.  Dzięki temu, jeżeli
 odbiorca odbierze dwa razy jedynkę i raz zero to <em>koryguje</em>
 taką sytuację przyjmując jako odebraną wartość jedynkę (z tego co mi
 wiadomo, kodowanie takie jest wykorzystywane w niektórych pamięciach
-ECC).</p>
+ECC).
 
 <p>O wiele wydajniejszym sposobem jest zastosowanie kodów Hamminga,
 które dzielą bity sekwencji o konkretnej długości na nachodzące na
@@ -63,13 +63,13 @@ znajduje będą miały złą wartość.  Sztuczka polega na takim podziale na
 grupy, aby widząc, w których grupach nastąpił błąd transmisji móc ten
 błąd poprawić.  W zależności od liczby dodanych bitów parzystości kod
 może być w stanie poprawić różną liczbę błędów, a jeszcze większą
-liczbę przekłamań wykryć.</p>
+liczbę przekłamań wykryć.
 
 <p>No i to chyba tyle.  Zupełnie oddzielnym tematem jest przesyłanie
 sygnałów (czy to analogowych czy cyfrowych) w eterze i jak to się
 dzieje, że na tym samym terenie może działa jednocześnie wiele stacji
 radiowych czy telefonicznych i do tego jeszcze możemy rozmawiać przez
-komórkę stojąc obok kilku access pointów.</p>
+komórkę stojąc obok kilku access pointów.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 17:33:17 -->
@@ -78,51 +78,51 @@ komórkę stojąc obok kilku access pointów.</p>
 
 <p>Masz błąd: „XML Parsing Error: mismatched tag. Expected: &lt;/p&gt;.<br />
 Location: http://mina86.jogger.pl/2008/02/13/transmisja-cyfrowa/<br />
-Line Number 67, Column 323:” </p>
+Line Number 67, Column 323:” 
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 17:35:56 -->
 <!-- nick: Michał Nazarewicz -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Dzięki za info. Muszę w końcu nabrać zwyczaju oglądania wpisu po opublikowaniu…</p>
+<p>Dzięki za info. Muszę w końcu nabrać zwyczaju oglądania wpisu po opublikowaniu…
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 17:36:09 -->
 <!-- nick: radmen -->
 <!-- nick_url: http://radmen.jogger.pl -->
 
-<p>Spoko :)</p>
+<p>Spoko :)
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 17:36:33 -->
 <!-- nick: Michał Nazarewicz -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Hehe… fajna sprawa to komentowanie przez jabbera. :P</p>
+<p>Hehe… fajna sprawa to komentowanie przez jabbera. :P
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 17:37:04 -->
 <!-- nick: radmen -->
 <!-- nick_url: http://radmen.jogger.pl -->
 
-<p>Inaczej pozostałbyś w błogiej nieświadomości o tym :P</p>
+<p>Inaczej pozostałbyś w błogiej nieświadomości o tym :P
 
 <!-- COMMENT -->
 <!-- date: 2008-02-15 18:35:10 -->
 <!-- nick: GiM -->
 <!-- nick_url: http://gim.jogger.pl -->
 
-<p>„Dodatkowo sygnał cyfrowy, w przeciwieństwie do analogowego, umożliwia zastosowanie kodów wykrywających błędy. […] Innymi sposobami są kody CRC czy nawet MD5.” </p>
+<p>„Dodatkowo sygnał cyfrowy, w przeciwieństwie do analogowego, umożliwia zastosowanie kodów wykrywających błędy. […] Innymi sposobami są kody CRC czy nawet MD5.” 
 
-<p>może mi się wydaje, ale wychodzi jakbyś traktował MD5 jako EDC/ECC, a on takowym kodem nie jest. Zresztą sam wspominałeś ostatnio o hash-ach.</p>
+<p>może mi się wydaje, ale wychodzi jakbyś traktował MD5 jako EDC/ECC, a on takowym kodem nie jest. Zresztą sam wspominałeś ostatnio o hash-ach.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-18 14:49:56 -->
 <!-- nick: mina86 -->
 <!-- nick_url: https://mina86.com/ -->
 
-<p>Gdyż MD5 może być (i jest) stosowany jako EDC (jako ECC raczej nie). Skoro CRC jest to czemu nie MD5? Zarówno różne wersje CRC jak i MD5 to funkcje mieszające i mogą być wykorzystywane do detekcji błędów.</p>
+<p>Gdyż MD5 może być (i jest) stosowany jako EDC (jako ECC raczej nie). Skoro CRC jest to czemu nie MD5? Zarówno różne wersje CRC jak i MD5 to funkcje mieszające i mogą być wykorzystywane do detekcji błędów.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-18 15:18:12 -->
@@ -131,11 +131,11 @@ Line Number 67, Column 323:” </p>
 
 <p>raczej średnio. CRC byl projektowany jako kod wykrywający błędy i ma dość mocne podstawy matematyczne. Właściwości CRC są dokładnie znane, wiadomo jakie rodzaje błędów jest w stanie wykryć a jakie nie, jakie wielomiany dobierać i w jaki sposób stopień wielomianu ma wpływ na możliwości detekcji błędów.<br />
 MD5 natomiast jest funkcją hashującą, które opisałeś ogólnie w pierwszym z tej serii artykułów. MD5 jest zaprojektowana by „mieszać” bity i tyle. Za EDC stoi całkiem spora teoria kodów (polecam wykłady Madhu Sudana) MD5 ma się nijak do tej teorii :)<br />
-Moim skromnym zdaniem funkcje hashujące a kody wykrywające i korygujące błędy to dwie różne rzeczy i raczej nie należy tych pojęć mieszać.</p>
+Moim skromnym zdaniem funkcje hashujące a kody wykrywające i korygujące błędy to dwie różne rzeczy i raczej nie należy tych pojęć mieszać.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-19 19:16:18 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Zmieniłem troszkę artykuł.</p>
+<p>Zmieniłem troszkę artykuł.

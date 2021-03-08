@@ -4,79 +4,79 @@
 <!-- categories: Misc -->
 
 <p>Na pustyni stoją beduini (na początku każdy wie tylko jak ma na imię), z których każdy ma swoje unikalne, w skali całej pustyni, imię.  Są usytuowani w ten sposób, że jeżeli jakiś beduin coś krzyknie to
-z pewnością, przynajmniej jeden, inny beduin go usłyszy.  Beduini maja na tyle podzielną uwagę, że jeżeli słyszą głosy wielu innych beduinów to są w stanie je rozróżnić i niejako "zakolejkować" otrzymane wiadomości, ale nie są w stanie rozpoznać, z której strony ani od kogo usłyszeli konkretną informację (zarówno, gdy odbierają wiele wiadomości jednocześnie jak i gdy odbierają tylko jedną wiadomość).</p>
+z pewnością, przynajmniej jeden, inny beduin go usłyszy.  Beduini maja na tyle podzielną uwagę, że jeżeli słyszą głosy wielu innych beduinów to są w stanie je rozróżnić i niejako "zakolejkować" otrzymane wiadomości, ale nie są w stanie rozpoznać, z której strony ani od kogo usłyszeli konkretną informację (zarówno, gdy odbierają wiele wiadomości jednocześnie jak i gdy odbierają tylko jedną wiadomość).
 
 <!-- EXCERPT -->
 
-<p>Należy opracować taki protokół komunikacji, aby dowolny beduin mógł przekazać informację dowolnemu innemu beduinowi, którego imię zna. Protokoły powinny generować jak najmniej szumu na pustyni, w końcu to nie problem krzyczeć dalej każdą otrzymaną informację tak, że dotrze ona nawet w najdalsze zakątki pustyni. Rozpatrywać następujące cechy i ograniczenia pojedynczo lub łącznie:</p>
+<p>Należy opracować taki protokół komunikacji, aby dowolny beduin mógł przekazać informację dowolnemu innemu beduinowi, którego imię zna. Protokoły powinny generować jak najmniej szumu na pustyni, w końcu to nie problem krzyczeć dalej każdą otrzymaną informację tak, że dotrze ona nawet w najdalsze zakątki pustyni. Rozpatrywać następujące cechy i ograniczenia pojedynczo lub łącznie:
 <ol>
-  <li>na pustynię mogą przychodzić nowi beduini,</li>
-  <li>beduini mogą umierać z głodu lub pragnienia (i) pozostawiając jednak spójność grafu połączeń lub (ii) dzieląc graf połączeń na dwie lub więcej części,</li>
-  <li>beduini mają ograniczoną pamięć i dlatego nie są w stanie pamiętać drogi do każdego z beduinów będących na pustyni, ale są w stanie pamiętać wszystkich swoich sąsiadów (tzn. beduinów, którzy są w zasięgu ich głosu) oraz</li>
-  <li>beduini znają swoje położenie geograficzne.</li>
+  <li>na pustynię mogą przychodzić nowi beduini,
+  <li>beduini mogą umierać z głodu lub pragnienia (i) pozostawiając jednak spójność grafu połączeń lub (ii) dzieląc graf połączeń na dwie lub więcej części,
+  <li>beduini mają ograniczoną pamięć i dlatego nie są w stanie pamiętać drogi do każdego z beduinów będących na pustyni, ale są w stanie pamiętać wszystkich swoich sąsiadów (tzn. beduinów, którzy są w zasięgu ich głosu) oraz
+  <li>beduini znają swoje położenie geograficzne.
 </ol>
 
 <h2>Część druga</h2>
-<p>Na pustyni są również małe beduidziątka, które są na tyle niesforne, że nie są w stanie usiedzieć w jednym miejscu i wędrują po całej pustyni.  Nie ustępują jednak swoim rodzicom pod względem siły głosu i niezależnie gdzie sie nie znajdują są w zasięgu głosu przynajmniej jednego beduina (i nigdy nie ma sytuacji, gdy przechodzą "nagle" z zasięgu jednego beduina do drugiego beduina nie będąc przez pewien czas w zasięgu obu tych beduinów).  Każde z beduidziątek ma, podobnie jak rodzice, swoje unikalne, w skali całej pustyni, imię.</p>
-<p>Należy opracować taki protokół komunikacji, aby dowolne beduidziątko mogło przekazać informację dowolnemu innemu beduidziątkowi, którego imię zna.  Poza cechami i ograniczeniami z części pierwszej rozpatrzeć sytuację, gdy beduidziątka znają swoje położenie geograficzne (a więc jeżeli również beduini znają swoje położenie, to beduidziątka są w stanie określić obszar, na którym słychać głoś danego beduina).</p>
+<p>Na pustyni są również małe beduidziątka, które są na tyle niesforne, że nie są w stanie usiedzieć w jednym miejscu i wędrują po całej pustyni.  Nie ustępują jednak swoim rodzicom pod względem siły głosu i niezależnie gdzie sie nie znajdują są w zasięgu głosu przynajmniej jednego beduina (i nigdy nie ma sytuacji, gdy przechodzą "nagle" z zasięgu jednego beduina do drugiego beduina nie będąc przez pewien czas w zasięgu obu tych beduinów).  Każde z beduidziątek ma, podobnie jak rodzice, swoje unikalne, w skali całej pustyni, imię.
+<p>Należy opracować taki protokół komunikacji, aby dowolne beduidziątko mogło przekazać informację dowolnemu innemu beduidziątkowi, którego imię zna.  Poza cechami i ograniczeniami z części pierwszej rozpatrzeć sytuację, gdy beduidziątka znają swoje położenie geograficzne (a więc jeżeli również beduini znają swoje położenie, to beduidziątka są w stanie określić obszar, na którym słychać głoś danego beduina).
 
 <!-- COMMENT -->
 <!-- date: 2008-02-19 21:54:21 -->
 <!-- nick: Sad -->
 <!-- nick_url: http://sad.jogger.pl -->
 
-<p>Hmmm… co do części pierwszej: może EIGRP? :)</p>
+<p>Hmmm… co do części pierwszej: może EIGRP? :)
 
-<p>Edit: Swoją drogą, porównywanie beduinów do routerów Cisco jest dość nietuzinkowe :P</p>
+<p>Edit: Swoją drogą, porównywanie beduinów do routerów Cisco jest dość nietuzinkowe :P
 
 <!-- COMMENT -->
 <!-- date: 2008-02-19 23:37:24 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Muszę jeszcze dokładniej poczytać o tym algorytmie, ale wydaje mi się, iż polega on w przypadku, gdy zakładamy ograniczoną pamięć beduinów, należy bowiem wziąć pod uwagę, że nie występuje tutaj coś takiego jak podsieci i „klasy” beduinów.</p>
+<p>Muszę jeszcze dokładniej poczytać o tym algorytmie, ale wydaje mi się, iż polega on w przypadku, gdy zakładamy ograniczoną pamięć beduinów, należy bowiem wziąć pod uwagę, że nie występuje tutaj coś takiego jak podsieci i „klasy” beduinów.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-20 02:48:54 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>No i chyba obmyśliłem, jak można rozwiązać problem z ograniczoną pamięcią.  Do tej pory źle się zabierałem do sprawy — cała sztuczka polega na nadaniu beduinom adresów.</p>
+<p>No i chyba obmyśliłem, jak można rozwiązać problem z ograniczoną pamięcią.  Do tej pory źle się zabierałem do sprawy — cała sztuczka polega na nadaniu beduinom adresów.
 
-<p>Na początek wybieramy arbitralnie jakiegoś beduina, który staje się korzeniem. Proces ten można zautomatyzować wybierając  beduina o „najmniejszym” (w sensie jakiegoś przyjętego dobrego porządku) imieniu.</p>
+<p>Na początek wybieramy arbitralnie jakiegoś beduina, który staje się korzeniem. Proces ten można zautomatyzować wybierając  beduina o „najmniejszym” (w sensie jakiegoś przyjętego dobrego porządku) imieniu.
 
 <p>Teraz beduini zapamiętują odległość (którą na początku inicjują nieskończonością) oraz listę dzieci.  Korzeń rozpoczyna wszystko zerując swoją odległość i krzycząc trójkę (NULL, swoje imię, 1).  Gdy ktoś usłyszy komunikat (rodzic, imię, metryka) robi co następuje:
 <ol>
-<li>jeśli rodzic to on sam zapamiętuje imię w liście dzieci, chyba że już tam jest;</li>
-<li>jeśli rodzic to ktoś inny oraz imię znajduje się w liście dzieci usuwa je stamtąd;</li>
-<li>jeśli metryka jest mniejsza od zapamiętanej odległości ustawia odległość na wartość metryki po czym krzyczy (imię, swoje imię, odległość + 1).</li>
+<li>jeśli rodzic to on sam zapamiętuje imię w liście dzieci, chyba że już tam jest;
+<li>jeśli rodzic to ktoś inny oraz imię znajduje się w liście dzieci usuwa je stamtąd;
+<li>jeśli metryka jest mniejsza od zapamiętanej odległości ustawia odległość na wartość metryki po czym krzyczy (imię, swoje imię, odległość + 1).
 </ol><br />
-Po odpowiednim czasie każdy z wierzchołków zna imiona swoich dzieci w tak zbudowanym drzewie.</p>
+Po odpowiednim czasie każdy z wierzchołków zna imiona swoich dzieci w tak zbudowanym drzewie.
 
-<p>W tej chwili beduini mogą zapomnieć odległość, ale muszą ciągle pamiętać listę dzieci oraz swój identyfikator (adres).  Zabawę ponownie rozpoczyna korzeń ustawiając swój adres na „0” i wykrzykując dla każdego ze swoich dzieci komunikat (imię dziecka, „id.n”), gdzie <code>id</code> to jego identyfikator, a <code>n</code> to numer dziecka.  Po wykrzyczeniu tych komunikatów zapomina listę dzieci (gdyż nie będzie już potrzebna). Gdy ktoś usłyszy wiadomość, gdzie imię zgadza się z jego imieniem ustawia swój identyfikator na ten z wiadomości i powtarza czynność wykonaną przez korzeń.</p>
+<p>W tej chwili beduini mogą zapomnieć odległość, ale muszą ciągle pamiętać listę dzieci oraz swój identyfikator (adres).  Zabawę ponownie rozpoczyna korzeń ustawiając swój adres na „0” i wykrzykując dla każdego ze swoich dzieci komunikat (imię dziecka, „id.n”), gdzie <code>id</code> to jego identyfikator, a <code>n</code> to numer dziecka.  Po wykrzyczeniu tych komunikatów zapomina listę dzieci (gdyż nie będzie już potrzebna). Gdy ktoś usłyszy wiadomość, gdzie imię zgadza się z jego imieniem ustawia swój identyfikator na ten z wiadomości i powtarza czynność wykonaną przez korzeń.
 
-<p>Aby wysłać wiadomość, beduin musi znać identyfikator odbiorcy — tutaj niestety trzeba zastosować zapytanie rozchodzące się po całej pustyni. Zakładamy, że każdy z beduinów będzie rozmawiał z taką liczbą osób, że jest w stanie zapamiętać identyfikatory ich wszystkich.</p>
+<p>Aby wysłać wiadomość, beduin musi znać identyfikator odbiorcy — tutaj niestety trzeba zastosować zapytanie rozchodzące się po całej pustyni. Zakładamy, że każdy z beduinów będzie rozmawiał z taką liczbą osób, że jest w stanie zapamiętać identyfikatory ich wszystkich.
 
-<p>Tymczasem, gdy trzeba wysłać wiadomość do wierzchołka o konkretnym identyfikatorze, to po prostu przekazujemy ją do rodzica, aż do momentu, gdy identyfikator beduina będzie przedrostkiem identyfikatora odbiorcy, a następnie do dzieci zgodnie z docelowym adresem.</p>
+<p>Tymczasem, gdy trzeba wysłać wiadomość do wierzchołka o konkretnym identyfikatorze, to po prostu przekazujemy ją do rodzica, aż do momentu, gdy identyfikator beduina będzie przedrostkiem identyfikatora odbiorcy, a następnie do dzieci zgodnie z docelowym adresem.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-20 08:15:50 -->
 <!-- nick: Sad -->
 <!-- nick_url: http://sad.jogger.pl -->
 
-<p>Dalej twierdzę, że wyważasz otwarte drzwi. Od tego są automatyczne protokoły routingu. </p>
+<p>Dalej twierdzę, że wyważasz otwarte drzwi. Od tego są automatyczne protokoły routingu. 
 
-<p>Co do przedostatniego akapitu (o identyfikatorach odbiorcy), to sprawa wygląda jeszcze prościej: beduini nie są głupi i nie muszą pamiętać imion wszystkich, po prostu będą sprawdzać, czy identyfikator odbiorcy należy do odpowiedniej klasy adresowej (przestrzeni nazw, jak zwał tak zwał). Jeśli więc odbiorcą jest Abdul, Muhammad, Tariq czy Saddam to wszystko jest OK. Natomiast wiadomość przeznaczona dla Krzysia, Fxjfdh2w czy 10.0.2.3 powinna zostać odrzucona jako nieprawidłowy odbiorca.</p>
+<p>Co do przedostatniego akapitu (o identyfikatorach odbiorcy), to sprawa wygląda jeszcze prościej: beduini nie są głupi i nie muszą pamiętać imion wszystkich, po prostu będą sprawdzać, czy identyfikator odbiorcy należy do odpowiedniej klasy adresowej (przestrzeni nazw, jak zwał tak zwał). Jeśli więc odbiorcą jest Abdul, Muhammad, Tariq czy Saddam to wszystko jest OK. Natomiast wiadomość przeznaczona dla Krzysia, Fxjfdh2w czy 10.0.2.3 powinna zostać odrzucona jako nieprawidłowy odbiorca.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-20 13:29:36 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>OK, nie czaję o czym mówisz. ;)</p>
+<p>OK, nie czaję o czym mówisz. ;)
 
-<p>Cały problem z protokołami routingu jest taki, że sieci zazwyczaj są podzielone na podsieci dzięki czemu nawet gdyby każdy router miałby trzymać całą tablicę routingu to sprawa jest prostsza niż w opisanym problemie, gdyż nie muszą pamiętać ścieżki do każdej maszyny, a jedynie do podsieci, w której one się znajdują.</p>
+<p>Cały problem z protokołami routingu jest taki, że sieci zazwyczaj są podzielone na podsieci dzięki czemu nawet gdyby każdy router miałby trzymać całą tablicę routingu to sprawa jest prostsza niż w opisanym problemie, gdyż nie muszą pamiętać ścieżki do każdej maszyny, a jedynie do podsieci, w której one się znajdują.
 
-<p>Z beduinami jest tak, że nie ma tutaj żadnych podsieci. Nie można wnioskować, że Abdul jest gdzieś w pobliżu Ahmeda, a na zupełnie innym końcu pustyni niż Zenon. Doszedłem do wniosku, że należy to rozwiązać tworząc takie podsieci i klasy adresowe.</p>
+<p>Z beduinami jest tak, że nie ma tutaj żadnych podsieci. Nie można wnioskować, że Abdul jest gdzieś w pobliżu Ahmeda, a na zupełnie innym końcu pustyni niż Zenon. Doszedłem do wniosku, że należy to rozwiązać tworząc takie podsieci i klasy adresowe.
 
-<p>Co do identyfikatorów, to po ich przydzieleniu komunikaty wysyłane są do ziomka o podanym identyfikatorze, a nie imieniu i dlatego najpierw trzeba poznać identyfikator komputera o zadanym imieniu, aby móc do niego wysyłać wiadomości (coś jak ARP).</p>
+<p>Co do identyfikatorów, to po ich przydzieleniu komunikaty wysyłane są do ziomka o podanym identyfikatorze, a nie imieniu i dlatego najpierw trzeba poznać identyfikator komputera o zadanym imieniu, aby móc do niego wysyłać wiadomości (coś jak ARP).

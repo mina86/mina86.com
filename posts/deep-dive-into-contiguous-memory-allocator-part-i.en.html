@@ -456,42 +456,42 @@ refer to the original email.
 <!-- date: 2012-10-15 11:46:50 -->
 <!-- nick: Lars -->
 
-<p>Great article and feature but I do not see any NUMA support. Am I missing something?</p>
+<p>Great article and feature but I do not see any NUMA support. Am I missing something?
 
 <!-- COMMENT -->
 <!-- date: 2012-10-19 06:13:25 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>What do you mean by NUMA support? You can create separate CMA regions in different banks of memory and let different devices use those.</p>
+<p>What do you mean by NUMA support? You can create separate CMA regions in different banks of memory and let different devices use those.
 
 <!-- COMMENT -->
 <!-- date: 2013-09-17 04:52:20 -->
 <!-- nick: wenpin -->
 
-<p>hi, michael, thanks for your contribution. is it necessary to do some fix for mips arch?  Btw, where is the partII?</p>
+<p>hi, michael, thanks for your contribution. is it necessary to do some fix for mips arch?  Btw, where is the partII?
 
 <!-- COMMENT -->
 <!-- date: 2013-09-18 12:27:37 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>I’m unaware of any specific fixes for MIPS architecture. To best of my knowledge, the steps described in ‘Integration with architecture code’ should apply to that architecture as well, but it is likely that something needs to be done (just like in ARM’s case) with reserved memory for it to work as CMA region.</p>
+<p>I’m unaware of any specific fixes for MIPS architecture. To best of my knowledge, the steps described in ‘Integration with architecture code’ should apply to that architecture as well, but it is likely that something needs to be done (just like in ARM’s case) with reserved memory for it to work as CMA region.
 
-<p>And sorry about part two, I’ve never gotten to finalising the draft. It lays somewhere on my disk, but unfortunately it’s not fit for publication.</p>
+<p>And sorry about part two, I’ve never gotten to finalising the draft. It lays somewhere on my disk, but unfortunately it’s not fit for publication.
 
 <!-- COMMENT -->
 <!-- date: 2013-09-18 14:47:43 -->
 <!-- nick: wenpin -->
 
-<p>Thanks,  Michael. Today I ported it to MIPS, it works fine.  What I have done for mips is changing memblock_reserve to bootmem_alloc, The original one causes the bad_page warning when activating the CMA region. The memblock_reseve failed to reserve the memory, so when the later CMA want to release the reserved memory to buddy system, It’s already freed. I’m not sure why.</p>
+<p>Thanks,  Michael. Today I ported it to MIPS, it works fine.  What I have done for mips is changing memblock_reserve to bootmem_alloc, The original one causes the bad_page warning when activating the CMA region. The memblock_reseve failed to reserve the memory, so when the later CMA want to release the reserved memory to buddy system, It’s already freed. I’m not sure why.
 
 <!-- COMMENT -->
 <!-- date: 2013-09-23 01:10:04 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Looks legit. Not every platform is using memblock, so yeah, some architectures will need to use bootmem instead. Happy to hear you manage to get it working. Also, feel free to send patches upstream. :)</p>
+<p>Looks legit. Not every platform is using memblock, so yeah, some architectures will need to use bootmem instead. Happy to hear you manage to get it working. Also, feel free to send patches upstream. :)
 
 <!-- COMMENT -->
 <!-- date: 2014-01-09 13:43:32 -->
@@ -501,9 +501,9 @@ refer to the original email.
 It does not work. I get an error:<br />
 <code>echo 1024 &gt; /dev/cma_test</code><br />
 <code>misc cma_test: no mem in CMA area.</code><br />
-Of course, CMA patch was included in kernel and CMA area was reserved successfully. </p>
+Of course, CMA patch was included in kernel and CMA area was reserved successfully. 
 
-<p><code>dma_alloc_coherent()</code> return NULL at this point (dma-mapping.h):</p>
+<p><code>dma_alloc_coherent()</code> return NULL at this point (dma-mapping.h):
 
 <pre>
 <code>if (!dev)
@@ -514,17 +514,17 @@ if (!is_device_dma_capable(dev))
 </code></pre>
 
 <p>Here dev is <code>/dev/cma_test</code> which created by test module.<br />
-Could you explain me why is this happening and how to fix this bug?</p>
+Could you explain me why is this happening and how to fix this bug?
 
 <!-- COMMENT -->
 <!-- date: 2014-07-02 14:06:06 -->
 <!-- nick: Robert -->
 
-<p>Hi,</p>
+<p>Hi,
 
-<p>I tried the test of Barry Song and it kind of works, but I can’t figure out why I can use only 15 of 16 MiB.</p>
+<p>I tried the test of Barry Song and it kind of works, but I can’t figure out why I can use only 15 of 16 MiB.
 
-<p>This is what I turned on in the kernel config:</p>
+<p>This is what I turned on in the kernel config:
 
 <p>-----<br />
 CONFIG<em>MEMORY</em>ISOLATION=y<br />
@@ -541,18 +541,18 @@ CONFIG<em>CMA</em>SIZE<em>SEL</em>MBYTES=y<br />
 # CONFIG<em>CMA</em>SIZE<em>SEL</em>MAX is not set<br />
 CONFIG<em>CMA</em>ALIGNMENT=8<br />
 CONFIG<em>CMA</em>AREAS=7<br />
------</p>
+-----
 
-<p>and the bootlog says:</p>
+<p>and the bootlog says:
 
 <p>[    0.000000] Booting Linux on physical CPU 0x0<br />
 [    0.000000] Linux version 3.12.21-custom-student-dirty (student@armv7a) (gcc version 4.8.1 (GCC) ) #3 Tue Jun 24 00:43:28 EEST 2014<br />
 [    0.000000] CPU: ARM926EJ-S [41069265] revision 5 (ARMv5TEJ), cr=00053177<br />
 [    0.000000] CPU: VIVT data cache, VIVT instruction cache<br />
 [    0.000000] Machine: Freescale MXS (Device Tree), model: DENX M28EVK<br />
-[    0.000000] cma: CMA: reserved 16 MiB at 46800000</p>
+[    0.000000] cma: CMA: reserved 16 MiB at 46800000
 
-<p>so one would expect 16 MiB cma … but … we can only allocate 15 MiB:</p>
+<p>so one would expect 16 MiB cma … but … we can only allocate 15 MiB:
 
 <p>15360<br />
 + echo 15360 &gt; /dev/cma<em>test<br />
@@ -568,19 +568,19 @@ CONFIG<em>CMA</em>AREAS=7<br />
 &lt;7&gt;[  619.272522] cma: dma<em>alloc</em>from<em>contiguous(cma c0dc3624, count 4096, align 8)<br />
 &amp;lt;7&amp;gt;[  619.272618] cma: dma</em>alloc<em>from</em>contiguous(): returned   (null)<br />
 &lt;3&gt;[  619.272682] misc cma<em>test: no mem in CMA area<br />
-./03</em>run.sh: line 29: echo: write error: No space left on device</p>
+./03</em>run.sh: line 29: echo: write error: No space left on device
 
-<p>Note that the start address changed from 0x46800000 to 0x46900000 ???</p>
+<p>Note that the start address changed from 0x46800000 to 0x46900000 ???
 
-<p>Do you have an explanation for this?</p>
+<p>Do you have an explanation for this?
 
-<p>Regards,</p>
+<p>Regards,
 
-<p>Robert</p>
+<p>Robert
 
 <!-- COMMENT -->
 <!-- date: 2014-10-04 13:46:35 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>The test device is not the only one which does allocations. It appears that other devices have already allocated some of the memory.</p>
+<p>The test device is not the only one which does allocations. It appears that other devices have already allocated some of the memory.

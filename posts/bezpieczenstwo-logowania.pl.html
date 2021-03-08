@@ -14,7 +14,7 @@
   lub kradzieży hasła) kryją się za zwykłym logowaniem z hasłem.
   Oczywiście problemem jest atak typu <i lang="en">man in the
   middle</i>, tzn.  jeśli komuś uda się podsłuchać komunikację
-  przeglądarka-serwer to pozna hasło użytkownika.</p>
+  przeglądarka-serwer to pozna hasło użytkownika.
 
 
 <h2>OpenID</h2>
@@ -27,7 +27,7 @@
   np. naszej strony.  Delegacja jest bardo pożytecznym mechanizmem,
   gdyż pozwala w szybki sposób zrezygnować z jakiegoś
   dostawcy usługi OpenID — wystarczy zmienić wpis na naszej
-  stronie, zamiast zmiany ustawień na dziesiątkach serwerów.</p>
+  stronie, zamiast zmiany ustawień na dziesiątkach serwerów.
 
 <p>Jak zatem wygląda uwierzytelnianie OpenID?  W dużym skórcie,
   z wykorzystaniem delegacji,identyfikator wpisany przez
@@ -35,22 +35,22 @@
   strona się łączy (kanał A), aby zostać oddelegowanym do dostawcy
   usługi OpenID (kanał B), który uwierzytelnia użytkownika
   (np. hasłem) (kanał C) i odsyła informację o sukcesie bądź
-  porażce stronie, która rozpoczęła całą zabawę.</p>
+  porażce stronie, która rozpoczęła całą zabawę.
 
 <p>Scenariusz pierwszy: Ktoś przejął kontrolę nad kanałem A, loguje
   się na stronie podając identyfikator ofiary, dzięki przejęciu
   kontroli nad kanałem A przesyła od razu informacje o tym, iż
-  uwierzytelnianie się powiodło i kończy zabawę.</p>
+  uwierzytelnianie się powiodło i kończy zabawę.
 
 <p>Scenariusz drugi: Ktoś przejął kontrolę nad kanałem B, loguje się
   na stronie podając identyfikator ofiary, strona pobiera adres
   dostawcy usługi i łączy się z nim, ale ponieważ kanał
   B jest skompromitowany atakującemu udaje się włamać do
-  systemu.</p>
+  systemu.
 
 <p>Scenariusz trzeci: Ktoś przejął kontrolę nad kanałem C i
   teraz tak samo jak w zwykłym ataku na hasło może je
-  podsłuchać.</p>
+  podsłuchać.
 
 
 <h2>Wnioski</h2>
@@ -61,7 +61,7 @@
   jedną rzecz: Jeżeli nie używasz połączeń szyfrowanych
   z uwierzytelnianiem to jedyne co OpenID Ci daje to większa
   wygoda (jeden login, jedno hasło) za cenę mniejszego
-  bezpieczeństwo.</p>
+  bezpieczeństwo.
 
 <p>Wynika z tego, iż zarówno serwer z zapisaną delegacją jak
   i dostawca usługi OpenID muszą posiadać wykupione certyfikaty
@@ -70,13 +70,13 @@
   naszym <i>bezpiecznym</i> identyfikatorem będzie sprawdzać
   poprawność certyfikatów i nie przyjmie <i lang="en">self
   signed certificates</i> ani certyfikatów podpisanych przez jakieś
-  centra, które nie sprawdzają tożsamości podmiotu.</p>
+  centra, które nie sprawdzają tożsamości podmiotu.
 
 <p>To wszystko rzuca cień na ideę wielkiej otwartości standardu.  Niby
   każdy może dostarczać usługi OpenID, a delegacja może być na
   dowolnej stronie, ale aby nie wpaść w pułapkę braku bezpieczeństwa
   należy wydać pieniążki na certyfikaty, a to troszkę utrudnia
-  sprawę.</p>
+  sprawę.
 
 
 <h2>Co w zamian?</h2>
@@ -89,7 +89,7 @@
   /dev/random | sha1sum</code>) dzięki temu nawet jeżeli ktoś wykradnie
   hasło do jakiejś strony to wszystkie inne są bezpieczne, a my
   tymczasem musimy znać jedynie hasło główne naszego zarządcy
-  haseł.</p>
+  haseł.
 
 <p>Innym ciekawym rozwiązaniem jest generowanie za pomocą JavaScript
   haseł na podstawie jakiegoś ciągu specyficznego dla danej strony
@@ -100,48 +100,48 @@
   hasła głównego nie można już zmienić, można to próbować obejść
   trzymając w skrypcie zaszyfrowany naszym hasłem głównym klucz
   służący do generowania haseł (czy zwiększy to poziom bezpieczeństwa
-  jest jednak kwestią dyskusyjną).</p>
+  jest jednak kwestią dyskusyjną).
 
 <!-- COMMENT -->
 <!-- date: 2008-05-10 08:35:48 -->
 <!-- nick: Michał Górny -->
 
-<p>Logowanie zwykłym hasłem jest równie niebezpiecznie! Atakujący może skompromitować kanał A, między mózgiem użytkownika, a klawiaturą; kanał B, między klawiaturą, a komputerem; kilka kolejnych kanałów na drodze z kontrolera klawiatury do przeglądarki! Czy może być coś niebezpieczniejszego?! Najlepiej od razu wyłączyć komputer i schować się w kąt.</p>
+<p>Logowanie zwykłym hasłem jest równie niebezpiecznie! Atakujący może skompromitować kanał A, między mózgiem użytkownika, a klawiaturą; kanał B, między klawiaturą, a komputerem; kilka kolejnych kanałów na drodze z kontrolera klawiatury do przeglądarki! Czy może być coś niebezpieczniejszego?! Najlepiej od razu wyłączyć komputer i schować się w kąt.
 
-<p>PS. Ktoś tu chyba nie rozumie zastosowania OpenID.</p>
+<p>PS. Ktoś tu chyba nie rozumie zastosowania OpenID.
 
 <!-- COMMENT -->
 <!-- date: 2008-05-10 12:25:04 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>„Ktoś tu chyba nie rozumie zastosowania OpenID.” — możliwe, w takim razie prosiłbym o wyjaśnienie, bo ja nie widzę dla OpenID zastosowania.</p>
+<p>„Ktoś tu chyba nie rozumie zastosowania OpenID.” — możliwe, w takim razie prosiłbym o wyjaśnienie, bo ja nie widzę dla OpenID zastosowania.
 
 <!-- COMMENT -->
 <!-- date: 2008-05-10 12:26:24 -->
 <!-- nick: Michał Górny -->
 
-<p>Zastosowanie dla OpenID to durne wordpressy, stawiane na własnych serwerach.</p>
+<p>Zastosowanie dla OpenID to durne wordpressy, stawiane na własnych serwerach.
 
 <!-- COMMENT -->
 <!-- date: 2008-05-10 12:29:31 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>I w czym jest on lepszy od menadżera haseł, w przeglądarce Internetowej?</p>
+<p>I w czym jest on lepszy od menadżera haseł, w przeglądarce Internetowej?
 
 <!-- COMMENT -->
 <!-- date: 2008-05-10 12:30:01 -->
 <!-- nick: Michał Górny -->
 
-<p>Tym, że nie musisz się rejestrować na każdym z nich z osobna.</p>
+<p>Tym, że nie musisz się rejestrować na każdym z nich z osobna.
 
 <!-- COMMENT -->
 <!-- date: 2008-05-10 12:33:07 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>OK, przyjmuję do wiadomości.</p>
+<p>OK, przyjmuję do wiadomości.
 
 <!-- COMMENT -->
 <!-- date: 2008-05-10 17:26:34 -->
@@ -149,24 +149,24 @@
 <!-- nick_url: http://mrk.jogger.pl -->
 
 <p>@mina86 — w jaki sposób zapewnić logowanie się do serwisów internetowych za pomocą metod biometrycznych, kluczy sprzętowych itd? OpenId to wszystko umożliwia (choć nie jest to jeszcze popularne) — wystarczy, że któryś dostawca openid wprowadzi taki sposób uwierzytelniania użytkowników. <br />
-Sposób przechowywania twojej tożsamości sieciowej można porównać do przechowywania pieniędzy — gdzie je trzymasz? W domu czy może jednak w banku? Bank też każdy może założyć (podobnie jak każdy może być dostawcą openid), ale jednak potrafimy wybrać te, którym można zaufać.</p>
+Sposób przechowywania twojej tożsamości sieciowej można porównać do przechowywania pieniędzy — gdzie je trzymasz? W domu czy może jednak w banku? Bank też każdy może założyć (podobnie jak każdy może być dostawcą openid), ale jednak potrafimy wybrać te, którym można zaufać.
 
 <!-- COMMENT -->
 <!-- date: 2008-05-10 17:55:58 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Bank może założyć każdy dla pewnych definicji słowa „każdy”. I czy, aby na pewno potrafimy wybrać te, którym można zaufać, czy może po prostu są one obwarwoane tyloma przepisami, że ostatecznie mamy wysoki poziom bezpieczeństwa? Mnie się wydaje, że jednak to drugie.</p>
+<p>Bank może założyć każdy dla pewnych definicji słowa „każdy”. I czy, aby na pewno potrafimy wybrać te, którym można zaufać, czy może po prostu są one obwarwoane tyloma przepisami, że ostatecznie mamy wysoki poziom bezpieczeństwa? Mnie się wydaje, że jednak to drugie.
 
-<p>Jestem przekonany, iż wraz ze wzrostem popularności OpenID coraz więcej osób będzie korzystać z dostawców, którzy niekoniecznie są bezpieczni (choć to zależy od tego co ktoś rozumie przez „bezpieczny”).</p>
+<p>Jestem przekonany, iż wraz ze wzrostem popularności OpenID coraz więcej osób będzie korzystać z dostawców, którzy niekoniecznie są bezpieczni (choć to zależy od tego co ktoś rozumie przez „bezpieczny”).
 
-<p>Wg mnie OpenID nie ma zastosowania w niczym więcej niż, jak to Michał Górny określił, durne wordpressy, stawiane na własnych serwerach.</p>
+<p>Wg mnie OpenID nie ma zastosowania w niczym więcej niż, jak to Michał Górny określił, durne wordpressy, stawiane na własnych serwerach.
 
 <!-- COMMENT -->
 <!-- date: 2008-05-10 22:35:15 -->
 <!-- nick: talen -->
 <!-- nick_url: http://talen.jogger.pl -->
 
-<p>co do serwerów przechowujących tożsamość (openId), to racja — każdy wybiera na jaki się autoryzuje. O bezpieczeństwo można zadbać — wystarczy trochę pokombinować.</p>
+<p>co do serwerów przechowujących tożsamość (openId), to racja — każdy wybiera na jaki się autoryzuje. O bezpieczeństwo można zadbać — wystarczy trochę pokombinować.
 
-<p>Co do durnych wordpressów… poczytajcie sobie o dataportablility… jeden login to tylko wierzchołek góry lodowej.</p>
+<p>Co do durnych wordpressów… poczytajcie sobie o dataportablility… jeden login to tylko wierzchołek góry lodowej.

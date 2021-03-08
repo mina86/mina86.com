@@ -6,7 +6,7 @@
 <p>Surprisingly I couldn’t find any HTTPS-aware examples how to drop the <code>www.</code> prefix from web hosts in Apache,
 so I had to come up with one myself.  Firstly, the following lines
 need to find their way to the end of Apache configuration file
-(<code>/etc/httpd/conf/httpd.conf</code> or something):</p>
+(<code>/etc/httpd/conf/httpd.conf</code> or something):
 
 <pre>
 RewriteEngine on
@@ -17,7 +17,7 @@ RewriteRule ^(.*)$ http://%1$1 [L,R=301]</pre>
 <p>Secondly, analogous lines need to be added <em>inside</em> of the
 <code>&lt;VirtualHost _default_:443&gt;</code> directive of mod_ssl
 configuration file (<code>/etc/httpd/conf.d/ssl.conf</code> or similar),
-like so:</p>
+like so:
 
 <pre>
 &lt;VirtualHost _default_:443&gt;
@@ -30,12 +30,12 @@ like so:</p>
 &lt;/VirtualHost&gt;</pre>
 
 <p>Now, after a restart, Apache will drop the <code>www.</code> prefix for
-both secure and insecure connections.</p>
+both secure and insecure connections.
 
 <!-- EXCERPT -->
 
 <p>To <em>force</em> secure connection and drop the prefix at the same
-time the part in main configuration file has to become:</p>
+time the part in main configuration file has to become:
 
 <pre>
 RewriteEngine on
@@ -44,7 +44,7 @@ RewriteCond %{HTTP_HOST} ^(www\.)?(.*)$
 RewriteRule ^(.*)$ https://%2$1 [L,R=301]</pre>
 
 <p>To force secure connection only for one domain, say
-<code>example.com</code>:</p>
+<code>example.com</code>:
 
 <pre>
 RewriteEngine on
@@ -61,30 +61,30 @@ RewriteRule ^(.*)$ http://%1$1 [L,R=301]</pre>
 <p>mod_rewrite has also a <code>REQUEST_SCHEME</code> variable and it’s
 tempting to use it, but it seems that it’s value is not what is
 advertised and instead it contains scheme and host name which is not
-that useful.</p>
+that useful.
 
 <p>If you want to <em>add</em> the prefix, <a
-href="http://no-www.org/">check out this site</a>.</p>
+href="http://no-www.org/">check out this site</a>.
 
 <!-- COMMENT -->
 <!-- date: 2014-05-21 19:46:50 -->
 <!-- nick: todds -->
 
-<p>THANK YOU NICK!!!! THANK YOU THANK YOU THANK YOU!!!! I don’t know why this was so hard to find. I doubt you and I are the only ones on the planet that want to do this or that we are the only two clueless people on the planet. Thanks again!</p>
+<p>THANK YOU NICK!!!! THANK YOU THANK YOU THANK YOU!!!! I don’t know why this was so hard to find. I doubt you and I are the only ones on the planet that want to do this or that we are the only two clueless people on the planet. Thanks again!
 
 <!-- COMMENT -->
 <!-- date: 2015-04-15 14:13:59 -->
 <!-- nick: recurse -->
 
-<p>You could do things easier and drop the www. in your DNS configuration, remove the www. from ServerName in your vhost config, then forward all requests to www. back to http://domain.com/requesting-page.blah using: </p>
+<p>You could do things easier and drop the www. in your DNS configuration, remove the www. from ServerName in your vhost config, then forward all requests to www. back to http://domain.com/requesting-page.blah using: 
 
 <p>RewriteEngine On<br />
 RewriteCond %{HTTP_HOST} ^www.<br />
-RewriteRule ^(.*)$ http://domain.com/$1 [R=301,L]</p>
+RewriteRule ^(.*)$ http://domain.com/$1 [R=301,L]
 
 <!-- COMMENT -->
 <!-- date: 2015-04-23 15:13:16 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>recurse, what you’re describing is plain HTTP only.</p>
+<p>recurse, what you’re describing is plain HTTP only.

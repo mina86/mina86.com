@@ -8,17 +8,17 @@
   jak powszechnie wiadomo nie jest do końca poprawny.  Wynikła z tego
   krótka dyskusja, której kompilację pozwolę sobie wkleić poniżej
   (gdyż nie jest ona ogólnie dostępna, a nie lubię, gdy informacje się
-  marnują).</p>
+  marnują).
 
 <!-- EXCERPT -->
 
-<p>Witam wszystkich,</p>
+<p>Witam wszystkich,
 
 <p>chciałbym odnieść się do poruszonego przeze mnie problemu
   poprawności efektywnego wzorca singletonu dla programów
   wielowątkowych zwanego również <i lang="en">double-checked
   locking pattern</i><sup><a href="#f1" id="fl1">1</a></sup>.  W tym
-  celu, na początku przywołam trochę teorii.</p>
+  celu, na początku przywołam trochę teorii.
 
 <p>Standard C++ definiuje pojęcie <i lang="en">sequence point</i>,
   na bazie którego określa zachowanie programu.  Konkretnie opisuje
@@ -26,7 +26,7 @@
   sekwencyjnych.  Co się dzieje pomiędzy nimi nie jest powiedziane.
   W szczególności nie jest prawdą, że wyrażenie po prawej stronie
   operatora przypisania musi być wykonane zanim nastąpi przypisanie.
-  Bardzo prostym przykładem jest kod:</p>
+  Bardzo prostym przykładem jest kod:
 
 <pre>
 int foo = 0x42;
@@ -42,7 +42,7 @@ foo = bar++;
   Kompilator może powyższy kod zaimplementować najpierw przypisując
   zmiennej <var>foo</var> wartość zmiennej <var>bar</var>, a potem
   dopiero inkrementując tą drugą<sup><a href="#f2"
-  id="fl2">2</a></sup>:</p>
+  id="fl2">2</a></sup>:
 
 <pre>
 foo = bar;
@@ -55,7 +55,7 @@ foo = bar;
   standardu C++ nie studiowałem tak dogłębnie jak standardu C i nie
   wiem, czy przez przypadek operator new nie wprowadza kolejnego
   punktu sekwencyjnego<sup><a href="#f3" id="fl3">3</a></sup>.
-  Gdyby tak było, to kod ten należałoby traktować jak:</p>
+  Gdyby tak było, to kod ten należałoby traktować jak:
 
 <pre>
 Foo *new_foo() { return new Foo(); }
@@ -66,10 +66,10 @@ instance = new_Foo();</pre>
   id="fl4">4</a></sup> już występować, gdyż wszystkie efekty uboczne
   funkcji muszą zostać wykonane zanim zwróci ona swoją wartość, a więc
   konstruktor musi być wywołany zanim funkcja zwróci adres
-  przydzielonej pamięci.</p>
+  przydzielonej pamięci.
 
 <p>Po tych wszystkich przemyśleniach postanowiłem sprawdzić jak to
-  wygląda w praktyce i faktycznie, kompilacja kodu:</p>
+  wygląda w praktyce i faktycznie, kompilacja kodu:
 
 <pre>
 struct Foo {
@@ -92,7 +92,7 @@ int main(void) {
 }</pre>
 
 <p>wskazuje, iż wartość do zmiennej inst została przypisana dopiero po
-  wywołaniu konstruktora.</p>
+  wywołaniu konstruktora.
 
 <p>Czas na chwilę refleksji.  Przeanalizowany przykład nie potwierdził
   moich zarzutów, ale wcale nie spowodowało to, iż przestałem uważać,
@@ -102,7 +102,7 @@ int main(void) {
   zagwarantuje, że identycznie zachowują się wszystkie języki
   programowania?  Z informacji, które swego czasu do mnie dotarły
   wynika, iż Java oraz C# mają co do tego ździebko odmienne
-  zdanie.</p>
+  zdanie.
 
 <p>Skoro już się tyle rozpisałem to należy też poświęcić trochę uwagi
   poruszonemu (przez kogoś z tyłu sali) problemowi, gdy instrukcja
@@ -117,7 +117,7 @@ int main(void) {
   drugi przykład: zapis do 32-bitowej zmiennej leżącej na granicy
   linii cache’u<sup><a href="#f6" id="fl6">6</a></sup> powoduje
   w procesorach i386 dwa zapisy przy równoczesnym braku blokowania
-  magistrali<sup><a href="#f7" id="fl7">7</a></sup>.</p>
+  magistrali<sup><a href="#f7" id="fl7">7</a></sup>.
 
 <p>Poza tym artykuł na stronie IBM uświadomił mi<sup><a href="#f8"
   id="fl8">8</a></sup>, iż w grę wchodzi jeszcze kolejność
@@ -127,12 +127,12 @@ int main(void) {
   potem wykonać jakieś przypisanie z konstruktora, nawet jeżeli
   napotkał na te instrukcje w odwrotnej kolejności.  W przypadku
   maszyn jednoprocesorowych nie stanowi to problemu, ale w przypadku
-  maszyn wieloprocesorowych (wielordzeniowych) już tak.</p>
+  maszyn wieloprocesorowych (wielordzeniowych) już tak.
 
 
 <h2>Przypisy</h2>
 <p><sup><a href="#fl1" id="f1">1</a></sup> Dla osób nieobecnych na
-wykładzie, chodzi o:</p>
+wykładzie, chodzi o:
 
 <pre>
 class Foo {
@@ -148,14 +148,14 @@ class Foo {
     }
 };</pre>
 
-<p>Twierdzę, iż wzorzec ten jest niepoprawny.</p>
+<p>Twierdzę, iż wzorzec ten jest niepoprawny.
 
 <p><sup><a href="#fl2" id="f2">2</a></sup> Szczerze mówiąc tak
   właśnie bym się spodziewał, że ta instrukcja zostanie
   zaimplementowana, gdyż alternatywą wobec tego jest tworzenie
   niepotrzebnych zmiennych tymczasowych (np. niepotrzebne zużywanie
   rejestru).  Aby sprawdzić swoją intuicję postanowiłem zrobić pewien
-  test:</p>
+  test:
 
 <pre>
 [mina86@tuptus ~/code]$ cat foo.c
@@ -206,77 +206,77 @@ main:
         .section        .note.GNU-stack,"",@progbits</pre>
 
 <p>Wyróżnione przeze mnie linie wskazują, iż kompilator zachowuje się
-  tak jak przewidziałem.</p>
+  tak jak przewidziałem.
 
 <p><sup><a href="#fl3" id="f3">3</a></sup> Wydaje się, iż
   w przypadku przeciążania tego operatora sequence point faktycznie
   jest dodawany, z racji faktu, iż jego użycie jest wówczas
   zamaskowanym wywołaniem funkcji, a wywołania funkcji dodają sequence
-  point.</p>
+  point.
 
 <p><sup><a href="#fl4" id="f4">4</a></sup> Nadal jakiś kompilator
   mógłby próbować to optymalizować, ale wówczas nie byłby to
-  kompilator zgodny ze standardem C++.</p>
+  kompilator zgodny ze standardem C++.
 
 <p><sup><a href="#fl5" id="f5">5</a></sup> Takie samo zachowanie
   występuje rzecz jasna na nowszych generacjach tego procesora
-  działających w trybie real.</p>
+  działających w trybie real.
 
 <p><sup><a href="#fl6" id="f6">6</a></sup> Chyba wystarczy, żeby nie
-  była wyrównana do jakiejś mniejszej jednostki.</p>
+  była wyrównana do jakiejś mniejszej jednostki.
 
 <p><sup><a href="#fl7" id="f7">7</a></sup> Przynajmniej nie
   znalazłem wzmianki o tym, aby instrukcja mov blokowała magistralę
-  w intelowskim Software Developer’s Manual.</p>
+  w intelowskim Software Developer’s Manual.
 
 <p><sup><a href="#fl8" id="f8">8</a></sup> Link do artykułu, na
-  który się powoływałem, gdzieś mi niestety zaginął.</p>
+  który się powoływałem, gdzieś mi niestety zaginął.
 
 <!-- COMMENT -->
 <!-- date: 2008-04-30 08:04:42 -->
 <!-- nick: AdamK -->
 <!-- nick_url: http://blog.adam.klobukowski.pl -->
 
-<p>Co do dostępu do pamięci i atomowości, to można w skrócie powiedzieć że pamięć obsługiwana jest w podzieleniu na „segmenty” (nie mylić z rejestrem segmentowym i związanym z nim komplikacjami). Jeżeli nasz dostęp mieści się w jednym segmencie to operacja będzie (zazwyczaj) atomowa. Natomiast jeśli dostęp zahacza o dwa segmenty, operacja nie będzie atomowa. (Oczywiście to spore uproszczenie jest)</p>
+<p>Co do dostępu do pamięci i atomowości, to można w skrócie powiedzieć że pamięć obsługiwana jest w podzieleniu na „segmenty” (nie mylić z rejestrem segmentowym i związanym z nim komplikacjami). Jeżeli nasz dostęp mieści się w jednym segmencie to operacja będzie (zazwyczaj) atomowa. Natomiast jeśli dostęp zahacza o dwa segmenty, operacja nie będzie atomowa. (Oczywiście to spore uproszczenie jest)
 
 <!-- COMMENT -->
 <!-- date: 2008-04-30 08:14:56 -->
 <!-- nick: rozie -->
 <!-- nick_url: http://rozie.jogger.pl -->
 
-<p>Ciekawy wpis. Taka mała prośba, czy mógłbyś korzystać z kategorii techblog dla wpisów z kategorii techniczne? Ten wpis jak najbardziej tam pasuje, pozostałe zapewne też, a nie ginęłyby w gąszczu innych.</p>
+<p>Ciekawy wpis. Taka mała prośba, czy mógłbyś korzystać z kategorii techblog dla wpisów z kategorii techniczne? Ten wpis jak najbardziej tam pasuje, pozostałe zapewne też, a nie ginęłyby w gąszczu innych.
 
 <!-- COMMENT -->
 <!-- date: 2008-04-30 08:41:45 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p><b>rozzie</b>, korzystam. Jednak kategoria Techblog nie jest na mojej stronie wyszcególniana (w większości pokrywa się z Techniczną).</p>
+<p><b>rozzie</b>, korzystam. Jednak kategoria Techblog nie jest na mojej stronie wyszcególniana (w większości pokrywa się z Techniczną).
 
 <!-- COMMENT -->
 <!-- date: 2008-04-30 08:47:49 -->
 <!-- nick: rozie -->
 <!-- nick_url: http://rozie.jogger.pl -->
 
-<p>Aha, OK. Jakoś dziś nie zacząłem od techbloga, patrzę w kategorie, a tam nie ma… ;) A szkoda by się marnowało.</p>
+<p>Aha, OK. Jakoś dziś nie zacząłem od techbloga, patrzę w kategorie, a tam nie ma… ;) A szkoda by się marnowało.
 
 <!-- COMMENT -->
 <!-- date: 2008-04-30 12:51:41 -->
 <!-- nick: Khorne -->
 <!-- nick_url: http://blog.rzechonek.net -->
 
-<p>Sama prawda :)</p>
+<p>Sama prawda :)
 
 <!-- COMMENT -->
 <!-- date: 2008-04-30 18:20:55 -->
 <!-- nick: bigfun -->
 <!-- nick_url: http://bigfun.jogger.pl -->
 
-<p>Ciekawy wpis. Gdybyś jeszcze odpuścił sobie te przypisy, albo   jakos wczesniej je umieszczal, zamiast na koncu calego arta, byloby ekstra. Skumulowane na końcu utrudniaja czytanie.</p>
+<p>Ciekawy wpis. Gdybyś jeszcze odpuścił sobie te przypisy, albo   jakos wczesniej je umieszczal, zamiast na koncu calego arta, byloby ekstra. Skumulowane na końcu utrudniaja czytanie.
 
 <!-- COMMENT -->
 <!-- date: 2008-04-30 21:14:12 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Dodałem linki, może będzie milej czytać. ;)</p>
+<p>Dodałem linki, może będzie milej czytać. ;)

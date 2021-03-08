@@ -229,7 +229,7 @@ cut -d: -f1 /etc/passwd |\
 <pre>cut -d: -f1 /etc/passwd &gt;&gt;/etc/ftpusers</pre>
 
 <p>In <code>/etc/inetd.conf</code> comment out <code>auth</code> which turn all lines
-in that files to comments.</p>
+in that files to comments.
 
 <p>Finally, configure
 <a href=https://en.wikipedia.org/wiki/TCP_Wrapper>TCP Wrapper</a> to prevent any services using
@@ -449,66 +449,66 @@ for GRP in adm news pop; do groupdel "$GRP"; done</pre>
 <!-- date: 2014-01-26 16:27:36 -->
 <!-- nick: Jarosław Rzeszótko -->
 
-<p>Could you write something more about your usage patterns? Are you using Slackware for your personal computing, or on servers? How long have you been doing it? I loved Slackware back in the day, but Slackware’s package management falled behind at some point, the ease with which you can install almost anything in Debian’s apt, Gentoo’s portage or FreeBSD ports system is a huge advantage compared to the austerity of Slackware. Has this changed recently? Why would you use Slackware today over Gentoo or Arch?</p>
+<p>Could you write something more about your usage patterns? Are you using Slackware for your personal computing, or on servers? How long have you been doing it? I loved Slackware back in the day, but Slackware’s package management falled behind at some point, the ease with which you can install almost anything in Debian’s apt, Gentoo’s portage or FreeBSD ports system is a huge advantage compared to the austerity of Slackware. Has this changed recently? Why would you use Slackware today over Gentoo or Arch?
 
 <!-- COMMENT -->
 <!-- date: 2014-01-26 17:25:55 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>I’ve been using Slackware as my main operating system for over ten years both on my desktop and later on <a href="https://mina86.com/2010/msi-wind-i-dziewiec-komor/" rel="nofollow">my netbook</a> which recently become a pure server.</p>
+<p>I’ve been using Slackware as my main operating system for over ten years both on my desktop and later on <a href="https://mina86.com/2010/msi-wind-i-dziewiec-komor/" rel="nofollow">my netbook</a> which recently become a pure server.
 
-<p><a href="https://mina86.com/2008/wrazenia-z-gentoo/" rel="nofollow">I’ve tried Gentoo a while back</a> but didn’t really like it especially as I don’t find the idea of compiling everything appealing any more.</p>
+<p><a href="https://mina86.com/2008/wrazenia-z-gentoo/" rel="nofollow">I’ve tried Gentoo a while back</a> but didn’t really like it especially as I don’t find the idea of compiling everything appealing any more.
 
-<p>What I like Slackware for is its simplicity. It sticks to simple text files when it comes to configuration without any unnecessary GUIs. Almost all configurations that worked ten years ago, still work.</p>
+<p>What I like Slackware for is its simplicity. It sticks to simple text files when it comes to configuration without any unnecessary GUIs. Almost all configurations that worked ten years ago, still work.
 
-<p>As for package management I really don’t mind lack of dependency resolution. It’s usually not a big issue for me, and majority of tools I need Slackware includes, so there’s not many packages that I need to compile myself.</p>
+<p>As for package management I really don’t mind lack of dependency resolution. It’s usually not a big issue for me, and majority of tools I need Slackware includes, so there’s not many packages that I need to compile myself.
 
 <!-- COMMENT -->
 <!-- date: 2014-01-26 20:23:04 -->
 <!-- nick: slawek@g.pl -->
 
-<p>what about modern, huge sata / sas drives and LILO ? ? ? is that works too?</p>
+<p>what about modern, huge sata / sas drives and LILO ? ? ? is that works too?
 
 <!-- COMMENT -->
 <!-- date: 2014-01-26 20:29:51 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>I don’t see why it wouldn’t. I used LILO on a 1T SATA drive with no problems. Currently I’m using it with a RAID-1 set up on two 40G SSD SATA-3 drives. I have never had a SAS drive, but I really don’t see why it would not work. Slackware 14.1 includes ELILO so Slackware works on UEFI systems as well.</p>
+<p>I don’t see why it wouldn’t. I used LILO on a 1T SATA drive with no problems. Currently I’m using it with a RAID-1 set up on two 40G SSD SATA-3 drives. I have never had a SAS drive, but I really don’t see why it would not work. Slackware 14.1 includes ELILO so Slackware works on UEFI systems as well.
 
 <!-- COMMENT -->
 <!-- date: 2014-04-02 04:40:11 -->
 <!-- nick: Deny Dias -->
 
-<p>Hi, mina86! That’s a wonderful piece of writing on Slackware’s post install and security! Thanks for writing it.</p>
+<p>Hi, mina86! That’s a wonderful piece of writing on Slackware’s post install and security! Thanks for writing it.
 
-<p>I just moved to a new notebook and did a fresh install of Slackware. Most of the working files at ~/ came from backup. But even with a backup, if you don keep track of every single file changed after install, it’s easy to get lost on all the minor changes made. For instance: how to remember that we’ve changed that one single line at /etc/rc.d/rc.local?!?</p>
+<p>I just moved to a new notebook and did a fresh install of Slackware. Most of the working files at ~/ came from backup. But even with a backup, if you don keep track of every single file changed after install, it’s easy to get lost on all the minor changes made. For instance: how to remember that we’ve changed that one single line at /etc/rc.d/rc.local?!?
 
-<p>So, do you have a hint on how to keep track of the changed files after initial install? That would be really useful to backup those files properly, and mainly to rebuild a new system scratch.</p>
+<p>So, do you have a hint on how to keep track of the changed files after initial install? That would be really useful to backup those files properly, and mainly to rebuild a new system scratch.
 
-<p>I took a look at the wild for info on that (although not that deep) and can’t found nothing straight to the matter. On Slackware, I thought that an checksum comparison between the original distribution files (namely CHECKSUMS.md5) and the current filesystem wold get it done. The thing is that process is quite time consuming. I have doubts if this is an elegant approach.</p>
+<p>I took a look at the wild for info on that (although not that deep) and can’t found nothing straight to the matter. On Slackware, I thought that an checksum comparison between the original distribution files (namely CHECKSUMS.md5) and the current filesystem wold get it done. The thing is that process is quite time consuming. I have doubts if this is an elegant approach.
 
-<p>Do you have any ideas on that matter?</p>
+<p>Do you have any ideas on that matter?
 
 <!-- COMMENT -->
 <!-- date: 2014-04-02 14:17:19 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>I do not install Slackware so often to give this problem much thought or try to implement any of my ideas. This time around, I had my previous article and my desktop so I could easily recreate all the configuration I needed.</p>
+<p>I do not install Slackware so often to give this problem much thought or try to implement any of my ideas. This time around, I had my previous article and my desktop so I could easily recreate all the configuration I needed.
 
-<p>If you know in advance that you’re going to reinstall the system, you can simply <code>tar</code> the <code>/etc/rc.d</code> directory of the old system and extract it after installation is done.  You can do that with the whole <code>/etc</code> but beware of files with user and group information, SSH and SSL keys, etc.</p>
+<p>If you know in advance that you’re going to reinstall the system, you can simply <code>tar</code> the <code>/etc/rc.d</code> directory of the old system and extract it after installation is done.  You can do that with the whole <code>/etc</code> but beware of files with user and group information, SSH and SSL keys, etc.
 
-<p>Yet another option is to keep <code>/etc</code> in a git repository periodically pushed to a safe location. Just initialise a repository in <code>/etc</code> and exclude specific files and directories using <code>.gitignore</code>.</p>
+<p>Yet another option is to keep <code>/etc</code> in a git repository periodically pushed to a safe location. Just initialise a repository in <code>/etc</code> and exclude specific files and directories using <code>.gitignore</code>.
 
 <!-- COMMENT -->
 <!-- date: 2014-04-02 16:47:35 -->
 <!-- nick: Deny Dias -->
 
-<p>Hummm! I don’t reinstall the system that often too. I did that now because the old machine, a MacBook Pro, required lots of customizations to deal with Apple’s craps so Linux became usable in it as the only OS installed (no dual boot). As the new machine is pretty standard, Slackware’s generic kernel is more than enough to handle it. So I thought it worth the time to reinstall from scratch to clean lots of the unnecessary stuff rather then just copy the old /etc and some at /lib, /lib64 and /opt.</p>
+<p>Hummm! I don’t reinstall the system that often too. I did that now because the old machine, a MacBook Pro, required lots of customizations to deal with Apple’s craps so Linux became usable in it as the only OS installed (no dual boot). As the new machine is pretty standard, Slackware’s generic kernel is more than enough to handle it. So I thought it worth the time to reinstall from scratch to clean lots of the unnecessary stuff rather then just copy the old /etc and some at /lib, /lib64 and /opt.
 
-<p>Right know, my installation can be migrated to a new pretty standard machine just by moving the SSD itself to the new hardware. But I feel more safe if I can just start from a fresh Slackware install and replace only the changed files. That would be quite quick to accomplish if one keep track of the changed files only.</p>
+<p>Right know, my installation can be migrated to a new pretty standard machine just by moving the SSD itself to the new hardware. But I feel more safe if I can just start from a fresh Slackware install and replace only the changed files. That would be quite quick to accomplish if one keep track of the changed files only.
 
 <p>That git approach might be very useful here. I’ll look into it
 later and report here if I get into something simple to
@@ -516,20 +516,20 @@ implement. Actually, I already do that with dotfiles at ~/ by using
 homeshick (I wrote
 an <a href="https://mexapi.macpress.com.br/2013/10/ordem-nos-dotfiles.html"
 rel="nofollow">article</a> about this, in Portuguese). Maybe the same
-approach may apply here too.</p>
+approach may apply here too.
 
 <!-- COMMENT -->
 <!-- date: 2015-03-01 08:30:20 -->
 <!-- nick: nick -->
 
-<p>i found this really insightful and it helps immensely with my user configuration. can you link me to any other articles by you or that you find helpful? i’m trying to start from the bottom, get my user account and security set up, update, then configure my login shell (zsh), then my console apps (vim, mc, lynx, the ones i’ll use most.) thanks for this.</p>
+<p>i found this really insightful and it helps immensely with my user configuration. can you link me to any other articles by you or that you find helpful? i’m trying to start from the bottom, get my user account and security set up, update, then configure my login shell (zsh), then my console apps (vim, mc, lynx, the ones i’ll use most.) thanks for this.
 
 <!-- COMMENT -->
 <!-- date: 2015-03-11 03:03:59 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>There is <a href="http://slackbook.org/" rel="nofollow">Slack book</a> which has documentation on Slackware. I haven’t read it myself though so cannot review it either way. But actually once you add a user, most things should just work.</p>
+<p>There is <a href="http://slackbook.org/" rel="nofollow">Slack book</a> which has documentation on Slackware. I haven’t read it myself though so cannot review it either way. But actually once you add a user, most things should just work.
 
 <!-- COMMENT -->
 <!-- date: 2016-02-17 00:47:06 -->
@@ -537,7 +537,7 @@ approach may apply here too.</p>
 
 <p>Thanks for this very good article.<br />
 It helped me a lot.<br />
-Slackware is the best.</p>
+Slackware is the best.
 
 <!-- COMMENT -->
 <!-- date: 2019-07-14 12:54:16 -->

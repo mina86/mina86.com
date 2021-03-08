@@ -9,9 +9,9 @@ doprowadzają do idealnego zabezpieczenia, olbrzymiego wzrostu
 wydajności, czu użyteczności systemu, ale raczej kroki wyważone
 pomiędzy tymi aspektami.  Oczywiście, jest to opis tego co <em>ja</em>
 robję, więc niekoniecznie wszystko, co zostało tutaj opisane,
-będzie <em>Ci</em> odpowiadać.</p>
+będzie <em>Ci</em> odpowiadać.
 
-<p>UPDATE 18/04/08: Dodane TMOUT.</p>
+<p>UPDATE 18/04/08: Dodane TMOUT.
 
 <!-- EXCERPT -->
 
@@ -27,12 +27,12 @@ przydatne przy ograniczaniu dostępu do różnych poleceń
 (<strong>nie</strong> dodawaj użytkownika do grupy <code>wheel</code>, bo
 dalsze modyfikacje plików konfiguracyjnych uniemożliwią Ci zalogowanie
 się do komputera).  Na pozostałe pytania wystarczy odpowiedzieć
-wciskając enter.</p>
+wciskając enter.
 
 <h2 id="loginaccess">Ustawienia logowania</h2>
 
 <p>W drugim kroku należy wyedytować plik <code>/etc/login.access</code>,
-aby miał następującą zawartość:</p>
+aby miał następującą zawartość:
 
 <pre>
 -:wheel:ALL
@@ -45,31 +45,31 @@ oprócz użytkownika o podanym loginie.  Jeżeli więcej osób ma mieć
 możliwość logowania się (nie dotyczy to dostępu zdalnego
 np. przez SSH) to można stworzyć grupę
 (np. <code>ttylogin</code>), a w omawianym pliku drugą
-z podanych linijek zamienić na:</p>
+z podanych linijek zamienić na:
 
 <pre>-:ALL EXCEPT ttylogin:ALL</pre>
 
 <p>W ten sposób, aby zalogować się jako root trzeba najpierw zalogować
 się jako zwykły użytkownik, a następnie użyć polecenia <code>su</code>,
-o którym niżej.</p>
+o którym niżej.
 
 <p>Dalej, w pliku <code>/etc/login.defs</code> dokonujemy następujących
-zmian:</p>
+zmian:
 
 <table>
  <tr>
-  <th scope="row"><code>MAIL_CHECK_ENAB</code></th>
+  <th scope="row"><code>MAIL_CHECK_ENAB</code>
   <td>Ustawiamy na <code>no</code>, chyba że rzeczywiście jest to
    potrzebne.  Jeżeli masz wątpliwości to pewnie nie jest to
-   potrzebne.</td>
- </tr>
+   potrzebne.
+ 
  <tr>
-  <th scope="row"><code>ISSUE_FILE</code></th>
+  <th scope="row"><code>ISSUE_FILE</code>
   <td>Ustawiamy na <code>/etc/issue</code>.  Później jeszcze dodamy
-   w odpowiednie miejsce kod definiujący ten plik.</td>
- </tr>
+   w odpowiednie miejsce kod definiujący ten plik.
+ 
  <tr>
-  <th scope="row"><code>SU_WHEEL_ONLY</code></th>
+  <th scope="row"><code>SU_WHEEL_ONLY</code>
   <td>Ustawiamy na <code>yes</code>.  W ten sposób z <code>su</code> będą
     mogli korzystać jedynie użytkownicy należący do grupy o numerze
     zero, tj. do grupy <code>root</code>.  Należy zauważyć,
@@ -81,25 +81,25 @@ zmian:</p>
     edytując plik
     <code>login.access</code>).  Nie ma się jednak co przejmować - na
     takich systemach nie należy po prostu zamieniać tej wartości -
-    zabezpieczeniem <code>su</code> jeszcze się zajmiemy.</td>
- </tr>
+    zabezpieczeniem <code>su</code> jeszcze się zajmiemy.
+ 
  <tr>
-  <th scope="row"><code>LOGIN_STRING</code></th>
+  <th scope="row"><code>LOGIN_STRING</code>
   <td>Komentarz mówi, że ta opcja nie działa poprawnie, ale nie
    spotkałem się z żadnymi problemami toteż wystarczy odkomentować
    linię by opcja <code>LOGIN_STRING</code> przyjęła wartość <code>"%s's
-   Password: "</code>.</td>
- </tr>
+   Password: "</code>.
+ 
  <tr>
-  <th scope="row"><code>GETPASS_ASTERISKS</code></th>
+  <th scope="row"><code>GETPASS_ASTERISKS</code>
   <td>Bardzo zabawna opcja, osobiście ustawiam ją na <code>10</code>
    dzięki czemu, w trakcie wpisywania hasła, wpisanie pojedynczej
    literki powoduje wyświetlenie od jednej do 10 gwiazdek - dobry
    sposób na zmylenie kogoś, kto spogląda zza ramienia na to co
    wpisujemy.  Śmiesznie też wyglądają ludzie, którzy myślą, że
    w istocie mam kilkudziesięcio znakowe hasło i wpisałem je w dwie,
-   trzy sekundy.</td>
- </tr>
+   trzy sekundy.
+ 
 </table>
 
 <h2 id="ssh">Zabezpieczanie SSH</h2>
@@ -109,18 +109,18 @@ zabezpieczyć SSH.  Przede wszystkim, jeżeli nie
 używamy <code>sshd</code> to warto ustawić, aby nie włączał się on
 automatycznie przy starcie (generalnie wszelkie nieużywane lub rzadko
 używane daemony nie powinny być uruchamiane przy starcie).  Aby tego
-dokonać wystarczy uruchomić polecenie:</p>
+dokonać wystarczy uruchomić polecenie:
 
 <pre>chmod 600 /etc/rc.d/rc.sshd</pre>
 
 <p>Przy takich ustawieniach, aby wystartować <code>sshd</code> należy
-wykonać polecenie:</p>
+wykonać polecenie:
 
 <pre>sh /etc/rc.d/rc.sshd start</pre>
 
 <p>Po drugie trzeba jeszcze wyedytować
 plik <code>/etc/ssh/sshd_config</code> ustawiając w nim następujące
-opcje:</p>
+opcje:
 
 <pre>
 PermitRootLogin no
@@ -135,23 +135,23 @@ opcji <code>AllowUsers</code> oddzielając poszczególne nazwy spacjami.
 Jeżeli użytkowników miałoby być sporo to lepiej stworzyć nową
 grupę, np. <code>sshlogin</code>, do
 pliku <code>sshd_config</code> dodać opcję <code>AllowGroups sshlogin</code>
-i dodawać użytkowników do tej grupy.</p>
+i dodawać użytkowników do tej grupy.
 
 <h2 id="su">Zabezpieczanie <code>su</code></h2>
 
 <p>Teraz jeszcze pozostaje zabezpieczyć trochę polecenie <code>su</code>.
 Po pierwsze, do pliku <code>/etc/suauth</code> (w razie potrzeby należy
-ten plik utworzyć) dodajemy następującą linijkę:</p>
+ten plik utworzyć) dodajemy następującą linijkę:
 
 <pre>ALL:ALL EXCEPT GROUP root:DENY</pre>
 
 <p>Dzięki której, jedynie użytkownicy należący do grupy <code>root</code>
 będą mogli korzystać z <code>su</code>.  W chwili obecnej, do grupy tej
 powinien należeć root oraz użytkownik stworzony na początku tego
-artykułu.</p>
+artykułu.
 
 <p>Na wszelki wypadek warto jeszcze wykonać następujące dwa
-polecenia:</p>
+polecenia:
 
 <pre>
 chown root:root /bin/su
@@ -159,12 +159,12 @@ chmod 4750 /bin/su</pre>
 
 <p>Dzięki którym, blokowanie użytkowników nienależących do grupy
 <code>root</code> będzie się odbywało również na poziomie systemu plików
-i jądra.</p>
+i jądra.
 
 <h2 id="rc">Skrypty startowe</h2>
 
 <p>Tutaj będzie trochę zmian.  Zarówno zwiększających bezpieczeństwo
-jak i przyśpieszających start systemu.</p>
+jak i przyśpieszających start systemu.
 
 <h3 id="rcm"><code>rc.M</code></h3>
 
@@ -174,27 +174,27 @@ oraz <code>fc-cache</code>.  Wykonują się one bardzo długo i strasznie
 wydłużają start systemu, a w gruncie rzeczy są niepotrzebne.  Należy
 tylko pamiętać, żeby po zainstalowaniu (lub odinstalowaniu)
 jakiejkolwiek biblioteki uruchomić <code>ldconfig</code> oraz po
-dodaniu/skasowaniu czcionek - <code>fc-cache</code>.</p>
+dodaniu/skasowaniu czcionek - <code>fc-cache</code>.
 
 <p>W celu przyśpieszenia startu systemu warto uruchomić kilka
 programów w tle.  Ja tak zrobiłem z <code>syslog</code>, <code>acpid</code>,
 <code>alsa</code>, <code>gpm</code>, oraz całym fragmentem kodu począwszy od
 <code>inet1</code>, a skończywszy na <code>inet2</code>.  W przypadku
-<code>syslog</code> wystarczy zmienić linijkę:</p>
+<code>syslog</code> wystarczy zmienić linijkę:
 
 <pre>  . /etc/rc.d/rc.syslog start</pre>
 
-<p>na:</p>
+<p>na:
 
 <pre>  /etc/rc.d/rc.syslog start &amp;</pre>
 
 <p>Może to co prawda spowodować, że niektóre komunikaty nie zostaną
 zapisane w logu systemowym, ale osobiście uznałem, że nie jest to aż
 tak wielka strata.  Analogicznie wygląda sytuacja
-z <code>acpid</code>, <code>alsa</code> oraz <code>gpm</code>.</p>
+z <code>acpid</code>, <code>alsa</code> oraz <code>gpm</code>.
 
 <p>W przypadku kodu od <code>inet1</code> do <code>inet2</code>, wystarczy
-przed linijkami:</p>
+przed linijkami:
 
 <pre>
 # Initialize the networking hardware.  If your network driver is a module
@@ -204,7 +204,7 @@ if [ -x /etc/rc.d/rc.inet1 ]; then
   . /etc/rc.d/rc.inet1
 fi</pre>
 
-<p>dodać okrągły nawias otwierający, tj.:</p>
+<p>dodać okrągły nawias otwierający, tj.:
 
 <pre>
 (
@@ -216,7 +216,7 @@ if [ -x /etc/rc.d/rc.inet1 ]; then
   . /etc/rc.d/rc.inet1
 fi</pre>
 
-<p>oraz za linijkami:</p>
+<p>oraz za linijkami:
 
 <pre>
 # Start networking daemons:
@@ -224,7 +224,7 @@ if [ -x /etc/rc.d/rc.inet2 ]; then
   . /etc/rc.d/rc.inet2
 fi</pre>
 
-<p>dodać okrągły nawias zamykający z etką:</p>
+<p>dodać okrągły nawias zamykający z etką:
 
 <pre>
 # Start networking daemons:
@@ -236,12 +236,12 @@ fi
 
 <p>Powinno to przyśpieszyć start systemu, choć nie wiem czy
 użytkownicy <code>hotplug</code> nie napotkają jakiś problemów, oby
-nie.</p>
+nie.
 
 <p>Na koniec jeszcze, zdecydowałem się usunąć pliki
 <code>/etc/rc.d/rc.font</code> i <code>/etc/rc.d/rc.keymap</code>, a ich
 zawartość wstawić bezpośrednio do pliku <code>/etc/rc.d/rc.M</code>
-z jednoczesnym uruchomieniem w tle:</p>
+z jednoczesnym uruchomieniem w tle:
 
 <pre>
 # Load a custom screen font
@@ -254,7 +254,7 @@ fi</pre>
 
 <h3 id="rcs"><code>rc.S</code></h3>
 
-<p>Tutaj jedynie zmieniłem kilka uprawnień:</p>
+<p>Tutaj jedynie zmieniłem kilka uprawnień:
 
 <pre>chmod 1733 /tmp/.ICE-unix /tmp/.X11-unix</pre>
 
@@ -263,7 +263,7 @@ Dodatkowo, można jeszcze zmienić uprawnienia do pliku <code>/var/run/utmp</cod
 <h3 id="rclocal"><code>rc.local</code></h3>
 
 <p>Nie rozwodząc się długo, do pliku <code>/etc/rc.d/rc.local</code>
-proponuję wpisać co następuje:</p>
+proponuję wpisać co następuje:
 
 <pre>
 chown root:root /sbin/shutdown /sbin/halt /sbin/reboot /sbin/poweroff /bin/su
@@ -297,14 +297,14 @@ ICMP.  Następnie generowane są pliku
 <code>/etc/issue</code> oraz <code>/etc/issue.net</code> po czym ustawiane są
 różne parametry dysku - prawdopodobnie będziesz chciał je zmodyfikować.
  Na koniec uruchamiany jest skrypt <code>/etc/cron.hourly/ntpsync</code>
-o ile takowy istnieje.</p>
+o ile takowy istnieje.
 
 <h3 id="rclasa"><code>rc.alsa</code></h3>
 
 <p>Ponieważ stosunkowo szybko przekompilowuję jądro i wkompilowuję
 w nim emulację OSS to nie ma potrzeby wczytywania
 żadnych modułów, więc w pliku <code>/etc/rc.d/rc.alsa</code> zmieniam
-definicję funkcji <code>load_alsa_oss_modules</code> na następującą:</p>
+definicję funkcji <code>load_alsa_oss_modules</code> na następującą:
 
 <pre>
 load_alsa_oss_modules () {
@@ -314,7 +314,7 @@ load_alsa_oss_modules () {
 <h3 id="rcsyslog"><code>rc.syslog</code></h3>
 
 <p>Tutaj można minimalnie zmienić parametry wywoływania
-<code>syslogd</code> oraz <code>klogd</code>:</p>
+<code>syslogd</code> oraz <code>klogd</code>:
 
 <pre>
 /usr/sbin/syslogd -m 0
@@ -323,7 +323,7 @@ load_alsa_oss_modules () {
 <h2>Crontab</h2>
 
 <p>Po pierwsze, tworzymy plik <code>/etc/cron.hourly/ntpsync</code>
-o następującej treści:</p>
+o następującej treści:
 
 <pre>
 #!/bin/sh
@@ -346,7 +346,7 @@ if [ -x /sbin/hwclock ]; then
 fi</pre>
 
 <p>Po drugie, tworzymy plik <code>/etc/cron.daily/cleanup</code> nadając
-mu prawa wykonywania o następującej treści:</p>
+mu prawa wykonywania o następującej treści:
 
 <pre>
 #!/bin/sh
@@ -354,36 +354,36 @@ mu prawa wykonywania o następującej treści:</p>
 
 <p>I na koniec jeszcze warto odpalić <code>crontab -e</code> i pozmieniać
 godziny z 4.  w nocy na np. północ, chyba że nasza maszyna jest zazwyczaj na chodzie o 4. w nocy. Oczywiście obu utworzonym plikom nadajemy prawa do
-wykonywania, np.:</p>
+wykonywania, np.:
 
 <pre>chmod 700 /etc/cron.hourly/ntpsync /etc/cron.daily/cleanup</pre>
 
 <h2 id="x">Zabezpieczanie Xów</h2>
 
-<p>Kilka szybkich zmian zamykających różne dziwne porty:</p>
+<p>Kilka szybkich zmian zamykających różne dziwne porty:
 
 <table>
  <tr>
-  <th scope="row"><code>/usr/X11R6/bin/startx</code></th>
-  <td><pre>defaultserverargs="-nolisten tcp"</pre></td>
- </tr>
+  <th scope="row"><code>/usr/X11R6/bin/startx</code>
+  <td><pre>defaultserverargs="-nolisten tcp"</pre>
+ 
  <tr>
-  <th scope="row"><code>/etc/X11/xdm/Xservers</code></th>
-  <td><pre>:0 local /usr/X11R6/bin/X -nolisten tcp</pre></td>
- </tr>
+  <th scope="row"><code>/etc/X11/xdm/Xservers</code>
+  <td><pre>:0 local /usr/X11R6/bin/X -nolisten tcp</pre>
+ 
  <tr>
-  <th scope="row"><code>/etc/rc.d/rc.4</code></th>
-  <td><pre>exec /usr/X11R6/bin/xdm -nodaemon -udpPort 0</pre></td>
- </tr>
+  <th scope="row"><code>/etc/rc.d/rc.4</code>
+  <td><pre>exec /usr/X11R6/bin/xdm -nodaemon -udpPort 0</pre>
+ 
  <tr>
-  <th scope="row"><code>/etc/X11/fs/config</code></th>
-  <td><pre>use-syslog = yes<br />no-listen = tcp</pre></td>
- </tr>
+  <th scope="row"><code>/etc/X11/fs/config</code>
+  <td><pre>use-syslog = yes<br />no-listen = tcp</pre>
+ 
 </table>
 
 <h2 id="del">Kasowanie zbędny userów i grup</h2>
 
-<p>Generalnie uruchamiamy następujące polecenia:</p>
+<p>Generalnie uruchamiamy następujące polecenia:
 
 <pre>
 find / -user adm -o -user games -o -user gdm -o -user lp -o -user news \
@@ -405,11 +405,11 @@ potrzebny/a.  W moim przypadku okazało się, że użytkownik
 <code>games</code> i <code>uucp</code> oraz grupa <code>uucp</code> były
 wykorzystywane (tj. istniały pliki należące do tych
 użytkowników/grup) i z tego powodu tych użytkowników/grup nie usunąłem
-(co widać brakiem odpowiedniej pozycji w pętli for).</p>
+(co widać brakiem odpowiedniej pozycji w pętli for).
 
 <h2 id="hostconf"><code>host.conf</code></h2>
 
-<p>Do pliku <code>/etc/host.conf</code> dodajemy:</p>
+<p>Do pliku <code>/etc/host.conf</code> dodajemy:
 
 <pre>
 nospoof on
@@ -425,7 +425,7 @@ chmod -R o-rwx /var/log</pre>
 
 <h2 id="profile"><code>profile</code></h2>
 
-<p>Na początek pliku <code>/etc/profile</code> dodajemy:</p>
+<p>Na początek pliku <code>/etc/profile</code> dodajemy:
 
 <pre>
 # Check required variables
@@ -449,11 +449,11 @@ można stworzyć grupę
 dodać opcję <code>gid=<i>numer</i></code>, gdzie <i>numer</i> to
 identyfikator stworzonej grupy.  Spowoduje to, że tylko <code>root</code>
 oraz członkowie grupy <code>vfat</code> będą mogli szperać po i dokonywać
-zmian na partycjach <code>vfat</code>.</p>
+zmian na partycjach <code>vfat</code>.
 
 <p>Na koniec jeszcze, by być bardziej zgodnym z <a
 href="http://www.pathname.com/fhs/" lang="en">File Hierarchy
-Standard</a> wykonuję następujące polecenia:</p>
+Standard</a> wykonuję następujące polecenia:
 
 <pre>
 mv -f -- /mnt /media
@@ -461,13 +461,13 @@ mkdir -- /mnt
 sed -e 's/\/mnt\//\/media\//' -i -- /etc/fstab</pre>
 
 <p>Co powoduje, że rzeczy takie jak CD-ROM czy dyskietki są montowane
-nie w katalogu <code>/mnt</code>, ale <code>/media</code>.</p>
+nie w katalogu <code>/mnt</code>, ale <code>/media</code>.
 
 <h2 id="lilo">LILO</h2>
 
 <p>Zawsze lubiłem, jak system szybko się ładował i zawsze denerwowały mnie
   długie opóźnienia powodowane przez boot loadery.  W związku z czym, w swoim
-  LILO dokonałem następujących zmian:</p>
+  LILO dokonałem następujących zmian:
 
 <p>Po pierwsze, dodałem <code>lba32</code> i <code>compact</code>; po drugie,
 <code>timeout</code> ustawiłem na <code>5</code>
@@ -478,7 +478,7 @@ wciśnięcie pojedynczego klawisza; i po piąte, pozmieniałem wszędzie
 <code>label</code> na jednoliterowe (konkretnie: <code>l</code> - linux,
 <code>o</code> - linux z poprzednim jądrem, <code>s</code> - linux w trybie
 single, <code>w</code> - windows).  Mój cały plik <code>/etc/lilo.conf</code>
-wygląda następująco:</p>
+wygląda następująco:
 
 <pre>
 boot = /dev/hda
@@ -517,7 +517,7 @@ nazwa_katalogu</code>.  W ten sposób otrzymuje błąd z informacją, że
 podany plik to katalog (jakie odkrywcze :P).  Jednakże jest bardzo
 łatwo nauczyć <code>less</code> listowania zawartości katalogu.  W tym
 celu otweiramy plik <code>/usr/bin/lesspipe.sh</code> i jego ostatnia
-linijkę (tj. <code>lesspipe "$1"</code>) zamieniamy na:</p>
+linijkę (tj. <code>lesspipe "$1"</code>) zamieniamy na:
 
 <pre>
 if [ -d "$1" ]; then
@@ -526,17 +526,17 @@ else
   lesspipe "$1"
 fi</pre>
 
-<p>Oczywiście można też skorzystać z <code>lesspipe</code> dostępnego w pakiecie <a href="http://tinyapps.sf.net">Tiny Applications</a>, który ma też różne inne ciekawe funkcje (np. ściąganie plików). Instalacja sprowadza się do dodania linijki <code>$(eval $(/sciezka/do/lesspipe --install-lesspipe)</code> do pliku profilu.</p>
+<p>Oczywiście można też skorzystać z <code>lesspipe</code> dostępnego w pakiecie <a href="http://tinyapps.sf.net">Tiny Applications</a>, który ma też różne inne ciekawe funkcje (np. ściąganie plików). Instalacja sprowadza się do dodania linijki <code>$(eval $(/sciezka/do/lesspipe --install-lesspipe)</code> do pliku profilu.
 
 <h2>umask</h2>
-<p>Ponieważ wyznaję zasadę, iż lepiej domyślnie nie dawać jakichś uprawnień i w razie konieczności to zmienić, w skryptach startowych na swoim koncie mam ustawione <code>umask 077</code>, przez co  tworzone przeze mnie pliki mają ustawione zerowe uprawnienia dla grupy i innych użytkowników. Jednakże instalowanie jakichkolwiek programów jako root czy tworzenie paczek z taką maską może naprawdę zaboleć, a zwykłe polecenie <code>su</code> pozostawia umask taki jaki był. Z tego powodu, warto, na wszelki wypadek, do skryptów startowych roota dodać wpisy zmieniające umask na domyślny. Uruchamiamy jako root (niektóre linijki zapewne można pominąć):</p>
+<p>Ponieważ wyznaję zasadę, iż lepiej domyślnie nie dawać jakichś uprawnień i w razie konieczności to zmienić, w skryptach startowych na swoim koncie mam ustawione <code>umask 077</code>, przez co  tworzone przeze mnie pliki mają ustawione zerowe uprawnienia dla grupy i innych użytkowników. Jednakże instalowanie jakichkolwiek programów jako root czy tworzenie paczek z taką maską może naprawdę zaboleć, a zwykłe polecenie <code>su</code> pozostawia umask taki jaki był. Z tego powodu, warto, na wszelki wypadek, do skryptów startowych roota dodać wpisy zmieniające umask na domyślny. Uruchamiamy jako root (niektóre linijki zapewne można pominąć):
 <pre>
   for f in shell bash zsh csh ksh; do
     echo umask 022 >>~/.${f}rc
 done</pre>
 
 <h2>TMOUT</h2>
-<p>Ciekawym pomysłem jest również ustawienie zmiennej <code>TMOUT</code>, w niektórych lub wszystkich skryptach startowych powłoki. Zasadniczo, jeżeli po czasie (w sekundach) określonym przez tą zmienną użytkownik nic nie wpisze do powłoki zostanie on automatycznie wylogowany. Osobiście używam tej opcji w dwóch miejscach: w powłoce super użytkownika oraz powłoce logowania zwykłego użytkownika (jako root, <i>mina86</i> podmieniamy na nazwę naszego użytkownika):</p>
+<p>Ciekawym pomysłem jest również ustawienie zmiennej <code>TMOUT</code>, w niektórych lub wszystkich skryptach startowych powłoki. Zasadniczo, jeżeli po czasie (w sekundach) określonym przez tą zmienną użytkownik nic nie wpisze do powłoki zostanie on automatycznie wylogowany. Osobiście używam tej opcji w dwóch miejscach: w powłoce super użytkownika oraz powłoce logowania zwykłego użytkownika (jako root, <i>mina86</i> podmieniamy na nazwę naszego użytkownika):
 <pre>
   for f in '' bash_ z; do
     echo TMOUT=1200 >>~mina86/.${f}profile
@@ -551,20 +551,20 @@ done</pre>
 <!-- nick: SS -->
 
 <p>Wszystko prawda, ale na desktopie. Tylko czy Slackware na desktopa to dobry wybór?<br />
-W przypadku serwera produkcyjnego to już połowa rozwiązań nie ma najmniejszego sensu, a druga połowa może powodować problemy.</p>
+W przypadku serwera produkcyjnego to już połowa rozwiązań nie ma najmniejszego sensu, a druga połowa może powodować problemy.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-28 08:47:43 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Jak dla mnie bardzo dobry.</p>
+<p>Jak dla mnie bardzo dobry.
 
 <!-- COMMENT -->
 <!-- date: 2008-03-01 10:53:20 -->
 <!-- nick: Porter3 -->
 
-<p>mina86 — super art! tego mi brakowało. Pozdrawiam.</p>
+<p>mina86 — super art! tego mi brakowało. Pozdrawiam.
 
 <!-- COMMENT -->
 <!-- date: 2008-03-08 01:36:52 -->
@@ -572,34 +572,34 @@ W przypadku serwera produkcyjnego to już połowa rozwiązań nie ma najmniejsze
 <!-- nick_url: https://darmowazupa.blogspot.com -->
 
 <p>Swietny artykul. Gratuluje.<br />
-pzdr</p>
+pzdr
 
 <!-- COMMENT -->
 <!-- date: 2009-02-16 22:59:53 -->
 <!-- nick: bryn1u -->
 
-<p>Gdzie to dodac ?</p>
+<p>Gdzie to dodac ?
 
 <p>for f in '' bash_ z; do
     echo TMOUT=1200 &gt;&gt;~mina86/.${f}profila<br />
-done</p>
+done
 
 <p>for f in shell bash zsh csh ksh; do
     echo TMOUT=1200 &gt;&gt;~/.${f}rc<br />
-done</p>
+done
 
 <!-- COMMENT -->
 <!-- date: 2009-02-16 23:02:33 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Nie dodać, tylko wykonać.</p>
+<p>Nie dodać, tylko wykonać.
 
 <!-- COMMENT -->
 <!-- date: 2009-02-17 14:01:48 -->
 <!-- nick: bryn1u -->
 
-<p>mina86 jedno pytanie jeszcze, pare osob mi mowilo ze to nie bezpiecznie nadawac takie chomdy jak podales wyzej czyli chmod 4750 /bin/costam tylko 750 dlaczego i czy prawda to ?</p>
+<p>mina86 jedno pytanie jeszcze, pare osob mi mowilo ze to nie bezpiecznie nadawac takie chomdy jak podales wyzej czyli chmod 4750 /bin/costam tylko 750 dlaczego i czy prawda to ?
 
 <!-- COMMENT -->
 <!-- date: 2009-02-17 14:21:42 -->
@@ -610,12 +610,12 @@ done</p>
   z 04700 jak i 0755 byłby bezużyteczny),
   a 04750 w przypadku <code>/sbin/halt</code> i spółki
   pozwala na uruchamianie tych programów przez użytkowników
-  w grupie bez konieczności uruchamiania su czy sudo.</p>
+  w grupie bez konieczności uruchamiania su czy sudo.
 
 <p>Czwórka na początku ustawia bit SUID.  O SUID
   i SGID <a href="/2008/systemy-operacyjne/">pisałem
   w innej mojej notce</a> (sekcja „Prawa dostępu do plików,
-  bity SUID, SGID”).</p>
+  bity SUID, SGID”).
 
 <p>W skrócie chodzi o to, że
   z ustawioną flagą SUID program jest uruchamiany tak jakby
@@ -625,25 +625,25 @@ done</p>
   z grupy root może go uruchomić i program zadziała
   poprawnie, gdyż dzięki SUID uzyska uprawnienia super
   użytkownika — bez tej flagi narzekałby na brak
-  uprawnień.</p>
+  uprawnień.
 
 <p>Generalnie z flagami SUID i SGID należy uważać, ale
   z drugiej strony są one po to, aby z nich korzystać.
   Przykładowo polecenia takie
   jak <code>mount</code>, <code>ping</code>, <code>ping6</code>, <code>umount</code>
-  czy <code>Xorg</code> mają bit SUID ustawiony.</p>
+  czy <code>Xorg</code> mają bit SUID ustawiony.
 
 <!-- COMMENT -->
 <!-- date: 2009-03-05 10:31:46 -->
 <!-- nick: tomek -->
 
-<p>Artykuł bardzo dobry. W „Kasowanie zbędny userów i grup” w pierwszym poleceniu są powielone nazwy użytkowników i lista nie odpowiada tym z następnego polecenia.</p>
+<p>Artykuł bardzo dobry. W „Kasowanie zbędny userów i grup” w pierwszym poleceniu są powielone nazwy użytkowników i lista nie odpowiada tym z następnego polecenia.
 
 <!-- COMMENT -->
 <!-- date: 2009-03-08 10:49:03 -->
 <!-- nick: tomek -->
 
-<p>Cofam co w poprzednim komentarzu napisałem. Pomyliłem grupy z użytkownikami.</p>
+<p>Cofam co w poprzednim komentarzu napisałem. Pomyliłem grupy z użytkownikami.
 
 <!-- COMMENT -->
 <!-- date: 2014-01-25 21:41:44 -->

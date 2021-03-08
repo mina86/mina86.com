@@ -6,7 +6,7 @@
 <p>Przenosząc się na Joggera straciłem sporo czasu na dochodzenie czemu skrypty,
   które zamieszczałem nie działały tak jak powinny (tzn. nie działały
   w ogóle). Okazało się, że zależnie od typu MIME strony skrypty są różnie
-  interpretowane. A dokładniej mechanizmy <i>ochrony</i> skryptów.</p>
+  interpretowane. A dokładniej mechanizmy <i>ochrony</i> skryptów.
 
 <p>Ze względu na przeglądarki nie rozumiejące tagu <code>script</code>
 przyjęło się kod skryptu umieszczać w komentarzu. Przeglądarki
@@ -15,7 +15,7 @@ i jakoś sobie z tym radziły. Ku memu lekkiemu zdziwieniu odkryłem, że
 Opera i <a href="https://www.mozilla.org/firefox/">Firefox</a>
 przestają wykonywać kod skryptu, gdy strona jest dostarczona
 jako <code>application/xhtml+xml</code>. Aby sprawę zbadać bardziej
-szczegółowo stworzyłem taką oto stronę testową:</p>
+szczegółowo stworzyłem taką oto stronę testową:
 
 <!-- EXCERPT -->
 
@@ -44,22 +44,22 @@ header('content-type: ' . $type . '; charset=iso-8859-2');
     ]]&gt;&lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;</pre>
-<p>Okazuje się, że wysyłając stronę jako <code>text/html</code> wykonują się dwa pierwsze, a jako <code>application/xhtml+xml</code> dwa ostatnie skrypty. Co to oznacza w praktyce? Otóż, mamy do wyboru:</p>
+<p>Okazuje się, że wysyłając stronę jako <code>text/html</code> wykonują się dwa pierwsze, a jako <code>application/xhtml+xml</code> dwa ostatnie skrypty. Co to oznacza w praktyce? Otóż, mamy do wyboru:
 <ul>
 <li>wysyłanie typu <code>text/html</code> i wówczas naszemu dokumentowi XHTML
-  będą towarzyszyły niepoprawne nagłówki,</li>
+  będą towarzyszyły niepoprawne nagłówki,
 <li>wysłanie typu <code>application/xhtml+xml</code> i wówczas niektóre
-  przeglądarki (np. IE) będą miały kłopoty z wyświetleniem strony,</li>
+  przeglądarki (np. IE) będą miały kłopoty z wyświetleniem strony,
 <li>zastosowanie negocjacji typu MIME i pozostawienie <i>gołych</i>
   skryptów <del>powodując tym samym, że strona przestanie się walidować (chyba,
   że w kodzie skryptu nie będzie używany znak mniejszości, większości ani
   etka)</del><ins>(update: okazuje się, że coś mi się pomyliło z tym, że
-  walidator W3C odrzuca takie dokumenty)</ins>,</li>
+  walidator W3C odrzuca takie dokumenty)</ins>,
 <li>zastosowanie negocjacji i sprytnego mechanizmu po stronie serwera, który
- będzie stosował odpowiednie sekwencje otwierające i zamykające skrypt albo</li>
+ będzie stosował odpowiednie sekwencje otwierające i zamykające skrypt albo
 <li>zastosowanie negocjacji i trzymanie wszystkich skryptów w plikach,
   dołączanych do strony za pomocą elementu <code>script</code>
-  z atrybutem <code>src</code>.</li>
+  z atrybutem <code>src</code>.
 </ul>
 <p>Cóż rzec… takie uroki XHTML-a.
 
@@ -69,38 +69,38 @@ header('content-type: ' . $type . '; charset=iso-8859-2');
 
 <p>Jeszcze była jakaś metoda z zastosowaniem jednocześnie CDATA
 i komentarza. O ile dobrze pamiętam, to chyba otwarcie i zamknięcie
-komentarza się pakowało w CDATA. (;</p>
+komentarza się pakowało w CDATA. (;
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 07:36:06 -->
 <!-- nick: brtk -->
 <!-- nick_url: http://sunridin.jogger.pl -->
 
-<p>Zapomniałeś o jednym: skrypt można dołączyć w oddzielnym pliku.</p>
+<p>Zapomniałeś o jednym: skrypt można dołączyć w oddzielnym pliku.
 
-<p>Poza tym chyba nie ma już przeglądarek, które nie wiedzą co to &lt;script&gt;, więc te komentarze ochronne można olać.</p>
+<p>Poza tym chyba nie ma już przeglądarek, które nie wiedzą co to &lt;script&gt;, więc te komentarze ochronne można olać.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 14:37:21 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>O… rzeczywiście. Wydawało mi się, że walidator się burzył, a okazuje się, że nie.</p>
-<p>Co do plików zewnętrznych to nie zapomniałem--ostatni punkt.</p>
+<p>O… rzeczywiście. Wydawało mi się, że walidator się burzył, a okazuje się, że nie.
+<p>Co do plików zewnętrznych to nie zapomniałem--ostatni punkt.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 20:55:20 -->
 <!-- nick: D4rky -->
 <!-- nick_url: http://nerdblog.jogger.pl -->
 
-<p>i ostatni punkt jest jako jedyny semantyczny. inline-script jest ble i nie powinno sie go stosowac, po to bozia dala zewnetrzne pliki ;]</p>
+<p>i ostatni punkt jest jako jedyny semantyczny. inline-script jest ble i nie powinno sie go stosowac, po to bozia dala zewnetrzne pliki ;]
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 20:58:15 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>To znaczy, jeżeli chce umieścić jakiś skrypt na jednej tylko stronie i skrypt ten jest bardzo króciutki (kilka linijek, kilkaset bajtów) to mam dla niego tworzyć nowy plik i zmuszać przeglądarkę, aby bezsensownie wysyłała kolejne zapytania do serwera? Moim zdaniem po to bozia dała inline-script, żeby jest stosować tam gdzie ma to sens.</p>
+<p>To znaczy, jeżeli chce umieścić jakiś skrypt na jednej tylko stronie i skrypt ten jest bardzo króciutki (kilka linijek, kilkaset bajtów) to mam dla niego tworzyć nowy plik i zmuszać przeglądarkę, aby bezsensownie wysyłała kolejne zapytania do serwera? Moim zdaniem po to bozia dała inline-script, żeby jest stosować tam gdzie ma to sens.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 20:59:43 -->
@@ -110,7 +110,7 @@ komentarza się pakowało w CDATA. (;</p>
 <p>mina86 — tak, po to masz zmuszac przegladarke, aby bezsensownie
 wysylala kolejne zapytania do serwera. Tak samo powinenes CSS trzymac
 w osobnym pliku i to nie ma znaczenia czy plik ma 1, 2 czy 50
-KB. Rules are rules ;)</p>
+KB. Rules are rules ;)
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 21:04:08 -->
@@ -127,7 +127,7 @@ KB. Rules are rules ;)</p>
 <!-- date: 2008-02-13 21:06:39 -->
 <!-- nick: Michał Górny -->
 
-<p>D4rky: Patrz: MTU.</p>
+<p>D4rky: Patrz: MTU.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-19 20:47:47 -->
@@ -135,18 +135,18 @@ KB. Rules are rules ;)</p>
 <!-- nick_url: http://mcv.jogger.pl -->
 
 <p>Przeglądarki poprawnie interpretują kod, wycinając to co jest
-w komentarzu XML &lt;!-- … --&gt;, czyli skrypt. ;-)</p>
+w komentarzu XML &lt;!-- … --&gt;, czyli skrypt. ;-)
 
 <p>Poprawne rozwiązanie to:<br />
 &lt;script …&gt; // &lt;![CDATA[
  …<br />
-// ]]&gt;&lt;/script&gt;</p>
+// ]]&gt;&lt;/script&gt;
 
 <p>Przeglądarki nie rozumiejące XHTML-a (XML-a) zignorują tagi sekcji
 CDATA, bo są one zakomentowane (a raczej zinterpretują jako kod JS,
 który jest… zakomentowany). Te rozumiejące najpierw przepuszczą stronę
 przez parser XML, który już zadba o to by sekcje CDATA były zrozumiane
-jako tekst.</p>
+jako tekst.
 
 <!-- COMMENT -->
 <!-- date: 2009-02-26 16:31:34 -->
@@ -166,7 +166,7 @@ w przypadku php nawala na maxa i lepiej tego nie stosować. Nadmienię jedynie, 
 w przyszłości XHTML/XML całkowicie ma zostać wyłączona wspomniana tu instrukcja
 przetwarzania kodu &lt;script&gt; oraz jakakolwiek możliwość załączania skryptów
 bezpośrednio do kodu html czy htm. Więc już polecam zewnętrzne pliki i jeszcze
-raz odsyłam do specyfikacji.</p>
+raz odsyłam do specyfikacji.
 
 <!-- COMMENT -->
 <!-- date: 2013-07-17 07:42:53 -->
@@ -176,4 +176,4 @@ raz odsyłam do specyfikacji.</p>
 <p>Standard-agnostic HTML code<br /><br />HTML has gone quite a long way since its inception.  This means<br />
   a lot of new features but also some small incompatibilities which<br />
   may pose issues in certain situations.  For instance, when posting<br />
-  a code snippet for others to include on […]</p>
+  a code snippet for others to include on […]

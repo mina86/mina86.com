@@ -6,30 +6,30 @@
 mieć dostępu do niczego poza ostatecznym efektem renderowania strony.
 Najczęściej jest to spowodowane chęcią zabezpieczenia
 kodu HTML lub obrazków przed kopiowaniem
-i używaniem ich do własnych celów.</p>
+i używaniem ich do własnych celów.
 
 <!-- EXCERPT -->
 
 <h2 id="how">Jak to zrobić?</h2>
 
 <p>W celu uniemożliwienia kopiowania kodu, obrazków lub tekstu
-dokumentu możesz wykonać jedną z poniższych rzeczy:</p>
+dokumentu możesz wykonać jedną z poniższych rzeczy:
 
 <ul>
   <li>połącz się do swojego serwera, zaznacz wszystkie pliki i wybierz
-    opcję „Usuń”;</li>
+    opcję „Usuń”;
   <li>zamiast wysyłać stronę na serwer, nagraj ją na dyskietki po czym
     zakop je w ogródku (tak z 10 metrów pod ziemią).  Warto też mieć
-    groźnego psa;</li>
+    groźnego psa;
   <li>zaszyfruj stronę jakimś mocnym algorytmem szyfrującym z użyciem
     dużego klucza (milion bitów powinno wystarczyć) po czym usuń
-    wszelkie kopie klucza;</li>
+    wszelkie kopie klucza;
   <li>przed wysłaniem strony na serwer, sformatuj sobie dysk
-    twardy;</li>
+    twardy;
   <li>stwórz stronę używając MS Frotnapge’a lub MS Worda (Co prawda
     źródło będzie widoczne, ale nikt nie będzie chciał go
-    kopiować); lub</li>
-  <li>nie publikuj strony w Internecie.</li>
+    kopiować); lub
+  <li>nie publikuj strony w Internecie.
 </ul>
 
 <h2 id="impossible">Tego nie da się zrobić</h2>
@@ -38,18 +38,18 @@ dokumentu możesz wykonać jedną z poniższych rzeczy:</p>
 strony ani żadnych jej elementów przed kopiowaniem.  Jeżeli użytkownik
 widzi w przeglądarce efekt renderowania strony, to ma również dostęp
 do składników, z których strona się składa.  Jednak wiele osób
-obłudnie probuje stosować różne dziwne metody.</p>
+obłudnie probuje stosować różne dziwne metody.
 
 <h3 id="mouseclick">Blokowanie prawego przycisku myszy</h3>
 
 <p>Sposób ten jest bardzo prosty do zaimplementowania i jednocześnie
 bardzo prosty do obejścia.  W niektórych przeglądarkach w ogóle nie
 działa, a jeżeli działa to wystarczy kliknąć prawym klawiszem myszki
-trzymając wciśnięty Shift.</p>
+trzymając wciśnięty Shift.
 
 <p>Niektóre wersje skryptów blokujących PPM dodatkowo wyświetla komunikat z informacjami o
 prawach autorskich.  Jedyne co taki komunikat powoduje to fakt, że
-użytkownik staje się coraz bardziej zdenerwowany z każdą chwilą.</p>
+użytkownik staje się coraz bardziej zdenerwowany z każdą chwilą.
 
 <h3 id="encrypt">"Szyfrowanie" źródła</h3>
 
@@ -59,18 +59,18 @@ znajomości algorytmu deszyfrowania i w niektórych przypadkach
 klucza.  Jednak jeżeli autor strony chce, żeby przeglądarka mogła
 renderować stronę to musi być w stanie odszyfrować "zaszyfrowany" kod
 źródłowy.  Jeżeli przeglądarka ma taką możliwość to jednocześnie
-użytkownik, który chce się dobrać do kodu źródłowego.</p>
+użytkownik, który chce się dobrać do kodu źródłowego.
 
 <p>W niektórych przypadkach wystarczy na początku kodu strony dodać
 <code>&lt;textarea&gt;</code> a na końcu <code>&lt;/textarea&gt;</code>.  Po
 otwarciu tak zmodyfikowanej strony, bardzo możliwe, że w polu
-tekstowym będziemy widzieć kod strony.</p>
+tekstowym będziemy widzieć kod strony.
 
 <p>Jeszcze prostszym sposobem jest użycie DOM
 Inspectora z <a href="https://www.mozilla.org/">Mozilli</a>.  Wystarczy
 go włączyć, wybrać kopiowanie do schowka drzewa HTML i na koniec
 wklejenie tekstu do ulubionego edytora tekstowego.  W ten sposób
-będziemy mieć dostęp do pełnego źródła strony.</p>
+będziemy mieć dostęp do pełnego źródła strony.
 
 <h3 id="images">Blokowania zapisywania obrazków</h3>
 
@@ -79,7 +79,7 @@ prosty sposób: Zapisanie zrzutu ekranu.  W większości graficznych
 interfejsów użytkownika wystarczy wcisnąć <b>Print Screen</b> po czym
 wkleić zawartość schowka w jakimś edytorze grafiki.  Taktyka działa w
 100% przypadków.  W innych sytuacjach można zajrzeć do kodu strony i
-tam można sprawdzić adres obrazka.</p>
+tam można sprawdzić adres obrazka.
 
 <h2 id="whatthen">Co więc można zrobić?</h2>
 
@@ -87,99 +87,99 @@ tam można sprawdzić adres obrazka.</p>
 autorskie oraz napisać, iż kopiowanie materiałów bez zgody autora jest
 nielegalne.  Z drugiej jednak strony nie należy z tym przesadzać
 pisząc tą informację czcionką 50pt jakimś rzucającym się w oczy
-kolorem - to tylko denerwowało by czytelników.</p>
+kolorem - to tylko denerwowało by czytelników.
 
 <p>W przypadku obrazków można także umieścić na stronie obrazki w kiepskiej
 jakości - takiej, która się nikomu na nic nie przyda.  Również warto dodawać
-tekst na obrazku z adresem strony i ewentualnie imieniem autora.</p>
+tekst na obrazku z adresem strony i ewentualnie imieniem autora.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-12 06:38:43 -->
 <!-- nick: jam łasica -->
 <!-- nick_url: http://jamlasica.jogger.pl -->
 
-<p>Co do zabezpieczonych obrazków, to w Fx wystarczy otworzyć informacje o stronie i wybrać sekcję „media” ;)</p>
+<p>Co do zabezpieczonych obrazków, to w Fx wystarczy otworzyć informacje o stronie i wybrać sekcję „media” ;)
 
 <!-- COMMENT -->
 <!-- date: 2008-02-12 06:43:51 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>O ja… A myślałem, że to tylko ja nie śpię o tak nieboskiej godzinie…</p>
+<p>O ja… A myślałem, że to tylko ja nie śpię o tak nieboskiej godzinie…
 
-<p>Co do „media”, to ktoś mógłby probować zabezpieczyć obrazek wrzucając go do flasha i tu już może być gorzej, a zrzutu ekranu nic nie przebije. :]</p>
+<p>Co do „media”, to ktoś mógłby probować zabezpieczyć obrazek wrzucając go do flasha i tu już może być gorzej, a zrzutu ekranu nic nie przebije. :]
 
-<p>Chyba, że przeglądarki zaczną implementować Digital Restrictions Management (i wówczas będzie trzeba kupić między innymi odpowiedni kabel łączący kartę graficzną z monitorem).</p>
+<p>Chyba, że przeglądarki zaczną implementować Digital Restrictions Management (i wówczas będzie trzeba kupić między innymi odpowiedni kabel łączący kartę graficzną z monitorem).
 
 <!-- COMMENT -->
 <!-- date: 2008-02-12 09:12:14 -->
 <!-- nick: Zal -->
 <!-- nick_url: http://zal.jogger.pl -->
 
-<p>@mina86: ale zaciemnienie kodu nie jest niemożliwe, prawda? Jakby się ktoś uparł to mógłby doprowadzić do sytuacji w której to kod wyglądałby, jak mielonka ;]</p>
+<p>@mina86: ale zaciemnienie kodu nie jest niemożliwe, prawda? Jakby się ktoś uparł to mógłby doprowadzić do sytuacji w której to kod wyglądałby, jak mielonka ;]
 
 <!-- COMMENT -->
 <!-- date: 2008-02-12 13:44:26 -->
 <!-- nick: Jony -->
 <!-- nick_url: http://blog.jkral.info -->
 
-<p>W sumie to wystarczy napisać zwykły kod, a później usunąć z niego wszystkie białe znaki :D Ja w takim wypadku wolałbym chyba napisać coś samemu, niż babrać się w czymś takim.</p>
+<p>W sumie to wystarczy napisać zwykły kod, a później usunąć z niego wszystkie białe znaki :D Ja w takim wypadku wolałbym chyba napisać coś samemu, niż babrać się w czymś takim.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-12 15:36:25 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Zal: to zależy jak na to spojrzeć. Może i faktycznie, np. po wycięciu wszystkich białych znaków, z kodu strony robi się mielonka, ale od czego jest wspomniany w artykule DOM Inspector? Nie to, żeby widział go kiedykolwiek na oczy w akcji, ale z tego co mi wiadomo, umożliwia on wyciągnięcie ładnie sformatowanego drzewa XML dokumentu.</p>
+<p>Zal: to zależy jak na to spojrzeć. Może i faktycznie, np. po wycięciu wszystkich białych znaków, z kodu strony robi się mielonka, ale od czego jest wspomniany w artykule DOM Inspector? Nie to, żeby widział go kiedykolwiek na oczy w akcji, ale z tego co mi wiadomo, umożliwia on wyciągnięcie ładnie sformatowanego drzewa XML dokumentu.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 00:06:04 -->
 <!-- nick: Biały -->
 <!-- nick_url: http://blog.rczajka.pl -->
 
-<p>Można sobie pisać, co się chce, ale kopiowanie materiałów z czyjejś strony nie wymaga żadnej zgody autora. Nie popadajmy w paranoję.</p>
+<p>Można sobie pisać, co się chce, ale kopiowanie materiałów z czyjejś strony nie wymaga żadnej zgody autora. Nie popadajmy w paranoję.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 00:08:32 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Niezależnie czy nam się to podoba, czy nie, owszem wymaga. Chyba, że podpada to pod dozwolony użytek, ale np. skopiować artykuły o długości podobnej do komentowanego nie można, choć można cytować jego fragmenty.</p>
+<p>Niezależnie czy nam się to podoba, czy nie, owszem wymaga. Chyba, że podpada to pod dozwolony użytek, ale np. skopiować artykuły o długości podobnej do komentowanego nie można, choć można cytować jego fragmenty.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 00:15:54 -->
 <!-- nick: Biały -->
 <!-- nick_url: http://blog.rczajka.pl -->
 
-<p>Nie, nie wymaga. :)</p>
+<p>Nie, nie wymaga. :)
 
-<p>Owszem, upublicznianie skopiowanych materiałów wymaga pozwolenia. Ale samo skopiowanie nie. Każdy ma prawo sobie zapisać np. artykuł na dysku na pamiątkę, albo wydrukować i powiesić na ścianie, albo ustawić skopiowane zdjęcie na tapecie swojego komputera, albo oprawić w ramki i dać swojej sympatii na pamiątkę. Kopiowanie materiałów z Internetu jest jak najbardziej legalne i nie wymaga niczyjego pozwolenia.</p>
+<p>Owszem, upublicznianie skopiowanych materiałów wymaga pozwolenia. Ale samo skopiowanie nie. Każdy ma prawo sobie zapisać np. artykuł na dysku na pamiątkę, albo wydrukować i powiesić na ścianie, albo ustawić skopiowane zdjęcie na tapecie swojego komputera, albo oprawić w ramki i dać swojej sympatii na pamiątkę. Kopiowanie materiałów z Internetu jest jak najbardziej legalne i nie wymaga niczyjego pozwolenia.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 00:19:12 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Jeśli o to chodzi, to faktycznie, chyba tak jest (to ten tzw. dozwolony użytek czy coś). Z drugiej strony prawnikiem nie jestem, więc mogę się mylić, zwłaszcza, że niestety niektóre organizacje mają na ten temat inne poglądy.</p>
+<p>Jeśli o to chodzi, to faktycznie, chyba tak jest (to ten tzw. dozwolony użytek czy coś). Z drugiej strony prawnikiem nie jestem, więc mogę się mylić, zwłaszcza, że niestety niektóre organizacje mają na ten temat inne poglądy.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-13 00:20:17 -->
 <!-- nick: Biały -->
 <!-- nick_url: http://blog.rczajka.pl -->
 
-<p>Te organizacje nie mają poglądów, tylko interesy: „powinno być tak a tak, bo wtedy mielibyśmy z tego najwięcej pieniędzy”. :)</p>
+<p>Te organizacje nie mają poglądów, tylko interesy: „powinno być tak a tak, bo wtedy mielibyśmy z tego najwięcej pieniędzy”. :)
 
 <!-- COMMENT -->
 <!-- date: 2009-01-08 17:36:09 -->
 <!-- nick: blinki -->
 
-<p>hmm… widze ze malo wiesz… :D jesli zakoduje jakas strone w php to nawet jak dostaniesz sie do zrodla to nie zobaczysz funkcji php… tylko zobaczysz strone juz po wykoniau akcji na serverze (po execute) czyli jesli ja zaszyfruje w php nie jestes w stanie tego rozkodowac chyba ze jakims cudem znajdziesz algorytm wymyslony przez webmastera… albo wlamiesz sie na ftp i pobierzesz algorytm :D troche lipne info na tej stronie… :)</p>
+<p>hmm… widze ze malo wiesz… :D jesli zakoduje jakas strone w php to nawet jak dostaniesz sie do zrodla to nie zobaczysz funkcji php… tylko zobaczysz strone juz po wykoniau akcji na serverze (po execute) czyli jesli ja zaszyfruje w php nie jestes w stanie tego rozkodowac chyba ze jakims cudem znajdziesz algorytm wymyslony przez webmastera… albo wlamiesz sie na ftp i pobierzesz algorytm :D troche lipne info na tej stronie… :)
 
 <!-- COMMENT -->
 <!-- date: 2009-01-08 18:10:17 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>blinki, mylisz pojęcia (i na dodatek piszesz w sposób trudny do zrozumienia). W artykule mowa jest o kodzie HTML (tudzież CSS, JavaScript i obrazki), na którego zabezpieczenie nie ma sposobu. </p>
+<p>blinki, mylisz pojęcia (i na dodatek piszesz w sposób trudny do zrozumienia). W artykule mowa jest o kodzie HTML (tudzież CSS, JavaScript i obrazki), na którego zabezpieczenie nie ma sposobu. 
 
-<p>O PHP (ani o innych mechanizmach wykonywanych po stronie serwera) nic nie pisałem i, muszę się przyznać, nie za bardzo zrozumiałem o co Ci chodzi z tym szyfrowaniem. Zakładając poprawnie skonfigurowany serwer oraz dobrze napisane skrypty (w przypadku PHP z tym może być problem) żadne szyfrowanie nie jest potrzebne, aby odciąć dostęp do kodu skryptu.</p>
+<p>O PHP (ani o innych mechanizmach wykonywanych po stronie serwera) nic nie pisałem i, muszę się przyznać, nie za bardzo zrozumiałem o co Ci chodzi z tym szyfrowaniem. Zakładając poprawnie skonfigurowany serwer oraz dobrze napisane skrypty (w przypadku PHP z tym może być problem) żadne szyfrowanie nie jest potrzebne, aby odciąć dostęp do kodu skryptu.

@@ -5,78 +5,78 @@
 
 <p>I have already mentioned <a href="/2010/0-is-ambiguous/">some
 problems with the null pointer</a> but my recent discovery knocked my
-socks off.</p>
+socks off.
 
 <p>By now, it should come with no surprise to anyone that <code>0</code>
 in pointer context acts as a null pointer (no matter of its
 actual representation).  Moreover, it takes only a tiny bit of
 experimenting to figure out that expressions like <code>(int)0</code> do
 as well.  The latter is in itself a bit of a pita but it is
-conforming to the C++ standard which says:</p>
+conforming to the C++ standard which says:
 
 <!-- EXCERPT -->
 
 <blockquote>
   <p>4.10.1 A <dfn>null pointer constant</dfn> is an integral
   constant expression rvalue of integer type that evaluates to
-  zero. […]</p>
+  zero. […]
 
   <p>5.19.1 […] An <dfn>integral constant-expression</dfn>
   can involve only literals, enumerators, const variables or static
   data members of integral or enumeration types initialized with
   constant expressions, non-type template parameters of integral or
-  enumeration types, and <code>sizeof</code> expressions. […]</p>
+  enumeration types, and <code>sizeof</code> expressions. […]
 
   <p>3.9.1.7 Types <code>bool</code>, <code>char</code>,
   <code>wchar_t</code>, and the signed and unsigned integer types are
   collectively called <dfn>integral types</dfn>.  A synonym for
-  integral type is <dfn>integer type</dfn>.  […]</p>
+  integral type is <dfn>integer type</dfn>.  […]
 </blockquote>
 
 <p>Yes, not only <code>(int)0</code> is a perfectly valid null pointer
 constant, but so are <code>false</code>, <code>1 - 1</code>,
 <code>sizeof(char) - sizeof(char)</code>, etc.  Not only that,
 a const variable of type int with value of zero is also
-a valid null pointer constant.</p>
+a valid null pointer constant.
 
 <p>This is not limited to C++ by the way.  C has similar wording
 even though it treats fewer things as a constant expression.  As
 a matter of fact, in the upcoming C++ standard it will become
 even worse as it adds more things to the definition of constant
-expression.</p>
+expression.
 
 <p>Like I’ve said, this comes to me as a bit of surprise and
 I have real trouble believing that it was C and C++ standard
 committees.  Who could possibly want to represent a null pointer
 in a different way than plain <code>0</code> (or <code>NULL</code> (or
-<code>nullptr</code>)).</p>
+<code>nullptr</code>)).
 
 <p>And now, a super important public service announcement: don’t feed
 the yao guai.  Oh wait, wrong one.  Beware of dereferencing a pointer
 cause you might assign null value to it instead of zeroing pointed to
-object.</p>
+object.
 
 <!-- COMMENT -->
 <!-- date: 2011-03-27 20:56:14 -->
 <!-- nick: Remigiusz ‘lRem’ Modrzejewski -->
 <!-- nick_url: http://blog.lrem.net -->
 
-<p>Thank you captain obvious!</p>
+<p>Thank you captain obvious!
 
-<p>On the other hand, most weird cases will give you a warning when using a real compiler with proper flags.</p>
+<p>On the other hand, most weird cases will give you a warning when using a real compiler with proper flags.
 
 <!-- COMMENT -->
 <!-- date: 2011-03-27 21:22:51 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>IMO those are far from obvious (ie. not everyone knows about it) and in fact counterintuitive.  Also, it seems gcc does not produce warnings which for me was troubling at best.</p>
+<p>IMO those are far from obvious (ie. not everyone knows about it) and in fact counterintuitive.  Also, it seems gcc does not produce warnings which for me was troubling at best.
 
 <!-- COMMENT -->
 <!-- date: 2011-03-27 23:14:59 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>C and C++ do not have that much of dangerous implicit type conversions.  In fact, C++ ever removed a few as it disallows implicit conversion of a pointer to void to some other pointer, and enumeration type to integer type. This made me hope that <code>false</code> or <code>UINT_MAX + 1</code> are not valid null pointers.</p>
-<p>In the worst case, I would at least expect GCC to issue a warning.</p>
-<p>Guess it was not obvious only to me though.</p>
+<p>C and C++ do not have that much of dangerous implicit type conversions.  In fact, C++ ever removed a few as it disallows implicit conversion of a pointer to void to some other pointer, and enumeration type to integer type. This made me hope that <code>false</code> or <code>UINT_MAX + 1</code> are not valid null pointers.
+<p>In the worst case, I would at least expect GCC to issue a warning.
+<p>Guess it was not obvious only to me though.

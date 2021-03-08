@@ -7,21 +7,21 @@
   czyli przygotowany przeze mnie plik z odpowiedziami na pytania
   przygotowawcze do egzaminu z przedmiotu Systemy operacyjne.  Zapewne
   największa wartość mają one dla studentów Elektroniki Politechniki
-  Warszawskiej, niemniej jednak może ktoś się tym zainteresuje.</p>
+  Warszawskiej, niemniej jednak może ktoś się tym zainteresuje.
 
 <!-- EXCERPT -->
 
 <h2>Definicje podstawowe i <em>obowiązkowe</em></h2>
 
 <dl>
-  <dt>System operacyjny</dt>
+  <dt>System operacyjny
   <dd>
-    <p>Zbiór programów i procedur spełniających dwie podstawowe funkcje:</p>
+    <p>Zbiór programów i procedur spełniających dwie podstawowe funkcje:
     <ul>
-      <li>zarządzanie zasobami systemu komputerowego i</li>
-      <li>tworzenie maszyny wirtualnej.</li>
+      <li>zarządzanie zasobami systemu komputerowego i
+      <li>tworzenie maszyny wirtualnej.
     </ul>
-    <p>Zasobami systemu komputerowego są:</p>
+    <p>Zasobami systemu komputerowego są:
     <ul>
       <li>zasoby sprzętowe: czas procesora, pamięć operacyjna, urządzenia
         zewnętrzne, inne komputery powiązane przez sieć itp;
@@ -29,36 +29,36 @@
         itp.
     </ul>
     <p>Zarządzanie zasobem polega na śledzeniu, przydzielaniui
-      odzyskiwaniu.</li>
+      odzyskiwaniu.
     </ul>
-  </dd>
+  
 
-  <dt>Proces</dt>
+  <dt>Proces
   <dd>Wykonujący się program wraz z jego środowiskiem
-    obliczeniowym.</dd>
+    obliczeniowym.
 
-  <dt>Powłoka</dt>
+  <dt>Powłoka
   <dd>Interpreter poleceń uruchamiany standardowo po otwarciu sesji
-    użytkownika.</dd>
+    użytkownika.
 
-  <dt>Sekcja krytyczna</dt>
+  <dt>Sekcja krytyczna
   <dd>Fragment programu, w którym występują instrukcje dostępu do
     zasobów dzielonych.  Instrukcje tworzące sekcję krytyczną muszą
     być poprzedzone i zakończone operacjami realizującymi
-    wzajemne wykluczanie.</dd>
+    wzajemne wykluczanie.
 
-  <dt>Semafor</dt>
+  <dt>Semafor
   <dd>Obiekt inicjowany nieujemną liczbą całkowitą, na której
     zdefiniowane są dwie niepodzielne operacje <code>up(sem) { ++sem;
-    }</code> i <code>down(sem) { while (!sem); --sem; }</code>.</dd>
+    }</code> i <code>down(sem) { while (!sem); --sem; }</code>.
 
-  <dt>Pamięć wirtualna</dt>
+  <dt>Pamięć wirtualna
   <dd>System pamięci złożony z co najmniej dwóch rodzajów
     pamięci: małej i szybkiej (np. pamięci operacyjnej) oraz
     dużej, lecz wolnej (np. pamięci pomocniczej), a także
     z dodatkowego sprzętu i oprogramowania umożliwiającego
     automatyczne przenoszenie fragmentów pamięci z jednego rodzaju
-    pamięci do drugiego.</dd>
+    pamięci do drugiego.
   <dd>To co jest na slajdach to jakiś bezsens.  A jak mam
     bezdyskowy router postawiony na Linuksie to co, nie ma tam pamięci
     wirtualnej?  Tak naprawdę w pamięci wirtualnej chodzi
@@ -68,14 +68,14 @@
     pamięci mogą być niedostępne w pamięci fizycznej, a na
     dysku czy innym pomocniczym medium (słyszałem, że pod Linuksem
     udało się korzystać z pamięci karty graficznej jako
-    swapu).</dd>
+    swapu).
 </dl>
 
 
 <h2>Programowanie w języku powłoki</h2>
 
 <dl>
-  <dt>Prawa dostępu do plików, bity SUID, SGID.</dt>
+  <dt>Prawa dostępu do plików, bity SUID, SGID.
 
   <dd><code>rwxrwxrwx</code> — po trzy bity na właściciela, grupę
     i „innych” (w tej kolejności patrząc od
@@ -83,21 +83,21 @@
     jakie prawa ma właściciel pliku; bity dla grupy określają jakie
     prawa mają użytkownicy wchodzący w skład grupy, do której należy
     grupa, za wyjątkiem właściciela; bity dla "innych" określają jakie
-    prawa mają pozostali użytkownicy.</dd>
+    prawa mają pozostali użytkownicy.
 
   <dd>Patrząc od bitów najbardziej znaczących rzeczone bity określają:
     <ul>
       <li><code>r</code> — prawo do odczytu (w kontekście katalogu
-        odczytu listy plików),</li>
+        odczytu listy plików),
       <li><code>w</code> — prawo do zapisu (w kontekście katalogu
-        do tworzenia lub usuwania plików) i</li>
+        do tworzenia lub usuwania plików) i
       <li><code>x</code> — prawo do wykonywania
         (a w kontekście katalogu do zmiany katalogu
-        bieżącego na dany katalog).</li>
+        bieżącego na dany katalog).
     </ul>
     Aby móc dobrać się do jakiegokolwiek pliku lub katalogu trzeba
     mieć prawo wykonywania do katalogu, w którym ten plik/katalog
-    się znajduje (i oczywiście działa to rekurencyjnie).</dd>
+    się znajduje (i oczywiście działa to rekurencyjnie).
 
   <dd>SUID i SGID określane są dla plików wykonywalnych
     i jeżeli są ustawione to w momencie uruchamiania programu
@@ -108,56 +108,56 @@
     że tak naprawdę to nie skrypt jest uruchamiany,
     a interpreter.  Na wyjściu polecenia <code>ls</code> bity SUID
     i SGID widoczne są jako <code>s</code> zamiast
-    <code>x </code>w prawach użytkownika bądź grupy.</dd>
+    <code>x </code>w prawach użytkownika bądź grupy.
 
   <dd>Jest jeszcze <i>sticky bit</i> (polecenie <code>ls</code> wyświetla to jako
     <code>t</code> zamiast <code>x</code> w uprawnieniach dla
     „innych”), który dla katalogu określa, że pliki
     w jego wnętrzu mogą być kasowane lub może być im zmieniana
     nazwa jedynie przez właściciela danego pliku, katalogu lub super
-    użytkownika.  Przydatne w katalogach typu <code>/tmp</code>.</dd>
+    użytkownika.  Przydatne w katalogach typu <code>/tmp</code>.
 
 
-  <dt>Główne zmienne powłoki.</dt>
+  <dt>Główne zmienne powłoki.
   <dd>
     <ul>
-      <li><code>0</code> — komenda uruchamiająca skrypt.</li>
-      <li><code>#</code> — liczba argumentów programu lub funkcji.</li>
-      <li><code>1</code>–<code>9</code> — argumenty skryptu lub funkcji.</li>
+      <li><code>0</code> — komenda uruchamiająca skrypt.
+      <li><code>#</code> — liczba argumentów programu lub funkcji.
+      <li><code>1</code>–<code>9</code> — argumenty skryptu lub funkcji.
       <li><code>*</code> — wszystkie argumenty skryptu/funkcji
-        rozwinięte do pojedynczego ciągu znaków.</li>
+        rozwinięte do pojedynczego ciągu znaków.
       <li><code>@</code> — wszystkie argumenty skryptu/funkcji
         rozwinięte do wielu ciągów znaków.  <b>Uwaga na użycie
         cudzysłowów</b>!  Bez nich, <code>$@</code> to to samo
-        co <code>$*</code>.</li>
-      <li><code>$</code> — PID procesu.</li>
-      <li><code>?</code> — kod wyjścia ostatnio zakończonego polecenia.</li>
-      <li><code>!</code> — PID ostatnio wykonanego procesu w tle.</li>
+        co <code>$*</code>.
+      <li><code>$</code> — PID procesu.
+      <li><code>?</code> — kod wyjścia ostatnio zakończonego polecenia.
+      <li><code>!</code> — PID ostatnio wykonanego procesu w tle.
       <li><code>IFS</code> — internal fields separator; określa jakie
-        znaki mogą separować słowa.</li>
-      <li><code>HOME</code> — katalog domowy.</li>
-      <li><code>SHELL</code> — polecenie wywołujące powłokę.</li>
+        znaki mogą separować słowa.
+      <li><code>HOME</code> — katalog domowy.
+      <li><code>SHELL</code> — polecenie wywołujące powłokę.
       <li><code>PATH</code> — lista katalogów oddzielonych
-        dwukropkiem, w których wyszukuje się pliki wykonywalne.</li>
+        dwukropkiem, w których wyszukuje się pliki wykonywalne.
       <li><code>PS1</code> — znak zachęty powłoki, gdy wpisujemy
-        komendy.</li>
+        komendy.
       <li><code>PS2</code> — znak zachęty, gdy kontynuujemy
-        komendę.</li>
-      <li><code>TERM</code> — rodzaj terminala.</li>
+        komendę.
+      <li><code>TERM</code> — rodzaj terminala.
       <li><code>MAIL</code> — skrzynka pocztowa, nie musi być wcale
-        ustawione.</li>
+        ustawione.
     </ul>
-  </dd>
+  
 
-  <dt>Polecenie powłoki <code>read</code>.</dt>
+  <dt>Polecenie powłoki <code>read</code>.
   <dd>Czyta linię ze standardowego wejścia dzieli ją
     na <var>n</var> słów zgodnie z wartością
     zmiennej <code>IFS</code>, gdzie <var>n</var> to liczba
     argumentów i zapisuje te słowa do zmiennych podanych jako
     argumenty.  Ostatnie słowo może de facto nie być pojedynczym
-    słowem.</dd>
+    słowem.
 
-  <dt>Polecenie powłoki <code>set</code>.</dt>
+  <dt>Polecenie powłoki <code>set</code>.
   <dd>Ustawia argumenty wywołania programu/funkcji, do których
     odwołujemy się przy pomocy <code>$&lt;cyferka&gt;</code>.  Dzięki temu
     poleceniu można robić zmienne lokalne w funkcjach, ale nie
@@ -165,30 +165,30 @@
     ustawiać różne opcje jeżeli argumenty zaczynają się od myślnika.
     Jeżeli nie chcemy ustawiać opcji należy jeszcze dodać <code>--</code>
     coby polecenie nie próbowało interpretować tego co podajemy jako
-    argumenty.</dd>
+    argumenty.
 
-  <dt>Polecenie powłoki <code>export</code>.</dt>
+  <dt>Polecenie powłoki <code>export</code>.
   <dd>Powoduje, że zmienna/e którą/e podamy jako argument/y zostanie
     „wyeksportowana” i będzie dostępna
     w wywoływanych poleceniach jako zmienna środowiskowa.
     Zmienne, które były zmiennymi środowiskowymi w momencie
     włączenia skryptu nadal takimi pozostają (przykładami są <code>HOME</code>,
-    <code>PATH</code> itp.).</dd>
+    <code>PATH</code> itp.).
 
   <dt>Pętle <code>for</code>/<code>while</code>/<code>do</code>
-    w programowaniu powłoki.</dt>
+    w programowaniu powłoki.
   <dd><code>for &lt;zmienna&gt; in &lt;lista-słów&gt;; do
       &lt;polecenie&gt;; done</code> wykonuje to co jest wewnątrz dla
     każdego słowa podanego w liście słów tak, że przy każdym
-    przebiegu pętli podana zmienna ma wartość kolejnego słowa.</dd>
+    przebiegu pętli podana zmienna ma wartość kolejnego słowa.
   <dd><code>for &lt;zmienna&gt;; do &lt;polecenie&gt;; done</code> tak jak
-    powyżej, gdy za listę słów poda się <code>"$@"</code>.</dd>
+    powyżej, gdy za listę słów poda się <code>"$@"</code>.
   <dd><code>while &lt;warunek&gt;; do &lt;polecenie&gt;; done</code>
-    wykonuje polecenie tak długo jak warunek zwraca kod błędu zero.</dd>
+    wykonuje polecenie tak długo jak warunek zwraca kod błędu zero.
   <dd><code>while :; do &lt;polecenie&gt;; done</code> taka miła pętla
-    nieskończona.</dd>
+    nieskończona.
 
-  <dt>Metaznaki powłoki.</dt>
+  <dt>Metaznaki powłoki.
   <dd>Zapewne chodzi o znaki <code>*</code>, <code>?</code>, <code>[</code>
     oraz <code>\</code>.  Mają one znaczenie przy interpretowaniu poleceń,
     gdyż są rozwijane w nazwę pliku lub nazwy plików.  Gwiazdka
@@ -203,152 +203,152 @@
     znak <code>^</code> nie ma tu nic do rzeczy)
     (np. <code>[!a-z]</code>, <code>[!abc]</code>, <code>[!a-z123]</code>).
     Backslash powoduje, że dany znak traci swoje
-    „magiczne” znaczenie.</dd>
+    „magiczne” znaczenie.
 
   <dt>Odczyt pliku <code>/etc/passwd</code>
-  z wykorzystaniem <code>read</code>/<code>set</code>/<code>IFS</code>.</dt>
+  z wykorzystaniem <code>read</code>/<code>set</code>/<code>IFS</code>.
   <dd><pre>
 while IFS=: read nick:pass:uid:gid:info:home:shell; do
     echo "User $nick ($uid/$gid); home directory: $home; shell: $shell"
-done &lt;/etc/passwd</pre></dd>
+done &lt;/etc/passwd</pre>
 
   <dt>Wykorzystanie polecenia <code>expr</code> do operacji arytmetycznych
-    na zmiennych.</dt>
+    na zmiennych.
   <dd><code>i=`expr $i + 1`</code>, <code>i=`expr $i - 1`</code>,
-    <code>i=`expr $a \* $b`</code>.</dd>
+    <code>i=`expr $a \* $b`</code>.
 
-  <dt>Opisz rezultat wykonania poleceń i grup poleceń:</dt>
+  <dt>Opisz rezultat wykonania poleceń i grup poleceń:
   <dd><code>x &gt;/dev/null 2&gt;&amp;1</code> — stdout i stderr
     przekierowane do tego samego <code>/dev/null</code>, tzn. jest jeden
-    zduplikowany deskryptor pliku.</dd>
+    zduplikowany deskryptor pliku.
   <dd><code>x 2&gt;&amp;1 1&gt;/dev/null</code> — stderr przekierowane
     do stdout, a <b>potem</b> stdout przekierowane
-    do <code>/dev/null</code>.</dd>
+    do <code>/dev/null</code>.
   <dd><code>x 2&gt;/dev/nul 1&gt;/dev/null</code> — stderr
     przekierowane do pliku <code>nul</code> w katalogu <code>dev</code>,
-    a stdout do <code>/dev/null</code>.</dd>
+    a stdout do <code>/dev/null</code>.
   <dd><code>x &lt; y &gt; z</code> — stdin czytane
-    z pliku <code>y</code>, stdout pisane do pliku <code>z</code>.</dd>
+    z pliku <code>y</code>, stdout pisane do pliku <code>z</code>.
   <dd><code>x &amp; y ; z</code> — <code>x</code> zostanie odpalone
     w tle i zaraz po tym <code>y</code>.  <code>z</code> zostanie uruchomione,
-    gdy działanie zakończy <code>y</code>.</dd>
+    gdy działanie zakończy <code>y</code>.
   <dd><code>x || y</code> — <code>y</code> wykonane
-    jeżeli <code>x</code> zwróci status różny od zera.</dd>
+    jeżeli <code>x</code> zwróci status różny od zera.
   <dd><code>find / foo.x 2&gt;&amp;1 1&gt;/dev/null</code> — przeszuka
     cały dysk, a następnie jeszcze katalog/plik <code>foo.x</code>
     w bieżącym katalogu.  Komunikaty błędów wypisane do stdout
-    a wszystko inne wyrzucone do <code>/dev/null</code>.</dd>
+    a wszystko inne wyrzucone do <code>/dev/null</code>.
   <dd><code>find / foo.x &gt;/dev/null 2&gt;&amp;1</code> — przeszuka
     cały dysk, a następnie jeszcze katalog/plik <code>foo.x</code>
     w bieżącym katalogu.  Standardowe wyjście oraz komunikaty
-    błędów rzucone do <code>/dev/null</code>.</dd>
+    błędów rzucone do <code>/dev/null</code>.
 
 
-  <dt>Opisz precyzyjnie działanie poniższych komend:</dt>
+  <dt>Opisz precyzyjnie działanie poniższych komend:
   <dd><code>x &gt; y</code> — tworzony bądź zeruje jest
     plik <code>y</code> do którego przekierowane jest standardowe wyjście
-    polecenia <code>x</code>.</dd>
+    polecenia <code>x</code>.
   <dd><code>x | y</code> — tworzony jest potok, do którego pisze
     polecenie <code>x</code>, a czyta polecenie <code>y</code>.
     Tzn. standardowe wyjście x  jest przekierowane do potoku,
     który jest przekierowany jako standardowe wejście polecenia
-    y.</dd>
+    y.
   <dd><code>x &lt; y</code> — otwierany jest plik <code>y</code>
     i jego zawartość jest wczytywana jako standardowe wejście
-    polecenia <code>x</code>.</dd>
+    polecenia <code>x</code>.
   <dd><code>cat y | x</code> — efekt taki sam jak powyżej, tyle że
-    zrealizowane to jest przez potok opisany dwa punkty wyżej.</dd>
+    zrealizowane to jest przez potok opisany dwa punkty wyżej.
   <dd><code>x &amp; y</code> — <code>x</code> uruchamiany jest w tle
     i zaraz po uruchomieniu nim (nie musi się on kończyć)
-    uruchamiany jest <code>y</code>.</dd>
+    uruchamiany jest <code>y</code>.
   <dd><code>x &amp;&amp; y</code> — uruchamiany jest <code>x</code>
-    i jeżeli zwraca status równy zero to uruchamiany jest <code>y</code>.</dd>
+    i jeżeli zwraca status równy zero to uruchamiany jest <code>y</code>.
   <dd><code>x || y</code> — jak wyżej, tylko <code>y</code> uruchamiany
-    jest, gdy <code>x</code> zwraca status różny od zero.</dd>
+    jest, gdy <code>x</code> zwraca status różny od zero.
   <dd><code>x ; y &amp;</code> — uruchamiany jest <code>x</code>,
-    a gdy się skończy uruchamiany jest <code>y</code> w tle.</dd>
+    a gdy się skończy uruchamiany jest <code>y</code> w tle.
   <dd><code>cat x &gt; y &lt;</code> — błąd składni?  Bez
     tego <code>&lt;</code> na końcu to polecenie <code>cat</code> wczytuje
     zawartość pliku <code>x</code> i wypisuje je na standardowe
     wyjście, które przekierowane jest do utworzonego lub zerowanego
-    pliku <code>y</code>.</dd>
+    pliku <code>y</code>.
 </dl>
 
 <h2>Procesy i wątki:</h2>
 <dl>
-  <dt>Współbieżność</dt>
-  <dd>procesy nie muszą wykonywać się jeden po drugim.</dd>
+  <dt>Współbieżność
+  <dd>procesy nie muszą wykonywać się jeden po drugim.
 
-  <dt>Równoległość</dt>
-  <dd>procesy wykonują się jednocześnie.</dd>
+  <dt>Równoległość
+  <dd>procesy wykonują się jednocześnie.
 
-  <dt>Rozproszoność</dt>
-  <dd>procesy wykonują się no różnych maszynach.</dd>
+  <dt>Rozproszoność
+  <dd>procesy wykonują się no różnych maszynach.
 
-  <dt>Porównanie procesów i wątków.</dt>
+  <dt>Porównanie procesów i wątków.
   <dd>Procesy mają osobną przestrzeń adresową, wątki nie.  Procesy są
     generalnie cięższe od wątków i przełączanie pomiędzy
-    procesami trwa dłużej niż pomiędzy wątkami.</dd>
+    procesami trwa dłużej niż pomiędzy wątkami.
 
   <dt>Porównanie wątków poziomu jądra i wątków poziomu
-    użytkownika.</dt>
+    użytkownika.
   <dd>Jądro nie wie o istnieniu wątków poziomu użytkownika toteż,
     na maszynie 1024 procesorowej i tak będzie wykonywał się
     jeden wątek użytkownika, tymczasem wątki poziomu jądra mogą być
     szeregowane przez jądro i wówczas wiele wątków tego samego
-    procesu może wykonywać się jednocześnie na kilku procesorach.</dd>
+    procesu może wykonywać się jednocześnie na kilku procesorach.
 
-  <dt>Architektura wielowątkowa w systemie Solaris.</dt>
-  <dd>Procesy.</dd>
+  <dt>Architektura wielowątkowa w systemie Solaris.
+  <dd>Procesy.
   <dd>Wątki użytkownika — implementowane bibliotecznie
-    nierozróżnialne przez jądro.</dd>
+    nierozróżnialne przez jądro.
   <dd>LWP (procesy lekkie) — rozróżniane przez jądro mogą
-    obsługiwać dowolną liczbę wątków poziomu użytkownika.</dd>
+    obsługiwać dowolną liczbę wątków poziomu użytkownika.
   <dd>Wątki jądra--podstawowy elementy szeregowanie rozmieszczane na
-    procesorach.</dd>
+    procesorach.
 </dl>
 
 
 <h2>Wzajemne wykluczanie i synchronizacja.</h2>
 
 <dl>
-  <dt>Wyścig i warunki wyścigu.</dt>
+  <dt>Wyścig i warunki wyścigu.
   <dd>sytuacja, w której co najmniej dwa procesy wykonują
     operację na zasobach dzielonych, a ostateczny wynik zależy od
-    momentu realizacji.</dd>
+    momentu realizacji.
 
-  <dt>Warunki konieczne implementacji sekcji krytycznej.</dt>
+  <dt>Warunki konieczne implementacji sekcji krytycznej.
   <dd>
     <ol>
-      <li>wewnątrz jeden proces,</li>
+      <li>wewnątrz jeden proces,
       <li>proces poza SK nie może blokować innego procesu pragnącego wejść do
-        SK,</li>
+        SK,
       <li>każdy proces oczekujący na wejście powinien się
-        doczekać.</li>
+        doczekać.
     </ol>
-  </dd>
+  
 
   <dt>Idea wykorzystania instrukcji Test&amp;SetLock (TSL) do realizacji
-    semafora binarnego.</dt>
+    semafora binarnego.
   <dd><pre>
 register r = 1;
 do {
   TSL(r, semaphore)
-} while (r);</pre></dd>
+} while (r);</pre>
   <dd>Albo jak ktoś woli pseudo-assembler:
     <pre>
 		mov     reg, 1
 loop_here:	tsl     reg, [semaphore]
-		jne     reg, 0, loop_here</pre></dd>
+		jne     reg, 0, loop_here</pre>
   <dd>Albo jak ktoś woli ix86 (w notacji AT&amp;T):
     <pre>
 		mov    eax, 1
 loop_here:	xchg   eax, [semaphore]
 		or     eax, eax
-		jnz    loop_here</pre></dd>
+		jnz    loop_here</pre>
 
   <dt>Algorytm i opis idei poprawnego rozwiązania problemu pięciu
-    filozofów.</dt>
+    filozofów.
 
   <dd><pre>
 #define N 5
@@ -396,7 +396,7 @@ void test(int n) {
     state[n] = EATING;
     up(sem[n]);
   }
-}</pre></dd>
+}</pre>
 
   <dd>Idea jest taka, że filozof może być w jednym z trzech
     stanów: Myślący, Głodny lub Jedzący.  I teraz
@@ -410,14 +410,14 @@ void test(int n) {
     zmienia swój stan na Myślący i sprawdza czy przez przypadek
     jeden z jego sąsiadów nie może zacząć jeść i jeżeli może
     to zmienia jego stan na Jedzący i podnosi dla niego semafor
-    (na którym zapewne ten filozof sobie smacznie śpi).</dd>
+    (na którym zapewne ten filozof sobie smacznie śpi).
 </dl>
 
 
 <h2>Przykładowe zadania projektowe</h2>
 <dl>
   <dt>Skrypt, który przyjmuje jako argument id użytkownika
-    i wypisuje na stdin nazwę użytkownika,</dt>
+    i wypisuje na stdin nazwę użytkownika,
   <dd><pre>
 #!/bin/sh
 while IFS=: read nick pass uid other; do
@@ -426,10 +426,10 @@ while IFS=: read nick pass uid other; do
         exit 0
     fi
 done
-exit 1</pre></dd>
+exit 1</pre>
 
   <dt>Skrypt zamieniający w nazwach wszystkich plików z bieżącego
-    katalogu litery z dużych na małe.</dt>
+    katalogu litery z dużych na małe.
   <dd><pre>
 #!/bin/sh
 for i in *; do
@@ -437,10 +437,10 @@ for i in *; do
     if [ X"$i" != X"$n" ]; then
         mv -f -- "$i" "$n"
     fi
-done</pre></dd>
+done</pre>
 
   <dt> Skrypt wypisujący przyjęte argumenty w odwrotnej
-    kolejności.</dt>
+    kolejności.
   <dd><pre>
 #!/bin/sh
 OUTPUT=$1
@@ -448,12 +448,12 @@ while [ $# -gt 1 ]; do
     shift
     OUTPUT="$1 $OUTPUT"
 done
-printf '%s\n' "$OUTPUT"</pre></dd>
+printf '%s\n' "$OUTPUT"</pre>
 
 
   <dt>Algorytm czytelników i pisarzy preferujący
    pisarzy — podać algorytm, opisać synchronizację, wyjaśnić
-   przeznaczenie poszczególnych zmiennych.</dt>
+   przeznaczenie poszczególnych zmiennych.
   <dd><pre>
 monitor {
     unsigned rc = 0, wc = 0;
@@ -477,7 +477,7 @@ monitor {
         if (!--wc) notify(wc_zero);
         notigy(available);
     }
-};</pre></dd>
+};</pre>
 
   <dd>Implementacja monitora oraz funkcji <code>wait</code>
     i <code>notify</code> jest oczywista, konkretnie dla monitora
@@ -486,7 +486,7 @@ monitor {
     wyjściu <code>up</code>.  Zmienne warunkowe natomiast to struktura
     składająca się z licznika count zainicjowanego zerem i semafora
     <code>semaphore</code>, wówczas funkcje <code>wait</code>
-    i <code>notify</code> wyglądają następująco:</dd>
+    i <code>notify</code> wyglądają następująco:
 
   <dd><pre>
 wait(cond condition) {
@@ -501,14 +501,14 @@ notify(cond condition) {
         --condition.count;
         up(condition.semaphore);
     }
-}</pre></dd>
+}</pre>
 
 
   <dt>Napisać algorytm z wykorzystaniem do synchronizacji
     semaforów z dostępnymi operacjami semaforowymi na jednym
     semaforze (a więc nie wolno korzystać z atomowych
     operacji wielosemaforowych) modelujący pracę statków
-    w następującej sytuacji:</dt>
+    w następującej sytuacji:
   <dt>Z portu A do portu B cztery statki przewożą towar cyklicznie
     pływając tam i z powrotem.  Po drodze między A i B
     jest jedna śluza, przez śluzę mogą jednocześnie przepływać co
@@ -523,7 +523,7 @@ notify(cond condition) {
     tej samej stronie śluzy co dopływający statek.  Inaczej statek
     musi czekać (proces ma zasnąć), aż inny statek płynący
     z przeciwka przejdzie przez śluzę, a przy okazji na
-    właściwą stronę przemieści się jeden z holowników.</dt>
+    właściwą stronę przemieści się jeden z holowników.
   <dd><pre>
 sem liczba_holownikow[2] = { 2, 0 };
 int strona_holownika[2] = { 0, 0 };
@@ -556,68 +556,68 @@ void statek() {
 
         plyn_do_portu_po_stronie(strona);
     }
-}</pre></dd>
+}</pre>
 
   <dd>Gdyby było osiem to nic się nie stanie.  Będzie to dzialać nawet dla
     42 statków.  Za to gdyby było więcej holowników to trzeba by użyć pętli
-    przy wybieraniu holownika.</dd>
+    przy wybieraniu holownika.
 </dl>
 
 
 <h2>Zarządzanie pamięcią</h2>
 <dl>
-  <dt>Metody przydziału pamięci</dt>
+  <dt>Metody przydziału pamięci
   <dd>
     <ul>
       <li>brak podziału — wolna przestrzeń adresowa w danej
         chwili przydzielana jednemu procesowi użytkowemu.
         Wieloprogramowanie można realizować przez wymiatanie
-        (ang. swapping),</li>
+        (ang. swapping),
       <li>podział pamięci — wolna przestrzeń adresowa podzielona na części
-        przydzielane pojedynczym procesom użytkowym,</li>
+        przydzielane pojedynczym procesom użytkowym,
       <li>wykorzystanie pamięci wirtualnej — istnieje jedna lub
         wiele wirtualnych przestrzeni adresowych przydzielanych
         procesom użytkowym, a mających w niewielkim stopniu
-        pokrycie w pamięci operacyjnej.</li>
+        pokrycie w pamięci operacyjnej.
     </ul>
-  </dd>
+  
 
   <dt>Rodzaje fragmentacji, występowanie, metody
-    przeciwdziałania.</dt>
+    przeciwdziałania.
   <dd>
     <ul>
       <li>wewnętrzna — zjawisko tworzenia niewykorzystywalnych,
         choć przydzielonych w ramach pewnej struktury (partycja,
-        ramka), obszarów pamięci,</li>
+        ramka), obszarów pamięci,
       <li>zewnętrzna — zjawisko tworzenia niewykorzystywalnych,
         nieprzydzielonych obszarów pamięci, zazwyczaj spowodowane
         niedoskonałością działania organizacji alokacji pamięci
-        procesom użytkowym.</li>
+        procesom użytkowym.
     </ul>
-  </dd>
+  
   <dd>Zapobiegać można poprzez:
     <ul>
-      <li>zwalnianie i scalanie,</li>
-      <li>zagęszczanie i relokację oraz</li>
-      <li>mechanizm stronicowania.</li>
+      <li>zwalnianie i scalanie,
+      <li>zagęszczanie i relokację oraz
+      <li>mechanizm stronicowania.
     </ul>
-  </dd>
+  
 
-  <dt>Stronicowanie i segmentacja.</dt>
+  <dt>Stronicowanie i segmentacja.
 
   <dd>Stronicowanie polega na podzieleniu pamięci wirtualnej procesu
     na strony o zadanej wielkości i przechowywanie
     fizycznych adresów początków tych stron w tablicy, w ten
     sposób, że jeżeli proces odwołuje się do eNtego bajtu Ktej strony
     w pamięci wirtualnej to na podstawie tablicy translacji
-    adresów tworzony jest adres fizyczny begin_page[K] + N.</dd>
+    adresów tworzony jest adres fizyczny begin_page[K] + N.
   <dd>Segmentacja polega na tym, iż tworzonych jest wiele przestrzeni
     adresowych, z których każda zaczyna się pod innym adresem
     w pamięci fizycznej (jeżeli stronicowanie nie występuje) lub
     wirtualnej (jeżeli stronicowanie występuje).  Zasadniczo, jeżeli
     proces odwołuje się do eNtego bajtu Ktego segmentu to na podstawie
     deskryptora tego segmentu tworzony jest adres fizyczny/logiczny
-    begin_segment[K] + N.</dd>
+    begin_segment[K] + N.
   <dd>Zasadniczo strony na siebie nie mogą nachodzić (choć różne
     strony różnych procesów mogą być odwzorowane na tą samą stronę
     w pamięci fizycznej), mają stały rozmiar oraz ich kolejność
@@ -625,24 +625,24 @@ void statek() {
     kolejności w pamięci fizycznej, gdy tymczasem segmenty mogą
     na siebie nachodzić, mają zmienne rozmiary oraz muszą być
     przechowywane w postaci ciągłej w pamięci
-    fizycznej/logicznej.</dd>
+    fizycznej/logicznej.
 
-  <dt>Odwrócone tablice stron.</dt>
+  <dt>Odwrócone tablice stron.
   <dd>W normalnym podejściu tablic translacji adresów, tablice te
     rosną w zależności od rozmiaru wirtualnej przestrzeni
     adresowej, co może niepraktyczne.  Przykładowo, mając 64-bitową
     przestrzeń adresową (nie wiem czy takie architektury istnieją, ale
     nieważne) trzeba by wprowadzić z pięć poziomów w tablicy
-    translacji co okazuje się dość niepraktyczne.</dd>
+    translacji co okazuje się dość niepraktyczne.
   <dd>Z tego powodu, zamiast trzymać tablicę strona logiczna
     -&gt; strona fizyczna trzyma się tablicę strona fizyczna -&gt;
     strona logiczna, której rozmiar jest proporcjonalny do rozmiaru
     pamięci fizycznej.  Wyszukiwanie w czymś takim powiązania
     strony logicznej do strony fizycznej wymaga przeszukania całej
     tablicy i dlatego stosuje się różne struktury pomocnicze
-    takie jak tablice mieszające i duże bufory.</dd>
+    takie jak tablice mieszające i duże bufory.
 
-  <dt>Opis translacji adresu w architekturze Pentium.</dt>
+  <dt>Opis translacji adresu w architekturze Pentium.
   <dd>Procesy adresują pamięć za pomocą 16-bitowego numeru segmentu
     oraz 32-bitowego przesunięcia.  Pierwsze trzy bity w numerze
     segmentu są jakieś magiczne.  Pierwsze dwa bity oznaczają poziom
@@ -653,18 +653,18 @@ void statek() {
     o segmencie, z których najistotniejszą jest początek
     tego segmentu.  Gdy ma już 32-bitowy początek segmentu sumuje go
     z 32-bitowym przemieszczeniem w segmencie co daje adres
-    logiczny.</dd>
+    logiczny.
   <dd>Teraz rozpoczyna się stronicowanie, czyli bardziej znaczące 20
     bity adresu logicznego oznaczają numer strony
     i z (dwupoziomowej o ile dobrze pamiętam) tablicy
     translacji adresów wyciągany jest adres danej strony w przestrzeni
     fizycznej, a dokładnie bardziej znaczące 20 bity; pozostałe
-    12 bity są kopiowane bezpośrednio z adresu logicznego.</dd>
+    12 bity są kopiowane bezpośrednio z adresu logicznego.
   <dd>Można to wszystko zapisać tak (uwaga! to tylko przykład, wcale
     nie mówię, że to wygląda dokładnie tak, tzn. że trzeci bit
     w numerze segmentu ma takie znaczenie, a nie odwrotne, czy że
     właśnie w taki sposób szukany jest wpis w GDT/LDT; wszystko
-    rozdrobniłem, aby było bardziej czytelne):</dd>
+    rozdrobniłem, aby było bardziej czytelne):
   <dd><pre>
 uint32_t translate(uint16_t segment, uint32_t offset) {
   /* segmentation */
@@ -678,20 +678,20 @@ uint32_t translate(uint16_t segment, uint32_t offset) {
   uint32_t  index2     = (logical &gt;&gt; 12) &amp; ((1 &lt;&lt; 10) - 1);
   uint32_t  page_start = TAB[index1][index2];
   return (page_start &amp; ~((1 &lt;&lt; 12) - 1)) | (logical &amp; ((1 &lt;&lt; 12) - 1));
-}</pre></dd>
+}</pre>
 
-  <dt>Poziomy ochrony w architekturze Pentium.</dt>
+  <dt>Poziomy ochrony w architekturze Pentium.
   <dd>Są cztery poziomy.  Proces działający w danym poziomie nie
     może odczytywać danych ani (bezpośrednio) wywoływać funkcji
     znajdujących się w poziomach bardziej uprzywilejowanych.  Aby
     przejść do poziomu bardziej uprzywilejowanego proces musi albo
-    wykorzystać bramę (ang. call gate) albo wywołać przerwanie.</dd>
+    wykorzystać bramę (ang. call gate) albo wywołać przerwanie.
 </dl>
 
 
 <h2>Wejście/wyjście.</h2>
 <dl>
-  <dt>DMA — opis i przeznaczenie.</dt>
+  <dt>DMA — opis i przeznaczenie.
   <dd>Jest to mechanizm mający na celu umożliwienie transmisji danych
     pomiędzy dwoma urządzeniami (np. dyskiem i pamięcią) bez
     angażowania w to procesora.  W trakcie, gdy DMA działa
@@ -700,9 +700,9 @@ uint32_t translate(uint16_t segment, uint32_t offset) {
     o wiele szybciej, gdyż procesor nie musi obsługiwać przerwań
     związanych z transmisją danych, a wszakże samo
     przełączanie kontekstu, gdy nastąpi przerwanie może być
-    długotrwałe.</dd>
+    długotrwałe.
 
-  <dt>RAID 0</dt>
+  <dt>RAID 0
   <dd>Wiele dysków tworzy jeden dysk logicznych, brak redundancji.
     Dane mogą być trzymane albo w paskach, gdzie poszczególne paski są
     trzymane na kolejnych dyskach (np. jeżeli są dwa dyski to jeden ma
@@ -711,37 +711,37 @@ uint32_t translate(uint16_t segment, uint32_t offset) {
     to marnuje się przestrzeń przynajmniej jednego z nich); albo
     w ten sposób, że „konkatenuje” się wszystkie
     dyski w ten sposób, że na każdym jest jakiś ciągły fragment
-    dysku logicznego.</dd>
-  <dt>RAID 1</dt>
-  <dd>Na wszystkich dyskach są dokładnie te same dane.</dd>
-  <dt>RAID 2</dt>
+    dysku logicznego.
+  <dt>RAID 1
+  <dd>Na wszystkich dyskach są dokładnie te same dane.
+  <dt>RAID 2
   <dd>Jakieś coś dzikiego stosowane w dawnych czasach przez IBM
-    korzystające z kodów korekcyjnych.</dd>
-  <dt>RAID 3</dt>
+    korzystające z kodów korekcyjnych.
+  <dt>RAID 3
   <dd>Jeden z dysków jest dyskiem z danymi parzystości
-    i parzystość jest liczona na poziomie bajtów (?).</dd>
-  <dt>RAID 4</dt>
+    i parzystość jest liczona na poziomie bajtów (?).
+  <dt>RAID 4
   <dd>Tak jak RAID 3, tylko parzystość jest liczona na poziomie pasków
-    (w sumie nie wiem czym to się różni).</dd>
-  <dt>RAID 5</dt>
+    (w sumie nie wiem czym to się różni).
+  <dt>RAID 5
   <dd>Tak jak 4, tyle że nie ma jednego dysku z parzystością tylko
     dla każdego „poziomu” jest to cyklicznie kolejny
-    dysk.</dd>
-  <dt>RAID 6</dt>
+    dysk.
+  <dt>RAID 6
   <dd>Tak jak RAID 5 tylko są dwa dyski parzystości dzięki czemu jak
     jeden dysk nam padnie można przejść na RAID5 i ciągle mieć
-    zabezpieczenie.</dd>
-  <dt>RAID 0+1</dt><dd>Na „dole” RAID 0, na
-    „górze” RAID 1.</dd>
-  <dt>RAID 1+0</dt><dd>Na „dole” RAID 1, na
-    „górze” RAID 0.</dd>
-  <dt>RAID 10</dt><dd>Po prostu RAID 1+0.</dd>
+    zabezpieczenie.
+  <dt>RAID 0+1<dd>Na „dole” RAID 0, na
+    „górze” RAID 1.
+  <dt>RAID 1+0<dd>Na „dole” RAID 1, na
+    „górze” RAID 0.
+  <dt>RAID 10<dd>Po prostu RAID 1+0.
 </dl>
 
 
 <h2>System plików</h2>
 <dl>
-  <dt>Idea plików odwzorowywanych w pamięci.</dt>
+  <dt>Idea plików odwzorowywanych w pamięci.
   <dd>Spoko akcja ziom, polegająca na tym, iż jakiś obszar pamięci to tak
     naprawdę zawartość pliku.  Jeżeli OS wspiera ten mechanizm i go
     odpowiednio poinstruujemy, to wie np. że w momencie zwalniania takiej
@@ -750,18 +750,18 @@ uint32_t translate(uint16_t segment, uint32_t offset) {
     pliku, ale pomińmy ten aspekt) i tak samo wie, że należy odczytać go
     z tego pliku, a nie ze swapu.  Tak samo, jeżeli proces zakończy
     działanie czy wyrejestruje takie odwzorowanie to OS zapisuje zmiany
-    dokonane w pamięci do pliku.</dd>
+    dokonane w pamięci do pliku.
 
   <dt>system plików w Unix V7 wraz z przykładem rozwiązania nazwy
-    <code>/home/nowak/soi.txt</code></dt>
+    <code>/home/nowak/soi.txt</code>
   <dd>Wszystko jest plikiem.  Każdy plik ma iwęzeł.  W iwęźle zapisane
     są takie informacje jak rozmiar, atrybuty, czasy utworzenia,
     modyfikacji itp. oraz wskaźniki na bloki danych.  Katalog to plik,
     w którym zapisane są pozycje katalogowe czyli lista nazw plików,
     które się w nim znajdują, a dokładniej odwzorowanie
     nazwa pliku↔numer iwęzła.  W Unix V7 pozycja taka to
-    był 16-bitowy numer iwęzła oraz 14-znakowa nazwa pliku.</dd>
-  <dd>Rozwinięcie nazwy <code>/home/nowak/soi.txt</code>:</dd>
+    był 16-bitowy numer iwęzła oraz 14-znakowa nazwa pliku.
+  <dd>Rozwinięcie nazwy <code>/home/nowak/soi.txt</code>:
   <dd><pre>
 Blok np. 1   Iwęzeł 67     Blok 24      iwęzeł 33      Blok 14
 
@@ -773,23 +773,23 @@ Blok np. 1   Iwęzeł 67     Blok 24      iwęzeł 33      Blok 14
     .            .            .             .              .
     .            .            .             .              .
     .                         .                            .
-</pre></dd>
+</pre>
   <dd>I już wiemy, że w iwęźle 66 są atrybuty, rozmiar, etc
     interesującego nas pliku oraz wskazania na bloki danych zajmowane
-    przez ten plik.</dd>
+    przez ten plik.
   <dd>Oczywiście katalog może zajmować kilka bloków i dany plik może
-    znajdować się na którymś bloku z kolei.</dd>
+    znajdować się na którymś bloku z kolei.
 
-  <dt>Idea dzienników transakcyjnych w systemach plików (ang. journaling).</dt>
+  <dt>Idea dzienników transakcyjnych w systemach plików (ang. journaling).
   <dd>Idea jest taka, aby niezależnie od jakichkolwiek awarii
     (np. nagłe wyłączenie prądu) system plików (a w różnych
     wersjach dziennikowania również dane plików) pozostawały
     w jednolitym stanie.  Realizuje się to w ten sposób, że
     zamiast zapisywać zmiany bezpośrednio w miejsce, którego one
     dotyczą zapisuje się je gdzieś na boku i gdy to się powiedzie
-    zmienia się odpowiednie wskaźniki w systemie plików.</dd>
+    zmienia się odpowiednie wskaźniki w systemie plików.
 
-  <dt>Idea migawek w systemach plików (ang. snapshot).</dt>
+  <dt>Idea migawek w systemach plików (ang. snapshot).
   <dd>Jest to zapisanie stanu urządzenia takiego jaki jest
     w danej chwili bez blokowania zapisu na to urządzenie
     (tzn. zapewne zablokować trzeba, ale tylko na krótką chwilę, gdy
@@ -800,7 +800,7 @@ Blok np. 1   Iwęzeł 67     Blok 24      iwęzeł 33      Blok 14
     zapisywany w jakiejś przestrzeni tymczasowej lub na odwrót,
     tzn. w momencie modyfikacji dane z migawki kopiowane są
     na obszar tymczasowy (a może nawet docelowy migawki),
-    a dane zmodyfikowane bezpośrednio na dysk.</dd>
+    a dane zmodyfikowane bezpośrednio na dysk.
 </dl>
 
 <!-- COMMENT -->
@@ -808,59 +808,59 @@ Blok np. 1   Iwęzeł 67     Blok 24      iwęzeł 33      Blok 14
 <!-- nick: Speedy -->
 <!-- nick_url: http://blog.zajc.info -->
 
-<p>błagam… wyłącz serwowanie XML’a jesli nie możesz zagwarantować poprawności kodu (tak jak teraz)!!!</p>
+<p>błagam… wyłącz serwowanie XML’a jesli nie możesz zagwarantować poprawności kodu (tak jak teraz)!!!
 
 <!-- COMMENT -->
 <!-- date: 2008-06-16 14:55:21 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Wybacz, już poprawione.</p>
+<p>Wybacz, już poprawione.
 
 <!-- COMMENT -->
 <!-- date: 2008-06-16 15:03:09 -->
 <!-- nick: Speedy -->
 <!-- nick_url: http://blog.zajc.info -->
 
-<p>Spoko. I dzięki za materiały — na pewno się przydadzą, bo godzinę temu oblałem dopytkę z tego przedmiotu :)  Politechnika Częstochowska</p>
+<p>Spoko. I dzięki za materiały — na pewno się przydadzą, bo godzinę temu oblałem dopytkę z tego przedmiotu :)  Politechnika Częstochowska
 
 <!-- COMMENT -->
 <!-- date: 2008-06-16 18:12:44 -->
 <!-- nick: Pedzacy Komajn Chaosu -->
 
 <p>Tez mialem dzis z tego egzamin :P <br />
-Tutaj jest ladnie wszystko tez opisane: http://wazniak.mimuw.edu.pl/index.php?title=Systemy_operacyjne+</p>
+Tutaj jest ladnie wszystko tez opisane: http://wazniak.mimuw.edu.pl/index.php?title=Systemy_operacyjne+
 
 <!-- COMMENT -->
 <!-- date: 2008-06-17 00:57:56 -->
 <!-- nick: bobiko -->
 <!-- nick_url: http://bobiko.jogger.pl -->
 
-<p>a ja bede miał w najblizszy poniedziałek egzaminy z SO i dziekuję za ściągawke :) zawsze się przyda :)</p>
+<p>a ja bede miał w najblizszy poniedziałek egzaminy z SO i dziekuję za ściągawke :) zawsze się przyda :)
 
-<p>pozdro</p>
+<p>pozdro
 
 <!-- COMMENT -->
 <!-- date: 2008-08-30 19:02:02 -->
 <!-- nick: silverooster -->
 
-<p>dlaczego ja dopiero teraz to znalazlam XD no coz… 15 wrzesnia poprawka ;) bedzie sie z czego przygotowac ;]</p>
+<p>dlaczego ja dopiero teraz to znalazlam XD no coz… 15 wrzesnia poprawka ;) bedzie sie z czego przygotowac ;]
 
 <!-- COMMENT -->
 <!-- date: 2008-08-30 19:52:19 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Powodzenia!</p>
+<p>Powodzenia!
 
 <!-- COMMENT -->
 <!-- date: 2008-09-17 00:52:13 -->
 <!-- nick: silverooster -->
 
-<p>zdane ^^ wreszcie mam wakacje :D</p>
+<p>zdane ^^ wreszcie mam wakacje :D
 
 <!-- COMMENT -->
 <!-- date: 2011-01-02 14:16:45 -->
 <!-- nick: Mirek -->
 
-<p>Niech Ci Bozia w dzieciach wynagrodzi!!:D</p>
+<p>Niech Ci Bozia w dzieciach wynagrodzi!!:D

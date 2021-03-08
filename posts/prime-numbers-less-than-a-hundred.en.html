@@ -8,16 +8,16 @@
 day.  No different at my office — at one point all
 engineers have been challenged to write the shortest code in
 C that prints all prime numbers (and only prime numbers) less
-than a hundred each on separate line.</p>
+than a hundred each on separate line.
 
 <p>This is an interesting brain-teaser so posting it here so others
 may choose to think about it while <a
-href="http://xkcd.com/303/">their code’s compiling</a>.</p>
+href="http://xkcd.com/303/">their code’s compiling</a>.
 
 <p>Of course, a ‘C program’ needs not to be taken too seriously — depending on
 not too far fetched undefined behaviours of given implementation is all right
 (but please do not use <code>system</code> or <code>exec</code> family of calls
-;) ).</p>
+;) ).
 
 <!-- EXCERPT -->
 
@@ -25,7 +25,7 @@ not too far fetched undefined behaviours of given implementation is all right
 
 <p>I have managed to came up with two 61-character (this excludes new
 line at the end of the file) solutions — one uses two loops
-and the other only one:</p>
+and the other only one:
 
 <pre>main(i,j){for(;j=i++&lt;99;)for(;++j&lt;i||printf("%d\n",i),i%j;);}</pre>
 <pre>
@@ -33,7 +33,7 @@ main(j,i){for(i=2;i%++j||(i>j||printf("%d\n",i),j=i++&lt;99););}</pre>
 
 <p>I have used a comma operator to print the prime number
 but <a href="#comm1573336">Wasacz solution</a> shown that it is not
-necessary and thus a 60-character solution can be created:</p>
+necessary and thus a 60-character solution can be created:
 
 <pre>main(i,j){for(;j=++i&lt;99;j&lt;i||printf("%d\n",i))for(;i%++j;);}</pre>
 
@@ -44,19 +44,19 @@ C language rules.  I will look through some of the surprising
 constructs and try to clarify them.  Some of the comments are of
 historic importance only but nonetheless may be interested for
 a C programmer curious about ins and outs of the
-language.</p>
+language.
 
 <p><b>Implicit return type</b>.  Starting from the very beginning, the
 <code>main</code> function has no return type specified.  That is
 actually quite all right since C89 defaults function’s return type to
-<code>int</code>.</p>
+<code>int</code>.
 
 <p><b>Old function prototype</b>.  This is not the only ‘problem’ with
 the function though.  <code>main</code>’s prototype lacks also argument
 types.  This is also a perfectly valid C syntax.  In original design
 types were not part of function declaration and, not to break old code,
 this (otherwise deprecated syntax) remained in C89.  The old function
-definition looks as follows:</p>
+definition looks as follows:
 
 <pre>
 <i>rettype</i> foo(<i>arg1</i>, <i>arg2</i>)
@@ -70,13 +70,13 @@ definition looks as follows:</p>
 invocation which lead to many hard to find bugs and thus
 a <code>sparse</code> tool was created which, among other things,
 checked whether all function invocations match function
-definition.</p>
+definition.
 
 <p>Digging more in this topic, when C89 standard was published not all
 compilers were fully compatible with it (in particular, not all
 supported the new function prototypes), which lead programmers to the
 use of a macro that let them omit function prototype when compiling
-with old compiler, ie.:</p>
+with old compiler, ie.:
 
 <pre>
 #if __STDC__
@@ -91,18 +91,18 @@ with old compiler, ie.:</p>
 list in function declaration does not mean that the function take no
 argument (which is true in C++).  It means function take unspecified
 number of arguments.  To declare function with no arguments one needs
-to use <code>void</code> keyword, ie.: <code>int foo(void)</code>.</p>
+to use <code>void</code> keyword, ie.: <code>int foo(void)</code>.
 
 <p><b>Implicit type</b>.  So, what <em>is</em> the type of
 <code>main</code> arguments?  There was none specified anywhere.  This
 is, yet again, quite all right since C89 defaults to <code>int</code>.
 Generally, anything that has been declared but has no type specified is
 of type <code>int</code>.  For example <code>static i;</code> is the
-same thing as <code>static int i;</code>.</p>
+same thing as <code>static int i;</code>.
 
 <p><b>Incorrect argument type</b>.  This brings us to the next issue.
 The two <code>main</code> function prototypes defined by the standard
-are:</p>
+are:
 
 <pre>
 int main(int, char **);
@@ -115,13 +115,13 @@ can lead to anything, including daemons coming out of your nose, but
 because in most (for some definitions of ‘most’) implementations
 <code>sizeof(int)</code> is no smaller than <code>sizeof(char *)</code>,
 passing convention for the two type is compatible and <code>int</code> has
-no trap representations, we are in the clear.</p>
+no trap representations, we are in the clear.
 
 <p><b><code>i</code>’s initialisation</b>.  Looking carefully at the
 code one notices that <code>i</code> is never initialised and instead it
 uses the value passed as first argument to <code>main</code> as its
 initial value.  This reveals a quite interesting bug: if one calls the
-program with some arguments, it will skip initial prime numbers.</p>
+program with some arguments, it will skip initial prime numbers.
 
 <p>What I find more fascinating though is situation where
 <code>main</code>’s first argument is zero (which standard permits).  In
@@ -129,18 +129,18 @@ this situation <code>j</code> will overflow (which is undefined
 behaviour for signed integers) and the second loop will finish
 when <code>j</code> reaches <code>-1</code>.  This is also a situation
 where <code>b/a</code> will yield undesired true value hence it is
-better to use <code>j&lt;i</code> comparison.</p>
+better to use <code>j&lt;i</code> comparison.
 
 <p><b>Implicit declaration</b>.  Obviously, to output the number we’ve
 used <code>printf</code> function.  This is a straight-forward approach,
 yet we seem to be missing said function’s declaration.  And yet another
 time, this is quite all right from C89’s point of view.  If function
 declaration is missing an implicit declaration based on types of passed
-arguments with <code>int</code> as a return type is assumed.</p>
+arguments with <code>int</code> as a return type is assumed.
 
 <p>Let’s stay here for a second because this is a good
 opportunity to yet again remind everybody not to cast result of
-<code>malloc</code> function.  Consider the following code:</p>
+<code>malloc</code> function.  Consider the following code:
 
 <pre>
 int main(void) {
@@ -155,7 +155,7 @@ assume a <code>int malloc(size_t)</code> prototype and then (because
 of cast operator) will obediently convert <code>int</code> into
 a pointer to <code>int</code>.  Without the cast, compiler will have
 to complain about implicit conversion from <code>int</code> to pointer
-type reminding about the header file:</p>
+type reminding about the header file:
 
 <pre>
 int main(void) {
@@ -169,18 +169,18 @@ printing code is the lack of return statement.  C99 specifies that
 returns a value of zero.’  One cannot hide behind C99 though since the
 code uses various C89 only ‘features’ (implicit type, implicit
 function declaration, etc).  Yes, this is another undefined behaviour
-in the code.</p>
+in the code.
 
 <p>Hope you have all enjoyed this little brain-teaser and maybe even
 got some interesting information about the C language from this
-entry.</p>
+entry.
 
 <!-- COMMENT -->
 <!-- date: 2010-12-12 21:50:52 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>72 actually since "%d " needs to be "%d\n".</p>
+<p>72 actually since "%d " needs to be "%d\n".
 
 <p>Three hints:
 <ol>
@@ -194,30 +194,30 @@ entry.</p>
 <!-- nick: Wasacz -->
 <!-- nick_url: http://blog.wasacz.net -->
 
-<p>Hints applied: https://ideone.com/iHe9v</p>
+<p>Hints applied: https://ideone.com/iHe9v
 
-<p>;)</p>
+<p>;)
 
 <!-- COMMENT -->
 <!-- date: 2010-12-13 11:19:00 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Yep, that’s it. :) When I get back from work I’ll also post a version with one loop as it may be interesting.</p>
+<p>Yep, that’s it. :) When I get back from work I’ll also post a version with one loop as it may be interesting.
 
 <!-- COMMENT -->
 <!-- date: 2010-12-13 11:24:15 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Ha! Actually, modifying your code I got down to 60. ;) Hint: Does you need the literal <code>1</code> value in the source code?</p>
+<p>Ha! Actually, modifying your code I got down to 60. ;) Hint: Does you need the literal <code>1</code> value in the source code?
 
 <!-- COMMENT -->
 <!-- date: 2010-12-13 11:54:38 -->
 <!-- nick: Wasacz -->
 <!-- nick_url: http://blog.wasacz.net -->
 
-<p>Wow ;) https://ideone.com/LqjjH</p>
+<p>Wow ;) https://ideone.com/LqjjH
 
 <!-- COMMENT -->
 <!-- date: 2010-12-14 08:42:44 -->
@@ -225,13 +225,13 @@ entry.</p>
 <!-- nick_url: http://rozie.blox.pl/ -->
 
 <p>Perlgolfa widziałem, ale Cgolf? 8-o<br />
-Fajne. ;-)</p>
+Fajne. ;-)
 
 <!-- COMMENT -->
 <!-- date: 2010-12-29 22:40:30 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Still, you can optimise it a bit (85):</p>
+<p>Still, you can optimise it a bit (85):
 
 <pre>main(n,j){long long x=0x3986291891100;for(puts("2");x/=4;printf("%d\n",n+=x%4*2+2));}</pre>

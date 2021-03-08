@@ -13,7 +13,7 @@ Windowsach NT sprawa może wyglądać trochę inaczej).  Co więcej, opis
 dotyczy LILO, ale ogólna idea może zostać
 zastosowana również w przypadku innych bootloaderów (zmieniają się
 jedynie pliki konfiguracyjne i polecenie updatowania
-bootloadera).</p>
+bootloadera).
 
 <!-- EXCERPT -->
 
@@ -21,7 +21,7 @@ bootloadera).</p>
 przynajmniej Win2k) można zawsze przywrócić stan MBR
 uruchamiający loadera Windowsów, więc w razie jakichś niepowodzeń
 można z tego skorzystać. Opisane jest to <a href="#winrescue">na
-końcu</a> artykułu.</p>
+końcu</a> artykułu.
 
 <p>Informuje również, że opisuję tutaj sposób, który przez niektórych
 ludzi (nie wiem czemu) jest niezalecany.  IMO jest
@@ -30,10 +30,10 @@ Windowsa oraz ma włączone wyświetlanie menu Windowsów.  W takim
 przypadku będzie zmuszony najpierw przejść przez
 LILO (czy inny bootloader Linuksa), a potem dopiero
 wchodzi do menu Windowsów.  Inny sposób powoduje, że wszystko wygląda
-dokładnie na odwrót.</p>
+dokładnie na odwrót.
 
 <p>Tradycyjnie, z góry zaznaczam, że nie ponoszę odpowiedzialności za
-jakiekolwiek szkody wynikające z korzystania z poniższego opisu.</p>
+jakiekolwiek szkody wynikające z korzystania z poniższego opisu.
 
 <h2 id="livecd">LiveCD</h2>
 
@@ -41,7 +41,7 @@ jakiekolwiek szkody wynikające z korzystania z poniższego opisu.</p>
 bootowalna bezpośrednio z CD (np.
 Knoppix, LiveSlack), bądź przynajmniej płyta instalacyjna GNU/Linuksa
 (np. Slackware’a) to prawdopodobnie z dużym powodzeniem
-można ją użyć do rozwiązania problemu.</p>
+można ją użyć do rozwiązania problemu.
 
 <p>Jeśli przy bootowaniu z CD odpala się
 LILO i czeka na wpisanie magicznych parametrów lub
@@ -54,7 +54,7 @@ to <code>bare.i</code>), a <i>&lt;rootdev&gt;</i> to partycja, na której
 jest root file system (tj. "<code>/</code>"; np.
 u mnie jest to
 <code>hda1</code>).  Cała linijka może wyglądać tak: <code>bare.i
-root=/dev/hda1 ro noinitrd</code>.</p>
+root=/dev/hda1 ro noinitrd</code>.
 
 <p>Jeżeli nie masz zielonego pojęcia jakie winno być
 <i>&lt;rootdev&gt;</i> to na 99% gdzieś w <code>/etc/lilo.conf</code>
@@ -62,7 +62,7 @@ root=/dev/hda1 ro noinitrd</code>.</p>
 odczytać odpalając Linuksa z płyty.  Należy jedynie pamiętać, żeby
 potem odczytać prawidłowy plik (tj. ten z dysku))
 znajdziesz opcje root z odpowiednim wpisem.  Będzie ona poprzedzona
-wpisem <code>image = <i>&lt;costam&gt;</i></code>, np.:</p>
+wpisem <code>image = <i>&lt;costam&gt;</i></code>, np.:
 
 <pre>
 image = /boot/bzImage
@@ -71,7 +71,7 @@ image = /boot/bzImage
 <p>Jeżeli po wciśnięciu Enter wszystko będzie działać poprawnie i
 odpali się zainstalowany na dysku GNU/Linux to można przejść do <a
 href="#liloinst">instalacji LILO</a>.  W przeciwnym
-wypadku należy próbować innych sztuczek:</p>
+wypadku należy próbować innych sztuczek:
 
 <h2 id="chroot">LiveCD i chroot</h2>
 
@@ -85,12 +85,12 @@ Całość można wykonać następującym poleceniem: <code>mkdir /mnt/root
 &amp;&amp; mount /dev/<i>&lt;rootdev&gt;</i> /mnt/root &amp;&amp;
 chroot /mnt/root &amp;&amp; mount -a &amp;&amp; echo OK</code>
 (<i>&lt;rootdev&gt;</i> to ciągle ta sama partycja z root file
-systemem).</p>
+systemem).
 
 <p>Jest pewne niezerowe prawdopodobieństwo (w gruncie rzeczy zawsze
 jest jakieś prawdopodobieństwo), że wszystko zadziała prawidłowo
 i jeśli tak to wystarczy już zainstalować to nieszczęsne
-LILO.</p>
+LILO.
 
 <h2 id="liloinst">Instalacja LILO</h2>
 
@@ -98,7 +98,7 @@ LILO.</p>
 należy wykonywać jako root).  Przede wszystkim należy upewnić się co
 do wartości opcji <code>boot</code>, należy podać: <code>boot =
 /dev/hda</code> .  Następnie dodać wpis z Windowsami - będzie on
-wyglądał mniej więcej tak:</p>
+wyglądał mniej więcej tak:
 
 <pre>
 other = /dev/<i>&lt;windev&gt;</i>
@@ -109,7 +109,7 @@ other = /dev/<i>&lt;windev&gt;</i>
 można odpalić polecenie: <code>fdisk -l /dev/hda</code> i wyszukać
 pierwszą partycję, która w kolumnie System ma „Win95” lub „FAT16”.
 Dodatkowo, partycja ta powinna być oznaczona gwiazdką w kolumnie Boot.
-Jeżeli nie jest to może być lipnie. ;) Ja mam coś takiego:</p>
+Jeżeli nie jest to może być lipnie. ;) Ja mam coś takiego:
 
 <pre>
 Disk /dev/hda: 120.0 GB, 120034123776 bytes
@@ -129,7 +129,7 @@ Units = cylinders of 16065 * 512 = 8225280 bytes
 jeszcze polecenie <code>mount</code> i tam (jeżeli partycje windowsowe są
 podmontowane) powinna być gdzieś szukana informacja.  Dla przykładu, u
 mnie jedna z linijek wygląda następująco (przełamanie linii dodane
-ręcznie):</p>
+ręcznie):
 
 <pre>
 /dev/hda2 on /C type vfat (rw,umask=0,shortname=winnt,codepage=852,
@@ -139,13 +139,13 @@ ręcznie):</p>
 opcja <code>prompt</code>, a <code>timeout</code> jest ustawiony na conajmniej
 10 (jest on podawany w dziesiątych sekundy).  Po wprowadzeniu
 koniecznych zmian wystarczy odpalić LILO poleceniem:
-<code>lilo -v</code></p>
+<code>lilo -v</code>
 
 <p>Jeżeli wszystko pójdzie dobrze to przy następnym reboocie winien
 pokazać się napis "<i>LILO</i>" i powinniśmy móc wybrać system
 operacyjny.  Jeżeli nic nie będzie się chciało włączyć, należy
 skorzystać z płyty instalacyjnej Windowśów, żeby przywrócić poprzedni
-MBR.</p>
+MBR.
 
 <h2 id="winrescue">Przywracanie MBR Windowsów</h2>
 
@@ -155,78 +155,78 @@ Console.  Zaraz po starcie instalatora trzeba wybrać opcję naprawiania
 systemu (wciskając przycisk R), a potem wybrać konsolę (wciskając C) -
 może to się różnić zależnie od wersji Windowsów.  Po zalogowaniu się
 (wymagane jest hasło administratora) wystarczy uruchomić polecenie:
-<code>fixmbr</code> i zrestartować komputer.</p>
+<code>fixmbr</code> i zrestartować komputer.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-12 18:52:59 -->
 <!-- nick: Stanisław ‘dozzie’ Klekot -->
 <!-- nick_url: http://dozzie.jogger.pl -->
 
-<p>Przeprazam bardzo, ale Slackware i pochodne Slaksa w żadnym przypadku nie są dystrybucjami GNU/Linuksa, tylko po prostu Linuksa.</p>
+<p>Przeprazam bardzo, ale Slackware i pochodne Slaksa w żadnym przypadku nie są dystrybucjami GNU/Linuksa, tylko po prostu Linuksa.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-12 18:56:01 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Jasne… A te całe coreutils, binutils, findutils, bash i wiele innych to Linus T. też sam napisał na poczekaniu?</p>
+<p>Jasne… A te całe coreutils, binutils, findutils, bash i wiele innych to Linus T. też sam napisał na poczekaniu?
 
 <!-- COMMENT -->
 <!-- date: 2008-02-12 19:22:36 -->
 <!-- nick: Stanisław ‘dozzie’ Klekot -->
 <!-- nick_url: http://dozzie.jogger.pl -->
 
-<p>A Apache, X.Org, KDE, GNOME, zsh, BerkeleyDB, Busyboksa, wszystkie daemony *cron i masę innych to niby GNU stworzyło?</p>
+<p>A Apache, X.Org, KDE, GNOME, zsh, BerkeleyDB, Busyboksa, wszystkie daemony *cron i masę innych to niby GNU stworzyło?
 
 <!-- COMMENT -->
 <!-- date: 2008-02-12 19:25:01 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>A mówię, że stworzyło? Ale to co potocznie ludzie nazywają Linuksem jest bardziej GNU niż Linux.</p>
+<p>A mówię, że stworzyło? Ale to co potocznie ludzie nazywają Linuksem jest bardziej GNU niż Linux.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-12 19:32:17 -->
 <!-- nick: Stanisław ‘dozzie’ Klekot -->
 <!-- nick_url: http://dozzie.jogger.pl -->
 
-<p>Tylko jeśli się uprzeć i pousuwać wszystkie użyteczne programy, zostawiając li tylko coreutils i gcc.</p>
+<p>Tylko jeśli się uprzeć i pousuwać wszystkie użyteczne programy, zostawiając li tylko coreutils i gcc.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-12 19:38:37 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Ośmielę się nie zgodzić. Linux to samo jądro, stosunkowo niewielka część systemu operacyjnego. Narzędzia GNU stanowią, w moim odczuciu, znacznie większą część całości. Cała reszta: Apache, X.Org, KDE, GNOME, zsh, BDB itp są kolejnymi składowymi. Dlatego właśnie uważam, iż w „Linuksach” więcej jest GNU niż Linuksa.</p>
+<p>Ośmielę się nie zgodzić. Linux to samo jądro, stosunkowo niewielka część systemu operacyjnego. Narzędzia GNU stanowią, w moim odczuciu, znacznie większą część całości. Cała reszta: Apache, X.Org, KDE, GNOME, zsh, BDB itp są kolejnymi składowymi. Dlatego właśnie uważam, iż w „Linuksach” więcej jest GNU niż Linuksa.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-12 19:43:43 -->
 <!-- nick: Stanisław ‘dozzie’ Klekot -->
 <!-- nick_url: http://dozzie.jogger.pl -->
 
-<p>Ciekawe. Bez GNU da się całkiem przyzwoicie obejść (Mikrotiki wszelkiej maści, Maemo, Familiar…), a bez kernela linuksowego GNU jest praktycznie bezużyteczny. To po raz.</p>
+<p>Ciekawe. Bez GNU da się całkiem przyzwoicie obejść (Mikrotiki wszelkiej maści, Maemo, Familiar…), a bez kernela linuksowego GNU jest praktycznie bezużyteczny. To po raz.
 
-<p>Poza tym Linux to nie samo jądro, ale również właśnie cały śmietnik userspace’owy, wliczając libc, kompilatory, powłoki, środowisko graficzne i tak dalej. Dlatego mówiąc o jądrze nie mówi się o Linuksie, tylko o kernelu Linuksa.</p>
+<p>Poza tym Linux to nie samo jądro, ale również właśnie cały śmietnik userspace’owy, wliczając libc, kompilatory, powłoki, środowisko graficzne i tak dalej. Dlatego mówiąc o jądrze nie mówi się o Linuksie, tylko o kernelu Linuksa.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-12 19:50:57 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Narzędzia GNU możesz zainstalować na Solarisie. Nie potrzebujesz do tego wcale Linuksa.</p>
+<p>Narzędzia GNU możesz zainstalować na Solarisie. Nie potrzebujesz do tego wcale Linuksa.
 
-<p>A z nazewnictwem, jak widać, bywa różnie. Dla mnie Linux to samo jądro. Niby czemu „cały śmietnik” miałby się również nazywać Linux? Wszakże w skład tego „śmietnika” wchodzi wiele programów, które mogą sobie bardzo dobrze radzić bez Linuksa.</p>
+<p>A z nazewnictwem, jak widać, bywa różnie. Dla mnie Linux to samo jądro. Niby czemu „cały śmietnik” miałby się również nazywać Linux? Wszakże w skład tego „śmietnika” wchodzi wiele programów, które mogą sobie bardzo dobrze radzić bez Linuksa.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-12 19:59:13 -->
 <!-- nick: Stanisław ‘dozzie’ Klekot -->
 <!-- nick_url: http://dozzie.jogger.pl -->
 
-<p>A próbowałeś kompilować narzędzia projektu GNU na rzeczonym Solarisie? Bo o ile dobrze pamiętam, trzeba trochę je było poprawiać zanim się skompilowały i zadziałały. Poza tym czy to byłby już GNU/Solaris? W żadnym przypadku.</p>
+<p>A próbowałeś kompilować narzędzia projektu GNU na rzeczonym Solarisie? Bo o ile dobrze pamiętam, trzeba trochę je było poprawiać zanim się skompilowały i zadziałały. Poza tym czy to byłby już GNU/Solaris? W żadnym przypadku.
 
 <!-- COMMENT -->
 <!-- date: 2008-02-12 20:09:34 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Nie próbowałem, ale z powodzeniem korzystam z binutils, basha i gcc na moim uczelnianym koncie na Solarisie. Czy byłby to GNU/Solaris można się sprzeczać, ale pomiędzy Solarisem, a Linuksem jest taka podstawowa różnica, że Solaris od zawsze było nazwą całego systemu operacyjnego, a Linux to nazwa jądra.</p>
+<p>Nie próbowałem, ale z powodzeniem korzystam z binutils, basha i gcc na moim uczelnianym koncie na Solarisie. Czy byłby to GNU/Solaris można się sprzeczać, ale pomiędzy Solarisem, a Linuksem jest taka podstawowa różnica, że Solaris od zawsze było nazwą całego systemu operacyjnego, a Linux to nazwa jądra.

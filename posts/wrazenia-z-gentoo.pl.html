@@ -13,18 +13,18 @@
  o istnieniu <a href="http://www.slamd64.com/">Slamd64</a>, ale od tej
  dystrybucji wolę trzymać się z daleka… (Update: Na chwilę obecną, gdy
  dodaję ten wpis do Joggera, mogę powiedzieć, że Slamd64 12.0 nie jest
- wcale takie złe i działa całkiem stabilnie i przyjemnie.)</p>
+ wcale takie złe i działa całkiem stabilnie i przyjemnie.)
 
 <!-- EXCERPT -->
 
 <p>Poniższego artykułu nie należy traktować jako opisu rzetelnych
  badań, ale jako moją prywatną opinię na temat Gentoo oraz różnych
- aspektów z nim związanych.</p>
+ aspektów z nim związanych.
 
 <p>Chciałbym również zaznaczyć, że początkowo nie byłem do Gentoo
  nastawiony negatywnie.  Owszem, żałowałem trochę, że odchodzę od
  Slackware’a, ale mimo wszystko cieszyłem się z myśli, że w końcu
- wykorzystam pełen potencjał swojej 64 bitowej maszyny.</p>
+ wykorzystam pełen potencjał swojej 64 bitowej maszyny.
 
 <h2 id="compilation">Kompilacja</h2>
 
@@ -32,19 +32,19 @@
  Pojawia się pytanie po co?
  W <a href="http://openbsd.chem.uw.edu.pl/faq/pl/index.html">FAQ-u
  OpenBSD</a> <a href="http://openbsd.chem.uw.edu.pl/faq/pl/faq5.html#WhySrc">wyczytać
- można</a> co następuje:</p>
+ można</a> co następuje:
 
 <blockquote>
- <p>Dlaczego potrzebuję systemu zbudowanego ze źródeł?</p>
+ <p>Dlaczego potrzebuję systemu zbudowanego ze źródeł?
 
- <p>Właściwie, jest bardzo prawdopodobne że nie potrzebujesz.</p>
+ <p>Właściwie, jest bardzo prawdopodobne że nie potrzebujesz.
 
- <p>Kilka powodów dlaczego NIE budować ze źródeł: […]</p>
+ <p>Kilka powodów dlaczego NIE budować ze źródeł: […]
  <ul>
   <li>NIE uzyskasz lepszej wydajności systemu poprzez zbudowanie go ze
-   źródeł.</li>
+   źródeł.
   <li>Zmiany opcji kompilatora mogą bardziej zepsuć twój system niż go
-   udoskonalić.</li>
+   udoskonalić.
  </ul>
 </blockquote>
 
@@ -54,7 +54,7 @@
  istotnie — flagi kompilatora nieznacznie wpływają na szybkość
  działania aplikacji toteż aplikacja skompilowana dla procesora i486
  z optymalizacją dla i686 będzie działać praktycznie tak samo szybko
- jak ta sama aplikacja skompilowana dla procesora i686.</p>
+ jak ta sama aplikacja skompilowana dla procesora i686.
 
 <p>Pozostaje jednak konfiguracja samego programu przed skompilowaniem
  (np. przy użyciu <code>./configure</code>).  Sytuacja tutaj wygląda
@@ -66,18 +66,18 @@
  <a href="http://www.postgres.org/">PostgreSQL</a>-a, nagle zostanie
  przekompilowana z jego obsługą, bo chcieliśmy, żeby jakaś inna
  aplikacja tą bazę danych obsługiwała więc dodaliśmy odpowiedni wpis
- do <code>USE</code>.</p>
+ do <code>USE</code>.
 
 <p>Oczywiście można edytować <i>ebuild</i>y, ale w takim razie po co
  ten cały <code>emerge</code> i <code>portage</code>, skoro i tak będzie
  trzeba ręcznie konfigurować programy?  W tym momencie czym to się
  różni od ściągnięcia źródeł paczki Slackware’a i edycji
- <i>SlackBuild</i>a? Moim zdaniem niczym.</p>
+ <i>SlackBuild</i>a? Moim zdaniem niczym.
 
 <p>Mogę jeszcze dodać, że w moim przypadku Gentoo, w którym wszystko
  było kompilowane z odpowiednimi flagami i jako aplikacje 64 bitowe
  działał zauważalnie wolniej niż Slackware, w którym część paczek była
- dla i486, a część i686.</p>
+ dla i486, a część i686.
 
 <h2 id="auto">Automatyka i zależności</h2>
 
@@ -94,7 +94,7 @@
  z kernelem i jego źródłami.  Ostatecznie coś tam wyczarowałem co
  teoretycznie miało spowodować, że <code>emerge</code> miał myśleć, że
  paczka ze źródłami kernela jest zainstalowana, ale jakoś niezbyt
- chciało to działać.</p>
+ chciało to działać.
 
 <p>Rzecz jasna można robić <i>ebuild</i>a, ale skoro wszystko robi się
  automatycznie to dlaczego mam tam grzebać? ;) O wiele bardziej
@@ -102,7 +102,7 @@
  całkiem dobrze - jeżeli zainstaluje się jakąś paczkę i brakować jej
  będzie zależności to przy uruchomieniu aplikacji widać komunikat
  błędu z informacją, że brakuje jakiejś biblioteki.  Wystarczy
- doinstalować paczkę, w której się ona znajduje i po sprawie.</p>
+ doinstalować paczkę, w której się ona znajduje i po sprawie.
 
 <p>Wiele osób zarzuca systemom bez zależności, że skompilowanie czegoś
  lub dodanie jakiejś paczki jest mordęgą, bo trzeba ręcznie polować na
@@ -111,7 +111,7 @@
  wywalam) i rzadko mi się zdarza, żebym musiał doinstalowywać jakieś
  biblioteki - zazwyczaj wszystko jest.  A aplikacje, które wymagały
  więcej niż jednej biblioteki, można zliczyć na palcach jednej
- ręki.</p>
+ ręki.
 
 <p>Należy również pamiętać, że system zależności z błędami jest
  znacznie gorszy (pod każdym względem) od systemu bez zależności.  Co
@@ -119,7 +119,7 @@
  przez siebie aplikację? W końcu jeżeli w repozytorium jest kilka
  tysięcy programów i bibliotek to wcale nie trudno o pomyłkę.
  Konsekwencje takiego błędu mogą być często opłakane a już na pewno
- irytujące.</p>
+ irytujące.
 
 <h2 id="enough">Miarka się przebrała</h2>
 
@@ -129,7 +129,7 @@
  <code>emerge</code>) zaczął w pewnym momencie ściągać wszystko
  z Internetu, gdy tymczasem przede mną leżała płytka z wypalonymi
  pakietami binarnymi i czymś tam jeszcze - niby nic, ale dla kogoś
- o niezbyt szybkim łączu to spora strata czasu.</p>
+ o niezbyt szybkim łączu to spora strata czasu.
 
 <p>Byłem w stanie wybaczyć temu systemowi, że bezsensownie (moim
  zdaniem) ściąga źródła wszystkiego z Internetu i traci czas na
@@ -137,9 +137,9 @@
  uaktualnić.  Niby wszystko jest najnowsze, ale jako, że gość sam mi
  wszystko instalował to ostatecznie nie do końca wiedziałem co mam na
  dysku, a przecież wydanie komendy do aktualizacji wszystkich pakietów
- na pewno nie zaszkodzi.</p>
+ na pewno nie zaszkodzi.
 
-<p>Tak właśnie myślałem.  I grubo się myliłem.</p>
+<p>Tak właśnie myślałem.  I grubo się myliłem.
 
 <p>Po jakimś czasie <code>emerge</code> przerwał pracę z jakimś błędem.
  Nie byłem w stanie uruchomić żadnego programu - w większości próby
@@ -149,7 +149,7 @@
  całe <code>coreutils</code> (czy jak ta paczka się nazywa na Gentoo) lub
  jakąś podobną, krytyczna do działania systemu paczkę co skutecznie
  uniemożliwiło mi dalsze z niego korzystanie.  Od tego momentu Gentoo
- jest niemile widziany na moim dysku.</p>
+ jest niemile widziany na moim dysku.
 
 <h2 id="epilogue">Epilog</h2>
 
@@ -159,7 +159,7 @@
  się o milisekundę krócej.  Największy problem polega na tym, że
  kompilacja ma sens tam gdzie stawianie Gentoo trwałoby miesiące,
  czyli na wolnych komputerach, bo właśnie tam różnice prędkości są
- najbardziej zauważalne.</p>
+ najbardziej zauważalne.
 
 <p>Nie twierdze, że ręczna kompilacja to coś złego.  Sam kompiluje
  niektóre aplikacje pomimo, że są one dostępne spaczkowane dla
@@ -170,17 +170,17 @@
  (<a href="http://www.fvwm.org/">FVWM</a>-a konfigurowałem kilka dni),
  ale okazuje się, że blado wypadam na tle użytkowników Gentoo (bez
  obrazy dla kogokolwiek), którzy potrafią godzinami kompilować
- przeróżne aplikacje.</p>
+ przeróżne aplikacje.
 
 <!-- COMMENT -->
 <!-- date: 2013-10-03 19:31:04 -->
 <!-- nick: Funfel -->
 
-<p>Za szybko się poddałeś. Sporo trzeba poczytać w Necie o Gentoo nawet kilkakrotnie aby go ogarnąć. Ja instalując ten system jakiś rok temu też miałem wiele problemów ale nauczyłem się jak je pokonywać i teraz cieszę się z tego systemu i raczej go nie usunę.</p>
+<p>Za szybko się poddałeś. Sporo trzeba poczytać w Necie o Gentoo nawet kilkakrotnie aby go ogarnąć. Ja instalując ten system jakiś rok temu też miałem wiele problemów ale nauczyłem się jak je pokonywać i teraz cieszę się z tego systemu i raczej go nie usunę.
 
 <!-- COMMENT -->
 <!-- date: 2013-10-03 21:02:57 -->
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>Me… Slackware ma oficjalne wsparcie dla x86_64, więc nie mam powodu, żeby szukać czegoś innego.</p>
+<p>Me… Slackware ma oficjalne wsparcie dla x86_64, więc nie mam powodu, żeby szukać czegoś innego.
