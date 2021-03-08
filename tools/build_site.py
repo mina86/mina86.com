@@ -425,14 +425,12 @@ class Writer(object):
 
         def write(val, **kw):
             val = re.sub('\s+', ' ', val)
-            val = re.sub('> <', '><', val)
-            val = val.strip()
             if kw:
                 kw.setdefault('author', author)
                 if 'date' in kw:
                     kw['date'] = kw['date'].strftime('%Y-%m-%dT%H:%M:%SZ')
                 val %= kw
-            fd.write(val)
+            fd.write(val.replace('> <', '><').strip())
 
         write('''
             <?xml version="1.0" encoding="UTF-8"?>
