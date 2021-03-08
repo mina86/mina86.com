@@ -546,13 +546,13 @@ def generate(writer, site):
             year = years[i]
             write_html('%d/index.%s.html' % (year, lang), 'index', {
                 'title': str(year),
-                'canonical': '%s/%d/' % (BASE_HREF, year),
+                'canonical': '/{}/'.format(year),
                 'prev': {
-                    'href': '/%d/' % years[i - 1],
+                    'href': '/{}/'.format(years[i - 1]),
                     'title': str(years[i - 1])
                 } if i else None,
                 'next': {
-                    'href': '/%d/' % years[i + 1],
+                    'href': '/{}/'.format(years[i + 1]),
                     'title': str(years[i + 1])
                 } if i + 1 < len(years) else None,
                 'entries': by_year[year],
@@ -579,7 +579,7 @@ def generate(writer, site):
             entries = sorted(cat.entries, key=lambda p: p.date, reverse=True)
             write_html(filename, 'index', {
                 'title': T(cat),
-                'canonical': cat.url,
+                'canonical': cat.href,
                 'entries': entries,
                 'archives': archives,
                 'categories': categories,
@@ -601,7 +601,7 @@ def generate(writer, site):
             filename = '%s.%s.html' % (str(i) if i else 'index', lang)
             write_html(filename, 'index', {
                 'title': T('Page %d') % i if i else None,
-                'canonical': BASE_HREF + href(i),
+                'canonical': href(i),
                 'prev': {
                     'href': href(i + 1),
                     'title': T('Older entries')
@@ -630,7 +630,7 @@ def generate(writer, site):
                 'next': posts[i - 1] if i else None,
                 'entry': cur,
                 'prev': posts[i + 1] if i + 1 < len(posts) else None,
-                'canonical': cur.url,
+                'canonical': cur.href,
                 'archives': archives,
                 'categories': categories,
             })
@@ -640,7 +640,7 @@ def generate(writer, site):
         for entry in site.pages:
             write_html(entry.filename_for_lang(lang), 'page', {
                 'entry': entry,
-                'canonical': entry.url,
+                'canonical': entry.href,
                 'archives': archives,
                 'categories': categories,
             })
