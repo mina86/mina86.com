@@ -451,6 +451,23 @@ class Writer(object):
               page_url=e(BASE_HREF + href),
               date=entries[0].date)
         for entry in entries[:10]:
+            body = str(entry.body)
+            if entry.body.needs_math:
+                if entry.lang == 'pl':
+                    msg = ('Ten wpis zawiera formuły matematyczne, które mogą '
+                           'zostać niepoprawnie wyświetlone w Twoim czytniku. '
+                           'Zalecane jest czytanie <a href="#m">tego artykułu '
+                           'na stronie internetowej</a>.')
+                else:
+                    msg = ('This entry includes Maths formulæ which may be '
+                           'rendered incorrectly by your feed reader. You may '
+                           'prefer reading <a href="#m">it on the web</a>.')
+                body = ('<script defer src={src}></script>'
+                        '<p><small>{msg}</small>{body}').format(
+                            src=('https://cdn.jsdelivr.net'
+                                 '/npm/mathjax@3/es5/tex-chtml.js'),
+                            msg=msg,
+                            body=body)
             write('''
                 <entry xml:base="%(url)s">
                   <title>%(subject)s</title>
@@ -467,9 +484,9 @@ class Writer(object):
                       entry.permalink),
                   url=e(entry.url),
                   date=entry.date,
-                  lang=entry.lang or 'en',
+                  lang=entry.lang,
                   body=e(compilers.minify_html(
-                      str(entry.body), static_mappings=self._static_mappings)))
+                      body, static_mappings=self._static_mappings)))
         write('</feed>')
 
         self.write_file(filename, fd.getvalue())
