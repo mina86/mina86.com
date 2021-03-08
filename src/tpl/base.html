@@ -71,7 +71,7 @@
 {%- set full = post_page or not entry.body.excerpt -%}
   <article {{ attr('class', 'q', full) }}>
 
-    <h1><a href="{{ entry.href }}"
+    <h1><a lang="{{ entry.lang }}" href="{{ entry.href }}"
            title="{{ T('Permanent link to the entry.') }}">{{
         entry.subject | safe }}</a></h1>
 
