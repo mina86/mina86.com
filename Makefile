@@ -28,7 +28,7 @@ $(foreach d,mina86.nfshost.com mina86.name nazarewicz.name, \
 
 public: public/mina86.com
 public/mina86.com: static/mina86.pub static/cv/index.html
-	@+exec python3 ./tools/build.py $@
+	@exec python3 ./tools/build.py --make=$(MAKE) $@
 
 touch:
 	touch src/*.* src/data/*.*

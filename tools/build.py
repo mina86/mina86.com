@@ -45,28 +45,20 @@ def print_action(action, *target):
     print(' %-4s %s' % (action, ' '.join(target)))
 
 
-_CPU_COUNT = None
+class Make(object):
+    _make = 'make'
 
-def cpu_count():
-    global _CPU_COUNT
-    if _CPU_COUNT is None:
-        n = 0
-        with open('/proc/cpuinfo') as fd:
-            for line in fd:
-                if line.startswith('processor '):
-                    n += 1
-        _CPU_COUNT = n
-    return _CPU_COUNT or 1
+    def __call__(self, targets):
+        no_jobserver = not re.search('--jobserver-(?:fds|auth)',
+                                     os.environ.get('MAKEFLAGS', ''))
+        cmd = [self._make, '-s']
+        cmd.extend(targets)
+        subprocess.check_call(cmd, close_fds=no_jobserver)
 
-def make(targets):
-    makeflags = os.environ.get('MAKEFLAGS') or os.environ.get('MFLAGS')
-    no_jobserver = not bool(makeflags and
-                            re.search('--jobserver-(?:fds|auth)', makeflags))
-    args = ['make', '-s']
-    if no_jobserver:
-        args.append('-j{}'.format(cpu_count() * 2))
-    args.extend(targets)
-    subprocess.check_call(args, close_fds=no_jobserver)
+    def set_exe(self, make):
+        self._make = make
+
+make = Make()
 
 
 class Writer(object):
@@ -220,8 +212,10 @@ def cleanup(out_dir, files):
             os.unlink(path)
 
 
-def main(argv):
-    _, out_dir = argv
+def main(args):
+    if args[0].startswith('--make='):
+        make.set_exe(args.pop(0)[7:])
+    out_dir, = args
 
     os.chdir(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -249,4 +243,4 @@ def main(argv):
 
 
 if __name__ == '__main__':
-    main(sys.argv)
+    main(sys.argv[1:])
