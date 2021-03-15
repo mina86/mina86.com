@@ -111,15 +111,25 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
     def __init__(self, *args: typing.Any, **kw: typing.Any):
         self._static_mappings = kw.pop('static_mappings', None)
         self._src_dir = kw.pop('src_dir', None)
+        self._self = [[1, kw.pop('self_url', None)]]
         super().__init__(*args, **kw)
 
     def handle_starttag(self, tag: str, attrs: _Attributes) -> None:
         self._transform_attrs(tag, attrs)
+        self._self[-1][0] += 1
         super().handle_starttag(tag, attrs)
 
     def handle_startendtag(self, tag: str, attrs: _Attributes) -> None:
         self._transform_attrs(tag, attrs)
+        if not self._self[-1][0]:
+            self._self.pop()
         super().handle_startendtag(tag, attrs)
+
+    def handle_endtag(self, tag):
+        self._self[-1][0] -= 1
+        if not self._self[-1][0]:
+            self._self.pop()
+        super().handle_endtag(tag)
 
     def _transform_attrs(self, tag: str, attrs: _Attributes) -> None:
         i = 0
@@ -128,6 +138,10 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
             if (tag in ('path', 'text', 'use', 'rect', 'circle') and
                 attr in ('x', 'cx', 'y', 'cy') and
                 value == '0'):
+                del attrs[i]
+                continue
+            if attr == 'self':
+                self._self.append([0, value])
                 del attrs[i]
                 continue
             if value:
@@ -156,9 +170,15 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
                                      'meta content'):
             # Comma separated lists, remove unnecessary spaces around commas.
             value = re.sub(r' ?, ?', ',', value)
-        elif attr in ('href', 'src') and value.startswith('https://'):
-            # Strip https:// from URLs
-            value = value[6:]
+        elif attr in ('href', 'src'):
+            if value.startswith('https://'):
+                value = value[6:]
+            if value.startswith('//mina86.com/'):
+                value = value[12:]
+            if value.startswith('/self'):
+                s = self._self[-1][1]
+                assert s is not None
+                value = s + value[5:]
         return value
 
     def handle_data(self, data):

@@ -484,7 +484,8 @@ class Writer(object):
                   date=entry.date,
                   lang=entry.lang,
                   body=e(compilers.minify_html(
-                      body, static_mappings=self._static_mappings)))
+                      body, static_mappings=self._static_mappings,
+                      self_url='')))
         write('</feed>')
 
         self.write_file(filename, fd.getvalue())

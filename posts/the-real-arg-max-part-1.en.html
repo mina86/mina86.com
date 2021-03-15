@@ -279,10 +279,10 @@ posh: /bin/true: Argument list too long
 
 <p>To quickly recap all the information:
 <ul>
-  <li>The maximum length of the arguments to the <code>execve</code> syscall is
-    the smallest of <code>ARG_MAX</code>, the maximum stack size† or 6 MiB
-    where <code>ARG_MAX</code> is the biggest of one fourth of the maximum stack
-    size or 128 KiB.
+  <li id=b1>The maximum length of the arguments to the <code>execve</code>
+    syscall is the smallest of <code>ARG_MAX</code>, the maximum stack
+    size<a href=#f1>†</a> or 6 MiB where <code>ARG_MAX</code> is the biggest of
+    one fourth of the maximum stack size or 128 KiB.
   <li>The limit covers: i) all command line arguments, ii) all environment
     variables, iii) pointers to the former two present in <code>argv</code>
     and <code>environ</code> arrays and iv) the path to the executable used to
@@ -297,10 +297,10 @@ posh: /bin/true: Argument list too long
   code responsible for implementing the limit so stay tuned (or should I say
   smash that Atom feed button?).
 
-<p>† Roughly speaking.  It’s of course impossible to use the entire stack for
-  arguments and environment variables since there would be no space left for any
-  other information or setting up stack frame.  As such, the actual arg limit is
-  capped at less than maximum stack size.
+<p id=f1><a href=#b1>†</a> Roughly speaking.  It’s of course impossible to use
+  the entire stack for arguments and environment variables since there would be
+  no space left for any other information or setting up stack frame.  As such,
+  the actual arg limit is capped at less than maximum stack size.
 
 <p style="margin-top: 2em">PS. By the way, despite all the BSD influences in
   XNU, I don’t consider macOS to be a BSD.

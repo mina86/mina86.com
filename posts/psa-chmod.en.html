@@ -29,10 +29,11 @@
   <pre>sudo sh -c 'umask 077; head -c 64 /dev/random &gt;keyfile'</pre>
 </blockquote>
 
-<p>The first method creates the file as world-readable† and before its
-  permission are changed <em>anyone</em> can read it.  The second
-  method creates the file as readable only by its owner from the very
-  beginning thus preventing the secret disclosure.
+<p id=b2>The first method creates the file as
+  world-readable<a href=/self#f2>†</a> and before its permission are
+  changed <em>anyone</em> can read it.  The second method creates the file as
+  readable only by its owner from the very beginning thus preventing the secret
+  disclosure.
 
 <!-- EXCERPT -->
 
@@ -55,8 +56,8 @@ exec 3&gt;&amp;-
   reality but the proper way of doing things is so trivial there’s no
   reason not to go with it.  Indeed, it’s actually <em>shorter</em>.
 
-<p>† This does depend on various factors.  For example whether the
-  directory the file is created in has executable bit set.
+<p id=f2><a href=#b2>†</a> This does depend on various factors.  For example
+  whether the directory the file is created in has executable bit set.
   Some <del>paranoid</del> security-conscious users may already have
   <code>umask</code> set to <code>077</code> but beware
   that <code>sudo</code> resets it to the default <code>022</code>.

@@ -69,9 +69,10 @@
 
 {%- macro post(entry, post_page) -%}
 {%- set full = post_page or not entry.body.has_excerpt -%}
-  <article {{ attr('class', 'q', full) }}>
+  <article {{ attr('class', 'q', full) }}
+           self="{% if not post_page %}{{ entry.href }}{% endif %}">
 
-    <h1><a lang="{{ entry.lang }}" href="{{ entry.href }}"
+    <h1><a lang="{{ entry.lang }}" href=/self
            title="{{ T('Permanent link to the entry.') }}">{{
         entry.subject | safe }}</a></h1>
 
@@ -93,8 +94,7 @@
 
       <div class="i">
         <ul>
-          <li><a href="{{ entry.href }}"
-                 title="Permanent link to the entry.">permlink</a>
+          <li><a href=/self title="Permanent link to the entry.">permlink</a>
         </ul>
         <p>{{ T('In categories:') }}
         <ul>
