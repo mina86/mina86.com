@@ -1,0 +1,397 @@
+<!-- subject: sRGB↔L*a*b*↔LCh<sub>ab</sub> conversions -->
+<!-- date: 2021-03-21 01:21:33 -->
+<!-- tags: rgb, srgb, cielab, colorimetry  -->
+<!-- categories: Articles, Techblog -->
+<!-- math: true -->
+
+<p>After writing about <a href="/2019/srgb-xyz-conversion/">conversion between
+  sRGB and XYZ</a> colour spaces I’ve been asked about a related process: moving
+  between sRGB and CIELAB (perhaps better known as L*a*b*).  As this may be of
+  interest to others, I’ve decided to go ahead and make an article out of it.
+  I’ll also touch on <abbr>CIELC</abbr>h<sub>ab</sub> which is a closely related
+  colour representation.
+
+<figure>
+  <img src="/d/chameleon-lab.jpg" width=1000 height=500 alt="Panther Chameleon">
+  <figcaption><small>Picture of a chameleon with its decomposition into L*, a*
+    and b* channels.  Photo
+    by <a href="https://commons.wikimedia.org/wiki/File:Panther_Chameleon.jpg">Dr
+    Pratt Datta</a>.</small></figcaption>
+</figure>
+
+<p>The L*a*b* colour space was intended to be perceptually uniform.  While it’s
+  not truly uniform it’s nonetheless useful and widely used in the industry.
+  For example, it’s the basis of the ΔE*<sub>00</sub> colour difference metric.
+  LCh<sub>ab</sub> aim to make L*a*b* easier to interpret by replacing a* and b*
+  axes with more intuitive chroma and hue parameters.
+
+<p>Importantly, the conversion between sRGB and L*a*b* goes through XYZ colour
+  space.  As such, the full process has multiple steps with a round trip
+  conversion being: sRGB​→​XYZ​→​L*a*b*​→​XYZ​→​sRGB.  Because of that structure I will
+  describe each of the steps separately.
+
+<!-- EXCERPT -->
+
+
+<h2>sRGB to XYZ</h2>
+
+<p>For brevity I’ll assume herein that we’re working with 8-bit colour depth,
+  i.e. that red, green and blue components are integers in the \(\{0..255\}\)
+  range.  This does not need to be true in general and in cases when this
+  differs the equations presented herein need to be adjusted accordingly.
+
+<p>When doing any conversions from sRGB, we first need to recall that it
+  uses <a href="/2019/srgb-xyz-conversion/">gamma correction</a>.  Each
+  component of the colour is <dfn>compressed</dfn> and needs to
+  be <dfn>expanded</dfn> to move to linear RGB space.  Only
+  then <a href="/2019/srgb-xyz-matrix/">the conversion matrix</a> \(M\) can be
+  used to switch from linear RGB to XYZ.  Having an \(\langle r_8, g_8, b_8
+  \rangle\) colour, the following formualæ may be used to get corresponding XYZ
+  coordinates:
+
+  $$ \begin{align}
+    \begin{bmatrix}X \\ Y \\ Z\end{bmatrix}
+             &= M \begin{bmatrix}R \\ G \\ B\end{bmatrix} \\[.5em]
+
+    R        &= g_e(r_8) \qquad \\
+    G        &= g_e(g_8) \qquad \\
+    B        &= g_e(b_8) \qquad \\[.5em]
+
+    g_e(c_8) &= \begin{cases}
+      {c_8 \over 3294.6}                              & \text{if } c_8 ≤ 10 \\
+      \left({c_8 + 14.025 \over 269.025}\right)^{2.4} & \text{otherwise}
+    \end{cases} \\[.5em]
+
+    \langle r_8, g_8, b_8 \rangle &∈ \{0 .. 255\}^3
+  \end{align} $$
+
+<p>Expressing all that in code, specifically Rust, we get:
+
+<pre>
+/// Converts sRGB colour given as a triple of 8-bit integers
+/// into XYZ colour space (with white’s Y value equal 1).
+fn xyz_from_srgb(srgb: [u8; 3]) -> [f32; 3] {
+    // Gamma expansion for 8-bit sRGB components.
+    fn gamma_expansion(value255: u8) -> f32 {
+        return if value255 &lt;= 10 {
+            value255 as f32 / 3294.6
+        } else {
+            ((value255 as f32 + 14.025) / 269.025).powf(2.4)
+        }
+    }
+
+    // Convert all components to linear RGB.
+    let r = gamma_expansion(srgb[0]);
+    let g = gamma_expansion(srgb[1]);
+    let b = gamma_expansion(srgb[2]);
+
+    // Switch to XYZ.
+    [
+        r*0.4124108464885388   + g*0.3575845678529519  + b*0.18045380393360833,
+        r*0.21264934272065283  + g*0.7151691357059038  + b*0.07218152157344333,
+        r*0.019331758429150258 + g*0.11919485595098397 + b*0.9503900340503373,
+    ]
+}
+</pre>
+
+<p>As mentioned, when working with different colour depths a different \(g_e\)
+  or <code>gamma_expansion</code> function is necessary.  It’s <em>not</em>
+  enough to scale all numbers since the \(c_8 ≤ 10\) condition has been chosen
+  specifically to work with 8-bit integers.  The base formula — for normalised
+  RGB components in the \([0, 1]\) range — and further discussion of this topic
+  is present in the aforementioned article
+  on <a href="/2019/srgb-xyz-conversion/">gamma correction</a>.
+
+
+<h2>XYZ to L*a*b*</h2>
+
+<p>While the sRGB standard defines a white point — which is incorporated into
+  the conversion matrix — CIELAB can be used with different illuminants.  For
+  simplicity, I’m going to assume the same reference — standard illuminant
+  D<sub>65</sub> — that sRGB uses and which is widely used when working with
+  emissive displays.  If necessary that can be easily adjusted by changing
+  \(X_r\), \(Y_r\) and \(Z_r\) values below to those corresponding to one’s
+  favourite white point.  With all that said, equations for calculating L*a*b*
+  coordinates for a colour given in XYZ space are as follows:
+
+  $$ \begin{align}
+    L^*  &= 116 f_y - 16    \\
+    a^*  &= 500 (f_x - f_y) \\
+    b^*  &= 200 (f_y - f_z) \\[.5em]
+
+    f_x  &= f(X / X_r) \\
+    f_y  &= f(Y / Y_r) \\
+    f_z  &= f(Z / Z_r) \\[.5em]
+
+    f(v) &= \begin{cases}
+      (κ v + 16) / 116 & \text{if }v ≤ ε \\
+      \sqrt[3]{v}      & \text{otherwise}
+    \end{cases} \\[.5em]
+
+    ε &= {216 \over 24389} \\
+    κ &= {24389 \over 27} \\[.5em]
+
+    X_r &= 0.9504492182750991 \\
+    Y_r &= 1 \\
+    Z_r &= 1.0889166484304715
+  \end{align} $$
+
+<p>Translating the formulæ into code yields:
+
+<pre>
+/// Converts colour from XYZ space to CIELAB (a.k.a. L*a*b) using
+/// D65 reference white point.
+fn lab_from_xyz(xyz: [f32; 3]) -> [f32; 3] {
+    const EPSILON: f32 = 216.0 / 24389.0;
+    const KAPPA: f32 = 24389.0 / 27.0;
+
+    fn f(v: f32) -> f32 {
+        if v > EPSILON {
+            v.powf(1.0 / 3.0)
+        } else {
+            (KAPPA * v + 16.0) / 116.0
+        }
+    }
+
+    let fx = f(xyz[0] / 0.9504492182750991);
+    let fy = f(xyz[1]);
+    let fz = f(xyz[2] / 1.0889166484304715);
+
+    [
+        116.0 * fy - 16.0,
+        500.0 * (fx - fy),
+        200.0 * (fy - fz),
+    ]
+}
+</pre>
+
+
+<h2>L*a*b* to XYZ</h2>
+
+<p>Conversion from L*a*b* to sRGB involves performing all the steps in reverse
+  order.  First going from CIELAB to XYZ, then to linear RGB and finally to
+  sRGB.  The first step of this process is governed by the following equations:
+
+  $$ \begin{align}
+    X           &= f^{-1}(f_x) X_r \\
+    Y           &= f^{-1}(f_y) Y_r \\
+    Z           &= f^{-1}(f_z) Z_r \\[.5em]
+
+    f_y         &= {(L^* + 16) \over 116} \\
+    f_x         &= {a^* \over 500} + f_y \\
+    f_z         &= f_y - {b^* \over 200} \\[.5em]
+
+    f^{-1}(v)   &= \begin{cases}
+      v^3              & \text{if }v > \sqrt[3]{ε} \\
+      (116 v − 16) / κ & \text{otherwise}
+    \end{cases} \\[.5em]
+
+    \sqrt[3]{ε} &= \sqrt[3]{216 \over 24389} = {6 \over 29}
+  \end{align} $$
+
+<p>To optimise calculations it’s also worth to observe that:
+
+  $$ \begin{align}
+    f^{-1}(f_y) &= \begin{cases}
+      f_y^3    & \text{if }(L^* + 16) / 116 > \sqrt[3]{ε} \\
+      (116 (L^* + 16) / 116 − 16) / κ & \text{otherwise}
+    \end{cases} \\
+    &= \begin{cases}
+      f_y^3   & \text{if }L^* > 116\sqrt[3]{ε}-16 \\
+      L^* / κ & \text{otherwise}
+    \end{cases} \\
+    116\sqrt[3]{ε}-16 &= 116{6 \over 29} - 16 = 8
+  \end{align} $$
+
+<p>Taking that optimisations into consideration, the equations translate into
+  the following Rust function:
+
+<pre>
+/// Converts colour from CIELAB (a.k.a. L*a*b) space
+/// using D65 reference white point to XYZ.
+fn xyz_from_lab(lab: [f32; 3]) -> [f32; 3] {
+    const CBRT_EPSILON: f32 = 0.20689655172413796;
+    const KAPPA: f32 = 24389.0 / 27.0;
+
+    fn f_inv(v: f32) -> f32 {
+        if v > CBRT_EPSILON: {
+            v.powi(3)
+        } else {
+            (v * 116.0 - 16.0) / KAPPA
+        };
+    }
+
+    let fy = (lab[0] + 16.0) / 116.0;
+    let fx = (lab[1] / 500.0) + fy;
+    let fz = fy - (lab[2] / 200.0);
+
+    let x = f_inv(fx) * 0.9504492182750991;
+    let y = if lab[0] > 8 {
+        fy.powi(3)
+    } else {
+        lab[0] / KAPPA
+    }
+    let z = f_inv(fz) * 1.0889166484304715;
+
+    [x, y, z]
+}
+</pre>
+
+
+<h2>XYZ to sRGB</h2>
+
+<p>The second step is moving to sRGB colour space.  Similarly to conversion in
+  the other direction, this involves switching from XYZ to linear RGB first (by
+  using the inverse conversion matrix) and then applying gamma compression
+  function to get final sRGB coordinates.
+
+  $$ \begin{align}
+    r_8    &= g_c(R) \\
+    g_8    &= g_c(G) \\
+    b_8    &= g_c(B) \\[.5em]
+
+    \begin{bmatrix}R \\ G \\ B\end{bmatrix}
+           &= M^{-1} \begin{bmatrix}X \\ Y \\ Z\end{bmatrix}^T \\[.5em]
+
+    g_c(s) &= g_e^{-1}(s) \\
+           & = \begin{cases}
+                 ⌊3294.6 s⌉                   & \text{if } s ≤ S_0 \\
+                 ⌊269.025 s^{1/2.4} - 14.025⌉ & \text{otherwise}
+               \end{cases} \\
+    S_0 &= 0.00313066844250060782371
+  \end{align} $$
+
+<p>Like before, this assumes 8-bit colour depth output.  For general form of the
+  \(g_c\) function which can be adjusted to other depths see discussion in
+  the <a href="/2019/srgb-xyz-conversion/">sRGB↔XYZ conversion</a> article.  In
+  the meanwhile, the above formulæ expressed in code take the following form:
+
+<pre>
+/// Converts colour given in XYZ colour space (with white’s Y value
+/// equal 1) into an sRGB colour specified as a triple of 8-bit integers.
+fn srgb_from_xyz(xyz: [f32; 3]) -> [u8; 3] {
+    // Gamma compression from linear [0, 1] value to 8-bit integer.
+    fn gamma_compression(linear: f32): u8 {
+        let v = if linear &lt;= 0.00313066844250060782371 {
+            3294.6 * linear
+        } else {
+            269.025 * linear.pow(5.0 / 12.0) - 14.025
+        };
+        v.round().min(255.0).max(0.0) as u8
+    }
+
+    let x = xyz[0];
+    let y = xyz[1];
+    let z = xyz[2];
+
+    let r = x* 3.240812398895283    - y*1.5373084456298136  - z*0.4985865229069666;
+    let g = x*-0.9692430170086407   + y*1.8759663029085742  + z*0.04155503085668564;
+    let b = x* 0.055638398436112804 - y*0.20400746093241362 + z*1.0571295702861434;
+
+    [
+        gamma_compression(r),
+        gamma_compression(g),
+        gamma_compression(b),
+    ]
+}
+</pre>
+
+<p>And that’s it as far as converting between L*a*b* and sRGB colour spaces is
+  concerned.  With the presented code, <code>lab_from_xyz(xyz_from_srgb([r, g,
+  b]))</code> gets an sRGB colour converted into L*a*b*
+  and <code>srgb_from_xyz(xyz_from_lab([l, a, b]))</code> moves in the opposite
+  direction.  There’s still a closely related colour
+  representation — <abbr>CIEL</abbr>Ch<sub>ab</sub> or LCh<sub>ab</sub> — which
+  we’ll look at next.
+
+
+<h2>L*a*b* and LCh<sub>ab</sub></h2>
+
+<p>The a* and b* components of the L*a*b* colour are not easy to interpret.
+  Even knowing that they component represents green-red and blue-yellow axes
+  respectively, it’s tricky to visualise the colour space.  To make it easier
+  for humans to work with, CIE defined an LCh<sub>ab</sub> colour space as
+  a conversion of L*a*b* into a cylindrical coordinate system.  It replaces a*
+  and b* components with more intuitive chroma and hue.  The relations between
+  all the components is as follows:
+
+  $$ \begin{align}
+    C^* &= \sqrt{a^{*2} + b^{*2}}  \\
+    h   &= \text{atan}_2(b^*, a^*) \\[.5em]
+    a^* &= C^* \cos(h)             \\
+    b^* &= C^* \sin(h)
+  \end{align} $$
+
+<p>Depending on use case it may be better to keep hue expressed in radians or to
+  convert it to degrees.  The former is usually easier for computation since
+  mathematical instructions typically operate in radians.  On the other hand,
+  the latter is more intuitive as it’s easier to think in degrees than radians.
+
+<p>Below are the formulæ expressed in code with conversion to degrees present:
+
+<pre>
+/// Converts colour given in CIELAB (a.k.a. L*a*b) space to
+/// CIELCh(ab) with hue expressed in degrees.
+fn lch_from_lab(lab: [f32; 3]) -> [f32; 3] {
+    [
+        lab[0],
+        lab[1].hypot(lab[2]),
+        lab[2].atan2(lab[1]) * 360.0 / std::f32::consts::TAU,
+    ]
+}
+
+/// Converts colour given in CIELCh(ab) space with hue
+/// expressed in degrees to CIELAB (a.k.a. L*a*b*).
+fn lab_from_lch(lch: [f32; 3]) -> [f32; 3] {
+    let h_rad = lch[2] * std::f32::consts::TAU / 360.0;
+    [
+        lch[0],
+        lch[1] * h_rad.cos(),
+        lch[1] * h_rad.sin(),
+    ]
+}
+</pre>
+
+
+<h2>Accuracy benchmark and possible improvements</h2>
+
+<p>To finish up, let’s test just how good the presented code is.  It’s not easy
+  to benchmark precision of the calculations in the conversion code.  There is
+  no authoritative set of colours with their coordinates given in RGB and L*a*b*
+  colour spaces.  Still, there is one thing that’s easy to check.
+
+<p>Colours with a* and b* components equal to zero represent shades of grey.  In
+  other words, for any \(c\), \(\langle c, c, c \rangle\) sRGB colour converted
+  to L*a*b* should have its last two components equal zero with L* going from
+  zero (for black) and a hundred (for white).  That is, of course, so long as
+  the L*a*b* uses D65 reference white point.  This observation allows a simple
+  benchmark to be written as follows:
+
+<pre>
+fn main() {
+    let mut count: usize = 0;
+    let mut error: f64 = 0.0;
+    let mut max: f32 = 0.0;
+    for i in 0..256 {
+        let lab = lab_from_xyz(xyz_from_srgb([i as u8, i as u8, i as u8]));
+        if lab[1] != 0.0 || lab[2] != 0.0 {
+            eprintln!("{:3} {:20} {:20} {:20}", i, lab[0], lab[1], lab[2]);
+            count += 1;
+            error = (lab[1] as f64).mul_add(lab[1] as f64, error);
+            error = (lab[2] as f64).mul_add(lab[2] as f64, error);
+            max = max.max(lab[1].abs());
+            max = max.max(lab[2].abs());
+        }
+    }
+    println!("{:3} {}e-9 {}e-6", count, error * 1e9, max * 1e6);
+}
+</pre>
+
+<p>When executed the code shows that 48 colours weren’t converted correctly with
+  the maximum error of less than 30 millionth and total square error of less
+  than 21 billionth.  With floating point numbers some imprecision is always to
+  be expected so this isn’t a bad result by no means.  However, on architectures
+  with fused multiply-add instruction accuracy can be improved by improving the
+  matrix multiplications at the end of <code>xyz_from_srgb</code> and at the
+  beginning of <code>srgb_from_xyz</code> function.  I’ll leave that as an
+  exercise to the reader.

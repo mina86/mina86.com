@@ -1,5 +1,6 @@
 <!-- subject: sRGB↔XYZ conversion -->
 <!-- date: 2019-07-07 17:25:42 -->
+<!-- update: 2021-03-21 01:21:33 -->
 <!-- tags: rgb, srgb, colorimetry -->
 <!-- categories: Articles, Techblog -->
 <!-- math: true -->
@@ -100,11 +101,11 @@
     E &= \begin{cases}
       12.92 × S                 & \text{if } S ≤ S_0 \\
       1.055 × S^{1/2.4} - 0.055 & \text{otherwise}
-    \end{cases} \\[0.5em]
+    \end{cases} \\[.5em]
     S &= \begin{cases}
-      E / 12.92                   & \text{if } E ≤ E_0 \\
-      ((E + 0.055) / 1.055)^{2.4} & \text{otherwise}
-    \end{cases} \\[0.5em]
+      {E \over 12.92}                            & \text{if } E ≤ E_0 \\
+      \left({E + 0.055 \over 1.055}\right)^{2.4} & \text{otherwise}
+    \end{cases} \\[.5em]
     S_0 &= 0.00313066844250060782371 \\
     E_0 &= 12.92 × S_0 \\
         &= 0.04044823627710785308233
@@ -127,11 +128,11 @@
     E_8 &= \begin{cases}
       ⌊3294.6 × S⌉                   & \text{if } S ≤ S_0 \\
       ⌊269.025 × S^{1/2.4} - 14.025⌉ & \text{otherwise}
-    \end{cases} \\[0.5em]
+    \end{cases} \\[.5em]
     S &= \begin{cases}
-      E_8 / 3294.6                   & \text{if } E_8 ≤ 10 \\
-      ((E + 14.025) / 269.025)^{2.4} & \text{otherwise}
-    \end{cases} \\[0.5em]
+      {E_8 \over 3294.6}                              & \text{if } E_8 ≤ 10 \\
+      \left({E_8 + 14.025 \over 269.025}\right)^{2.4} & \text{otherwise}
+    \end{cases} \\[.5em]
     S_0 &= 0.00313066844250060782371 \\
   \end{align} $$
 
@@ -207,3 +208,7 @@
 </form>
 
 <script src=/d/srgb-xyz-conversion-demo.js></script>
+
+<p>Update (March 2021): The implementation has been updated with more precise
+  value for the D65 standard illuminant.  This affected values
+  in <code>xyzFromRgbMatrix</code> and <code>rgbFromXyzMatrix</code> matrices..

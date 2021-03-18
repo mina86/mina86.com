@@ -1,5 +1,6 @@
 <!-- subject: Greyscale, you might be doing it wrong -->
 <!-- date: 2021-02-07 20:06:46 -->
+<!-- update: 2021-03-21 01:21:33 -->
 <!-- tags: rgb, greyscale -->
 <!-- categories: Articles, Techblog -->
 
@@ -25,7 +26,7 @@
 
   <pre>
 fn grey_from_rgb_avg_32bit(r: u8, g: u8, b: u8) -&gt; u8 {
-    let y = 3567454 * r as u32 + 11998779 * g as u32 + 1210983 * b as u32;
+    let y = 3567664 * r as u32 + 11998547 * g as u32 + 1211005 * b as u32;
     ((y + (1 &lt;&lt; 23)) &gt;&gt; 24) as u8
 }
   </pre>
@@ -100,9 +101,9 @@ fn grey_from_rgb_exact(r: u8, g: u8, b: u8) -&gt; u8 {
         } + 0.5) as u8
     }
 
-    let Y = 0.21267285140562248 * to_linear(r) +
-            0.715152155287818   * to_linear(g) +
-            0.07217499330655958 * to_linear(b);
+    let y = 0.21264934272065283 * to_linear(r) +
+            0.7151691357059038  * to_linear(g) +
+            0.07218152157344333 * to_linear(b);
     from_linear(y)
 }
 </pre>
@@ -130,9 +131,9 @@ fn grey_from_rgb_exact(r: u8, g: u8, b: u8) -&gt; u8 {
 
 <pre id=gamma2>
 fn grey_from_rgb_gamma2(r: u8, g: u8, b: u8) -&gt; u8 {
-    ((r as f32 * r as f32 * 0.21267285140562248 +
-      g as f32 * g as f32 * 0.715152155287818   +
-      b as f32 * b as f32 * 0.07217499330655958).sqrt() + 0.5) as u8
+    ((r as f32 * r as f32 * 0.21264934272065283 +
+      g as f32 * g as f32 * 0.7151691357059038  +
+      b as f32 * b as f32 * 0.07218152157344333).sqrt() + 0.5) as u8
 }
 </pre>
 
@@ -174,9 +175,9 @@ fn grey_from_rgb_gamma2_isqrt(r: u8, g: u8, b: u8) -&gt; u8 {
         x as u8
     }
 
-    isqrt((r as u32 * r as u32 * 13938 +
-           g as u32 * g as u32 * 46868 +
-           b as u32 * b as u32 *  4730) >> 16)
+    isqrt((r as u32 * r as u32 * 13936 +
+           g as u32 * g as u32 * 46869 +
+           b as u32 * b as u32 *  4731) >> 16)
 }
 </pre>
 
@@ -191,9 +192,9 @@ fn grey_from_rgb_gamma2_isqrt(r: u8, g: u8, b: u8) -&gt; u8 {
 
 <pre id=float>
 fn grey_from_rgb_avg_float(r: u8, g: u8, b: u8) -&gt; u8 {
-    (r as f32 * 0.21263682167732384 +
-     g as f32 * 0.7151829818412507  +
-     b as f32 * 0.07218019648142547 + 0.5) as u8
+    (r as f32 * 0.21264934272065283 +
+     g as f32 * 0.7151691357059038  +
+     b as f32 * 0.07218152157344333 + 0.5) as u8
 }
 </pre>
 
@@ -592,3 +593,9 @@ fn grey_from_rgb_avg_32bit(r: u8, g: u8, b: u8) -&gt; u8 {
   easy to pick out but the formulæ described here will map all of them to the
   same shade of grey.  Especially in computer vision this may not be the desired
   result, but it does represent what a black and white film would capture.
+
+
+<p>Update (March 2021): The article has been updated with more precise value for
+  the D65 standard illuminant.  This affected the coefficients used in the code.
+  However, the adjustment was only slight so there were no changes to the
+  benchmark results.

@@ -208,17 +208,22 @@ class Post(_Addresable):
     # This is an *ugly*, *ugly* global variable.
     PREFERRED_LANGUAGE = None
 
-    class _Data(collections.namedtuple('PostData', 'subject body date lang')):
+    class _Data(collections.namedtuple('PostData',
+                                       'subject body date updated lang')):
 
         def __new__(cls, d):
             date = d.get('date')
             if date:
                 date = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+            updated = d.get('updated')
+            if updated:
+                updated = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
             return super(Post._Data, cls).__new__(
                 cls,
                 subject=d['subject'].strip(),
                 body=d['__body__'],
                 date=date,
+                updated=updated,
                 lang=d['__lang__'])
 
     def __init__(self, permalink, categories, tags, versions):
@@ -400,10 +405,18 @@ class Sitemap(object):
 
 
 class Writer(object):
+    @classmethod
+    def _do_striptags(cls, value):
+        if hasattr(value, "__html__"):
+            value = value.__html__()
+        value = str(value).replace('LCh<sub>ab</sub>', 'LCh(ab)')
+        return jinja2.filters.do_striptags(value)
 
     def __init__(self, writer, tpl_dir, static_mappings):
         self._env = jinja2.Environment(loader=jinja2.FileSystemLoader(tpl_dir),
                                        autoescape=True)
+        self._env.filters['striptags'] = self._do_striptags
+
         self._writer = writer
         self._tpl_dir = tpl_dir
         self._static_mappings = static_mappings
@@ -427,8 +440,9 @@ class Writer(object):
             val = re.sub('\s+', ' ', val)
             if kw:
                 kw.setdefault('author', author)
-                if 'date' in kw:
-                    kw['date'] = kw['date'].strftime('%Y-%m-%dT%H:%M:%SZ')
+                for key in ('date', 'updated'):
+                    if (value := kw.get(key)) is not None:
+                        kw[key] = value.strftime('%Y-%m-%dT%H:%M:%SZ')
                 val %= kw
             fd.write(val.replace('> <', '><').strip())
 
@@ -472,7 +486,7 @@ class Writer(object):
                   <id>%(id)s</id>
                   <link rel="alternate" type="text/html" href="%(url)s"/>
                   <published>%(date)s</published>
-                  <updated>%(date)s</updated>
+                  <updated>%(updated)s</updated>
                   %(author)s
                   <content type="html" xml:lang="%(lang)s">%(body)s</content>
                 </entry>
@@ -482,6 +496,7 @@ class Writer(object):
                       entry.permalink),
                   url=e(entry.url),
                   date=entry.date,
+                  updated=entry.updated or entry.date,
                   lang=entry.lang,
                   body=e(compilers.minify_html(
                       body, static_mappings=self._static_mappings,

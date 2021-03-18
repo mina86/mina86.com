@@ -1,5 +1,6 @@
 <!-- subject: Calculating sRGB↔XYZ matrix -->
 <!-- date: 2019-02-03 07:42:06 -->
+<!-- update: 2021-03-21 01:21:33 -->
 <!-- tags: rgb, srgb, colorimetry -->
 <!-- categories: Articles, Techblog -->
 <!-- math: true -->
@@ -46,19 +47,19 @@
     <tr>
       <th scope=row>Red
       <td>\(\langle 0.64, 0.33\rangle\)
-      <td>\(\langle 64 Y_r / 33, \; Y_r, \; Y_r / 11\rangle\)
+      <td>\(\langle {64 \over 33} Y_r, \; Y_r, \; {1 \over 11} Y_r\rangle\)
     <tr>
       <th scope=row>Green
       <td>\(\langle 0.30, 0.60\rangle\)
-      <td>\(\langle Y_g / 2, \; Y_g, \; Y_g / 6\rangle\)
+      <td>\(\langle {1 \over 2} Y_g, \; Y_g, \; {1 \over 6} Y_g\rangle\)
       <tr>
         <th scope=row>Blue
         <td>\(\langle 0.15, 0.06\rangle\)
-        <td>\(\langle 5 Y_b / 2, \; Y_b, \; 79 Y_b / 6\rangle\)
+        <td>\(\langle {5 \over 2} Y_b, \; Y_b, \; {79 \over 6} Y_b\rangle\)
       <tr>
         <th scope=row>White (D65)
-        <td>\(\langle 0.31271, 0.32902\rangle\)
-        <td>\(\langle 31271 Y_w / 32902, \; Y_w, \; 35827 Y_w / 32902\rangle\)
+        <td>\(\langle 0.312713, 0.329016\rangle\)
+        <td>\(\langle {312713 \over 329016} Y_w, \; Y_w, \; {358271 \over 329016} Y_w\rangle\)
 </table>
 
 <p>That’s where reference white point comes into play.  Its coordinates in
@@ -126,7 +127,7 @@
     \end{bmatrix}
   \end{align} $$
 
-<p>All quantities on the right-hand side are known, therefore \([Y_r Y_g
+<p>All quantities on the right-hand side are known, therefore \([Y_r \; Y_g \;
   Y_b]^T\) can be computed.  Let’s tidy things up into a final formula.
 
 
@@ -264,8 +265,8 @@ def calculate_srgb_matrix():
                               fractions.Fraction(60, 100)),
                  Chromaticity(fractions.Fraction(15, 100),
                               fractions.Fraction( 6, 100)))
-    white = Chromaticity(fractions.Fraction(31271, 100000),
-                         fractions.Fraction(32902, 100000))
+    white = Chromaticity(fractions.Fraction(312713, 1000000),
+                         fractions.Fraction(329016, 1000000))
     return calculate_rgb_matrix(primaries, white)
 </pre>
 
@@ -280,25 +281,19 @@ def calculate_srgb_matrix():
   aforementioned code are as follows:
 
 <pre>
-M = [
-    [ 10135552 / 24577794, 8788810 / 24577794,  4435075 / 24577794 ],
-    [  2613072 / 12288897, 8788810 / 12288897,   887015 / 12288897 ],
-    [  1425312 / 73733382, 8788810 / 73733382, 70074185 / 73733382 ]
-] ≈ [
-    [ 0.4123865632529917,   0.35759149092062537, 0.18045049120356368 ],
-    [ 0.21263682167732384,  0.7151829818412507,  0.07218019648142547 ],
-    [ 0.019330620152483987, 0.11919716364020845, 0.9503725870054354  ]
-]
+    ⎡ 0.4124108464885388   0.3575845678529519  0.18045380393360833 ⎤
+M ≈ ⎢ 0.21264934272065283  0.7151691357059038  0.07218152157344333 ⎥
+    ⎣ 0.019331758429150258 0.11919485595098397 0.9503900340503373  ⎦
+    ⎡ 33786752 / 81924984   29295110 / 81924984    14783675 / 81924984  ⎤
+M = ⎢  8710647 / 40962492   29295110 / 40962492     2956735 / 40962492  ⎥
+    ⎣  4751262 / 245774952  29295110 / 245774952  233582065 / 245774952 ⎦
 
-M_inv = [
-    [   1283178 / 395920,    -608687 / 395920,   -197412 / 395920   ],
-    [ -42591639 / 43944050, 82435961 / 43944050, 1826061 / 43944050 ],
-    [     49353 / 887015,    -180961 / 887015,    937707 / 887015   ]
-] ≈ [
-    [  3.2410032329763587,   -1.5373989694887855,  -0.4986158819963629   ],
-    [ -0.9692242522025166,    1.875929983695176,    0.041554226340084724 ],
-    [  0.055639419851975444, -0.20401120612390997,  1.0571489771875335   ]
-]
+      ⎡  3.240812398895283    -1.5373084456298136  -0.4985865229069666  ⎤
+M⁻¹ ≈ ⎢ -0.9692430170086407    1.8759663029085742   0.04155503085668564 ⎥
+      ⎣  0.055638398436112804 -0.20400746093241362  1.0571295702861434  ⎦
+      ⎡   4277208 / 1319795    -2028932 / 1319795   -658032 / 1319795  ⎤
+M⁻¹ = ⎢ -70985202 / 73237775  137391598 / 73237775  3043398 / 73237775 ⎥
+      ⎣    164508 / 2956735     -603196 / 2956735   3125652 / 2956735  ⎦
 </pre>
 
 <p>It’s important to remember this is not all that is needed to perform
@@ -307,3 +302,6 @@ M_inv = [
   correction.  For those interested, all
   that <a href="/2019/srgb-xyz-conversion/">is described in follow-up
   article</a>.
+
+<p>Update (March 2021): The article has been updated with more precise value for
+  the D65 standard illuminant.  This affected the resulting numbers slightly.
