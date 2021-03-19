@@ -46,7 +46,7 @@
 <p id=rr>A computer scientist might lean towards the first option but a software
   engineer will know it’s the second.
 
-<script>(o=>{var a=o.querySelector("#rr"),f=o.createElement("pre"),r,e=o=>{r=o.exec("foobarbaz");return r?"['"+r[0]+"']":"null"};f.innerHTML="/foo|foobar/.exec('foobarbaz') → "+e(/foo|foobar/)+"\n/foobar|foo/.exec('foobarbaz') → "+e(/foobar|foo/);a.innerText+=" Here’s a live demonstration of this browsers handling of those cases:";a.parentNode.appendChild(f)})(document);</script>
+<script>(o=>{var a=o.querySelector("#rr"),f=o.createElement("pre"),e=r=>(r=r.exec("foobarbaz"))?"['"+r[0]+"']":"null",x=e(/foo|foobar/),y=e(/foobar|foo/);f.innerHTML="/foo|foobar/.exec('foobarbaz') → "+x+"\n/foobar|foo/.exec('foobarbaz') → "+y+" // <i>"+(x==y?"✓ Pass":"✗ Failure")+"</i>";a.innerText+=" Here’s a live demonstration of current browser’s handling of those cases:";a.parentNode.appendChild(f)})(document);</script>
 
 <!-- EXCERPT -->
 
@@ -57,8 +57,8 @@
   long as they did not use Perl Compatible Regular Expressions
   (PCRE).  <dfn>Passed</dfn> here means they produced the same result regardless
   of the order of the subexpressions in the alternation.  Anything claiming to
-  be using compatible engine (e.g. <code>std::regex::extended</code> form C++)
-  worked correctly as well.  The rest didn’t bode so well.
+  be using POSIX compatible engine (e.g. <code>std::regex::extended</code> form
+  C++) worked correctly as well.  The rest didn’t bode so well.
 
 <table>
   <thead><th>Tool<th>Result
