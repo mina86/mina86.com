@@ -1,0 +1,291 @@
+<!-- subject: Dark theme with media queries, CSS and JavaScript -->
+<!-- date: 2021-03-28 03:42:19 -->
+<!-- categories: Site News, Articles, Techblog -->
+<!-- tags: html, css, javascript -->
+
+<figure class=nw>
+  <img src=/d/news-day-night.webp width=1000 height=200
+       alt="Split view of Tower Bridge during the day and at night.">
+  <figcaption>(photo by <a href="https://www.matel.tv/?wix-vod-video-id=803b455b482348dbaccbb924f575a50c&wix-vod-comp-id=comp-jct22gi6">Franck Matellini</a>)</figcaption>
+</figure>
+
+<p>No, your eyes are not deceiving you.  This website has gone through
+  a redesign and in the process gained a dark mode.  Thanks to media queries,
+  the darkness should commence automatically according to reader’s system
+  preferences (as reported by the browsers).  You can also customise this
+  website in settings panel in top right (or bottom right).
+
+<p>What are media queries?  And how to use them to adjust website’s appearance
+  based on user preferences?  I’m glad you’ve asked, because I’m about to
+  describe the CSS and JavaScript magic that enables this feature.
+
+
+<h2>Media queries overview</h2>
+
+<pre class=fr style="--w:25em">
+body { font-family: sans-serif; }
+@media print {
+	body { font-family: serif; }
+}
+</pre>
+
+<p>Media queries grew from the <code>@media</code> rule present since the
+  inception of CSS.  At first it provided a way to use different styles
+  depending on a device used to view the page.  Most commonly used <dfn>media
+  types</dfn> where <code>screen</code> and <code>print</code> as seen in the
+  example on the right.  Over time the concept evolved into general <dfn>media
+  queries</dfn> which allow checking other aspects of the user agent such as
+  display size or browser settings.  A simple stylesheet respecting reader’s
+  preferences might be as simple as:
+
+<pre>
+body {
+	/* <i>Black-on-white by default</i> */
+	background: #fff;
+	color: #000;
+}
+@media (prefers-color-scheme: dark) {
+	/* <i>White-on-black if user prefers dark colour scheme</i> */
+	body {
+		background: #000;
+		color: #fff;
+	}
+}
+</pre>
+
+<p>That’s enough to get us started but not all browsers support that feature or
+  provide a way for the user to specify desired mode.  For example, without
+  a desktop environment Chrome will report light theme preference and Firefox
+  users need to go deep into the bowels of <code>about:config</code> to
+  change <code>ui.systemUsesDarkTheme</code> flag if they are fond of darkness.
+  To accommodate such situations, it’s desirable to provide a JavaScript toggle
+  which defaults to option specified in system settings.
+
+<p>Fortunately, media can be queried through JavaScript and herein I’ll describe
+  how it’s done and how to marry theme switching with browser preferences
+  detection.  TL;DR version is to
+  grab <a href="https://files.mina86.com/czesiu.html">a demonstration HTML
+  file</a> which includes a fully working CSS and JavaScript code that can be
+  used to switch themes on a website.
+
+
+<!-- EXCERPT -->
+
+
+<h2>Theme mode switch</h2>
+
+<p>Firstly we need a way to toggle colour themes from JavaScript.  One common
+  approach is adding or removing classes to document’s root element.  Those
+  classes are then used within stylesheets to apply different colours depending
+  on the choice.  For example, aforementioned example of the media queries could
+  be rewritten as follows:
+
+<pre>
+.light body {
+	background: #fff;
+	color: #000;
+}
+.dark body {
+	background: #000;
+	color: #fff;
+}
+</pre>
+
+<p>With such stylesheet prepared what remains is adding a function to switch
+  <code>html</code> element’s class name between <code>light</code>
+  to <code>dark</code>:
+
+<pre>
+/** <i>Enables or disables dark mode depending on the argument.  The</i>
+    <i>change is done by adding or removing ‘light’ and ‘dark’ CSS</i>
+    <i>classes to document’s root element.</i> */
+const setDarkMode = (dark = true) => {
+	const lst = document.documentElement.classList;
+	lst.toggle('light', !dark);
+	lst.toggle('dark', dark);
+}
+
+/** <i>Returns whether dark mode is currently enabled.</i> */
+const isDarkMode = () => document.documentElement.classList.contains('dark');
+</pre>
+
+<p>All of this is enough to add a dark mode toggle button on a website; for
+  example one such as the following:
+
+<pre>
+&lt;a href="#" onclick="setDarkMode(!isDarkMode());
+                     return false">Toggle Dark Mode&lt;/a>
+</pre>
+
+<p>There are other ways of switching website themes.  Another possibility is to
+  selectively disable or add stylesheets corresponding to different themes.  The
+  exact implementation doesn’t matter for our purposes; what’s important is that
+  the technique is client-side and provides method for setting and returning
+  current mode: <code>setDarkMode</code> and <code>isDarkMode</code>
+  respectively.
+
+
+<h2>Respecting user preferences</h2>
+
+<p>The missing part is getting results of CSS media query.  Fortunately, there’s
+  a function designed to provide exactly that: <code>window.matchMedia</code>.
+  It takes the query list as a string argument and returns object with
+  a property called <code>matches</code> indicating whether user agent fits the
+  query or not.  The method is sufficient to initialise the theme to match
+  user’s preferences; for example:
+
+<pre>
+(() => {
+	const query = window.matchMedia('(prefers-color-scheme: dark)');
+	setDarkMode(query.matches);
+})();
+</pre>
+
+<p>With this approach, when page loads its appearance is set to fit user’s
+  system settings (as indicated by the browser).  Alas, the website doesn’t
+  respond to the preferences being changed <em>after</em> the page has been
+  loaded.  This is in contrast to the <code>@media</code> rule which causes
+  styles to be recomputed whenever necessary.
+
+<p>Fortunately there is a way to replicate CSS behaviour in JavaScript.  Object
+  returned by the <code>matchMedia</code> function is an event target and
+  receives <code>change</code> events whenever the result of the query — you’ve
+  guessed it — changes.  With a listener attached, code can update the theme in
+  response to preferences being altered:
+
+<pre>
+(() => {
+	const query = window.matchMedia('(prefers-color-scheme: dark)');
+	setDarkMode(query.matches);
+	query.addEventListener('change', _ => {
+		setDarkMode(query.matches);
+	});
+})();
+</pre>
+
+
+<h2>Saving the choice</h2>
+
+<p>With steps described so far, the website defaults to whatever theme browser
+  reports as preferred by the user and user can toggle the dark mode if they so
+  desire.  However, if they do toggle the mode and reload the page, the choice
+  is forgotten.  This does not make for a good user experience.
+
+<p>In the olden days cookies were the solution to such problems.  While they
+  were envisioned as a way for server to save information in the browser, with
+  advent of JavaScript they could also be used by the client code.  Modern and
+  a more convenient approach is to use <code>window.localStorage</code> instead.
+  It provides <code>getItem</code>, <code>setItem</code>
+  and <code>removeItem</code> methods which do exactly what their name implies.
+
+<p>Incorporating local storage into the code is as simple as an apple pie.
+  Firstly, when page loads we need to consult the saved value by checking result
+  of <code>window.localStorage.getItem('dark-theme')</code> call.  If
+  it’s <code>null</code> there is no saved setting and media query result should
+  be used; otherwise, enable dark mode if the result is <code>'yes'</code>.
+  Secondly, when toggling dark mode, we need to save the setting by
+  invoking <code>window.localStorage.setItem('dark-theme', dark ?  'yes' :
+  'no')</code> code.
+
+
+<h2>Preserving explicit user choices</h2>
+
+<p>This leaves one final issue: the inconsistency of whether explicit user
+  choice made on the website or preferences reported via media query take
+  precedence.  When page loads, the explicit choice will dictate the theme.  On
+  the other hand, when browser settings are changed after the page has been
+  loaded, that change will take precedence.
+
+<p>Addressing this is just a matter of introducing a variable that remembers
+  whether user has made an explicit choice.  The variable would be set on page
+  load according to whether the local storage preference was found and when user
+  changes settings on the website.  This is best paired with a feature to reset
+  customisation which would make the website act as if no user choice was made.
+
+<p>With all those constraints, the overall behaviour of the implementation
+  should be as follows:
+
+<ul>
+  <li>On page load, read local storage to retrieve user’s customisation for the
+    website if one has been made on previous visit.  If present, set theme
+    according to it and remember it has been user’s choice.  Otherwise, set
+    theme according to the media query.
+  <li>When media query changes check if user has made a choice.  If they have,
+    ignore the event; otherwise set theme according to the media query.
+  <li>When user changes website settings, set theme accordingly, save the choice
+    in local storage and remember that user has made a choice.
+  <li>When user resets customisation, set theme according to media query, remove
+    setting from local storage and forget that user has made an explicit choice.
+</ul>
+
+<p>It’s worth considering that ‘on page load’ should happen as soon as possible.
+  Preferably, code setting the initial theme would be included near the top of
+  the HTML code of the page.  Putting it at the end or using deferred loading
+  for such initialisation script may result in the page flashing when user’s
+  setting from local storage or media query is applied.
+
+
+<h2>The code</h2>
+
+<p>Below is the code implementing the described behaviour.  It is complete
+  except for the <code>setDarkMode</code> and <code>isDarkMode</code> functions
+  which can either be copied from the top of the page or written from scratch if
+  a different way for switching themes is
+  desired.  <a href="https://files.mina86.com/czesiu.html">A demonstration
+  documnte</a> is also available.
+
+<pre>
+const setDarkMode = (dark = true) { /* <i>…</i> */; };
+const isDarkMode = () => { return /* <i>…</i> */; };
+
+/** <i>Whether the user has explicitly chosen scheme to use.  If true,</i>
+    <i>changes to the ‘prefers-color-scheme’ media query will be ignored.</i> */
+let darkModeUserChoice = false;
+
+/** <i>The media query result for user’s ‘prefers dark scheme’ choice.</i> */
+const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+/* <i>Read ‘dark-theme’ setting from local storage and set mode according</i>
+   <i>to its value (if present) or result of the ‘prefers dark scheme’ media</i>
+   <i>query (otherwise).  Furthermore, listen to changes to the media query</i>
+   <i>result and updates the page unless user has chosen a theme</i>
+   <i>explicitly.</i> */
+(() => {
+	let value = window.localStorage.getItem('dark-theme');
+	darkModeUserChoice = value != null;
+	value = darkModeUserChoice ? value == 'yes'
+	                           : darkModeMediaQuery.matches;
+	setDarkMode(value);
+	darkModeMediaQuery.addEventListener('change', _ => {
+		if (!darkModeUserChoice) {
+			setDarkMode(darkModeMediaQuery.matches);
+		}
+	});
+})();
+
+/** <i>Sets user choice of the dark theme preference and enables or disables</i>
+    <i>dark theme accordingly.  With an explicit user choice the result of</i>
+    <i>color scheme preference media query will no longer be taken into</i>
+    <i>account when choosing whether to enable dark theme.</i> */
+const makeDarkModeUserChoice = dark => {
+	setDarkMode(dark);
+	darkModeUserChoice = true;
+	window.localStorage.setItem(
+		'dark-theme', isDarkMode() ? 'yes' : 'no');
+};
+
+/** <i>Resets user choice of the dark theme preference.  Instead, the</i>
+    <i>dark theme mode will be set based on the result of the color</i>
+    <i>scheme preference media query.</i> */
+const resetDarkModeUserChoice = () => {
+	darkModeUserChoice = false;
+	window.localStorage.removeItem('dark-theme');
+	setDarkMode(darkModeMediaQuery.matches);
+};
+</pre>
+<pre>
+&lt;a href="#" onclick="makeDarkModeUserChoice(!isDarkMode());
+                     return false">Toggle dark mode&lt;/a>
+&lt;a href="#" onclick="resetDarkModeUserChoice();
+                     return false">Reset customisation&lt;/a>
+</pre>

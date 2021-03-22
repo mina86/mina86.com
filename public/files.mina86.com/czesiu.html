@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html class=light lang=pl>
+
+<script>
+const darkModeImpl = {
+	/** Enables or disables dark mode depending on the argument.
+	    The change is done by adding or removing ‘light’ and ‘dark’
+	    CSS classes to document’s root element. */
+	setDark: (dark = true) => {
+		if (dark === void(0)) {
+			dark = true;
+		}
+		const lst = document.documentElement.classList;
+		lst.toggle('light', !dark);
+		lst.toggle('dark', dark);
+		return dark;
+	},
+
+	/** Returns whether dark mode is currently enabled. */
+	isDark: () => document.documentElement.classList.contains('dark'),
+};
+
+const darkMode = (impl => {
+	/** Whether the user has explicitly chosen scheme to use.  If true,
+	    changes to the ‘prefers-color-scheme’ media query will be
+	    ignored. */
+	let userChoice = false;
+
+	/** The media query result for user’s ‘prefers dark scheme’ choice. */
+	const query = window.matchMedia('(prefers-color-scheme: dark)');
+
+	/* Read ‘dark-theme’ setting from local storage and set mode according
+	   to its value (if present) or result of the ‘prefers dark scheme’
+	   media query (otherwise).  Furthermore, listen to changes the media
+	   query result and update page mode unless user has chosen a theme
+	   explicitly. */
+	const value = window.localStorage.getItem('dark-theme');
+	userChoice = value != null;
+	impl.setDark(userChoice ? value == 'yes' : query.matches);
+	query.addEventListener('change', _ => {
+		if (!userChoice) {
+			impl.setDark(query.matches);
+		}
+	});
+
+	return {
+		setDark: impl.setDark,
+		isDark: impl.isDark,
+
+		/** Resets user choice of the dark theme preference.  Instead,
+		    the daark theme mode will be set based on the result of the
+		    color scheme preference media query. */
+		resetChoice: () => {
+			userChoice = false;
+			impl.setDark(query.matches);
+			window.localStorage.removeItem('dark-theme');
+		},
+
+		/** Sets user choice of the dark theme preference and enables or
+		   disables dark theme accordingly.  With an explicit user
+		   choice the result of color scheme preference media query will
+		   no longer be taken into account when choosing whether to
+		   enable dark theme. */
+		choose: dark => {
+			dark = impl.setDark(dark);
+			userChoice = true;
+			window.localStorage.setItem(
+				'dark-theme', dark ? 'yes' : 'no');
+		}
+	};
+})(darkModeImpl);
+</script>
+
+<meta charset=utf-8>
+<title>Piosenka o końcu świata</title>
+<style>
+html {
+	--foreground: #002344;
+	--background: #cadef8;
+	--button-background: #4caf50;
+	--button-foreground: #000;
+	--button-hover-background: #80e27e;
+	--shadow: #37474f;
+}
+html.dark {
+	--foreground: #cadef8;
+	--background: #002344;
+	--button-background: #1b5e20;
+	--button-foreground: #fff;
+	--button-hover-background: #003300;
+	--shadow: #000;
+}
+
+body {
+	color: var(--foreground);
+	background: var(--background);
+}
+
+main {
+	font-family: cursive, serif;
+	max-width: 40em;
+	text-align: justify;
+	margin: 0 auto;
+	line-height: 1.5;
+	font-style: italic;
+}
+h1 {
+	font-size: 2em;
+	margin: 1em 0 0;
+}
+p {
+	margin: 0;
+}
+section {
+	margin: 1em 0;
+}
+
+nav {
+	font-family: sans-serif;
+	margin-top: 2em;
+	text-align: right;
+	font-size: 0.75em;
+}
+nav a {
+	margin: 0.5em 1em;
+	padding: 0.5em;
+	background: var(--button-background);
+	color: var(--button-foreground);
+	font-weight: bold;
+	border-radius: 0.5em;
+	box-shadow: 0.25em 0.25em 0.25em var(--shadow);
+	text-decoration: none;
+}
+nav a:focus {
+	outline: none;
+	box-shadow: 0 0 0 2px var(--background),
+		    0 0 1px 4px var(--button-background);
+}
+nav a:hover {
+	background: var(--button-hover-background);
+}
+nav a:hover:focus {
+	box-shadow: 0 0 0 2px var(--background),
+		    0 0 1px 4px var(--button-hover-background);
+}
+</style>
+
+<main>
+  <h1>Piosenka o końcu świata</h1>
+  <p>Czesław Miłosz
+
+  <section>
+    <p>W dzień końca świata
+    <p>Pszczoła krąży nad kwiatem nasturcji,
+    <p>Rybak naprawia błyszczącą sieć.
+    <p>Skaczą w morzu wesołe delfiny,
+    <p>Młode wróble czepiają się rynny
+    <p>I wąż ma złotą skórę, jak powinien mieć.
+  </section>
+  <section>
+    <p>W dzień końca świata
+    <p>Kobiety idą polem pod parasolkami,
+    <p>Pijak zasypia na brzegu trawnika,
+    <p>Nawołują na ulicy sprzedawcy warzywa
+    <p>I łódka z żółtym żaglem do wyspy podpływa,
+    <p>Dźwięk skrzypiec w powietrzu trwa
+    <p>I noc gwiaździstą odmyka.
+  </section>
+  <section>
+    <p>A którzy czekali błyskawic i gromów,
+    <p>Są zawiedzeni.
+    <p>A którzy czekali znaków i archanielskich trąb,
+    <p>Nie wierzą, że staje się już.
+    <p>Dopóki słońce i księżyc są w górze,
+    <p>Dopóki trzmiel nawiedza różę,
+    <p>Dopóki dzieci różowe się rodzą,
+    <p>Nikt nie wierzy, że staje się już.
+  </section>
+  <section>
+    <p>Tylko siwy staruszek, który byłby prorokiem,
+    <p>Ale nie jest prorokiem, bo ma inne zajęcie,
+    <p>Powiada przewiązując pomidory:
+    <p>Innego końca świata nie będzie,
+    <p>Innego końca świata nie będzie.
+  </section>
+</main>
+
+<script>
+(() => {
+	const nav = document.createElement('nav');
+	const addButton = (html, onclick) => {
+		const button = document.createElement('a');
+		button.href = '#';
+		button.onclick = onclick;
+		button.innerHTML = html;
+		nav.appendChild(button);
+	};
+	addButton('Toggle Dark Mode',
+	          () => (darkMode.choose(!darkMode.isDark()), false));
+	addButton('Reset Customisation',
+	          () => (darkMode.resetChoice(), false));
+	nav.setAttribute('lang', 'en');
+	document.body.appendChild(nav);
+})();
+ </script>
