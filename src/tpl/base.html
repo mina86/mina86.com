@@ -41,14 +41,14 @@
         <li><a href="{{ next.href }}" rel="next"
                  {{ attr('title', next.title, not next.subject) }}
                >« {% if next.subject -%}<i>{{ next.subject | safe }}</i>
-                  {%- else %}{{ T('next page') | safe }}
+                  {%- else %}{{ T('newer posts') | safe }}
                   {%- endif %}</a>
        {%- endif -%}
       {%- if prev -%}
         <li class="r"><a href="{{ prev.href }}" rel="prev"
                  {{ attr('title', prev.title, not prev.subject) }}
                >{% if prev.subject -%}<i>{{ prev.subject | safe}}</i>
-                {%- else %} {{ T('previous page') | safe }}
+                {%- else %} {{ T('older posts') | safe }}
                 {%- endif %} »</a>
       {%- endif -%}
     </ul>
@@ -107,7 +107,7 @@
 <script>document.documentElement.style=localStorage.getItem('c')||'';</script>
 <meta charset=UTF-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
-<title>{% if title %}{{ title | striptags }} ― {% endif %}mina86.com</title>
+<title>{% if title %}{{ title | striptags }} — {% endif %}mina86.com</title>
 <link rel="stylesheet" href="/d/css.css">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="/d/head-font.woff2" as=font crossorigin>

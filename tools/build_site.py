@@ -62,7 +62,7 @@ TRANSLATIONS = {
     'Site News': {'pl': 'Aktualności'},
 
     # Pagination
-    'Page %d': {'pl': '%d. strona'},
+    '{} page': {'pl': '{} strona'},
     'Older entries': {'pl': 'Starsze wpisy'},
     'Newer entries': {'pl': 'Nowsze wpisy'},
 
@@ -70,8 +70,8 @@ TRANSLATIONS = {
     'Contact': {'pl': 'Kontakt'},
     'Categories': {'pl': 'Kategorie'},
 
-    'previous page': {'pl': 'poprzedna strona'},
-    'next page': {'pl': 'następna strona'},
+    'older posts': {'pl': 'starsze wpisy'},
+    'newer posts': {'pl': 'nowsze wpisy'},
 
     'Permanent link to the entry.': {'pl': 'Stabilny link do wpisu.'},
     'See comments': {'pl': 'Zobacz komentarze'},
@@ -93,6 +93,27 @@ def get_translation(lang, text):
     return text.decode('utf-8') if isinstance(text, bytes) else text
 
 
+def format_ordinal(lang, num):
+    if lang == 'pl':
+        th = '.'
+    elif 4 <= num % 100 <= 20 or 3 < num % 10:
+        th = 'th'
+    else:
+        th = ('th', 'st', 'nd', 'rd')[num % 10]
+    return str(num) + th
+
+
+def format_page_title(*, lang, title, page):
+    if not page:
+        return title
+    page = get_translation(lang, '{} page').format(
+        format_ordinal(lang, page + 1))
+    if title:
+        return '{} ({})'.format(title, page)
+    else:
+        return page
+
+
 MONTHS_PL = (None, 'stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca',
              'lipca', 'sierpnia', 'września', 'października', 'listopada',
              'grudnia')
@@ -110,11 +131,9 @@ def format_byline(lang, author, email, date):
         date = '%d %s %d' % (day, MONTHS_PL[month], year)
         fmt = '%s | %s'
     else:
-        th = 'th'
-        if day < 10 or day > 20:
-            th = {1: 'st', 2: 'nd', 3: 'rd'}.get(day % 10, 'th')
+        day = format_ordinal('en', day)
         month = date.strftime('%B')
-        date = '%d%s of %s %d' % (day, th, month, year)
+        date = '%s of %s %d' % (day, month, year)
         fmt = 'Posted by %s on %s'
 
     return jinja2.utils.Markup(fmt % (author, date))
@@ -123,26 +142,35 @@ def format_byline(lang, author, email, date):
 class _Addresable(object):
     _subdir = None
 
+    class __Paged(str):
+        def __call__(self, *, page=None):
+            return self + str(page) if page else self
+
     @property
     def url(self):
-        return '%s%s' % (BASE_HREF, self.href)
+        return self.__Paged(BASE_HREF + self.href)
 
     @property
     def href(self):
         if self._subdir:
-            return '/%s/%s/' % (self._subdir, self.permalink)
+            href = '/%s/%s/' % (self._subdir, self.permalink)
         else:
-            return '/%s/' % self.permalink
+            href = '/%s/' % self.permalink
+        return self.__Paged(href)
 
-    def filename_for_lang(self, lang=None):
+    def filename(self, *, lang=None, page=None):
         args = []
         if self._subdir:
             args.append(self._subdir)
         args.append(self.permalink)
-        if lang:
-            args.append('index.%s.html' % lang)
+        if page:
+            base = str(page)
         else:
-            args.append('index.html')
+            base = 'index'
+        if lang:
+            args.append('{}.{}.html'.format(base, lang))
+        else:
+            args.append('{}.html'.format(base))
         return os.path.join(*args)
 
 
@@ -592,6 +620,35 @@ def generate(writer, site):
                         'weekly' if year == NOW.year else 'monthly',
                         '0.1')
 
+        def generate_pages(*, entries, href, filename, title=None):
+            for idx in range(0, len(entries), 10):
+                page = idx // 10
+                write_html(filename(lang=lang, page=page), 'index', {
+                    'title': format_page_title(
+                        lang=lang, title=title, page=page),
+                    'canonical': href(page=page),
+                    'prev': {
+                        'href': href(page=page + 1),
+                        'title': T('Older entries')
+                    } if idx + 10 < len(entries) else None,
+                    'next': {
+                        'href': href(page=page - 1),
+                        'title': T('Newer entries')
+                    } if page else None,
+                    'entries': entries[idx:idx + 10],
+                    'archives': archives,
+                    'categories': categories,
+                })
+                if not title and not page:
+                    changefreq = 'daily'
+                    priority = '1.0'
+                else:
+                    changefreq = 'weekly'
+                    priority = '0.3' if title else '0.5'
+                sitemap_add(BASE_HREF + href(page=page), entries[idx].date,
+                            changefreq, priority)
+
+
         # Generate category pages
         for cat in site.categories:
             # When generating pages for In English or In Polish categories,
@@ -603,18 +660,13 @@ def generate(writer, site):
             # it’ll use their preferred language regardless.
             Post.PREFERRED_LANGUAGE = cat.lang or lang
 
-            filename = cat.filename_for_lang(lang)
             entries = sorted(cat.entries, key=lambda p: p.date, reverse=True)
-            write_html(filename, 'index', {
-                'title': T(cat),
-                'canonical': cat.href,
-                'entries': entries,
-                'archives': archives,
-                'categories': categories,
-            })
-            sitemap_add(cat.url, cat.date, 'weekly', '0.3')
+            generate_pages(entries=entries,
+                           href=cat.href,
+                           filename=cat.filename,
+                           title=T(cat))
 
-            filename = os.path.join(os.path.dirname(filename),
+            filename = os.path.join(os.path.dirname(cat.filename()),
                                     'atom.%s.xml' % lang)
             feed_id = ('http://mina86.com/atom/cat/%s/content/html/' %
                        cat.permalink)
@@ -623,28 +675,11 @@ def generate(writer, site):
         Post.PREFERRED_LANGUAGE = lang
 
         # Generate pagination pages (10 entries per page)
-        i = 0
-        while i * 10 < len(posts):
-            href = lambda p: '/%d' % p if p else '/'
-            filename = '%s.%s.html' % (str(i) if i else 'index', lang)
-            write_html(filename, 'index', {
-                'title': T('Page %d') % i if i else None,
-                'canonical': href(i),
-                'prev': {
-                    'href': href(i + 1),
-                    'title': T('Older entries')
-                } if i * 10 + 10 < len(posts) else None,
-                'next': {
-                    'href': href(i - 1),
-                    'title': T('Newer entries')
-                } if i else None,
-                'entries': posts[i * 10:i * 10 + 10],
-                'archives': archives,
-                'categories': categories,
-            })
-            sitemap_add(BASE_HREF + href(i), posts[i * 10].date,
-                        'weekly' if i else 'daily', '0.5' if i else '1.0')
-            i += 1
+        generate_pages(entries=posts,
+                       href=lambda page: '/%d' % page if page else '/',
+                       filename=lambda lang, page: '%s.%s.html' % (
+                           str(page) if page else 'index', lang))
+
         writer.write_atom('atom.%s.xml' % lang, posts,
                           href='/',
                           feed_id='http://mina86.com/atom/content/html/')
@@ -653,7 +688,7 @@ def generate(writer, site):
         for i in range(len(posts)):
             # next and prev are swapped because posts is reversed
             cur = posts[i]
-            write_html(cur.filename_for_lang(lang), 'post', {
+            write_html(cur.filename(lang=lang), 'post', {
                 'title': cur.subject,
                 'next': posts[i - 1] if i else None,
                 'entry': cur,
@@ -666,7 +701,7 @@ def generate(writer, site):
 
         # Generate pages pages
         for entry in site.pages:
-            write_html(entry.filename_for_lang(lang), 'page', {
+            write_html(entry.filename(lang=lang), 'page', {
                 'entry': entry,
                 'canonical': entry.href,
                 'archives': archives,
