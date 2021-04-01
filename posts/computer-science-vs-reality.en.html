@@ -1,0 +1,337 @@
+<!-- subject: Computer Science vs Reality -->
+<!-- date: 2021-05-23 23:58:13 -->
+<!-- tags: computer science, vector, linked list, trie, prefix tree -->
+<!-- categories: Articles, Techblog  -->
+<!-- math: true -->
+
+<img class=fr width=500 height=484 style="height:auto"
+     src=/d/batman-slap.webp alt="Robin: ‘Let’s use a linked li—’;
+                                  Batman: *slaps Robin* ‘Vector is faster’">
+
+<p>Some years ago, during a friendly discussion about C++, a colleague
+  challenged me with a question: what’s the best way to represent a sequence of
+  numbers if delete operation is one that needs to be supported.  I argued in
+  favour of a linked list suggesting that with sufficiently large number of
+  elements, it would be much preferred.
+
+<p>In a twist of fate, I’ve been recently discussing an algorithm which reminded
+  my of that conversation I had all those years ago.  But this time I was
+  arguing against a node-based data structure.  Rather than ending things at
+  a conversation, I’ve decided to benchmark a few solutions to make sure which
+  approach is the best.
+
+
+<h2>The problem</h2>
+
+<p>The task at hand is simple.  Design a data structure which stores a set of
+  words all of the same length and is able to return all words matching globs in
+  the form ‘<var>prefix</var>*<var>suffix</var>’.  That is, words which start
+  with a given prefix and end with a given suffix.  Either part of the pattern
+  may be empty and their concatenation is never longer than length of the words
+  in the collection.  Initialisation time and memory footprint are not
+  a concern.  Complexity of returning a result can be assumed to be constant.
+
+<!-- EXCERPT ONLY -->
+
+<p>In this article I’me going to describe possible solutions — some using
+  a boring vector while others taking advantage of an exciting prefix tree — and
+  benchmark the implementations in an ultimate battle between
+  contiguous-memory-based and a node-based containers.
+
+<!-- FULL -->
+
+<p>For example, supposing we were given words ‘foo’, ‘bar’ and ‘baz’, the
+  following table lists results for look-ups of various patterns:
+
+<table>
+  <thead><tr><th>Pattern<th>Result<th>Notes
+  <tbody>
+    <tr><td>‘*’<td>‘foo’, ‘bar’, ‘baz’
+        <td rowspan=2>Prefix and suffix can be empty.  Sole asterisk matches
+          everything or just a fragment of the word.
+    <tr><td>‘b*’<td>‘bar’, ‘baz’
+    <tr><td>‘b*r’<td>‘bar’<td>
+    <tr><td>‘f*r’<td>∅<td>
+    <tr><td>‘bar*’<td>‘bar’
+        <td rowspan=2>An asterisk may also match an empty substring if
+          concatenation of prefix and suffix has length equal that of the words
+          in the set.
+    <tr><td>‘ba*r’<td>‘bar’
+</table>
+
+
+<h2>Vector solution</h2>
+
+<p>The simplest approach is to store all the words in a list and compare each
+  with the pattern.  With \(n\) words each \(k\)-character long this has
+  \(O(kn)\) complexity.  More specifically, the run-time can be expressed in
+  terms of properties of the pattern.  This makes the complexity of a lookup
+  \(O(pn+sn)\) where \(p\) is the length of the prefix in the glob and \(s\)
+  length of the suffix.
+
+<p id=b1>An obvious improvement is sorting the list.  With the words ordered,
+  a binary search makes it possible to narrow down in logarithmic time the
+  search space to a subset of words which match pattern’s prefix.  This changes
+  the complexity to \(O(p\log n + ns)\)<a href="#f1">†</a>.
+
+<p>Another approach is to have two sorted lists, one called <code>forward</code>
+  containing the given words and another called <code>backward</code> containing
+  the words in their reversed forms, and a <code>fwd_to_bck</code> array which
+  would specify position in <code>backward</code> list corresponding to word
+  in <code>forward</code>.  In other words, for any valid
+  index <var>i</var>, <code>forward[<var>i</var>] =
+  reverse_word(backward[fwd_to_bck[<var>i</var>]])</code>.  Following up with
+  the example of a set with <code>foo</code>, <code>bar</code>
+  and <code>baz</code> words, the three lists would have the following contents:
+
+  <table>
+    <thead>
+      <tr>
+        <th>Index
+        <th><code>forward</code>
+        <th><code>fwd_to_bck</code>
+        <th><code>backward</code>
+    <tbody>
+      <tr><th>0<td><code>bar</code><td>1<td><code>oof</code>
+      <tr><th>1<td><code>baz</code><td>2<td><code>rab</code>
+      <tr><th>2<td><code>foo</code><td>0<td><code>zab</code>
+    </table>
+
+<p>With such data structure prepared, lookup algorithm becomes two binary
+  searches followed by a scan through <code>fwd_to_bck</code> to check if word
+  in <code>forward</code> list falls within a range of indexes
+  in <code>backward</code> list identified through the binary search.
+  Complexity of this solution is \(O((p+s)\log n + n)\).
+
+
+<h2>Trie</h2>
+
+<svg width="12.5em" height="20em" viewBox="0 0 500 800" class=fl
+     style="--w:12.5em;
+            shape-outside:polygon(0 0,59%0,77%32%,77%61%,100%100%,0 100%)">
+  <defs>
+    <polygon id="ar" points="  0,-25
+                              18,-65
+                               0,-45
+                             -18,-65
+                               0,-25"/>
+  </defs>
+  <g stroke=var(--i) stroke-width=3 fill=var(--a)>
+    <path fill="none" d="M70,708V497L244,27L331,262V497L252,708m156,0L331,497"/>
+    <circle cx="244" cy="27"  r="22" fill="var(--j)"/>
+    <circle cx="157" cy="262" r="22" />
+    <circle cx="331" cy="262" r="22" />
+    <circle cx="70"  cy="497" r="22" />
+    <circle cx="331" cy="497" r="22" />
+    <use xlink:href="#ar" transform="translate(157 262) rotate( 20)"/>
+    <use xlink:href="#ar" transform="translate(331 262) rotate(-20)"/>
+    <use xlink:href="#ar" transform="translate( 70 497) rotate( 20)"/>
+    <use xlink:href="#ar" x="331" y="497"/>
+    <use xlink:href="#ar" x="70"  y="732"/>
+    <use xlink:href="#ar" transform="translate(244 732) rotate( 20)"/>
+    <use xlink:href="#ar" transform="translate(418 732) rotate(-20)"/>
+  </g>
+  <text font-size="40" text-anchor="middle">
+    <tspan x="190" y="144">f</tspan>
+    <tspan x="310">b</tspan>
+    <tspan x="100" y="370">o</tspan>
+    <tspan x="357">a</tspan>
+    <tspan x="55" y="614">o</tspan>
+    <tspan x="270">r</tspan>
+    <tspan x="395">z</tspan>
+    <tspan y="770" font-style="italic" font-size="50">
+      <tspan x="70">foo</tspan>
+      <tspan x="244">bar</tspan>
+      <tspan x="418">baz</tspan>
+    </tspan>
+  </text>
+</svg>
+
+<p>There is another way though.  One involving a rarely used data structure, the
+  humble <a href="https://en.wikipedia.org/wiki/Trie">prefix tree</a>.  In
+  a trie, which is another name for the data type, edges are labelled by
+  individual characters.  In order to check presence of a key, the tree is
+  traversed following connections corresponding to characters of the word.
+  Since there’s a constant upper-limit to number of children a node can have,
+  lookup operation takes time linear in the length of the key, \(O(k)\), which
+  is better than binary search.
+
+<p>If all the words are put into a trie, finding all matching
+  a <code><var>prefix</var>*<var>suffix</var></code> pattern becomes a three
+  step process.  Firstly, follow edges in the trie matching characters in the
+  prefix.  Secondly, fan out the tree traversing \(k-p-s\) edges deep.  And
+  finally, follow edges matching characters in the suffix.  If a leaf node is
+  reached than path to that leaf describes a word in the set matching the
+  pattern.
+
+<p>Complexity of the first and last step are simple to derive; they are \(O(p)\)
+  and \(O(sn)\) respectively.  Suffix length needs to be multiplied by number of
+  words because in the worst case all words need to be tested.  As for the
+  fan-out step, we need to go \(k-p-s\) steps deep and in the worst case do it
+  for all keys which results in \(O((k-p-s)n)\) complexity.
+
+<p id=b2>Overall, the lookup ends up having \(O(p+(k-p)n)\) run-time.
+  Interestingly, it does not depend on the suffix<a href="#f2">‡</a>.  On the
+  other hand, the longer the prefix the faster the algorithm will run.  On one
+  extreme, if the glob is just a literal string (and thus prefix length equal
+  word length), we end up with a linear lookup.  In those cases, trie should be
+  faster than vector-based data structure.
+
+
+<h2>Benchmarks</h2>
+
+<p>To check the theoretical analysis I’ve prepared
+  <a href=https://github.com/mina86/pattern-match-benchmark>a benchmark to
+  compare aforementioned approaches</a>.  Three different vector-based
+  implementations and four trie-based ones were measured.
+
+<p>Putting <a href="https://docs.google.com/spreadsheets/d/1PlTcUsvMoYIBsURyv928aB3PYY8AUylam40wxKe6L1o/view">all
+  of that data</a> on a graph isn’t feasible.  The run-time depends on four
+  parameters — number of words, length of each word, length of the prefix in the
+  pattern and length of the suffix in the pattern — which doesn’t map well to
+  a two-dimensional canvas.  To wrangle the measurements, I’ve first reduced the
+  data set.  For each quadruple of parameters I’ve taken the best result of
+  a trie-based implementation and the worst of a vector-based one and divided
+  them.  This gives a ratio \(r\) indicating how much faster (if value is less
+  than one) or slower (if value is greater than one) trie-based solution is.
+
+<p>That still leaves quite a few dimensions so I’ve further grouped results by
+  word length and prefix length (discarding number of words and suffix length).
+  Figure below shows all the results collected into separate bands, one for each
+  word length the benchmark was run.  Within each band separate columns indicate
+  runs with a different prefix length starting from and empty prefix and ending
+  at a pattern which consists of the full word.  Vertical axis is logarithmic
+  and is the aforementioned execution time ratio \(r\).
+
+<figure>
+  <svg width="35em" height="26.25em" viewBox="0 0 560 420"
+       stroke-width="1" text-anchor="middle">
+    <path fill="var(--j)"
+          d="M76,0h80v360H76zM236,0h80v360H236zM396,0h80v360H396z" />
+    <path stroke="var(--e)" d="M76,20h480
+                               m0,40h-480
+                               m0,40h480
+                               m0,40h-480
+                               m0,40h480
+                               m0,40h-480
+                               m0,40h480
+                               m0,40h-480
+                               m0,40h480"/>
+    <path stroke="var(--q)" stroke-width="2" d="
+M102,39h8m0,37h-8m0,37h8m0,33h-8m0,39h8m0,39h-8m0,35h8
+M112,285h8m0,-166h-8m0,169h8m0,-132h-8m0,134h8m0,-99h-8m0,106h8m0,-71h-8m0,74h8m0,-40h-8m0,38h8m0,-24h-8m0,19h8m0,-9h-8
+M122,347h8m0,-1h-8m0,-3h8m0,-5h-8m0,-5h8m0,-9h-8m0,-4h8
+M177,29h8m0,38h-8m0,35h8m0,37h-8m0,36h8m0,43h-8
+M187,242h8m0,-134h-8m0,135h8m0,-97h-8m0,106h8m0,-72h-8m0,82h8m0,-51h-8m0,46h8m0,-15h-8m0,22h8m0,-7h-8
+M197,301h8m0,58h-8m0,-74h8m0,10h-8m0,15h8m0,-30h-8m0,9h8m0,2h-8m0,-15h8m0,7h-8m0,-2h8m0,-11h-8m0,4h8m0,-4h-8m0,-6h8m0,24h-8m0,-5h8m0,1h-8
+M207,300h8h-8m0,-4h8m0,-3h-8m0,-5h8m0,4h-8
+M252,27h8m0,35h-8m0,36h8m0,34h-8m0,41h8
+M262,204h8m0,-99h-8m0,105h8m0,-68h-8m0,85h8m0,-50h-8m0,43h8m0,-16h-8m0,23h8m0,-7h-8
+M272,248h8m0,17h-8m0,-30h8m0,7h-8m0,5h8m0,-16h-8m0,6h8m0,-1h-8m0,-9h8m0,1h-8m0,-1h8m0,-7h-8m0,23h8m0,-3h-8h8
+M282,256h8m0,-8h-8m0,17h8m0,-27h-8m0,14h8m0,-10h-8m0,5h8m0,-11h-8m0,12h8m0,-12h-8h8m0,-3h-8m0,11h8m0,-17h-8h8m0,1h-8m0,32h8m0,-20h-8m0,-4h8m0,13h-8
+M292,265h8m0,-3h-8m0,-2h8m0,-1h-8m0,7h8
+M327,21h8m0,36h-8m0,35h8m0,37h-8
+M337,173h8m0,-74h-8m0,84h8m0,-54h-8m0,49h8m0,-26h-8m0,32h8m0,-9h-8
+M347,201h8m0,4h-8m0,-15h8m0,5h-8m0,1h8m0,-10h-8h8m0,-2h-8m0,-5h8m0,18h-8m0,-2h8m0,2h-8
+M357,209h8m0,-9h-8m0,5h8m0,-11h-8m0,11h8m0,-11h-8h8m0,-4h-8m0,11h8m0,-16h-8m0,-2h8m0,3h-8m0,34h8m0,-24h-8m0,-2h8m0,13h-8
+M367,232h8m0,-22h-8m0,-9h8m0,5h-8m0,-5h8m0,31h-8m0,-25h8m0,-11h-8m0,1h8m0,1h-8m0,33h8m0,-29h-8m0,-15h8m0,-2h-8m0,10h8m0,56h-8m0,-33h8m0,-23h-8m0,-3h8m0,24h-8
+M377,246h8m0,3h-8m0,-5h8m0,5h-8
+M402,17h8m0,35h-8m0,37h8
+M412,146h8m0,-53h-8m0,44h8m0,-19h-8m0,26h8m0,-15h-8
+M422,155h8h-8m0,-10h8m0,-1h-8m0,-1h8m0,-6h-8m0,22h8m0,-3h-8m0,2h8
+M432,165h8m0,-10h-8m0,1h8m0,-5h-8m0,9h8m0,-16h-8m0,-1h8m0,2h-8m0,33h8m0,-20h-8m0,-3h8m0,12h-8
+M442,189h8m0,-24h-8m0,-10h8m0,1h-8m0,1h8m0,31h-8m0,-28h8m0,-15h-8m0,-1h8m0,9h-8m0,58h8m0,-33h-8m0,-19h8m0,-4h-8m0,20h8
+M452,228h8m0,-37h-8m0,-20h8m0,-8h-8h8m0,20h-8m0,45h8m0,-38h-8m0,-23h8m0,-9h-8m0,-1h8m0,24h-8m0,68h8m0,-40h-8m0,-31h8m0,-16h-8m0,-2h8m0,48h-8
+M462,240h8m0,1h-8m0,11h8
+M477,11h8m0,37h-8
+M487,99h8m0,-23h-8m0,38h8m0,-9h-8
+M497,106h8m0,-1h-8m0,-8h8m0,20h-8m0,-3h8m0,2h-8
+M507,120h8m0,-15h-8m0,-1h8m0,1h-8m0,34h8m0,-23h-8m0,-3h8m0,14h-8
+M517,148h8m0,-28h-8m0,-14h8m0,-2h-8m0,9h8m0,58h-8m0,-32h8m0,-22h-8m0,-3h8m0,21h-8
+M527,186h8m0,-37h-8m0,-23h8m0,-9h-8h8m0,24h-8m0,69h8m0,-39h-8m0,-30h8m0,-20h-8m0,-2h8m0,45h-8
+M537,228h8m0,-39h-8m0,-27h8m0,-8h-8m0,-2h8h-8m0,36h8m0,60h-8m0,-40h8m0,-35h-8m0,-19h8m0,-5h-8h8m0,53h-8
+M547,241h8m0,10h-8
+" />
+    <g font-style="italic">
+      <text x="-180" y="21"
+            transform="rotate(-90)">Trie ÷ Vector time (r)</text>
+      <text x="316" y="408">Words length (k)</text>
+    </g>
+    <g font-size="0.75em">
+      <text text-anchor="end"><tspan x="75" y="344">0.1×</tspan><tspan x="75" y="304">1×</tspan><tspan x="75" y="264">10×</tspan><tspan x="75" y="224">100×</tspan><tspan x="75" y="184">1 k×</tspan><tspan x="75" y="144">10 k×</tspan><tspan x="75" y="104">100 k×</tspan><tspan x="75" y="64">1 M×</tspan><tspan x="75" y="24">10 M×</tspan></text>
+      <text y="380"><tspan x="116">10</tspan><tspan x="196">100</tspan><tspan x="276">1 k</tspan><tspan x="356">10 k</tspan><tspan x="436">100 k</tspan><tspan x="516">1 M</tspan></text>
+    </g>
+
+  </svg>
+</figure>
+
+<p>A few things immediately jump out.  First of all, as predicted, the longer
+  the prefix the better tries fare.  This is shown by the ratio falling down
+  between columns within a single vertical band.  For example, for word length
+  of ten characters, if pattern has one-character prefix trie’s execution time
+  (shown in the middle column of the first band) varies from the same as
+  vector-based algorithm to over ten thousand times slower; but a simple word
+  lookup (situation where prefix length is equal word length which is shown in
+  the last column), prefix tree is over ten times faster at times.
+
+<p>The second thing however is that overall, tries are very bad compared to much
+  simpler vector-based structures.  Starting at word length of a thousand, tries
+  are ten times slower than using a sorted array of the keys.  (I haven’t made
+  any measurements for length between those two sizes).  Furthermore, the longer
+  the words in the set, the worst prefix tree becomes.  But even with short
+  words, depending on type of queries vector-based algorithm can be thousands
+  times faster.  There were only a handful of tests in which prefix tree bode
+  better than an array:
+
+  <table class=r>
+    <thead style="text-align:center">
+      <tr><th>n<th>k<th>p<th>s<th>Worst Vector [µs]<th>Best Trie [µs]<th>r
+    <tbody>
+      <tr><td>1<td rowspan=8>10<td>10<td>0<td>0.452<td>0.145<td>0.32
+      <tr><td>10<td>10<td>0<td>0.548<td>0.135<td>0.25
+      <tr><td>100<td>1<td>1<td>1.779<td>1.747<td>0.98
+      <tr><td>100<td>10<td>0<td>0.896<td>0.134<td>0.15
+      <tr><td>1000<td>10<td>0<td>1.194<td>0.134<td>0.11
+      <tr><td>10000<td>10<td>0<td>1.585<td>0.135<td>0.09
+      <tr><td>100000<td>10<td>0<td>1.874<td>0.134<td>0.07
+      <tr><td>1000000<td>10<td>0<td>2.337<td>0.159<td>0.07
+    <tbody>
+      <tr><td>10000<td rowspan=3>100<td>10<td>1<td>8.537<td>4.687<td>0.55
+      <tr><td>100000<td>10<td>1<td>132.68<td>4.373<td>0.03
+      <tr><td>100000<td>10<td>10<td>4.116<td>3.919<td>0.95
+  </table>
+
+<p>And let’s not forget that the cards were stacked in favour of the trees.  Not
+  only the best trie was pitted against the worst vector solution, but the
+  alphabet consisted of only 26 symbols (specifically lower case letters) which
+  also benefited trie.
+
+<h2>Conclusion</h2>
+
+<p>The big O notation ‘hides constants’.  Any programmer recognises that
+  distinct algorithm with the same complexity can perform vastly differently.
+  It’s also not news that due to asymptotic nature of the big O, algorithms with
+  seemingly better complexity may run slower than ones with worse ones.  This is
+  why you’d use insertion sort to sort ten elements rather than using a heap
+  sort or why Coppersmith–Winograd algorithm is never used in practice.
+
+<p>It’s good to sometimes remind ourselves in practice of those facts.
+  Sometimes a naïve, almost brute-force, approach may be faster just because it
+  uses tighter loops or has better cache-locality.  And cache-locality is
+  something node-based data structures (such as linked lists or trees) don’t
+  have.
+
+<p>In other words, it’s nearly never a linked-list and rarely a tree.
+
+
+<p id=f1><a href="#b1">†</a> If we further assume uniform distribution of words
+  the linear search matching suffixes doesn’t need to go through all \(n\) keys.
+  Rather it needs to test only \(O\left({n \over \exp(p)}\right)\) strings which
+  is noticeably smaller.  This makes the complexity equal \(O\left(p\log n + {ns
+  \over \exp(p)}\right)\).  The same adjustment can be made in other complexity
+  functions.  Big O expresses pessimistic time so it’s arguably more correct to
+  derive the formula for the worst-case scenario in which all words need to be
+  checked.
+
+<p id=f2><a href="#b2">‡</a> Of course this is only in worst case scenario.  In
+  practice, on average case, presence of a suffix will speed the algorithm up.
