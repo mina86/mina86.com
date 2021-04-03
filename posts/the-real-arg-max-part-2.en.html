@@ -1,0 +1,348 @@
+<!-- subject: Will the real <code>ARG_MAX</code> please stand up? Part 2 -->
+<!-- date: 2021-04-18 01:49:29 -->
+<!-- tags: arg_max, unix, linux -->
+<!-- categories: Articles, Techblog -->
+
+<p>In <a href="/2021/the-real-arg-max-part-1/">part one</a> we’ve looked at
+  the <code>ARG_MAX</code> parameter on Linux-based systems.  We’ve established
+  experimentally how it affects arguments passed programs and what influences
+  the value.  This time, we’ll look directly at the source to verify our
+  findings and see how the limit looks from the point of view of system
+  libraries and kernel itself.
+
+<!-- EXCERPT -->
+
+<h2>C system library</h2>
+
+<p>Application get value of the <code>ARG_MAX</code> parameter from
+  the <code>sysconf</code> function.  It’s what the <code>getconf</code> utility
+  uses to report the limit.  But even though the result of the function is
+  closely related to the kernel, looking for its definition in the Linux source
+  code is an exercise in futility.  Rather, the function is defined in the
+  C system library which, in GNU/Linux distributions, is commonly providedy by
+  the glibc package.
+
+<p>glibc is a cross-platform library which supports many kernels and
+  architectures.  It often includes multiple definitions of the same function
+  each tailored for particular platform — such is the case
+  with <code>sysconf</code>.  Thankfully, our analysis is limited to Linux and
+  we can limit ourselves to just one of them.  In glibc 2.33, the implementation
+  we’re interested in is located
+  in <code>sysdeps/unix/sysv/linux/sysconf.c</code> file and looks as follows:
+
+<pre>
+#define legacy_ARG_MAX 131072
+
+<i>/* […] */</i>
+
+long int
+__sysconf (int name)
+{
+  const char *procfname = NULL;
+
+  switch (name)
+    {
+      <i>/* […] */</i>
+
+    case _SC_ARG_MAX:
+      {
+        struct rlimit rlimit;
+        /* Use getrlimit to get the stack limit.  */
+        if (__getrlimit (RLIMIT_STACK, &amp;rlimit) == 0)
+	  return MAX (legacy_ARG_MAX, rlimit.rlim_cur / 4);
+
+        return legacy_ARG_MAX;
+      }
+
+      <i>/* […] */</i>
+    }
+
+  return posix_sysconf (name);
+}
+</pre>
+
+<p>This code explains discrepancies we’ve observed
+  when <a href="/2021/the-real-arg-max-part-1/#bigstack">testing large stack
+  size limit</a>.  While glibc implements the 128 KiB lower bound it’s unaware
+  of the 6 MiB upper bound.  Since <code>getconf</code> utility relies
+  on <code>sysconf</code> library function, having the above implementation
+  means that for large stacks the tool will wrongly report <code>ARG_MAX</code>
+  as quarter of maximum stack size.
+
+<p>glibc isn’t the only library used on Linux systems.  Others have their
+  own <code>sysconf</code> implementations which may return different values.
+  uClibc-ng 1.0.38 behaves the same way glibc does while bionic 10.0, dietlibc
+  0.34 and musl 1.2 return 128 KiB as <code>ARG_MAX</code>.
+
+<p>The good news is that situation with glibc is about to improve.  My
+  recent <a href="https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=a9880586eedb3ba89ca6a7c5e3f0664c279cf636">commit
+  updating <code>sysconf</code> implementation</a> makes the function aware of
+  the 6 MiB upper bound.  Once the change finds its way into a glibc release,
+  the library will report <code>ARG_MAX</code> correctly even for large stacks.
+
+
+<h2>Linux kernel</h2>
+
+<p>On the kernel side, we want to look at the <code>execve</code> system call.
+  Like all other system calls, it is defined using
+  a <code>SYSCAL_DEFINE<var>n</var></code> macro.  It doesn’t take long to find
+  its implementation in <code>fs/exec.c</code> file.  In Linux 5.11.11 it looks
+  as follows:
+
+<pre>
+SYSCALL_DEFINE3(execve,
+		const char __user *, filename,
+		const char __user *const __user *, argv,
+		const char __user *const __user *, envp)
+{
+	return do_execve(getname(filename), argv, envp);
+}
+</pre>
+
+<p>Definition of <code>do_execve</code> can be found just a few lines earlier in
+  the same file.  All it does is call <code>do_execveat_common</code> function
+  so that’s what we’re going to take a closer look at.  It is where most of the
+  checks and calculations happen:
+
+<pre>
+static int do_execveat_common(int fd, struct filename *filename,
+			      struct user_arg_ptr argv,
+			      struct user_arg_ptr envp,
+			      int flags)
+{
+	struct linux_binprm *bprm;
+	int retval;
+	<i>/* […] */</i>
+
+	retval = count(argv, MAX_ARG_STRINGS);
+	if (retval &lt; 0)
+		goto out_free;
+	bprm->argc = retval;
+
+	retval = count(envp, MAX_ARG_STRINGS);
+	if (retval &lt; 0)
+		goto out_free;
+	bprm->envc = retval;
+
+	retval = bprm_stack_limits(bprm);
+	if (retval &lt; 0)
+		goto out_free;
+
+	retval = copy_string_kernel(bprm->filename, bprm);
+	if (retval &lt; 0)
+		goto out_free;
+	bprm->exec = bprm->p;
+
+	retval = copy_strings(bprm->envc, envp, bprm);
+	if (retval &lt; 0)
+		goto out_free;
+
+	retval = copy_strings(bprm->argc, argv, bprm);
+	if (retval &lt; 0)
+		goto out_free;
+
+	retval = bprm_execve(bprm, fd, filename, flags);
+
+	<i>/* […] */</i>
+	return retval;
+}
+</pre>
+
+<p>The two invocations to <code>count</code> function calculate number of
+  command line arguments and environment variables.  Each call may fail if the
+  number exceeds <code>MAX_ARG_STRINGS</code>.  Technically speaking this is
+  another limit but in practice the constant is over two billion and, as we’ll
+  see later, there is no way to reach this number without reaching other limits
+  first.  The only other situation in which <code>count</code> function may
+  return an error is in case of memory fault, but that’s not interesting for our
+  analysis.
+
+
+<h3>Limit calculation</h3>
+
+<p><code>bprm_stack_limits</code> is where the actual calculation happens.  The
+  function determines the limit and stores it in the <code>bprm</code>
+  structure.  It’s defined as follows:
+
+<pre>
+static int bprm_stack_limits(struct linux_binprm *bprm)
+{
+	unsigned long limit, ptr_size;
+
+	limit = _STK_LIM / 4 * 3;
+	limit = min(limit, bprm->rlim_stack.rlim_cur / 4);
+	limit = max_t(unsigned long, limit, ARG_MAX);
+
+	ptr_size = (bprm->argc + bprm->envc) * sizeof(void *);
+	if (limit &lt;= ptr_size)
+		return -E2BIG;
+	limit -= ptr_size;
+
+	bprm->argmin = bprm->p - limit;
+	return 0;
+}
+</pre>
+
+<p><code>_STK_LIM</code> is the default stack size limit and equals 8 MiB.  The
+  first expression in the function is what introduces the upper bound of 6 MiB
+  for arguments.  It’s worth noting that it’s a relatively new restriction
+  introduced in Linux 4.13 (and later back-ported to previous releases).  Why
+  it’s there might be a story for another time.
+
+<p>The second expression in the function is what implements the ‘quarter of the
+  stack size’ rule.  This is what could be called a ‘normal’ case and definitely
+  is most typical of common desktop and server configurations.  With default
+  maximum stack size limit being 8 MiB the default limit for executable
+  arguments ends up being 2 MiB.
+
+<p>The third expression sets the limit to be no less than
+  the <code>ARG_MAX</code>.  This gets a bit confusing.  <code>ARG_MAX</code> is
+  supposed to be a dynamic value and here we see a constant of the same name.
+  As often is the case, the explanation lays in the past.  Historically the
+  value was constant and defined as a macro in kernel headers.  Eventually,
+  a more dynamic approach was introduced but the definition of the macro stuck.
+  To maintain backwards-compatibility, the dynamic calculation kept the old
+  static value as a lower bound.
+
+<p>The last adjustment in the function is to reserve space for
+  the <code>argv</code> and <code>envp</code> arrays.  If the limit cannot
+  accommodate them the function returns an error; otherwise the limit is reduced
+  by the necessary space.  This is where we can see that the limit of two
+  billion arguments and environment variables (imposed by the <code>count</code>
+  function called in <code>do_execveat_common</code>) can never be reached.
+  With a 6 MiB upper bound for the limit, the most one could hope for is 1.25
+  million arguments and that’s only on a 32-bit system with all strings empty.
+
+<p>The calculated limit is finally stored in <code>argmin</code> field of
+  the <code>bprm</code> structure.  It specifies the lowest address at which
+  arguments can still be stored and the value will be checked later on when
+  program executable path, environment variables and command line arguments are
+  copied.  Recall that stack grows downward which is why the field specifies the
+  minimum and why it’s calculated by subtracting the argument size limit from
+  the current top of the stack (specified by <code>bprm->p</code>).
+
+
+<h3>Copying strings</h3>
+
+<p>Finally, <code>do_execveat_common</code> checks the lengths of the strings
+  while copying them to the new program’s memory.  First, the path to program’s
+  executable is transferred with the help of <code>copy_string_kernel</code>
+  function which is defined as follows:
+
+<pre>
+int copy_string_kernel(const char *arg, struct linux_binprm *bprm)
+{
+	int len = strnlen(arg, MAX_ARG_STRLEN) + 1 <i>/* terminating NUL */</i>;
+	unsigned long pos = bprm->p;
+
+	if (len == 0)
+		return -EFAULT;
+	if (!valid_arg_len(bprm, len))
+		return -E2BIG;
+
+	arg += len;
+	bprm->p -= len;
+	if (IS_ENABLED(CONFIG_MMU) && bprm->p &lt; bprm->argmin)
+		return -E2BIG;
+
+	<i>/* [… copy the string …] */</i>
+	<i>/* [… analogous to memcpy(bprm->p, arg, len); …] */</i>
+
+	return 0;
+}
+</pre>
+
+<p>Firstly, <code>strnlen</code> paired with call to <code>valid_arg_len</code>
+  checks whether the string exceeds <code>MAX_ARG_STRLEN</code> bytes (or
+  128 KiB).  <code>valid_arg_len</code> is a trivial inline function whose body
+  simply states <code>return len &lt;= MAX_ARG_STRLEN;</code>.  If the size of
+  the string exceeds the limit, argument list is deemed too long and the
+  function returns an error.
+
+<p>Then, the function checks if there’s enough space on stack to fit the string.
+  This is done by moving the stack pointer downwards
+  (i.e. subtracting <code>len</code> from <code>bprm->p</code> field) to reserve
+  memory for the argument and checking whether the new position of the edge of
+  the stack crossed the limit (by checking if <code>bprm->p &lt;
+  bprm->argmin</code>).  If so, argument list is to long.  Otherwise the
+  argument is copied onto the stack.
+
+<p>The <code>copy_strings</code> function which <code>do_execveat_common</code>
+  function calls to transfer environment variables and command line arguments is
+  entirely analogous.  The two differences are that i) source data lives in
+  user-space and ii) the function operates in a loop copying a sequence of
+  strings.
+
+<pre>
+static int copy_strings(int argc, struct user_arg_ptr argv,
+			struct linux_binprm *bprm)
+{
+	<i>/* […] */</i>
+	int ret;
+
+	while (argc-- > 0) {
+		const char __user *str;
+		int len;
+		unsigned long pos;
+
+		ret = -EFAULT;
+		str = get_user_arg_ptr(argv, argc);
+		if (IS_ERR(str))
+			goto out;
+
+		len = strnlen_user(str, MAX_ARG_STRLEN);
+		if (!len)
+			goto out;
+
+		ret = -E2BIG;
+		if (!valid_arg_len(bprm, len))
+			goto out;
+
+		pos = bprm->p;
+		str += len;
+		bprm->p -= len;
+		if (bprm->p &lt; bprm->argmin)
+			goto out;
+
+		<i>/* [… copy the string …] */</i>
+		<i>/* [… analogous to memcpy(bprm->p, str, len); …] */</i>
+	}
+	ret = 0;
+out:
+	<i>/* […] */</i>
+	return ret;
+}
+</pre>
+
+<p>Having to read from user-space complicates the function, though much of that
+  complexity has been hidden from the listing above in the elided code.  The
+  visible parts are calls to <code>get_user_arg_ptr</code>
+  and <code>strnlen_user</code> instead of <code>strnlen</code>.
+
+<p>The parts that interests us remain the same: the <code>valid_arg_len</code>
+  call and the <code>bprm->p &lt; bprm->argmin</code> comparison.
+
+
+<h2>Conclusion</h2>
+
+<p>This concludes the investigation.  In the previous article we’ve seen how the
+  argument length limit affects user-space, here we looked at the source code of
+  the kernel to confirm our previous findings.  There are still a few minor
+  mysteries — such as why the 6 MiB exists or what happens if maximum stack size
+  is less that 128 KiB — which I may tackle at another time.
+
+<p>It remains important to remember that our findings are true for Linux only.
+  Other kernels will set the limit differently and count different things
+  towards it.  POSIX leaves the details purposefully vague.  As a result
+  a portable application may struggle to interpret the limit; it should not only
+  take value of <code>ARG_MAX</code> with a grain of salt but ideally also
+  recover from <code>E2BIG</code> error by reducing number of arguments.
+
+<p>Fortunately, Unix-like systems provide a simple solution in the form
+  of <code>xargs</code> and <code>find … -exec … +</code> commands.  Those
+  should be much easier to use and sufficient for most cases.  They will
+  typically know how to deal with the command’s argument size limit.
+
+<p>Whatever the case may be, I hope this article has been informative and
+  provided further understanding of the kernel and it’s interaction with
+  user-space}.

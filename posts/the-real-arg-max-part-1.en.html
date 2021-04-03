@@ -30,7 +30,7 @@ bash: <var>command</var>: Argument list too long
   <div style="flex:.8 20rem">
     <p style="margin-top:0">The value of <code>ARG_MAX</code> is no secret and
       can be retrieve with <code>getconf</code> utility.  On x86_64 platform
-      it’s 2097152 (or 2 MiB) by default.  To test this limit we can use pretty
+      it’s 2097152 (or 2 MiB) by default.  To test this limit we can use pretty
       much any command; <code>echo</code> should do.  A simple experiment (as
       shown in the listing on the side) confirms that the tool can be called
       with a one-million-character-long argument.  On the other hand, further
@@ -100,7 +100,7 @@ $ /bin/echo "$s" "$s" "$s" "$s" "$s" "$s" "$s" "$s" \
   until we get the ‘Argument list too long’ error message.  As we’ll see the one
   gets is highly dependent on the environment.  In the shell session shown in
   listing above, I got a limit of 2093730 characters which is only 3422 bytes
-  shy of the 2 MiB we got as the value <code>ARG_MAX</code>.  What could account
+  shy of the 2 MiB we got as the value <code>ARG_MAX</code>.  What could account
   for this difference?
 
 <p>Since <code>echo</code> prints a white-space character after each argument,
@@ -240,11 +240,11 @@ $ ulimit -Ss $((1024 * 1024)); getconf ARG_MAX
 
 <p>Correlating maximum stack size with value of the <code>ARG_MAX</code> limit
   we can easily see that the latter is set to one fourth of the former with
-  additional restriction that <code>ARG_MAX</code> is no lower than 128 KiB.
+  additional restriction that <code>ARG_MAX</code> is no lower than 128 KiB.
   Upper limit on the other hand does not seem to exist.  Or does it?  Let’s try
-  a stack size of 42 MiB:
+  a stack size of 42 MiB:
 
-<pre>
+<pre id=bigstack>
 $ ulimit -Ss $((42 * 1024))
 $ getconf ARG_MAX
 11010048
@@ -259,9 +259,9 @@ sh: /bin/true: Argument list too long
 </pre>
 
 <p>Turns out even if the kernel returns a large value of <code>ARG_MAX</code>,
-  the limit is always capped at 6 MiB.
+  the limit is always capped at 6 MiB.
 
-<p>On the other end, even if kernel reports <code>ARG_MAX</code> to be 128 KiB,
+<p>On the other end, even if kernel reports <code>ARG_MAX</code> to be 128 KiB,
   that effective limit will never reach more than the maximum stack size.  For
   example:
 
@@ -280,17 +280,18 @@ posh: /bin/true: Argument list too long
 <p>To quickly recap all the information:
 <ul>
   <li id=b1>The maximum length of the arguments to the <code>execve</code>
-    syscall is the smallest of <code>ARG_MAX</code>, the maximum stack
-    size<a href=#f1>†</a> or 6 MiB where <code>ARG_MAX</code> is the biggest of
-    one fourth of the maximum stack size or 128 KiB.
+    syscall is one forth of the maximum stack size but no less than 128 KiB and
+    no more than 6 MiB.
   <li>The limit covers: i) all command line arguments, ii) all environment
     variables, iii) pointers to the former two present in <code>argv</code>
     and <code>environ</code> arrays and iv) the path to the executable used to
     run the program.
   <li>In addition, regardless of how high the limit is, a single command line
-    argument and environment variable cannot exceed 128 KiB.  Length of
+    argument and environment variable cannot exceed 128 KiB.  Size of
     environment variable is calculated as the size
     of <code><var>name</var>=<var>value</var></code> string.
+  <li>String size includes the terminating NUL byte, i.e. it’s the string length
+    plus one.
 </ul>
 
 <p>And that’s it for now.  In the next episode we’re going to look at the kernel
