@@ -640,6 +640,20 @@
 	(onresize = e => (onscroll(), positionDropDown()))();
 
 
+	/* Scrolls document to the element specified in the hash taking into
+	   consideration height of the header. */
+	(onhashchange = el => {
+		if (!/^#[a-z0-9-_]+$/i.exec(el = location.hash) ||
+		    !(el = query(el))) {
+			return true;
+		}
+		scrollTo(pageXOffset,
+		         el.getBoundingClientRect().top + pageYOffset -
+		         header.getBoundingClientRect().bottom - 16);
+		return false;
+	})();
+
+
 	/* Add third party scripts. */
 	a = src => create('script', doc.head).src = src;
 
