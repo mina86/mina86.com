@@ -1,0 +1,84 @@
+<!-- subject: Embrace the Bloat -->
+<!-- date: 2021-05-16 12:44:36 -->
+<!-- tags: bloat, suckless, xscreensaver -->
+<!-- categories: Articles, Techblog  -->
+
+<p>‘I’m using slock as my screen locker,’ a wise man once said.  He had a beard
+  so surely he was wise.
+
+<p>‘Oh?’ his colleague raised a brow intrigued.  ‘Did they fix the PAM bug?’ he
+  prodded inquisitively. Nothing but a confused stare came in reply.  ‘slock
+  crashes on systems using PAM,’ he offered an explanation and to demonstrate
+  his point, he approached a nearby machine and pressed the Return key.
+
+<p>Screens, blanked by a locker just a few minutes prior, came back to life,
+  unlocked without the need to enter the password.
+
+<!-- EXCERPT -->
+
+<p id=b4 style="margin-top:2em">No, I wasn’t the one in the story, but I might
+  just as well had been.  At the time when I witnessed this conversation I was
+  using slock as well preferring it over a ‘bloated’
+  xscreensaver.<a href="#f4">†</a> In theory reducing ‘bloat’ is a sound idea.
+  As Steve McConnel reports in Code Complete, there are 1-25 bugs per thousand
+  lines of code.  Therefore, using software with fewer lines of code reduces
+  number of vulnerabilities one is exposed to.
+
+<p>Alas reducing ‘bloat’ is rarely a rational pursuit.  Hardly anyone is
+  analysing security implications or resource usage, rather people are motivated
+  by a dogma proclaiming that ‘bloat’ is evil and software without ‘bloat’ is
+  divine.<a href="#f5">‡</a>
+
+<p>But that dogma is not always correct.  slock has 395 lines of code
+  while <code>xscreensaver</code> has nearly half a million.  And yet, time and
+  time
+  again, <a href="https://www.jwz.org/blog/2021/01/i-told-you-so-2021-edition/">Jamie
+  Zawinski has been proven right</a>.  Similarly, one could argue that LibreSSL
+  has been a premature fork and free software community would have been better
+  served by all resources focusing on OpenSSL rather than splitting some of the
+  efforts to a library whose big selling point was removal of features.
+
+<p>A common argument brought up in discussion about ‘bloat’ is that of Unix
+  philosophy to write programs which do one thing and do it well.  For example,
+  does GNU cat need a <code>--show-all</code> switch?  It could be replaced with
+  a sed script and removing its handling would improve cat, right?  Except
+  what’s often lost in that reasoning is that now everyone has to write and
+  maintain a non-trivial sed script rather than having a shared tool used by
+  millions of people and maintained by a well established project.
+
+<p>Am I saying that we should push as much code into every application?  Choose
+  tools with the biggest binary size?  No, of course not.  Programs with well
+  defined scope, devoid of unnecessary features have their advantages, but
+  comparing number of lines of code is never a good metric by itself.  It’s good
+  to try and understand where those additional lines come from.  Even if there
+  is no difference in set of features between two programs, one might be larger
+  because
+  it’s <a href="https://www.reddit.com/r/unix/comments/6gxduc/how_is_gnu_yes_so_fast/">better
+  optimised</a> or
+  uses <a href="https://www.jwz.org/xscreensaver/toolkits.html">a more
+  secure</a> design.
+
+<p>Size of the executable or number of lines of code are a poor proxy for other,
+  actually significant properties of a system.  If you care about security, look
+  at the design of a piece of software and how historically its project reacted
+  to vulnerabilities.  If you want maximum speed, first make sure that
+  executable size is actually a problem (especially since smaller binary may
+  mean fewer optimisations).  If you are after minimising space, firsts make
+  sure that you cannot spare those few cents to get another GB of storage.  Make
+  sure you’re optimising what you actually care about and an irrelevant proxy
+  metric.
+
+<p id=f4><a href="#b4">†</a> It was just pure luck that I wasn’t affected by the
+  bug.  My account password was long and complicated.  While good for security
+  it got annoying fast when I had to type it each time I returned with a fresh
+  mug of tea.  Because of that I was running a modified version of slock which
+  verified entered password against a hard-coded hash rather than my system
+  credentials.  As an aside, this had additional benefit
+  of <a href="/2021/start-your-passwords-with-slash-bang/">preventing my account
+  password being leaked</a> if I ever tried to unlock a screen after forgetting
+  to lock it beforehand.
+
+<p id=f5><a href="#b5">‡</a> Worse still, some people seem to be motivated by
+  a ‘GNU is bad’ attitude.  It’s not uncommon for Internet forums to witness
+  someone trying to claim GNU tools are bad by bringing up number of lines of
+  code or size of the binaries.
