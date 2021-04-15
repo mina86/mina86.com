@@ -1,0 +1,24 @@
+<!-- subject: Pro tip: You can put URLs in C & C++ code -->
+<!-- date: 2022-04-01 01:17:43 -->
+<!-- tags: c, c++ -->
+<!-- categories: Misc, Techblog -->
+
+<p>Documenting source code is important part of software engineering.  Code is
+  read more often than it’s written making it crucial to provide enough context
+  for reader to understand what the implementation is doing.  This can come in
+  the form of links to external resources providing description of an algorithm,
+  reference for an API or historic context justifying the code.
+
+<p>As it turns out, C and C++ languages offer a little-known feature which
+  allows URLs to be included directly in the function source code.  For example:
+
+<pre>
+static float rsqrt(float x) {
+	<a href=https://en.wikipedia.org/wiki/Fast_inverse_square_root>https://en.wikipedia.org/wiki/Fast_inverse_square_root</a>
+	static_assert(std::numeric_limits&lt;float>::is_iec559);
+	auto i = std::bit_cast&lt;uint32_t>(x) >> 1;
+	auto y = std::bit_cast&lt;float>(UINT32_C(0x5F375A86) - i);
+	y *= 1.5f - x * 0.5F * y * y;
+	return y;
+}
+</pre>
