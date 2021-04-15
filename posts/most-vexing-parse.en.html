@@ -1,0 +1,205 @@
+<!-- subject: Most vexing parse -->
+<!-- date: 2021-04-25 16:22:02 -->
+<!-- tags: c++, mvp, most vexing parse -->
+<!-- categories: Misc, Techblog -->
+
+<p>Here’s a puzzle: What does the following C++ code output:
+
+<pre>
+#include &lt;cstdio>
+#include &lt;string>
+
+struct Foo {
+	Foo(unsigned n = 1) {
+		std::printf("Hell%s,", std::string(n, 'o').c_str());
+	}
+	~Foo() {
+		std::printf("%s", " world");
+	}
+};
+
+static constexpr double pi = 3.141592653589793238;
+
+int main(void) {
+	Foo foo();
+	Foo bar(unsigned(pi));
+}
+</pre>
+
+<!-- EXCERPT -->
+
+<p>If your reaction is ‘What do you mean? It’s obvious!’ than you’ve answered
+  incorrectly.  But if you’ve exclaimed ‘This is implementation-defined because
+  there’s no terminating new-line character in text stream!’ than
+  congratulations on knowing this fact; that’s still the wrong answer though.
+  The correct reaction is a sigh followed by a lament at C++ syntax.
+
+<p>The <code>Foo foo();</code> line is a <em>function declaration</em> and has
+  no effect on the behaviour of the code.  The program outputs nothing and
+  returns with a zero exit status.  Perhaps more confusingly, <code>Foo
+  bar(unsigned(pi);</code> is <em>also</em> just a function declaration — this
+  time of a function with a single unsigned argument — and doesn’t affect output
+  of the program.
+
+<p>This is an instance of the infamous <dfn>most vexing parse</dfn> which is
+  a syntax ambiguity where a piece of code could be interpreted as a function
+  declaration or creation of an object.  In those situations C++ mandates the
+  syntax to be parsed as a function declaration.
+
+
+<h2>Removing the ambiguity</h2>
+
+<p>There are a few possible ways to force the compiler to treat the lines as an
+  object definitions.  In case of <code>foo</code>, the simplest (and arguably
+  best) is to remove the parenthesis all together.  In case
+  of <code>bar</code>, an explicit cast, that is
+  using <code>static_cast&lt;unsigned>(pi)</code>, would resolve the issue.
+
+<p>C++11 offers another option in the form of aggregate initialisation (also
+  known as brace initialisation).  Simply replace parenthesis around the
+  supposed constructor arguments with braces and the code will behave as
+  expected:
+
+<pre>
+static constexpr double pi = 3.141592653589793238;
+
+int main(void) {
+	Foo foo{};
+	Foo bar{unsigned(pi)};
+}
+</pre>
+
+<p>But before you go on a rampage and start replacing all parenthesis with
+  braces…
+
+
+<h2>Here’s another puzzle</h2>
+
+<p>What does the following C++ code output:
+
+<pre>
+#include &lt;iostream>
+#include &lt;vector>
+
+int main(void) {
+	typedef std::vector&lt;int> Vector;
+	Vector a(6);
+	Vector b{6};
+	Vector c({6});
+	Vector d(6, 9);
+	Vector e{6, 9};
+	Vector f({6, 9});
+	std::cout << a.size() << ' ' << a[0] << ", "
+	          << b.size() << ' ' << b[0] << ", "
+	          << c.size() << ' ' << c[0] << ", "
+	          << d.size() << ' ' << d[0] << ", "
+	          << e.size() << ' ' << e[0] << ", "
+	          << f.size() << ' ' << f[0] << '\n';
+}
+</pre>
+
+<p>In constructor call the parenthesis can be replaced by braces so in the code
+  above <code>a</code> is the same as <code>b</code> and <code>d</code> is the
+  same as <code>e</code>, right?  Not so fast.
+
+<ul>
+  <li>The definition of variable <code>a</code> is equivalent to <code>Vector
+    a(6, 0);</code>.  Nothing surprising here.  This constructs a six-element
+    vector with all elements initialised to zero.
+  <li>However, the definition of variable <code>b</code> is different.
+    Because <code>std::vector</code> has a constructor which
+    takes <code>std::initializer_list</code> as an argument, when braces are
+    used that constructor is used.  As such, the <code>b</code> variable is in
+    fact equivalent to <code>c</code>.  They are both one-element vectors
+    holding the value six.
+  <li>The definition of variable <code>d</code> is analogous to <code>a</code>
+    and results in a six-element vector with all elements set to nine.  Again,
+    no surprises there.
+  <li>Finally, the definitions of variables <code>e</code> and <code>f</code>
+    are equivalent and — just like with <code>b</code> and <code>c</code> — call
+    constructor with an initialiser list resulting in a two-argument vector
+    holding values six and nine.
+</ul>
+
+<p>The output of the program is therefore <code>6 0, 1 6, 1 6, 6 9, 2 6, 2
+    6</code>.
+
+
+<h2>Conclusion</h2>
+
+<p>The most vexing parse is not a new issue — it fact it’s now two decades since
+  Scott Meyers coined the term in his Effective STL book — and I certainly won’t
+  make any new revelations about it.  It is unfortunate that in attempt to solve
+  it the committee decided it was a good idea to allow braces themselves to be
+  a shorthand for calling constructor with initialiser list.  This decision
+  means that adding a constructor which takes <code>std::initializer_list</code>
+  is now an API-breaking change.  How?  Let’s consider the following code:
+
+<pre>
+#include &lt;iostream>
+#include &lt;memory>
+
+struct DynArr {
+	DynArr(size_t size) : ptr(std::make_unique&lt;int[]>(size)), sz(size) {}
+
+	/*
+	DynArr(std::initializer_list&lt;int> lst) : DynArr(lst.size()) {
+		std::copy(lst.begin(), lst.end(), ptr.get());
+	}
+	*/
+
+	size_t size() const { return sz; }
+	int *data() { return ptr.get(); }
+	int &amp;operator[](size_t offset) { return ptr[offset]; }
+	int &amp;last() { return ptr[sz - 1]; }
+
+private:
+	const std::unique_ptr&lt;int[]> ptr;
+	const size_t sz;
+};
+
+int main(void) {
+	DynArr arr{5};
+	arr[0] = arr[1] = 1;
+	for (size_t i = 2; i &lt; arr.size(); ++i) {
+		arr[i] = arr[i - 2] + arr[i - 1];
+	}
+	std::cout &lt;&lt; arr.last() &lt;&lt; '\n';
+}
+</pre>
+
+<p>With only the <code>DynArr(size_t)</code> constructor present,
+  the <code>DynArr arr{5}</code> definition allocates a five-element array and
+  the code calculates fifth number in the Fibonacci sequence.  But if a later
+  revisions of the class introduce
+  the <code>DynArr(std::initializer_list&lt;int&gt;)</code> constructor, the
+  same line will invoke this new constructor and later cause a buffer overflow.
+
+<p>Unfortunately (as often is the case when talking about C++) there are no
+  definite answers to the most vexing parse or the potential confusion with
+  aggregate initialisation.  It’s remains one of those things a C++ programmer
+  has to be aware of.
+
+
+<h2>Epilogue: A bonus puzzle</h2>
+
+<p>I’ll leave you, Dear Reader, with the this puzzle.  What does the following
+  C++ code output:
+
+<pre>
+#include &lt;cstdio>
+#include &lt;math.h>
+#include &lt;string>
+
+struct Foo {
+	Foo(unsigned n = 1) {
+		std::printf("Hell%s, world\n", std::string(n, 'o').c_str());
+	}
+};
+
+int main(void) {
+	Foo bar(unsigned(M_PI));
+}
+</pre>
+
+<p>C and C++ are so much fun!
