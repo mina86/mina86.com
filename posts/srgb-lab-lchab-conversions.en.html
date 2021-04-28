@@ -210,7 +210,7 @@ fn lab_from_xyz(xyz: [f32; 3]) -> [f32; 3] {
 /// Converts colour from CIELAB (a.k.a. L*a*b) space
 /// using D65 reference white point to XYZ.
 fn xyz_from_lab(lab: [f32; 3]) -> [f32; 3] {
-    const CBRT_EPSILON: f32 = 0.20689655172413796;
+    const CBRT_EPSILON: f32 = 6.0 / 29.0;
     const KAPPA: f32 = 24389.0 / 27.0;
 
     fn f_inv(v: f32) -> f32 {
