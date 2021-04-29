@@ -35,11 +35,11 @@ int main(void) {
   The correct reaction is a sigh followed by a lament at C++ syntax.
 
 <p>The <code>Foo foo();</code> line is a <em>function declaration</em> and has
-  no effect on the behaviour of the code.  The program outputs nothing and
-  returns with a zero exit status.  Perhaps more confusingly, <code>Foo
+  no effect on the behaviour of the code.  Perhaps more confusingly, <code>Foo
   bar(unsigned(pi);</code> is <em>also</em> just a function declaration — this
   time of a function with a single unsigned argument — and doesn’t affect output
-  of the program.
+  of the program.  In the end, the program outputs nothing and returns with
+  a zero exit status.
 
 <p>This is an instance of the infamous <dfn>most vexing parse</dfn> which is
   a syntax ambiguity where a piece of code could be interpreted as a function
@@ -183,8 +183,8 @@ int main(void) {
 
 <h2>Epilogue: A bonus puzzle</h2>
 
-<p>I’ll leave you, Dear Reader, with the this puzzle.  What does the following
-  C++ code output:
+<p>I’ll leave you, Dear Reader, with this puzzle.  What does the following C++
+  code output:
 
 <pre>
 #include &lt;cstdio>
