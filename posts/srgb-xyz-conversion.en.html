@@ -6,7 +6,7 @@
 <!-- math: true -->
 
 <p>In an earlier post, I’ve shown how
-  to <a href="/2019/srgb-xyz-matrix/">calculate an sRGB↔XYZ conversion
+  to <a href="/2019/srgb-xyz-matrix/">calculate an RGB↔XYZ conversion
   matrix</a>.  It’s only natural to follow up with a code for converting
   between <a href="https://en.wikipedia.org/wiki/SRGB">sRGB</a>
   and <a href="https://en.wikipedia.org/wiki/CIE_1931_color_space">XYZ</a>
@@ -146,8 +146,10 @@
 
 <p>And that’s it.  Encoding, gamma correction
   and <a href="/2019/srgb-xyz-matrix/">the conversion matrix</a> are all the
-  necessary pieces to get the conversion implemented.  To keep things
-  interesting, lets this time write the code in TypeScript:
+  necessary pieces to get the conversion implemented.  Just as before, Rust
+  programmers can take advantage of <a href="https://crates.io/crates/srgb">the
+  srgb crate</a> which implemented full conversion.  However, to keep things
+  interesting, in addition, here’s the conversion code written in TypeScript:
 
 <pre>
 <!-- INCLUDE ESCAPED: srgb-xyz-conversion.ts -->
@@ -161,11 +163,11 @@
 <form id=demo style="display:none" novalidate>
   <h2>Demonstration</h2>
 
-  <p>And finally, for demonstration, the form below allows converting between
-  sRGB colours and their XYZ coordinates.  The table allows entry and performs
-  automatic conversion between non-linear and linear red, green and blue
-  values.  Observing how they relate to each other may help visualise the
-  effects of gamma correction.
+  <p>For demonstration, the form below allows converting between sRGB colours
+  and their XYZ coordinates.  The table allows entry and performs automatic
+  conversion between non-linear and linear red, green and blue values.
+  Observing how they relate to each other may help visualise the effects of
+  gamma correction.
 
   <table>
     <tbody>

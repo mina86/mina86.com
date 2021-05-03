@@ -1,11 +1,11 @@
-<!-- subject: Calculating sRGB↔XYZ matrix -->
+<!-- subject: Calculating RGB↔XYZ matrix -->
 <!-- date: 2019-02-03 07:42:06 -->
 <!-- update: 2021-03-21 01:21:33 -->
 <!-- tags: rgb, srgb, colorimetry -->
 <!-- categories: Articles, Techblog -->
 <!-- math: true -->
 
-<p>I’ve recently found myself in need of an sRGB↔XYZ transformation matrix
+<p>I’ve recently found myself in need of an RGB↔XYZ transformation matrix
   expressed to the maximum possible precision.  Sources on the Internet
   typically limit the precision to just a few decimal places so I've decided to
   do the calculations by myself.
@@ -14,7 +14,7 @@
   red, green and blue coordinates of a colour, produces its XYZ coordinates.  In
   other words,
   a <a href="https://www.khanacademy.org/math/linear-algebra/alternate-bases/change-of-basis/v/linear-algebra-change-of-basis-matrix">change
-  of basis matrix</a> from a space whose basis vectors are sRGB’s primary
+  of basis matrix</a> from a space whose basis vectors are RGB’s primary
   colours:
 
   $$ M = \begin{bmatrix}
@@ -28,14 +28,14 @@
 
 <h2>Derivation</h2>
 
-<p>sRGB primary colours are defined in
+<p>RGB primary colours are typically provided as chromaticity usually expressed
+  as <a href="https://en.wikipedia.org/wiki/CIE_1931_color_space#CIE_xy_chromaticity_diagram_and_the_CIE_xyY_color_space">x
+  and y</a> coordinates.  For sRGB they are defined in
   <a href="https://webstore.iec.ch/publication/6169">IEC 61966 standard</a> (and
   also <a href="https://www.itu.int/rec/R-REC-BT.709-6-201506-I/en">Rec. 709
-  document</a> which is 170 francs cheaper) as a pair
-  of <a href="https://en.wikipedia.org/wiki/CIE_1931_color_space#CIE_xy_chromaticity_diagram_and_the_CIE_xyY_color_space">x
-  and y</a> values (i.e. chromaticity coordinates).  Converting them to XYZ
-  space is simple: \(X = x Y / y\) and \(Z = (1 - x - y) Y / y,\) but leaves
-  luminosity (the Y value) unknown.
+  document</a> which is 170 francs cheaper).  Converting them to XYZ space is
+  simple: \(X = x Y / y\) and \(Z = (1 - x - y) Y / y,\) but leaves luminosity
+  (the Y value) unknown.
 
 <table>
   <thead>
@@ -181,14 +181,12 @@ where:
 <h2>Implementation</h2>
 
 <p>Having the theoretical part covered, it’s time to put the equations into
-  practice, which brings up a question of language to use.  With
-  <a href="https://docs.python.org/3/library/stdtypes.html#numeric-types-int-float-complex">unlimited-precision
-  integers</a> and
-  <a href="https://docs.python.org/3/library/fractions.html">rational numbers
-  arithmetic already implemented</a>, Python is a particularly good choice as it
-  will allow all calculations to be done without rounding.
-
-<p>Implementation begins with an overview of the algorithm:
+  practice, which brings up a question of language to use.  Rust programmers may
+  simply reach for <a href="https://crates.io/crates/rgb_derivation">the
+  rgb_derivation crate</a> which provides all the necessary algorithms and
+  supports rational arithmetic using big integers.  However, for the sake of
+  brevity, rather than presenting the Rust implementation, we’re going to use
+  Python instead.  The code begins with an overview of the algorithm:
 
 <pre>
 Chromaticity = collections.namedtuple('Chromaticity', 'x y')
@@ -277,8 +275,12 @@ def calculate_srgb_matrix():
 
 <h2>The matrix</h2>
 
-<p>Finally, if you just want to have the result, the matrices calculated using
-  aforementioned code are as follows:
+<p>Finally, there’s the matrix itself.  Rust programmers are in luck
+  again.  <a href="https://crates.io/crates/srgb">The srgb crate</a> provides
+  <a href="https://docs.rs/srgb/0.1.4/srgb/xyz/constant.XYZ_FROM_SRGB_MATRIX.html">the
+  matrix</a> along with other values and functions needed to work with sRGB
+  colour space.  If the values are needed in other programming languages, they
+  can be copied from the following listing:
 
 <pre>
     ⎡ 0.4124108464885388   0.3575845678529519  0.18045380393360833 ⎤
@@ -296,12 +298,12 @@ M⁻¹ = ⎢ -70985202 / 73237775  137391598 / 73237775  3043398 / 73237775 ⎥
       ⎣    164508 / 2956735     -603196 / 2956735   3125652 / 2956735  ⎦
 </pre>
 
+
 <p>It’s important to remember this is not all that is needed to perform
   conversion between sRGB and XYZ colour spaces.  The matrix assumes a linear
   RGB coordinates normalised to [0, 1] range which requires dealing with gamma
-  correction.  For those interested, all
-  that <a href="/2019/srgb-xyz-conversion/">is described in follow-up
-  article</a>.
+  correction.  I’ve written <a href="/2019/srgb-xyz-conversion/">a follow-up
+  article</a> which describes how to deal with that.
 
 <p>Update (March 2021): The article has been updated with more precise value for
   the D65 standard illuminant.  This affected the resulting numbers slightly.
