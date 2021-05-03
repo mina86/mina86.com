@@ -105,14 +105,11 @@ fn xyz_from_srgb(srgb: [u8; 3]) -> [f32; 3] {
 
 <h2>XYZ to L*a*b*</h2>
 
-<p>While the sRGB standard defines a white point — which is incorporated into
-  the conversion matrix — CIELAB can be used with different illuminants.  For
-  simplicity, I’m going to assume the same reference — standard illuminant
-  D<sub>65</sub> — that sRGB uses and which is widely used when working with
-  emissive displays.  If necessary that can be easily adjusted by changing
-  \(X_r\), \(Y_r\) and \(Z_r\) values below to those corresponding to one’s
-  favourite white point.  With all that said, equations for calculating L*a*b*
-  coordinates for a colour given in XYZ space are as follows:
+<p>While the sRGB standard defines a specific white point — which is baked into
+  the conversion matrix — CIELAB can be computed in reference to an arbitrary
+  illuminant.  Since we’re starting with a colour defined using D<sub>65</sub>
+  white point it is what I’m going to use in L*a*b* calculations as well.  With
+  that assumption, the formulæ are as follows:
 
   $$ \begin{align}
     L^*  &= 116 f_y - 16    \\
@@ -136,7 +133,17 @@ fn xyz_from_srgb(srgb: [u8; 3]) -> [f32; 3] {
     Z_r &= 1.0889166484304715
   \end{align} $$
 
-<p>Translating the formulæ into code yields:
+<p>Naïvely one might change \(X_r\), \(Y_r\) and \(Z_r\) values to use
+  a different white point.  In some sense that would work, but the recommended
+  way of performing the change is to use Bradford transformation.  It is
+  what <a href="https://drafts.csswg.org/css-color/#lab-colors">CSS mandates</a>
+  when dealing with <code>lab()</code> colours.  Chromatic adaptation is beyond
+  the scope of this article so for now the important thing to remember is that
+  formulæ and implementations presented here result in L*a*b* colour calculated
+  in reference to D<sub>65</sub> illuminant while other sources may use
+  D<sub>50</sub> instead.
+
+<p>Speaking of implementation, here it is for the XYZ→CIELAB conversion:
 
 <pre>
 /// Converts colour from XYZ space to CIELAB (a.k.a. L*a*b) using
