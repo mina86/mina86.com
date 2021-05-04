@@ -1,0 +1,315 @@
+<!-- subject: The L*u*v* and LCh<sub>uv</sub> colour spaces -->
+<!-- date: 2021-05-09 22:15:30 -->
+<!-- tags: rgb, srgb, cieluv, colorimetry  -->
+<!-- categories: Articles, Techblog -->
+<!-- math: true -->
+
+<p>I’ve written about <a href="/2021/srgb-lab-lchab-conversions/">L*a*b*</a> so
+  it’s only fair that I’ll also describe its twin sister: the L*u*v* colour
+  space (a.k.a. CIELUV).  The two share a lot in common.  For example, they use
+  the same luminance value, base their chromaticity
+  on <a href="https://en.wikipedia.org/wiki/Opponent_process">opponent
+  process</a> theory and each of them has a corresponding cylindrical LCh
+  coordinate system.  Yet, despite those similarities — or perhaps because of
+  them — the CIELUV colour space is often overlooked.
+
+<figure>
+  <img src="/d/chameleon-luv.webp" width=1000 height=500
+       alt="Panther Chameleon">
+  <figcaption>Fig. 1.  Picture of a chameleon with its decomposition into L*, u*
+    and v* channels.  Photo
+    by <a href="https://commons.wikimedia.org/wiki/File:Panther_Chameleon.jpg">Dr
+    Pratt Datta</a>.</figcaption>
+</figure>
+
+<p>Even though L*a*b* seems to be getting all the limelight, L*u*v* model has
+  its advantages.  Before we start comparing the two colour spaces, let’s first
+  go through the conversion formulæ.
+
+<!-- EXCERPT -->
+
+<h2>sRGB and D<sub>65</sub></h2>
+
+<p>Since I’ve already described <a href="/2019/srgb-xyz-conversion/">translation
+  between sRGB and XYZ</a>
+  (<a href="/2021/srgb-lab-lchab-conversions/">twice</a> in fact), this article
+  will focus on relations between XYZ, xyY, L*u*v* and LCh<sub>uv</sub> colour
+  spaces.
+
+<p>This article is still going to have some sRGB bias and assume everything is
+  computed in reference to the D<sub>65</sub> white point.  CIELUV can be
+  calculated compared to arbitrary illuminant but if one starts with an sRGB
+  colour it’s easiest to stick to the same white point.
+
+<p>It’s important to keep in mind that others may use different
+  illuminant — D<sub>50</sub> is another common choice — and that to properly
+  convert an sRGB colour (which uses D<sub>65</sub>) to L*u*v* with a different
+  white point, the XYZ coordinates need to be treated with a Bradford transform
+  first.
+
+<p>With those disclosures out of the way, let’s get to the conversion.  In
+  addition to presenting Maths equations, I’ll present Rust implementation of
+  the operations.  The code is also provided
+  in <a href="https://crates.io/crates/luv">luv crate</a>.
+
+
+<h2 na>XYZ or xyY to L*u*v*</h2>
+
+<p>L*a*b* and L*u*v* colour models use the same luminance component.  Formula
+  for calculating it will therefore be identical.  Equations for the other two
+  coordinates depends on whether conversion is done from XYZ or xyY colour
+  space.
+
+  $$ \begin{align}
+    L^*  &= \begin{cases}
+      24389 Y / 27         & \text{if }24389 Y ≤ 216 \\
+      116 \sqrt[3]{Y} - 16 & \text{otherwise}
+    \end{cases} \\
+    u^*  &= 13 L^* (u' - u_r') \\
+    v^*  &= 13 L^* (v' - v_r') \\[.5em]
+
+    u_r' &= 0.1978330369967827 \\
+    v_r' &= 0.4683304743525223
+  \end{align} $$
+
+<p>The \(u_r'\) and \(v_r'\) variables specify chromaticity of the reference
+  white point.  As discussed earlier, provided values are for D<sub>65</sub>
+  illuminant.  The \(u'\) and \(v'\) values for any colour can be calculated
+  from XYZ coordinates or xy chromaticity as follows:
+
+  $$ \begin{align}
+    u' &= 4X / D & u' &= 4x / d \\
+    v' &= 9Y / D & v' &= 9y / d \\
+    D &= X + 15Y + 3Z  & d  &= -2x + 12y + 3
+  \end{align} $$
+
+<p>Expressed in code, the formulæ look as follows (for brevity only the XYZ
+  version is shown):
+
+<pre>
+/// Converts colour from XYZ space to CIELUV (a.k.a. L*u*v*) using
+/// D65 reference white point.
+fn luv_from_xyz(xyz: [f32; 3]) -&gt; [f32; 3] {
+    const EPSILON: f32 = 216.0 / 24389.0;
+    const KAPPA: f32 = 24389.0 / 27.0;
+    const WHITE_U_PRIME: f32 = 0.1978330369967827;
+    const WHITE_V_PRIME: f32 = 0.4683304743525223;
+
+    let [x, y, z] = xyz;
+
+    let l = if y &lt;= 0.0 {
+        /* This case is needed to handle XYZ = (0, 0, 0)
+           which would otherwise lead to division by zero. */
+        return [0.0, 0.0, 0.0];
+    } else if y &lt;= EPSILON {
+        KAPPA * y
+    } else {
+        116.0 * y.powf(1.0 / 3.0) - 16.0
+    };
+
+    let d = x + 15.0 * y + 3.0 * z;
+    let u = 13.0 * l * (4.0 * x / d - WHITE_U_PRIME);
+    let v = 13.0 * l * (9.0 * y / d - WHITE_V_PRIME);
+
+    [ l, u, v ]
+}
+</pre>
+
+
+<h2 na>L*u*v* to XYZ or xyY</h2>
+
+<p>Conversion in the opposite direction can be easily derived with all the
+  operations simply performed in reverse:
+
+  $$ \begin{align}
+    Y &= \begin{cases}
+      \left({L^* + 16 \over 116}\right)^3  & \text{if }L^* > 8 \\
+      {27 L^* \over 24389}                 & \text{otherwise}
+    \end{cases} \\
+    u' &= {u^* \over 13 L^*} + u_r' \\
+    v' &= {v^* \over 13 L^*} + v_r'
+  \end{align} $$
+
+<p>Like before, depending on whether conversion to XYZ or xyY colour space is
+  desired, either of the two sets of equations should be used:
+
+  $$ \begin{align}
+    X &= Y {9u' \over 4v'}             & x &= {9 u' \over d} \\
+    Z &= Y {12 - 3u' - 20v' \over 4v'} & y &= {4 v' \over d} \\
+      &                                & d &= 6 u' - 16 v' + 12
+  \end{align} $$
+
+<p>Again limiting the code to XYZ colour space, the above written in Rust
+  becomes:
+
+<pre>
+/// Converts colour from CIELUV (a.k.a. L*u*v*) space
+/// using D65 reference white point to XYZ.
+fn xyz_from_luv(luv: [f32; 3]) -&gt; [f32; 3] {
+    const ONE_OVER_KAPPA: f32 = 27.0 / 24389.0;
+    const WHITE_U_PRIME: f32 = 0.1978330369967827;
+    const WHITE_V_PRIME: f32 = 0.4683304743525223;
+
+    if luv.l &lt;= 0.0 {
+        /* This case is needed to avoid division by zero */
+        return [0.0, 0.0, 0.0];
+    }
+    let ll = 13.0 * luv.l;
+    let u_prime = luv.u / ll + WHITE_U_PRIME;
+    let v_prime = luv.v / ll + WHITE_V_PRIME;
+
+    let y = if luv.l &gt; 8.0 {
+        ((luv.l + 16.0) / 116.0).powi(3)
+    } else {
+        luv.l * ONE_OVER_KAPPA
+    };
+
+    let a = 0.75 * y * u_prime / v_prime;
+    let x = 3.0 * a;
+    let z = y * (3.0 - 5.0 * v_prime) / v_prime - a;
+
+    [x, y, z]
+}
+</pre>
+
+
+<h2>L*u*v* and LCh<sub>uv</sub></h2>
+
+<p>The L*u*v* model represents chromaticity using a green-red (\(u'\)) and
+  blue-yellow (\(v'\)) axis.  Those are hard to interpret (as per figure 1 at
+  the beginning of the article) so for convince CIE defined a cylindrical
+  LCH<sub>uv</sub> colour space (sometimes also called HCL).  It is based on
+  CIELUV and uses the same L* value but encodes chromaticity using chroma
+  (\(C^*\)) and hue (\(h\)).  If this all sounds familiar, it’s because this is
+  the same motivation behind
+  the <a href="/2021/srgb-lab-lchab-conversions/#lch">LCh<sub>ab</sub></a> and
+  the formulæ used to convert between models are equivalent as well:
+
+  $$ \begin{align}
+    C^* &= \sqrt{u^{*2} + v^{*2}}  \\
+    h   &= \text{atan}_2(v^*, u^*) \\[.5em]
+    u^* &= C^* \cos(h)             \\
+    v^* &= C^* \sin(h)
+  \end{align} $$
+
+
+<h2>Comparing L*a*b* and L*u*v*</h2>
+
+<p>The CIELAB and CIELUV colour spaces both attempt to be perceptually uniform.
+  Neither managed to achieve that goal and no clearly better model could be
+  selected so in 1976 the International Commission on Illumination (CIE) adopted
+  both.  If a commission full of experts couldn’t figure the best on out,
+  I won’t convince anyone one way or another either.  It’s still worth keeping
+  in mind that there are more than one almost perceptually uniform colour model
+  and it may not always be the best option to default to L*a*b*.
+
+<figure>
+  <img src="/d/lch-hue.webp" width=1080 height=300
+       alt="Panther Chameleon">
+  <figcaption>Fig. 2. The hue wheel stretched into a single band for HSL (top
+      bar), LCh<sub>ab</sub> (middle) and LCh<sub>uv</sub> (bottom) colour
+      spaces.  In the top band, S = 0.5 and L varies from 0.2 to 0.8.  In the
+      middle and bottom bands, L* varies from 32.3 to 80.0.  In the middle
+      (bottom) band, C* varies from 38.93 (44.13) at the edges to 77.85 (88.26)
+      in the middle.</figcaption>
+</figure>
+
+<p>Figure 2 above depicts the full range of hues for HSL, LCh<sub>ab</sub> and
+  LCh<sub>uv</sub> colour spaces.  The red, green and blue lines on the figure
+  indicate sRGB colours whose other two values are equal.  In other words, the
+  lines is where colour converted to sRGB has the coordinates (r, x, x), (x, g,
+  x) or (x, x, b) respectively.  Those lines demonstrate the three primary hues
+  are spaced more evenly in CIELUV model than in CIELAB.  This is, by the way,
+  why the theme customisation on this blog uses the former colour space.
+
+<p>There are of course other aspects to consider.  For example, with embedding
+  of RGB gamuts in L*a*b* and L*u*v* having irregular shape, clipping may become
+  an issue which affects the two models differently.
+
+<p>As an aside, the figure also clearly demonstrates that HSL’s lightness is
+  a misnomer.  HSL may be somewhat useful for picking colours as an alternative
+  to RGB, but it shouldn’t but using it to compare or manipulate colours in
+  a meaningfully way is not a good idea.
+
+
+<h2>sRGB conversion optimisation</h2>
+
+<p>To finish up, it might be worth nothing that if conversion is performed from
+  an RGB colour system the implementation can be optimised a bit.  Normally, the
+  chain of operations is RGB→linear RGB→XYZ→L*u*v* (and the same thing backwards
+  when switching colour spaces in the opposite direction).  Moving between
+  linear RGB and XYZ coordinates involves a handful of linear transformations
+  which can be combined with some operations performed when converting between
+  XYZ and L*u*v*..
+
+<p>Firstly, observe that to calculate colour’s CIELUV coordinates we need
+  \(4X\), \(Y\) and \(D = X + 15Y + 3Z\) values only.  This is because L* is
+  a function of \(Y\), \(u' = 4X / D\) and \(v' = 9Y / D\).  Secondly, observe
+  that colour’s XYZ coordinates are linear combination of \(Y\), \(Y / v'\) and
+  \(Yu' / v'\) values.  In particular, \(X = 2.25Yu'/v'\) and \(Z = -5Y + 3Y/v'
+  - 0.75Yu'/v'\).  With that we can derive the following:
+
+  $$ \begin{align}
+    \begin{bmatrix}
+      4X \\ Y \\ D
+    \end{bmatrix} &= \begin{bmatrix}
+      4 & 0 & 0 \\
+      0 & 1 & 0 \\
+      1 & 15 & 3 \\
+    \end{bmatrix} \begin{bmatrix}
+      X \\ Y \\ Z
+    \end{bmatrix} = \begin{bmatrix}
+      4 & 0 & 0 \\
+      0 & 1 & 0 \\
+      1 & 15 & 3 \\
+    \end{bmatrix} M \begin{bmatrix}
+      R \\ G \\ B
+    \end{bmatrix} \\[.5em]
+
+    \begin{bmatrix}
+      R \\ G \\ B
+    \end{bmatrix} &= M^{-1} \begin{bmatrix}
+      X \\ Y \\ Z
+    \end{bmatrix} = M^{-1} \begin{bmatrix}
+      0 & 0 & 2.25\\
+      1 & 0 & 0 \\
+      -5 & 3 & -0.75
+    \end{bmatrix} \begin{bmatrix}
+      Y \\ {Y \over v'} \\ {Y u' \over v'}
+    \end{bmatrix}
+  \end{align} $$
+
+<p>In other words:
+
+  $$ \begin{align}
+    \begin{bmatrix}
+      4X \\ Y \\ D
+    \end{bmatrix} &= M^* \begin{bmatrix}
+      R \\ G \\ B
+    \end{bmatrix} & \text{where}\quad & M^* = \begin{bmatrix}
+      4 & 0 & 0 \\
+      0 & 1 & 0 \\
+      1 & 15 & 3 \\
+    \end{bmatrix} M \\[.5em]
+
+    \begin{bmatrix}
+      R \\ G \\ B
+    \end{bmatrix} &= M^{-*} \begin{bmatrix}
+      Y \\ {Y \over v'} \\ {Y u' \over v'}
+    \end{bmatrix} & \text{where}\quad & M^{-*} = M^{-1} \begin{bmatrix}
+      0 & 0 & 2.25\\
+      1 & 0 & 0 \\
+      -5 & 3 & -0.75
+    \end{bmatrix}
+  \end{align} $$
+
+<p>The \(M\) and \(M^{-1}\) are of course <a href="/2019/srgb-xyz-matrix/">the
+  RGB↔XYZ change of basis matrices</a>.  The insight here is that \(M^*\) and
+  \(M^{-*}\) matrices can be calculated beforehand thus reducing number of
+  operations when performing conversion between RGB and L*u*v* colour.
+
+<p>It does lead to faster execution but due to the nature of floating point
+  numbers it leads to less precise results.  This is pretty much the reason
+  why <a href="https://crates.io/crates/luv">the luv crate</a> doesn’t currently
+  use this optimisation.  Other implementations which favour speed may choose to
+  do so.

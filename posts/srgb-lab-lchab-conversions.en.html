@@ -12,11 +12,12 @@
   colour representation.
 
 <figure>
-  <img src="/d/chameleon-lab.jpg" width=1000 height=500 alt="Panther Chameleon">
-  <figcaption><small>Picture of a chameleon with its decomposition into L*, a*
-    and b* channels.  Photo
+  <img src="/d/chameleon-lab.webp" width=1000 height=500
+       alt="Panther Chameleon">
+  <figcaption>Picture of a chameleon with its decomposition into L*, a* and b*
+    channels.  Photo
     by <a href="https://commons.wikimedia.org/wiki/File:Panther_Chameleon.jpg">Dr
-    Pratt Datta</a>.</small></figcaption>
+    Pratt Datta</a>.</figcaption>
 </figure>
 
 <p>The L*a*b* colour space was intended to be perceptually uniform.  While it’s
@@ -125,8 +126,8 @@ fn xyz_from_srgb(srgb: [u8; 3]) -> [f32; 3] {
       \sqrt[3]{v}      & \text{otherwise}
     \end{cases} \\[.5em]
 
-    ε &= {216 \over 24389} \\
-    κ &= {24389 \over 27} \\[.5em]
+    ε &= 216 / 24389 \\
+    κ &= 24389 / 27 \\[.5em]
 
     X_r &= 0.9504492182750991 \\
     Y_r &= 1 \\
@@ -135,7 +136,7 @@ fn xyz_from_srgb(srgb: [u8; 3]) -> [f32; 3] {
 
 <p>Naïvely one might change \(X_r\), \(Y_r\) and \(Z_r\) values to use
   a different white point.  In some sense that would work, but the recommended
-  way of performing the change is to use Bradford transformation.  It is
+  way of performing the change is to use Bradford transform.  It is
   what <a href="https://drafts.csswg.org/css-color/#lab-colors">CSS mandates</a>
   when dealing with <code>lab()</code> colours.  Chromatic adaptation is beyond
   the scope of this article so for now the important thing to remember is that
@@ -184,7 +185,7 @@ fn lab_from_xyz(xyz: [f32; 3]) -> [f32; 3] {
     Y           &= f^{-1}(f_y) Y_r \\
     Z           &= f^{-1}(f_z) Z_r \\[.5em]
 
-    f_y         &= {(L^* + 16) \over 116} \\
+    f_y         &= {L^* + 16 \over 116} \\
     f_x         &= {a^* \over 500} + f_y \\
     f_z         &= f_y - {b^* \over 200} \\[.5em]
 
@@ -200,8 +201,8 @@ fn lab_from_xyz(xyz: [f32; 3]) -> [f32; 3] {
 
   $$ \begin{align}
     f^{-1}(f_y) &= \begin{cases}
-      f_y^3    & \text{if }(L^* + 16) / 116 > \sqrt[3]{ε} \\
-      (116 (L^* + 16) / 116 − 16) / κ & \text{otherwise}
+      f_y^3                    & \text{if }(L^* + 16) / 116 > \sqrt[3]{ε} \\
+      \left(116 {(L^* + 16) \over 116} − 16\right) / κ & \text{otherwise}
     \end{cases} \\
     &= \begin{cases}
       f_y^3   & \text{if }L^* > 116\sqrt[3]{ε}-16 \\
@@ -214,7 +215,7 @@ fn lab_from_xyz(xyz: [f32; 3]) -> [f32; 3] {
   the following Rust function:
 
 <pre>
-/// Converts colour from CIELAB (a.k.a. L*a*b) space
+/// Converts colour from CIELAB (a.k.a. L*a*b*) space
 /// using D65 reference white point to XYZ.
 fn xyz_from_lab(lab: [f32; 3]) -> [f32; 3] {
     const CBRT_EPSILON: f32 = 6.0 / 29.0;
@@ -312,7 +313,7 @@ fn srgb_from_xyz(xyz: [f32; 3]) -> [u8; 3] {
   we’ll look at next.
 
 
-<h2>L*a*b* and LCh<sub>ab</sub></h2>
+<h2 id=lch>L*a*b* and LCh<sub>ab</sub></h2>
 
 <p>The a* and b* components of the L*a*b* colour are not easy to interpret.
   Even knowing that they component represents green-red and blue-yellow axes

@@ -435,6 +435,7 @@ class Writer(object):
         if hasattr(value, "__html__"):
             value = value.__html__()
         value = str(value).replace('LCh<sub>ab</sub>', 'LCh(ab)')
+        value = str(value).replace('LCh<sub>uv</sub>', 'LCh(uv)')
         return jinja2.filters.do_striptags(value)
 
     def __init__(self, writer, tpl_dir, static_mappings):
