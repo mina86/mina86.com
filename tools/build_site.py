@@ -322,7 +322,7 @@ def read_entry(fd, dirname):
 
         elif m['sep'] == 'COMMENT':
             break
-        elif m['sep'] == 'EXCERPT':
+        elif m['sep'] == 'FULL':
             excerpt = content
             content = ''
         else:
