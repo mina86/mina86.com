@@ -126,7 +126,7 @@
 {% endblock %}
 <script defer src=/d/js.js></script>
 <script defer src=/d/g></script>
-{%- if (entry and entry.body.needs_math) or
+{%- if (entry and entry.body.full_needs_math) or
        (entries and (entries | selectattr('body.excerpt_needs_math') | first)) -%}
 <script async
         src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js></script>

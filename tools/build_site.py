@@ -204,12 +204,12 @@ class Tag(_Group):
 
 
 class Body(object):
-    __slots__ = ('__parts', '__excerpt_math', '__full_math')
+    __slots__ = ('__parts', 'excerpt_needs_math', 'full_needs_math')
 
     def __init__(self, excerpt, more, needs_math=False):
         self.__parts = parts = (excerpt, more) if excerpt else (more,)
-        self.__excerpt_math = needs_math and self.__check_math(parts[0])
-        self.__full_math = self.__excerpt_math or (
+        self.excerpt_needs_math = needs_math and self.__check_math(parts[0])
+        self.full_needs_math = self.excerpt_needs_math or (
             needs_math and len(parts) > 1 and self.__check_math(parts[1]))
 
     def html(self, full=True):
@@ -220,8 +220,6 @@ class Body(object):
         return ' '.join(self.__parts)
 
     has_excerpt = property(lambda self: len(self.__parts) > 1)
-    excerpt_needs_math = property(lambda self: self.__excerpt_math)
-    needs_math = property(lambda self: self.__full_math)
 
     @staticmethod
     def __check_math(text):
@@ -490,7 +488,7 @@ class Writer(object):
               date=entries[0].date)
         for entry in entries[:10]:
             body = str(entry.body)
-            if entry.body.needs_math:
+            if entry.body.full_needs_math:
                 if entry.lang == 'pl':
                     msg = ('Ten wpis zawiera formuły matematyczne, które mogą '
                            'zostać niepoprawnie wyświetlone w Twoim czytniku. '
