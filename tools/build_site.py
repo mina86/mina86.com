@@ -206,17 +206,17 @@ class Tag(_Group):
 class Body(object):
     __slots__ = ('__data', 'excerpt_needs_math', 'full_needs_math')
 
-    def __init__(self, excerpt, more, needs_math=False):
-        if excerpt:
-            self.__data = (excerpt, excerpt + more)
+    def __init__(self, prefix, excerpt_only, rest, needs_math=False):
+        if prefix:
+            self.__data = (prefix + excerpt_only, prefix + rest)
         else:
-            self.__data = (more, more)
-        if needs_math and excerpt:
-            needs_math = self.__check_math(excerpt)
-            self.excerpt_needs_math = needs_math
-            self.full_needs_math = needs_math or self.__check_math(more)
+            self.__data = (rest, rest)
+        if needs_math and prefix:
+            p = self.__check_math(prefix)
+            self.excerpt_needs_math = p or self.__check_math(excerpt_only)
+            self.full_needs_math = p or self.__check_math(rest)
         else:
-            needs_math = needs_math and self.__check_math(more)
+            needs_math = needs_math and self.__check_math(rest)
             self.excerpt_needs_math = self.full_needs_math = needs_math
 
     def html(self, full=True):
@@ -297,12 +297,11 @@ def parse_filename(filename):
 
 _DIRECTIVE_LINE_RE = re.compile(r'^<!-- (?:'
     r'(?P<key>[a-z]+): (?P<value>.*)'
-    r'|(?P<sep>[A-Z]*)'
+    r'|(?P<sep>[A-Z ]*)'
     r'|INCLUDE(?P<esc> ESCAPED)?: (?P<inc>[-a-zA-Z0-9.]+)) -->')
 
 def read_entry(fd, dirname):
-    excerpt = None
-    content = ''
+    parts = ['']
     kw = d = {}
 
     for line in fd:
@@ -316,7 +315,7 @@ def read_entry(fd, dirname):
             kw = None
 
         if not m:
-            content += line
+            parts[-1] += line
 
         elif m['inc']:
             path = os.path.join(dirname, m['inc'])
@@ -324,18 +323,30 @@ def read_entry(fd, dirname):
                 data = rd.read()
             if m['esc']:
                 data = data.replace('&', '&amp;').replace('<', '&lt;')
-            content += data
+            parts[-1] += data
 
         elif m['sep'] == 'COMMENT':
             break
+        elif m['sep'] == 'EXCERPT ONLY':
+            if len(parts) == 1:
+                parts.append('')
+            else:
+                sys.stderr.write('Unexpected ‘EXCERPT ONLY’ directive, '
+                                 'ignoring')
         elif m['sep'] == 'FULL':
-            excerpt = content
-            content = ''
+            if len(parts) < 3:
+                parts.extend([''] * (3 - len(parts)))
+            else:
+                sys.stderr.write('Unexpected ‘FULL’ directive, ignoring')
         else:
             sys.stderr.write('Unexpected directive: ' + line)
 
-    d['__body__'] = Body(excerpt, content,
-                         needs_math=d.pop('math', None) == 'true')
+    if len(parts) == 1:
+        parts = ('', '', parts[0])
+    elif len(parts) == 2:
+        sys.stderr.write('Got ‘EXCERPT ONLY’ without ‘FULL’ directive')
+        parts.append('')
+    d['__body__'] = Body(*parts, needs_math=d.pop('math', None) == 'true')
     return d
 
 
