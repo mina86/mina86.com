@@ -204,22 +204,28 @@ class Tag(_Group):
 
 
 class Body(object):
-    __slots__ = ('__parts', 'excerpt_needs_math', 'full_needs_math')
+    __slots__ = ('__data', 'excerpt_needs_math', 'full_needs_math')
 
     def __init__(self, excerpt, more, needs_math=False):
-        self.__parts = parts = (excerpt, more) if excerpt else (more,)
-        self.excerpt_needs_math = needs_math and self.__check_math(parts[0])
-        self.full_needs_math = self.excerpt_needs_math or (
-            needs_math and len(parts) > 1 and self.__check_math(parts[1]))
+        if excerpt:
+            self.__data = (excerpt, excerpt + more)
+        else:
+            self.__data = (more, more)
+        if needs_math and excerpt:
+            needs_math = self.__check_math(excerpt)
+            self.excerpt_needs_math = needs_math
+            self.full_needs_math = needs_math or self.__check_math(more)
+        else:
+            needs_math = needs_math and self.__check_math(more)
+            self.excerpt_needs_math = self.full_needs_math = needs_math
 
     def html(self, full=True):
-        html = ' '.join(self.__parts) if full else self.__parts[0]
-        return jinja2.utils.Markup(html)
+        return jinja2.utils.Markup(self.__data[full])
 
     def __str__(self):
-        return ' '.join(self.__parts)
+        return self.__data[1]
 
-    has_excerpt = property(lambda self: len(self.__parts) > 1)
+    has_excerpt = property(lambda self: self.__data[0] is not self.__data[1])
 
     @staticmethod
     def __check_math(text):
