@@ -457,6 +457,15 @@ article {
 		font-size: 1em;
 		margin: 1em 0;
 	}
+	p[id^=f] {
+		font-size: @small;
+		margin-top: (round(2em / @small, 2));
+		background: linear-gradient(to right, @border-colour 70%, @bg-colour) no-repeat 0 0/40% 1px;
+	}
+	p[id^=f] + p[id^=f] {
+		margin-top: 1em;
+		background: none;
+	}
 	li {
 		margin: 1em 0 1em 2em;
 	}
