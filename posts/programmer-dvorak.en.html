@@ -1,0 +1,280 @@
+<!-- subject: Programmer (vs) Dvorak -->
+<!-- date: 2021-05-30 00:17:42 -->
+<!-- tags: programmer dvorak -->
+<!-- categories: Articles, Techblog  -->
+
+<p>A few years age I’ve made a decision that had the potential to change the
+  course of history.  Had I went a different path,
+  the <a href="https://bugs.freedesktop.org/show_bug.cgi?id=25200">pl(dvp)</a>
+  layout might have never seen the light of day.  But did I make a wise choice?
+  Or had I chosen poorly?
+
+<p>I’m talking of course about the decision to
+    learn <a href="https://www.kaufmann.no/roland/dvorak/">Programmer Dvorak</a>
+    rather than a regular Dvorak keyboard layout.  The main differences between
+    the two is that in the former digits are entered with Shift key pressed down
+    which allows several punctuation marks often used when programming to be
+    typed without the need to reach for Shift.  The hypothesis goes that
+    developers use digits less often thus such design optimises the layout for
+    them.
+
+<p>To test this I’ve grabbed <a href="https://github.com/mina86">all my git
+    repositories</a> and constructed a histogram of characters used in text
+    files present there.  Since letters are on the same position on both layouts
+    in question, only digits and punctuation characters are compared on the
+    histogram:
+
+<figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+       width="44em" height="17em" viewBox="0 0 704 272"
+       stroke-width="1">
+    <defs>
+      <pattern id="un" patternUnits="userSpaceOnUse" width="4" height="4">
+        <rect x="0" y="0" width="4" height="4" fill="#1b9e77"/>
+        <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="#000"/>
+      </pattern>
+      <pattern id="sh" patternUnits="userSpaceOnUse" width="4" height="4">
+        <rect x="0" y="0" width="4" height="4" fill="#d95f02"/>
+        <path d="M-1,-1 l2,2 M0,0 l4,4 M3,3 l2,2" stroke="#000"/>
+      </pattern>
+    </defs>
+    <path stroke="var(--e)" d="M8,32h688m0,40H8m0,40h688m0,40H8m0,40h688" />
+    <path fill="#fffc" d="M508,32h176v80H508Z"/>
+    <path fill="url(#un)" d="M64,192v-125h14v125zm16,0v-124h14v124zm48,0v-111h14v111zm16,0v-110h14v110zm160,0v-50h14v50zm16,0v-41h14v41zm16,0v-41h14v41zm128,0v-26h14v26zm16,0v-24h14v24zm32,0v-24h14v24zm32,0v-14h14v14zm16,0v-10h14v10z
+                             M516,64v16h16V64z
+                             M16,224h360v14H16z"/>
+    <path fill="url(#sh)" d="M192,192v-89h14v89zm64,0v-66h14v66zm16,0v-55h14v55zm80,0v-37h14v37zm16,0v-35h14v35zm16,0v-33h14v33zm32,0v-32h14v32zm16,0v-31h14v31zm16,0v-27h14v27zm48,0v-24h14v24zm80,0v-10h14v10zm48,0v-6h14v6zm32,0v-3h14v3z
+                             M516,88v16h16V88z
+                             M16,240h230v14H16z"/>
+    <path fill="#7570b3" d="M16,192v-160h14v160zm16,0v-151h14v151zm16,0v-148h14v148zm48,0v-114h14v114zm16,0v-112h14v112zm48,0v-99h14v99zm16,0v-95h14v95zm32,0v-84h14v84zm16,0v-84h14v84zm16,0v-73h14v73zm48,0v-53h14v53zm112,0v-32h14v32zm128,0v-18h14v18zm64,0v-9h14v9zm16,0v-8h14v8zm32,0v-4h14v4zm32,0v-2h14v2z
+                            M516,40v16h16V40z
+                            M16,208h640v14H16z" />
+    <text font-size=0.875em text-anchor=middle><tspan x="23" y="24">-</tspan><tspan x="39" y="33">"</tspan><tspan x="55" y="36">.</tspan><tspan x="71" y="59">)</tspan><tspan x="87" y="60">(</tspan><tspan x="103" y="70">,</tspan><tspan x="119" y="72">/</tspan><tspan x="135" y="73">*</tspan><tspan x="151" y="74">=</tspan><tspan x="167" y="85">_</tspan><tspan x="183" y="89">;</tspan><tspan x="199" y="95">0</tspan><tspan x="215" y="100">&gt;</tspan><tspan x="231" y="100">:</tspan><tspan x="247" y="111">&lt;</tspan><tspan x="263" y="118">1</tspan><tspan x="279" y="129">2</tspan><tspan x="295" y="131">'</tspan><tspan x="311" y="134">#</tspan><tspan x="327" y="143">{</tspan><tspan x="343" y="143">}</tspan><tspan x="359" y="147">4</tspan><tspan x="375" y="149">3</tspan><tspan x="391" y="151">8</tspan><tspan x="407" y="152">\</tspan><tspan x="423" y="152">5</tspan><tspan x="439" y="153">6</tspan><tspan x="455" y="157">9</tspan><tspan x="471" y="158">$</tspan><tspan x="487" y="160">[</tspan><tspan x="503" y="160">7</tspan><tspan x="519" y="160">]</tspan><tspan x="535" y="166">&amp;</tspan><tspan x="551" y="170">+</tspan><tspan x="567" y="174">!</tspan><tspan x="583" y="174">%</tspan><tspan x="599" y="175">|</tspan><tspan x="615" y="176">@</tspan><tspan x="631" y="178">`</tspan><tspan x="647" y="180">?</tspan><tspan x="663" y="181">~</tspan><tspan x="679" y="182">^</tspan><tspan x="672" y="219">52%</tspan><tspan x="392" y="235">29%</tspan><tspan x="262" y="251">19%</tspan></text>
+    <text style="fill:#212121"><tspan x="540" y="55">Not number row</tspan><tspan x="540" y="79">Unshifted</tspan><tspan x="540" y="103">Shifted</tspan></text>
+  </svg>
+</figure>
+
+<!-- FULL -->
+
+<h2>Analysis</h2>
+
+<p>The graph supports the idea that punctuation is used more often than digits
+  when programming.  Keys outside of the number row are for the most part on the
+  same position on regular Dvorak and Programmer Dvorak layouts so shifted and
+  unshifted characters are of main interest.  Of those, the first four are
+  non-digits and within the first ten only three are digits.
+
+<p>A quite striking feature of Programmer Dvorak is that it puts digits in
+  a ‘7531902468’ sequence (rather than ordering them).  Again, the histogram
+  supports that design decision as well.  The two most used digits are zero and
+  one which are accessible with index finger.  Traditional sorted ordering puts
+  them in little finger’s column.
+
+<p>A minor difference between the two Dvorak variants is position of the
+  apostrophe and semicolon keys.  The data shows that I use double quote quite
+  often.  Since I’ve never learned to properly use Shift keys, location used by
+  Programmer Dvorak ends up beneficial for me.  After all, pressing Shift with
+  the key right next to it is easier than Shift and the key two rows up.
+
+<p id=b1>Lastly, Programmer Dvorak moves plus and equals signs to the number
+  row.  On regular Dvorak layout those keys are accessible by stretching right
+  little finger one row up and two columns to the side.  It’s hardly
+  a comfortable key to reach.  Programmer Dvorak puts caret and at sign there
+  instead.  And yes, you’ve guessed it, the data supports that decision: equals
+  and plus are used much more than at sign and caret.<a href="#f1">†</a>
+
+<h2>Conclusion</h2>
+
+<p>Looks like my choice was correct.  It has been scientifically proven that
+  Programmer Dvorak is better than regular Dvorak.  Who knows what catastrophes
+  were averted thanks to me!
+
+<p>Except of course this was hardly scientific and the results should be taken
+  with a grain of salt.  After all, looking at the characters in source files
+  doesn’t necessary reflect what keys are pressed to construct those files.  For
+  example, while I don’t configure my editor to automatically insert
+  parenthesise, braces or apostrophes, if I had such feature enabled,
+  methodology chosen here would overestimate use of punctuation characters.
+  Looking at the files also ignores effects of copying and pasting text.  It’s
+  hard to tell whether that would affect the data though or whether the effect
+  balances itself out.
+
+<p>Overall though, I’m fairly satisfied with the results demonstrating that for
+  me Programmer Dvorak was a better choice than regular Dvorak layout.
+
+
+<h2>Addendum: Qwerty</h2>
+
+<p>Since inevitably someone will be curious about comparison to Qwerty layout,
+  the statistics for the letters are as follows:
+
+<table>
+  <thead>
+    <tr><th>Letter<th>Frequency<th>Dvorak<th>Qwerty
+  <tbody>
+    <tr style="background:var(--j)">
+      <th>e<td class=r>11.5%<td>home   <td>top
+    <tr style="background:linear-gradient(to right,var(--j) 79%,#fff0 79%)">
+      <th>t<td class=r> 9.1%<td>home   <td>top*
+    <tr style="background:linear-gradient(to right,var(--j) 65%,#fff0 65%)">
+      <th>i<td class=r> 7.5%<td>home*  <td>top
+    <tr style="background:linear-gradient(to right,var(--j) 62%,#fff0 62%)">
+      <th>a<td class=r> 7.2%<td>home   <td>home
+    <tr style="background:linear-gradient(to right,var(--j) 61%,#fff0 61%)">
+      <th>n<td class=r> 7.0%<td>home   <td>bottom*
+    <tr style="background:linear-gradient(to right,var(--j) 59%,#fff0 59%)">
+      <th>s<td class=r> 6.8%<td>home   <td>home
+    <tr style="background:linear-gradient(to right,var(--j) 59%,#fff0 59%)">
+      <th>r<td class=r> 6.7%<td>top    <td>top
+    <tr style="background:linear-gradient(to right,var(--j) 56%,#fff0 56%)">
+      <th>o<td class=r> 6.5%<td>home   <td>top
+    <tr style="background:linear-gradient(to right,var(--j) 40%,#fff0 40%)">
+      <th>l<td class=r> 4.6%<td>top    <td>home
+    <tr style="background:linear-gradient(to right,var(--j) 37%,#fff0 37%)">
+      <th>c<td class=r> 4.3%<td>top    <td>bottom
+  <tbody>
+    <tr style="background:linear-gradient(to right,var(--j) 32%,#fff0 32%)">
+      <th>d<td class=r> 3.7%<td>home*  <td>home
+    <tr style="background:linear-gradient(to right,var(--j) 27%,#fff0 27%)">
+      <th>p<td class=r> 3.1%<td>top    <td>top
+    <tr style="background:linear-gradient(to right,var(--j) 27%,#fff0 27%)">
+      <th>u<td class=r> 3.1%<td>home   <td>top
+    <tr style="background:linear-gradient(to right,var(--j) 26%,#fff0 26%)">
+      <th>m<td class=r> 2.9%<td>bottom <td>bottom
+    <tr style="background:linear-gradient(to right,var(--j) 25%,#fff0 25%)">
+      <th>h<td class=r> 2.9%<td>home   <td>home*
+    <tr style="background:linear-gradient(to right,var(--j) 24%,#fff0 24%)">
+      <th>f<td class=r> 2.8%<td>top*   <td>home
+    <tr style="background:linear-gradient(to right,var(--j) 18%,#fff0 18%)">
+      <th>g<td class=r> 2.1%<td>top    <td>home*
+    <tr style="background:linear-gradient(to right,var(--j) 14%,#fff0 14%)">
+      <th>b<td class=r> 1.6%<td>bottom*<td>bottom*
+    <tr style="background:linear-gradient(to right,var(--j) 14%,#fff0 14%)">
+      <th>y<td class=r> 1.6%<td>top*   <td>top*
+    <tr style="background:linear-gradient(to right,var(--j) 12%,#fff0 12%)">
+      <th>w<td class=r> 1.3%<td>bottom <td>top
+  <tbody>
+    <tr style="background:linear-gradient(to right,var(--j) 9%,#fff0 9%)">
+      <th>v<td class=r> 1.0%<td>bottom <td>bottom
+    <tr style="background:linear-gradient(to right,var(--j) 8%,#fff0 8%)">
+      <th>k<td class=r> 1.0%<td>bottom <td>home
+    <tr style="background:linear-gradient(to right,var(--j) 8%,#fff0 8%)">
+      <th>x<td class=r> 0.9%<td>bottom*<td>bottom
+    <tr style="background:linear-gradient(to right,var(--j) 4%,#fff0 4%)">
+      <th>z<td class=r> 0.4%<td>bottom <td>bottom
+    <tr style="background:linear-gradient(to right,var(--j) 2%,#fff0 2%)">
+      <th>j<td class=r> 0.3%<td>bottom <td>home
+    <tr style="background:linear-gradient(to right,var(--j) 2%,#fff0 2%)">
+      <th>q<td class=r> 0.2%<td>bottom <td>top
+</table>
+<p>Asterisk indicates keys towards the middle of the keyboard which index finger
+  needs to stretch sideways to reach.
+
+<p>Interestingly, this also shows that swapping ‘i’ and ‘u’ keys on Dvorak-based
+  layouts makes some dose of sense.  At least in the source code I write, the
+  former is used over twice as frequent as the latter.  <code>i</code> is
+  a common loop variable so that may have something to do with it.
+
+<p id=f1><a href="#b1">†</a> Then again, I usually type on Kinesis Advantage
+  keyboard
+  with <a href="https://github.com/mina86/dot-files/tree/master/kinesis">a small
+  dose of remapping</a>.  This puts at sign under my middle finger at the very
+  bottom of the keyboard.  As a result, it’s slightly easier to type than equals
+  sign which requires my index finger to be stretched far up and to the right.
+
+<!--
+e 231162
+t 177997
+i 147928
+a 141392
+n 139167
+r 132766
+s 131022
+o 128797
+l 87185
+c 80576
+d 71712
+u 59310
+p 57472
+h 57256
+m 55076
+f 53673
+- 44039
+" 41898
+. 40745
+g 38123
+) 34459
+( 34074
+, 31402
+/ 30851
+* 30378
+= 30356
+b 30353
+y 29598
+_ 27345
+; 26224
+w 25865
+0 24460
+> 23238
+: 23009
+< 20240
+v 19452
+k 18670
+1 18376
+x 17219
+T 16596
+E 15884
+2 15295
+' 14636
+# 13888
+S 13659
+I 12573
+A 12302
+R 11819
+{ 11338
+} 11277
+N 10904
+C 10750
+L 10718
+4 10406
+P 9831
+3 9819
+O 9460
+8 9135
+\ 8768
+5 8718
+z 8668
+6 8599
+M 8083
+D 7436
+9 7374
+$ 7186
+F 6778
+7 6664
+[ 6626
+] 6530
+U 6247
+G 6224
+& 4960
+H 4763
+B 4500
+j 4287
+Y 3975
++ 3962
+W 3057
+q 3033
+! 2754
+% 2701
+X 2541
+| 2538
+V 2221
+@ 2097
+K 2090
+` 1746
+J 1099
+? 983
+~ 878
+Z 831
+Q 695
+^ 599
+-->
