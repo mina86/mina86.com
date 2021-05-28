@@ -1,0 +1,202 @@
+<!-- subject: Explicit isn’t better than implicit -->
+<!-- date: 2021-06-06 20:12:49 -->
+<!-- tags: python, rust, exilicit -->
+<!-- categories: Articles, Techblog -->
+
+<p>Continuing <a href="/2021/embrace-the-bloat/">the new tradition of clickbaity
+    titles</a>, let’s talk about explicitness.  It’s a subject that comes up
+    when bike-shedding language and API designs.  Pointing out that a construct
+    or a function exhibits implicit behaviour is often taunted as an ultimate
+    winning argument against it.
+
+<p>There are two problems with such line of reasoning.  First of all, people
+  claim to care about feature being explicit but came to accept a lot of
+  implicit behaviour without batting an eye.  Second of all, no one actually
+  agrees what the terms mean.
+
+<p>In this article I’ll demonstrate those two issues and show that ‘explicit
+  over implicit’ is the wrong value to uphold.  It’s merely a proxy for a much
+  more useful goal interfaces should strive for.  By the end I’ll demonstrate
+  what we should really look at instead.
+
+<!-- FULL -->
+
+
+<h2>Dispelling the myths</h2>
+
+<p>Let’s start by examining just how explicit Python and Rust are.  After all,
+  their communities often boast the virtue of explicitness in their respective
+  languages.  I’m sure it’s going to be completely uncontroversial to suggest
+  that they may be much more implicit than some give them credit for.
+
+
+<h3>The Zen of Python is a lie</h3>
+
+<p><a href="https://www.python.org/dev/peps/pep-0020/">The Zen of Python</a> is
+    a collection of aphorisms which represent Python’s guiding principles.  It’s
+    not clear, at least to me, whether they are listed in order of importance,
+    but the second entry states that ‘explicit is better than implicit’.
+    Despite that, there are multiple instances where this rule is broken.  In
+    particular, Python implicitly:
+
+<ul>
+  <li>creates new variables.  One cannot even argue that the assignment
+    statement defines a variable since that’s not the case as can be seen in the
+    following toy example:
+    <pre>
+foo = 'foo'
+def func():
+        return foo
+        foo = 'bar'
+print(func())
+    </pre>
+  <li>propagates exceptions making any statement possible function exit point;
+  <li>converts values to booleans in conditions.  For example, <code>if
+    some_list:</code> is a Pythonic way to check if a list is non-empty
+    while <code>if not var:</code> is a Pythonic way of checking whether
+    a variable is <code>None</code>;
+  <li>converts between booleans, integers and floats in arithmetic operations.
+    Depending on the operation, this happens even if both operands are of the
+    same type;
+  <li>concatenates strings separated by white-space;
+  <li>constructs tuples from comma-separated values (without the need to type
+    parenthesise);
+  <li>loads package’s <code>__init__.py</code> file when importing a module; and
+  <li>implicitly returns <code>None</code> from functions lacking explicit
+    return.
+</ul>
+
+<p>It could even be argued that garbage collection is an implicit behaviour.
+  After all, objects are never explicitly freed and all memory management is
+  hidden from the user.
+
+
+<h3>Rust philosophy of explicitness is not a thing</h3>
+
+<p>But let’s not dwell on scripting languages, change gears and go a level lower
+  to a compiled and strictly-typed Rust.  While it doesn’t have a formal list of
+  guiding principles, explicitness is often cited as an important value.  Yet,
+  what often seems to be forgotten is that Rust implicitly:
+
+<ul>
+  <li>infers types,
+  <li>infers lifetime in function prototypes,
+  <li>shortens lifetimes of references,
+  <li>performs <code>Deref</code> coercion,
+  <li>passes <code>self</code> by value or reference based on method prototype,
+  <li>clones <code>Copy</code> types when passed to functions by value,
+  <li>calls <code>drop</code> of <code>Drop</code> objects when they go out of
+    scope and
+  <li>converts error type when question mark operator is used.
+</ul>
+
+<p>To be even more contrarian, I could claim <code>sort</code>
+  method <em>implicitly</em> uses natural ordering.  Or that order of operations
+  in <code>230 - 220 / 2</code> expression isn’t explicitly specified.
+
+<p>But the point here isn’t to demonstrate that Python or Rust aren’t
+  ‘explicit’.  Such position would be hard to defend.  Rather, it is to show
+  that even languages which pride themselves in championing explicitness are
+  willing to compromise on that principle.  This means that saying some new
+  feature exhibits implicit behaviour is not a be-all and end-all argument for
+  blocking such design.
+
+
+<h2>‘You’ve typed it so it’s explicit’</h2>
+
+<p>Than again, maybe I’m completely off the mark?  Perhaps all the
+  aforementioned behaviour aren’t implicit after all?  For example, Python
+  documents <a href="https://docs.python.org/3/reference/expressions.html#booleans">quite
+  clearly</a> what values are interpreted as false and which as true.  This
+  means that there is nothing implicit in <code>if some_list:</code> not
+  executing the body if the list is empty, right?
+
+<p>Some of the examples I’ve enumerated are definitely less clear-cut than
+  others, but I challenge anyone who thinks that none of them are valid to come
+  up with justification and then present an example of a feature of any
+  non-esoteric language which is implicit.  One will quickly realise that either
+  at least some of the aforementioned behaviours are implicit or there’s no such
+  thing as an implicit behaviour and thus the whole discussion is moot.
+
+<p>Ultimately this leaves us with no commonly agreed definition of what it means
+  for a feature or interface to be explicit.  There’s not even a consensus on
+  some vague understanding of the phrase.  On one extreme, a not unreasonable
+  argument that nothing is implicit could be made (after all a program behaves
+  exactly according to language’s documentation), on the other, some C♯
+  programmers argue that <code>""</code> isn’t an explicit-enough way of
+  specifying an empty string.  Unfortunately, I don’t have a definition which
+  would satisfy everyone and thus solve this particular problem.  Instead, I’m
+  side-stepping the entire discussion.
+
+
+<h2>Explicit doesn’t matter</h2>
+
+<p>Because, you see, when people say ‘design X is bad because it’s not explicit’
+  they actually don’t care about the feature being implicit.  Instead, they
+  (potentially subconsciously) use the level of explicitness as a proxy to
+  decide how easy it is to reason about the program.
+
+<p>To continue with Python’s boolean coercion example, it is well understood
+  that Python considers zero values and empty containers to be false.  Therefore
+  there’s little issue with <code>if some_list:</code> checking whether the list
+  is empty.  However, time of day is neither a collection nor a number
+  so <code>if
+  some_time:</code> <a href="https://lwn.net/Articles/590299/">checking whether
+  object represents
+  midnight</a> <a href="https://github.com/python/cpython/commit/ee6bdc07d65d5df418ad9dc2bb7139666af9a6b2">was</a>
+  an issue.  It wasn’t because the check was implicit (this was also true when
+  testing for empty container) but rather because it was an unexpected
+  behaviour.
+
+<p id=b1>When Rust infers types, the compiler picks the only one sensible and
+  obvious choice.  If there’s any ambiguity, programmer has to explicitly
+  specify the type.  Contrast it with function overloading in C++.  The rules
+  are defined, but they are so convoluted only a handful of people understand
+  them.  Again, the issue isn’t whether the feature is implicit or not; the
+  problem is how easy it is to reason about the code and how likely it is that
+  the compiler does something unexpected.<a href="#f1">†</a>
+
+
+<h3>Principle of least astonishment</h3>
+
+<p>What actually matters is following the principle of least astonishment.
+  Rather than wondering whether a particular design is explicit enough, the
+  correct question is to ask how likely it is for a feature to lead to
+  a surprising behaviour.
+
+<p>Bugs often emerge when the compiler does something programmer doesn’t expect.
+  Python treating <code>True</code> as one in arithmetic operations is the only
+  sensible non-throwing interpretation which means that the principle is
+  preserved.  On the other hand C promoting integers can easily lead to
+  astonishing results (such as unsigned object being less than negative value of
+  a signed type) which violates the principle.
+
+
+<h3>Summary</h3>
+
+<p>In conclusion, advocating explicitness for explicitness’s sake is not sound.
+  Being explicit is a tool which, in some cases, helps minimise surprises in the
+  code and makes it easier to reason about a program.  If implicit behaviour
+  does not make the source more confusing that it normally would be, there’s no
+  reason to fight it.
+
+<p>But even then, all those things need to be weighted in context of other
+  useful properties of a design.  Ergonomics of a programming language matter
+  and it may sometimes be worth sacrificing the principle of least astonishment
+  if that means the code may be more beautiful (which coincidentally is another
+  aphorism from The Zen of Python).
+
+
+<p id=f1><a href="#b1">†</a> As an aside, confusing a general idea of a feature
+  with implementation of the feature in a specific language is another common
+  fallacy.  Function resolution in C++ may be convoluted but that doesn’t mean
+  that function overloading in general needs to be confusing.  For example,
+  picking methods in Java is quite straightforward and allowing overloading on
+  <a href="https://en.wikipedia.org/wiki/Arity">arity</a> in Rust would leave no
+  ambiguity in the code.  Arguing against default parameters on the account of
+  how mystifying C++ can get is therefore invalid.  Similar comparison could be
+  made with Python’s treatment of false values.  Yes, it may sometimes lead to
+  astonishing results (e.g. intending to test for <code>None</code> but
+  forgetting that non-<code>None</code> values are tested as well), but if
+  adapted to Rust, those surprising behaviours would not be an issue (thanks to
+  strict typing).
