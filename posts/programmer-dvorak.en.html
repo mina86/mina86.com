@@ -1,5 +1,5 @@
 <!-- subject: Programmer (vs) Dvorak -->
-<!-- date: 2021-05-30 00:17:42 -->
+<!-- date: 2021-05-30 11:36:23 -->
 <!-- tags: programmer dvorak -->
 <!-- categories: Articles, Techblog  -->
 
@@ -38,8 +38,11 @@
         <path d="M-1,-1 l2,2 M0,0 l4,4 M3,3 l2,2" stroke="#000"/>
       </pattern>
     </defs>
-    <path stroke="var(--e)" d="M8,32h688m0,40H8m0,40h688m0,40H8m0,40h688" />
-    <path fill="#fffc" d="M508,32h176v80H508Z"/>
+    <g id=gr>
+      <path stroke="var(--e)" d="M8,32h688m0,40H8m0,40h688m0,40H8m0,40h688" />
+      <path fill="#fffc" d="M508,32h176v80H508Z"/>
+      <text style="fill:#212121"><tspan x="540" y="55">Not number row</tspan><tspan x="540" y="79">Unshifted</tspan><tspan x="540" y="103">Shifted</tspan></text>
+    </g>
     <path fill="url(#un)" d="M64,192v-125h14v125zm16,0v-124h14v124zm48,0v-111h14v111zm16,0v-110h14v110zm160,0v-50h14v50zm16,0v-41h14v41zm16,0v-41h14v41zm128,0v-26h14v26zm16,0v-24h14v24zm32,0v-24h14v24zm32,0v-14h14v14zm16,0v-10h14v10z
                              M516,64v16h16V64z
                              M16,224h360v14H16z"/>
@@ -50,8 +53,9 @@
                             M516,40v16h16V40z
                             M16,208h640v14H16z" />
     <text font-size=0.875em text-anchor=middle><tspan x="23" y="24">-</tspan><tspan x="39" y="33">"</tspan><tspan x="55" y="36">.</tspan><tspan x="71" y="59">)</tspan><tspan x="87" y="60">(</tspan><tspan x="103" y="70">,</tspan><tspan x="119" y="72">/</tspan><tspan x="135" y="73">*</tspan><tspan x="151" y="74">=</tspan><tspan x="167" y="85">_</tspan><tspan x="183" y="89">;</tspan><tspan x="199" y="95">0</tspan><tspan x="215" y="100">&gt;</tspan><tspan x="231" y="100">:</tspan><tspan x="247" y="111">&lt;</tspan><tspan x="263" y="118">1</tspan><tspan x="279" y="129">2</tspan><tspan x="295" y="131">'</tspan><tspan x="311" y="134">#</tspan><tspan x="327" y="143">{</tspan><tspan x="343" y="143">}</tspan><tspan x="359" y="147">4</tspan><tspan x="375" y="149">3</tspan><tspan x="391" y="151">8</tspan><tspan x="407" y="152">\</tspan><tspan x="423" y="152">5</tspan><tspan x="439" y="153">6</tspan><tspan x="455" y="157">9</tspan><tspan x="471" y="158">$</tspan><tspan x="487" y="160">[</tspan><tspan x="503" y="160">7</tspan><tspan x="519" y="160">]</tspan><tspan x="535" y="166">&amp;</tspan><tspan x="551" y="170">+</tspan><tspan x="567" y="174">!</tspan><tspan x="583" y="174">%</tspan><tspan x="599" y="175">|</tspan><tspan x="615" y="176">@</tspan><tspan x="631" y="178">`</tspan><tspan x="647" y="180">?</tspan><tspan x="663" y="181">~</tspan><tspan x="679" y="182">^</tspan><tspan x="672" y="219">52%</tspan><tspan x="392" y="235">29%</tspan><tspan x="262" y="251">19%</tspan></text>
-    <text style="fill:#212121"><tspan x="540" y="55">Not number row</tspan><tspan x="540" y="79">Unshifted</tspan><tspan x="540" y="103">Shifted</tspan></text>
   </svg>
+  <figcaption>Fig. 1. Histogram of characters used in text files authored by me
+    present in my Git repositories.</figcaption>
 </figure>
 
 <!-- FULL -->
@@ -82,6 +86,71 @@
   a comfortable key to reach.  Programmer Dvorak puts caret and at sign there
   instead.  And yes, you’ve guessed it, the data supports that decision: equals
   and plus are used much more than at sign and caret.<a href="#f1">†</a>
+
+
+<h3>Language composition</h3>
+
+<p>Different languages use their own syntax and thus the most commonly used
+  characters end up different.  Someone writing exclusively in Lisp will wear
+  out their parenthesise much quicker than someone writing in Haskell.  Turns
+  out, I write mostly in languages whose syntax is based on C.
+
+<table>
+  <thead>
+    <tr><th>File type<th>Percentage of lines
+  <tbody>
+    <tr style="background:var(--j)">
+      <td>C or C++<td class=r>41.53%
+    <tr style="background:linear-gradient(to right,var(--j) 22%,#fff0 22%)">
+      <td>HTML or XML-based<td class=r> 8.98%
+    <tr style="background:linear-gradient(to right,var(--j) 19%,#fff0 19%)">
+      <td>Java<td class=r> 8.02%
+    <tr style="background:linear-gradient(to right,var(--j) 17%,#fff0 17%)">
+      <td>Misc configuration<td class=r> 7.20%
+    <tr style="background:linear-gradient(to right,var(--j) 16%,#fff0 16%)">
+      <td>Python<td class=r> 6.64%
+    <tr style="background:linear-gradient(to right,var(--j) 14%,#fff0 14%)">
+      <td>Shell script<td class=r> 5.65%
+    <tr style="background:linear-gradient(to right,var(--j) 9%,#fff0 9%)">
+      <td>Rust<td class=r> 3.89%
+    <tr style="background:linear-gradient(to right,var(--j) 9%,#fff0 9%)">
+      <td>Perl<td class=r> 3.89%
+    <tr style="background:linear-gradient(to right,var(--j) 8%,#fff0 8%)">
+      <td>Misc text<td class=r> 3.33%
+    <tr style="background:linear-gradient(to right,var(--j) 7%,#fff0 7%)">
+      <td>JavaScript<td class=r> 2.94%
+    <tr style="background:linear-gradient(to right,var(--j) 6%,#fff0 6%)">
+      <td>Lisp<td class=r> 2.55%
+    <tr style="background:linear-gradient(to right,var(--j) 6%,#fff0 6%)">
+      <td>LaTeX<td class=r> 2.33%
+    <tr style="background:linear-gradient(to right,var(--j) 3%,#fff0 3%)">
+      <td>Makefile<td class=r> 1.34%
+    <tr style="background:linear-gradient(to right,var(--j) 4%,#fff0 4%)">
+      <td>(Rest)<td class=r> 1.71%
+</table>
+
+<p>But I also dabble in Lisp.  This brings up a question: is that why I write so
+  many parenthesise?  Analysing all files except for <code>*.el</code> reveal
+  that my using Emacs doesn’t skew the result too much.  There is a little bit
+  of shuffling but parenthesise still end up in top five (even though their
+  relative frequency suffers) and first digit (zero) on 12th position.
+
+<figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+       width="44em" height="12em" viewBox="0 0 704 192"
+       stroke-width="1">
+    <use href="#gr"/>
+    <path fill="url(#un)" d="M64,192v-127h14v127zm16,0v-125h14v125zm48,0v-119h14v119zm16,0v-119h14v119zm160,0v-54h14v54zm16,0v-45h14v45zm16,0v-44h14v44zm128,0v-28h14v28zm32,0v-26h14v26zm16,0v-25h14v25zm32,0v-15h14v15zm16,0v-11h14v11z
+                             M516,64v16h16V64z" />
+    <path fill="url(#sh)" d="M192,192v-96h14v96zm64,0v-72h14v72zm16,0v-61h14v61zm80,0v-41h14v41zm16,0v-39h14v39zm16,0v-36h14v36zm16,0v-35h14v35zm16,0v-34h14v34zm32,0v-29h14v29zm32,0v-27h14v27zm96,0v-11h14v11zm48,0v-7h14v7zm32,0v-3h14v3z
+                             M516,88v16h16V88z" />
+    <path fill="#7570b3" d="M16,192v-160h14v160zm16,0v-159h14v159zm16,0v-159h14v159zm48,0v-125h14v125zm16,0v-123h14v123zm48,0v-108h14v108zm16,0v-100h14v100zm32,0v-91h14v91zm16,0v-90h14v90zm16,0v-79h14v79zm48,0v-57h14v57zm144,0v-33h14v33zm96,0v-19h14v19zm64,0v-10h14v10zm16,0v-8h14v8zm32,0v-4h14v4zm32,0v-2h14v2z
+                            M516,40v16h16V40z" />
+    <text font-size="0.875em" text-anchor="middle"><tspan x="23" y="24">.</tspan><tspan x="39" y="25">"</tspan><tspan x="55" y="25">-</tspan><tspan x="71" y="57">)</tspan><tspan x="87" y="59">(</tspan><tspan x="103" y="59">/</tspan><tspan x="119" y="61">,</tspan><tspan x="135" y="65">*</tspan><tspan x="151" y="65">=</tspan><tspan x="167" y="76">_</tspan><tspan x="183" y="84">;</tspan><tspan x="199" y="88">0</tspan><tspan x="215" y="93">&gt;</tspan><tspan x="231" y="94">:</tspan><tspan x="247" y="105">&lt;</tspan><tspan x="263" y="112">1</tspan><tspan x="279" y="123">2</tspan><tspan x="295" y="127">'</tspan><tspan x="311" y="130">#</tspan><tspan x="327" y="139">{</tspan><tspan x="343" y="140">}</tspan><tspan x="359" y="143">4</tspan><tspan x="375" y="145">3</tspan><tspan x="391" y="148">8</tspan><tspan x="407" y="149">5</tspan><tspan x="423" y="150">6</tspan><tspan x="439" y="151">\</tspan><tspan x="455" y="155">9</tspan><tspan x="471" y="156">$</tspan><tspan x="487" y="157">7</tspan><tspan x="503" y="158">[</tspan><tspan x="519" y="159">]</tspan><tspan x="535" y="165">&amp;</tspan><tspan x="551" y="169">+</tspan><tspan x="567" y="173">!</tspan><tspan x="583" y="173">%</tspan><tspan x="599" y="174">|</tspan><tspan x="615" y="176">@</tspan><tspan x="631" y="177">`</tspan><tspan x="647" y="180">?</tspan><tspan x="663" y="181">~</tspan><tspan x="679" y="182">^</tspan></text>
+  </svg>
+  <figcaption>Fig. 1. Histogram of characters used in text files authored by me
+    present in my Git repositories excluding Emacs Lisp files.</figcaption>
+</figure>
 
 <h2>Conclusion</h2>
 
