@@ -1,0 +1,112 @@
+<!-- subject: How do balanced audio cables work -->
+<!-- date: 2021-06-13 12:00:11 -->
+<!-- tags: audio, balanced, xlr -->
+<!-- categories: Articles, Techblog -->
+
+<p>Have you ever wondered how balanced audio cables work?  For the longest time
+  I have until finally deciding to look into it.  Turns out the principle is
+  actually rather straightforward.
+
+<p>In a normal, unbalanced wire an analogue signal <var>S</var> is sent over
+  a pair of wires: one carries the signal while the other a reference zero.
+  Receiver interprets voltage between the two as the signal.  The issue is that
+  over the length of a cable noise is introduced.  While transmitter
+  sends <var>S</var>, receiver gets <var>S + e</var> (where <var>e</var> denotes
+  the noise).
+
+<figure>
+  <svg width="45em" height="15em" viewBox="-10 -10 480 160" fill="none">
+    <defs>
+      <path id="sin" stroke="var(--i)" stroke-width="2"
+            d="m 0.375,7.3575822 c 0,0 1.45216,-6.99595999 2.82746,-6.98255999 1.3753,0.0134 2.83797,6.96253999 2.83797,6.96253999 0,0 1.5241,6.9844798 2.86424,6.9891998 1.34014,0.005 2.87126,-6.9891998 2.87126,-6.9891998"
+            />
+      <use href="#sin" id="nis" transform="scale(1, -1)"/>
+      <path id="noise" stroke-width="0.4"
+            d="M 0.0202051,6.3820138 0.2720171,2.2287188 0.5242361,12.947371 0.7760481,8.6079708e-4 1.0282661,5.9265648 l 0.251814,0.742079 0.251812,3.9994562 0.252219,-6.0981682 0.251813,6.2265022 0.251812,-6.4269002 0.252219,6.1945212 0.251812,-9.3263952 0.252218,1.87281 0.251814,-1.806416 0.251812,1.590229 0.252219,1.2704 0.251812,-1.312909 0.252219,9.7409552 0.251813,-1.969162 0.251812,-7.5426522 0.252219,7.1677662 0.251813,-0.211733 0.252218,-5.9208462 0.251813,5.85769 0.251812,-4.293778 0.252219,8.2964722 0.251813,-13.1857742 0.251812,3.458179 0.252219,-3.638739 0.251813,7.513908 0.252217,-6.481151 0.251814,5.832185 0.251812,4.7893062 0.252219,-6.8127172 0.251813,1.592656 0.252217,-6.27063 0.251814,9.7490522 0.251813,-4.9791782 0.252217,-0.442495 0.251814,-1.555816 0.2518129,7.3677582 0.252217,-4.1140262 0.251814,2.536349 0.252217,-6.510703 0.251813,2.758608" />
+    </defs>
+    <!-- Boxes -->
+    <path stroke="var(--e)" stroke-width="1" stroke-dasharray="1 1"
+          d="M 0,126 V 0 H 126 V 126 Z
+             M 255,126 V 0 h 179 V 126 Z" />
+
+    <text font-style=italic x="6" y="6">Transmitter<tspan
+       x="428" text-anchor="end">Receiver</tspan><tspan
+       font-style=normal font-size=20
+       x="170" y="57"
+       dy="0 2.5 -2.75 0 2.25"
+       dx="0 1 -0.5 2 -0.75"
+       rotate="5 -7 -13 5 -5">noise</tspan></text>
+
+    <g stroke="currentcolor" >
+      <!-- Wires and gates -->
+      <path d="m 138.75,138 h 7.5 M 135,135 h 15 m -18.75,-3 h 22.5 M 142.5,104.25 V 132 M 392.25001,52.5 h 12.75 v 13.500001 m -21,-5.250001 v 11.250069 c -126.21168,1.175002 -209.78467,0.24377 -335.999734,0 V 33 c 126.216284,2.5e-5 209.783454,6.9e-5 335.999734,6.9e-5 V 44.25 M 22.499997,58.5 V 52.500069 H 48.000276 M 32.999997,104.25 H 405.00001 V 90.000001 M 375.75001,52.5 l 8.25,-8.25 8.25,8.25 -8.25,8.25 z" />
+      <g fill="var(--a)">
+        <path
+          d="m 95.249996,72.000069 -26.999998,-15 v 30 z m 0,-39 -26.999998,-15 v 30 z m 229.823004,39 -27,-15 v 30 z m 0,-39 -27,-15 v 30 z" />
+        <circle cx="98" cy="72" r="6" />
+        <circle cx="328" cy="72" r="6" />
+      </g>
+      <!-- Pluses -->
+      <path d="M 273.27,22.35 h 5
+               M 273.27,62.85 h 5
+               M 275.77,19.85 v 5
+               M 275.77,60.5  v 5
+               M 351   ,22.35 h 5
+               M 353.5 ,19.85 v 5
+               M 351   ,62.85 h 5
+               M 384   ,49    v 7
+               M 380.5 ,52.5  h 7"/>
+    </g>
+
+    <!-- Microphone and speaker -->
+    <path stroke="var(--f)" stroke-width="4" stroke-linecap="round"
+          d="m 22.499991,63.208315 c 3.5162,0 6.34694,2.83073 6.34694,6.34693 v 16.57465 c 0,3.5162 -2.83074,6.34694 -6.34694,6.34694 -3.5162,0 -6.34693,-2.83074 -6.34693,-6.34694 v -16.57465 c 0,-3.5162 2.83073,-6.34693 6.34693,-6.34693 z
+             m 406.521429,-5.342357 -14.33261,12.41469 h -13.56474 v 15.97585 h 13.35921 l 14.53814,12.59375 z
+             M 22.499991,97.317001 V 104.25
+             m -5.40959,0 10.81917,-6e-5
+             m 6.367676,-18.697485 c 2e-6,6.492508 -5.284824,11.757544 -11.777325,11.764546 -6.4925,0.007 -11.763346,-5.246675 -11.77735,-11.739166
+             M 437.93866,69.450978 a 16.294282,16.294282 0 0 1 0,17.88193
+             m 5.93278,-23.81471 a 25.068125,25.068125 0 0 1 0,29.7475
+             m 5.43143,-35.17893 a 32.421441,32.421441 0 0 1 0,40.61036" />
+
+    <!-- Signal waves -->
+    <use href="#sin" x="27" y="35" />
+    <use href="#sin" x="108" y="15" />
+    <use href="#nis" x="108" y="70" />
+    <use href="#sin" x="259" y="15" />
+    <use href="#nis" x="259" y="70" />
+    <use href="#sin" x="337" y="15" />
+    <use href="#sin" x="337" y="55" />
+    <use href="#sin" x="337" y="55" />
+    <use href="#sin" x="392" y="35" />
+
+
+    <!-- Noise -->
+    <g stroke="var(--q)"
+       stroke-dasharray="1, 0.5, 0.75, 1.25">
+      <path stroke-width="0.5"
+            d="m 140.40622,48.622739 1.16321,-26.54809 1.15941,68.51422 1.16319,-82.7548196 1.16321,37.8774396 1.15941,4.7434 1.16319,25.56474 1.16321,-38.97981 1.16318,39.80013 1.15941,-41.08109 1.16322,39.59571 1.16317,-59.61482 1.15942,11.97108 1.1632,-11.54669 1.1632,10.16483 1.1594,8.12046 1.16322,-8.39219 1.16318,62.26472 1.16321,-12.58698 1.15942,-48.21304 1.16317,45.81674 1.16322,-1.35342 1.15941,-37.84637 1.16318,37.44269 1.16321,-27.44607 1.15942,53.0315 1.16318,-84.28418 1.16321,22.10488 1.16318,-23.25904 1.15942,48.02931 1.16321,-41.42787 1.16317,37.27965 1.15943,30.6135 1.1632,-43.54726 1.16318,10.18036 1.15942,-40.08223 1.16321,62.31649 1.16318,-31.82719 1.15941,-2.82845 1.16323,-9.94485 1.16316,47.09511 1.16322,-26.29709 1.15942,16.21249 1.16318,-41.61677 1.1632,17.63316 1.15942,-29.83716 1.16319,29.27561 1.1632,-23.94736 1.15942,46.63966 1.16317,-16.23836 1.16323,14.64946 1.16316,-20.94037 1.15943,47.78606 1.16321,-37.81274 1.16318,-2.48686 1.15942,-39.99423 1.1632,41.74617 1.16319,23.13739 1.15941,-23.64977 1.16321,-39.07557 1.16318,20.74887 1.15942,50.45406 1.16318,-38.48036 1.16321,-7.76337 1.16321,20.98434 1.15942,-44.34946 1.16318,41.47962 1.16321,19.96476 1.15939,-48.86774 1.1632,48.85223 1.16321,-23.47123 1.15939,-20.80062 1.1632,42.72693 1.16322,-32.04971 1.16318,2.67575 1.15943,-16.23576 1.1632,-7.99625 1.16318,51.81265 1.15942,8.01696 1.16318,-51.36239 1.1632,-0.0881 1.15942,29.14364 1.16321,8.43619 1.16318,-24.43905 1.16321,-11.81584 1.15942,7.26909 1.16319,-28.4216496 1.16316,35.7683796 1.15946,-22.23167 1.16318,-7.63655"
+        />
+      <use href="#noise" x="279.87" y="15.39" />
+      <use href="#noise" x="279.87" y="55.89" />
+      <use href="#noise" x="357.55" y="15.39" />
+      <use href="#noise" x="357.55" y="55.89" />
+    </g>
+  </svg>
+  <figcaption>Illustration of transmission of an analogue signal over a balanced
+    cable.  For brevity the diagram missuses symbols from digital signal
+    processing and should not be taken as a technically correct representation.
+  </figcaption>
+</figure>
+
+<p>A balanced cable addresses this problem by sending the information over three
+  wires: hot (or positive), cold (or negative) and ground.  Hot wire carries the
+  signal <var>S</var> as before, cold one carries the inverse of the
+  signal <var>-S</var> and ground is zero as before.  Just like before, when
+  information travels over the cable, noise is introduced.  Crucially, because
+  it’s a single cable, noise on the positive and negative wires
+  are <em>strongly</em> correlated.  Receiver therefore gets <var>S + e</var> on
+  hot wire and <var>-S + e</var> on cold wire.  All it needs to do is inverse
+  the signal on negative wire and add both signals together.  Inversion changes
+  phase of the noises on the cold wire such that it cancels out error remaining
+  on the positive wire: <var>(S + e) + -(-S + e) = S + e + S - e → S</var>.
