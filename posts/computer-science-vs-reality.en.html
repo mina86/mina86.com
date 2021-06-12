@@ -64,15 +64,15 @@
 
 <p>The simplest approach is to store all the words in a list and compare each
   with the pattern.  With \(n\) words each \(k\)-character long this has
-  \(O(kn)\) complexity.  More specifically, the run-time can be expressed in
-  terms of properties of the pattern.  This makes the complexity of a lookup
-  \(O(pn+sn)\) where \(p\) is the length of the prefix in the glob and \(s\)
-  length of the suffix.
+  \(\mathcal O(kn)\) complexity.  More specifically, the run-time can be
+  expressed in terms of properties of the pattern.  This makes the complexity of
+  a lookup \(\mathcal O(pn+sn)\) where \(p\) is the length of the prefix in the
+  glob and \(s\) length of the suffix.
 
 <p id=b1>An obvious improvement is sorting the list.  With the words ordered,
   a binary search makes it possible to narrow down in logarithmic time the
   search space to a subset of words which match pattern’s prefix.  This changes
-  the complexity to \(O(p\log n + ns)\)<a href="#f1">†</a>.
+  the complexity to \(\mathcal O(p\log n + ns)\)<a href="#f1">†</a>.
 
 <p>Another approach is to have two sorted lists, one called <code>forward</code>
   containing the given words and another called <code>backward</code> containing
@@ -101,7 +101,7 @@
   searches followed by a scan through <code>fwd_to_bck</code> to check if word
   in <code>forward</code> list falls within a range of indexes
   in <code>backward</code> list identified through the binary search.
-  Complexity of this solution is \(O((p+s)\log n + n)\).
+  Complexity of this solution is \(\mathcal O((p+s)\log n + n)\).
 
 
 <h2>Trie</h2>
@@ -153,8 +153,8 @@
   individual characters.  In order to check presence of a key, the tree is
   traversed following connections corresponding to characters of the word.
   Since there’s a constant upper-limit to number of children a node can have,
-  lookup operation takes time linear in the length of the key, \(O(k)\), which
-  is better than binary search.
+  lookup operation takes time linear in the length of the key, \(\mathcal
+  O(k)\), which is better than binary search.
 
 <p>If all the words are put into a trie, finding all matching
   a <code><var>prefix</var>*<var>suffix</var></code> pattern becomes a three
@@ -164,13 +164,14 @@
   reached than path to that leaf describes a word in the set matching the
   pattern.
 
-<p>Complexity of the first and last step are simple to derive; they are \(O(p)\)
-  and \(O(sn)\) respectively.  Suffix length needs to be multiplied by number of
-  words because in the worst case all words need to be tested.  As for the
-  fan-out step, we need to go \(k-p-s\) steps deep and in the worst case do it
-  for all keys which results in \(O((k-p-s)n)\) complexity.
+<p>Complexity of the first and last step are simple to derive; they are
+  \(\mathcal O(p)\) and \(\mathcal O(sn)\) respectively.  Suffix length needs to
+  be multiplied by number of words because in the worst case all words need to
+  be tested.  As for the fan-out step, we need to go \(k-p-s\) steps deep and in
+  the worst case do it for all keys which results in \(\mathcal O((k-p-s)n)\)
+  complexity.
 
-<p id=b2>Overall, the lookup ends up having \(O(p+(k-p)n)\) run-time.
+<p id=b2>Overall, the lookup ends up having \(\mathcal O(p+(k-p)n)\) run-time.
   Interestingly, it does not depend on the suffix<a href="#f2">‡</a>.  On the
   other hand, the longer the prefix the faster the algorithm will run.  On one
   extreme, if the glob is just a literal string (and thus prefix length equal
