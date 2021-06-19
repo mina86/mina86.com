@@ -1,0 +1,117 @@
+<!-- subject: Primes ≤ 100 in Rust -->
+<!-- date: 2021-06-20 00:49:43 -->
+<!-- tags: rust, primes, brain-teaser -->
+<!-- categories: Articles, Misc, Techblog -->
+
+<p>In a past life <a href="/2010/prime-numbers-less-than-a-hundred/">I’ve talked
+    about</a> a challenge to write the shortest program which prints all prime
+    numbers less than a hundred.  Back then I’ve discussed a 60-character long
+    solution written in C.  Since Rust is the future, inspired
+    by <a href="https://www.reddit.com/r/rust/comments/o1i3d2/prime_number_generator_in_rust_664579_primes/">a recent
+    thread on Sieve of Eratosthenes</a> I’ve decided to carry the task for Rust
+    as well.
+
+<p>To avoid spoiling the solution, I’m padding this article with a bit of
+  unrelated content.  To jump straight to the code, skip the next block of
+  paragraphs.  Otherwise, here’s a joke for ya:
+
+<!-- FULL -->
+
+<blockquote>
+  <p>After realising he got lost, a man in a hot air balloon spotted a woman
+    below.  He descended and shouted, ‘Excuse me, can you help me?  I’ve
+    promised a friend I would meet him an hour ago, but I don’t know where
+    I am.’
+  <p>The woman below looked up and replied matter-of-factly, ‘You are in a hot
+    air balloon hovering around ten metres above the ground.  You are between 47
+    and 48 degrees north latitude and between 8 and 9 degrees east longitude.’
+  <p>‘You must be an engineer,’ the balloonist concluded.
+  <p>‘I am,’ the woman replied intrigued, ‘How did you know?’
+  <p>‘Well, everything you told me is technically correct, but I have no idea
+    how to use your information and I am still lost.  Frankly, you’ve not been
+    much help.’
+  <p>The woman pondered for a while and responded, ‘You must be in
+    management.’
+  <p>‘I am,’ the man confirmed, ‘but how did you know?’
+  <p>‘Well, you don’t know where you are or where you are going, you have risen
+    to where you are thanks to hot air, you made a promise which you have no
+    idea how to keep and you expect people beneath you to solve your problems.
+    The fact is you are in exactly the same position you were in before we met,
+    but now, somehow, it’s my fault!’
+</blockquote>
+
+<h2>The solution</h2>
+
+<p>Now back to the matter at hand.  Let’s first go with a 68-character long
+  solution I came up with.  It is as follows:
+
+<pre>fn main(){for n in 2..99{if(2..n).all(|k|n%k!=0){println!("{}",n)}}}</pre>
+
+<p>For comparison, here’s the aforementioned C variant:
+
+<pre>main(i,j){for(;j=++i&lt;99;j&lt;i||printf("%d\n",i))for(;i%++j;);}</pre>
+
+<p>Let’s break it down a little taking this opportunity to talk about Rust.
+
+<p>Commonality between the two variants is lack of type declarations.  It’s
+  important to note that, while in C this was due to since deprecated rule that
+  variables are implicitly integers, Rust performs type inference.  In many
+  situations in Rust there’s no need to declare types and the compiler will
+  figure the correct one out.
+
+<p>Rust doesn’t have a C-style <code>for</code> syntax and offers range loop
+  instead.  <code>for n in 2..99 { <var>body</var> }</code> will execute body
+  with <code>n</code> variable ranging from 2 to 98 inclusively.  Since 99 is
+  not a prime, we don’t need to include it in the range.  By the
+  way, <code>2..99</code> is not part of the syntax for the loop; rather, it
+  declares a range object.  And yes, ranges are right-open (though there’s also
+  syntax for closed intervals).
+
+<p><code>|<var>args</var>| <var>expr</var></code> is Rust’s syntax for lambdas
+  (also known as anonymous functions).  I’m not a fan of the pipe characters in
+  there — I’d much rather have Haskell’s syntax instead — but it’s something one
+  can get used to.
+
+<p>The <code>n % k != 0</code> expression demonstrates Rust
+  dosn’t <a href="/2021/explicit-isnt-better-than-implicit/">implicitly</a>
+  convert integers to booleans.  In fact, the exclamation mark unary operator
+  performs binary (not logical) negation when applied to integer types.  That’s
+  something tilde does in C.  Tilde used to declare boxed types and values in
+  Rust but is now unused.
+
+<p>Perhaps due to quirk of history, ranges in Rust are iterators (as opposed to
+  merely
+  implementing <a href="https://doc.rust-lang.org/std/iter/trait.IntoIterator.html"><code>IntoIterator</code>
+  trait</a>) which means that methods such as <code>all</code> are available on
+  them.  <code>all</code>, of course, checks whether all elements satisfy the
+  predicate given as argument.  This means
+  that <code>(2..n).all(<var>predicate</var>)</code> will test
+  the <var>predicate</var> for all integers from 2 to n-1 inclusively (again,
+  ranges are right-open unless different operator is used).
+
+<p>And
+    finally, <a href="https://doc.rust-lang.org/std/macro.println.html"><code>println!</code></a>
+    is rather self-explanatory.  For people interested in the future, it’s worth
+    noting that
+    if <a href="https://rust-lang.github.io/rfcs/2795-format-args-implicit-identifiers.html"><code>format_args_implicits</code>
+    feature</a> gets stabilised, the code will be shortened by one more
+    character.
+
+
+<h2>67-character solution?</h2>
+
+<p>There is a way to reach 67 characters.  It’s much more boring and I’m not
+  sure if it’s in the spirit of the challenge.  The trick is to hard-code the
+  list of primes as a byte buffer.  It’s not pretty, but it works:
+
+<pre>
+fn main(){for n in b"&#2;&#3;&#5;&#7;&#11;\r&#17;&#19;&#23;&#29;&#31;%)+/5;=CGIOSYa"{println!("{}",n)}}
+</pre>
+
+<p>Note that your user agent may fail to display control characters present in
+  the above listing.  Copying and pasting should work though.
+
+<p>The <code>b</code> sigil in front of the string is necessary to declare
+  a byte-array rather than a <code>str</code> object.  The latter doesn’t cannot
+  be iterated over without invoking <code>bytes</code> or <code>chars</code>
+  method which would make the solution too long.
