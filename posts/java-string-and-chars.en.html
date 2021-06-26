@@ -4,14 +4,14 @@
 <!-- categories: Articles, Techblog -->
 
 <p>Do you recall when I decided
-  to <a href="/2017/golang-string-and-bytes/">abuse Go’s run-time</a> and play
+  to <a href="/2017/golang-string-and-bytes/">abuse Go’s runtime</a> and play
   with <code>string</code>↔<code>[]byte</code></a> conversion?  Fun times…
   I wonder if we could do the same to Java?
 
 <p>To remind ourselves of the ‘problem’, strings in Java are immutable but
   because Java has no concept of ownership or <code>const</code> keyword (can we
-  move the industry to Rust already?) to make true on that promise, Java
-  run-time has to make
+  move the industry to Rust already?) to make true on that promise, Java runtime
+  has to make
   a <a href="https://www.javacreed.com/what-is-defensive-copying">defensive
   copy</a> each time a new string is created or when string’s characters are
   returned.
@@ -31,7 +31,7 @@ private static Field getValueField() {
 		return field;
 	}
 	throw new UnsupportedOperationException(
-		"UnsafeString not supported by the run-time");
+		"UnsafeString not supported by the runtime");
 }
 
 private final static Field valueField = getValueField();
@@ -181,7 +181,7 @@ java.lang.IllegalArgumentException: Can not set final [B field java.lang.String.
 	at java.base/java.lang.reflect.Field.set(Field.java:780)
 	at com.mina86.unsafe.UnsafeStringImpl.makeUnsafeMaybe(UnsafeStringImpl.java:19)
 	at com.mina86.unsafe.UnsafeStringBenchmark.main(UnsafeStringBenchmark.java:15)
-Testing unsafe implementation: unsupported by the run-time
+Testing unsafe implementation: unsupported by the runtime
 </pre>
 
 <p>How’s that for a twist? Uh? I overhyped the twist, you say? Well… Dumbledore

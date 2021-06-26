@@ -64,7 +64,7 @@
 
 <p>The simplest approach is to store all the words in a list and compare each
   with the pattern.  With \(n\) words each \(k\)-character long this has
-  \(\mathcal O(kn)\) complexity.  More specifically, the run-time can be
+  \(\mathcal O(kn)\) complexity.  More specifically, the run time can be
   expressed in terms of properties of the pattern.  This makes the complexity of
   a lookup \(\mathcal O(pn+sn)\) where \(p\) is the length of the prefix in the
   glob and \(s\) length of the suffix.
@@ -171,7 +171,7 @@
   the worst case do it for all keys which results in \(\mathcal O((k-p-s)n)\)
   complexity.
 
-<p id=b2>Overall, the lookup ends up having \(\mathcal O(p+(k-p)n)\) run-time.
+<p id=b2>Overall, the lookup ends up having \(\mathcal O(p+(k-p)n)\) run time.
   Interestingly, it does not depend on the suffix<a href="#f2">‡</a>.  On the
   other hand, the longer the prefix the faster the algorithm will run.  On one
   extreme, if the glob is just a literal string (and thus prefix length equal
@@ -187,7 +187,7 @@
   implementations and four trie-based ones were measured.
 
 <p>Putting <a href="https://github.com/mina86/pattern-match-benchmark/blob/master/result/bench.csv">all
-  of that data</a> on a graph isn’t feasible.  The run-time depends on four
+  of that data</a> on a graph isn’t feasible.  The run time depends on four
   parameters — number of words, length of each word, length of the prefix in the
   pattern and length of the suffix in the pattern — which doesn’t map well to
   a two-dimensional canvas.  To wrangle the measurements, I’ve first reduced the
