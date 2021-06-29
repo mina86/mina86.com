@@ -50,7 +50,8 @@ def func():
         foo = 'bar'
 print(func())
     </pre>
-  <li>propagates exceptions making any statement possible function exit point;
+  <li>propagates exceptions turning any statement into a possible function exit
+    point;
   <li>converts values to booleans in conditions.  For example, <code>if
     some_list:</code> is a Pythonic way to check if a list is non-empty
     while <code>if not var:</code> is a Pythonic way of checking whether
@@ -86,8 +87,12 @@ print(func())
   <li>passes <code>self</code> by value or reference based on method prototype,
   <li>clones <code>Copy</code> types when passed to functions by value,
   <li>calls <code>drop</code> of <code>Drop</code> objects when they go out of
-    scope and
-  <li>converts error type when question mark operator is used.
+    scope,
+  <li>converts error type when question mark operator is used and
+  <li>implicitly returns <code>()</code> from functions lacking tail or
+    return expression,
+  <li>resolves `format!` named arguments not explicitly listed in invocation of
+    the macro.
 </ul>
 
 <p>To be even more contrarian, I could claim <code>sort</code>
@@ -96,10 +101,9 @@ print(func())
 
 <p>But the point here isn’t to demonstrate that Python or Rust aren’t
   ‘explicit’.  Such position would be hard to defend.  Rather, it is to show
-  that even languages which pride themselves in championing explicitness are
-  willing to compromise on that principle.  This means that saying some new
-  feature exhibits implicit behaviour is not a be-all and end-all argument for
-  blocking such design.
+  that even languages which championing explicitness are willing to compromise
+  on that principle.  This means that saying some new feature exhibits implicit
+  behaviour is not a be-all and end-all argument for blocking such design.
 
 
 <h2>‘You’ve typed it so it’s explicit’</h2>
