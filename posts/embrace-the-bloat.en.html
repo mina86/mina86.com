@@ -1,6 +1,7 @@
 <!-- subject: Embrace the Bloat -->
 <!-- date: 2021-05-16 12:44:36 -->
-<!-- tags: bloat, suckless, xscreensaver -->
+<!-- update: 2021-07-31 01:25:21 -->
+<!-- tags: bloat, suckless, xscreensaver, stupid light -->
 <!-- categories: Articles, Techblog  -->
 
 <p>‘I’m using slock as my screen locker,’ a wise man once said.  He had a beard
@@ -8,8 +9,8 @@
 
 <p>‘Oh?’ his colleague raised a brow intrigued.  ‘Did they fix the PAM bug?’ he
   prodded inquisitively. Nothing but a confused stare came in reply.  ‘slock
-  crashes on systems using PAM,’ he offered an explanation and to demonstrate
-  his point, he approached a nearby machine and pressed the Return key.
+  crashes on systems using PAM,’ he offered an explanation and to demonstrate,
+  he approached a nearby machine and pressed the Return key.
 
 <p>Screens, blanked by a locker just a few minutes prior, came back to life,
   unlocked without the need to enter the password.
@@ -47,14 +48,17 @@
   millions of people and maintained by a well established project.
 
 <p>Am I saying that we should push as much code into every application?  Choose
-  tools with the biggest binary size?  No, of course not.  Programs with well
-  defined scope, devoid of unnecessary features have their advantages, but
-  comparing number of lines of code is never a good metric by itself.  It’s good
-  to try and understand where those additional lines come from.  Even if there
-  is no difference in set of features between two programs, one might be larger
-  because
-  it’s <a href="https://www.reddit.com/r/unix/comments/6gxduc/how_is_gnu_yes_so_fast/">better
-  optimised</a> or
+  tools with the biggest binary size?  Bring in huge dependencies just because
+  we can?  No, of course not.  Programs with well defined scope and devoid of
+  unnecessary features have their advantages (including security ones), but
+  comparing number of lines of code is rarely a good metric by itself.  It’s
+  good to try and understand where those additional lines come from.  Even if
+  there is no difference in set of features between two programs, one might be
+  larger because
+  it’s <a href="https://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html">better
+  optimised</a> (seriously,
+  they <a href="https://www.reddit.com/r/unix/comments/6gxduc/how_is_gnu_yes_so_fast/">don’t
+  joke around</a>) or
   uses <a href="https://www.jwz.org/xscreensaver/toolkits.html">a more
   secure</a> design.
 
@@ -65,8 +69,18 @@
   executable size is actually a problem (especially since smaller binary may
   mean fewer optimisations).  If you are after minimising space, firsts make
   sure that you cannot spare those few cents to get another GB of storage.  Make
-  sure you’re optimising what you actually care about and an irrelevant proxy
-  metric.
+  sure you’re optimising what you actually care about and not an irrelevant
+  proxy metric.
+
+<p>PS. It has since been pointed out to me that there may be a better term for
+  what I’m talking about here.  The concept
+  of <a href="https://www.arp242.net/stupid-light.html">stupid light</a> which
+  apparently originated from hiking.  Just like blind pursue to shed weight when
+  going camping can get you soaking wet, blind pursue to shed bytes, lines or
+  code or dependencies can get your screen unlocked without a password.  But
+  remember that the flip side of the analogy also works.  Stuffing your backpack
+  full of unnecessary items may cause you to miss your goal just like adding
+  tones and tones of code may break your project.
 
 <p id=f4><a href="#b4">†</a> It was just pure luck that I wasn’t affected by the
   bug.  My account password was long and complicated.  While good for security
