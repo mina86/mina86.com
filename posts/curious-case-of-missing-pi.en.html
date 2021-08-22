@@ -1,0 +1,160 @@
+<!-- subject: Curious case of missing π -->
+<!-- date: 2022-06-28 3:18:53 -->
+<!-- tags: c -->
+<!-- categories: Articles, Techblog -->
+
+<p>π is one of those a constant which pops up when least expected.  At the same
+  time it’s sometimes missing when most needed.  For example, consider the
+  following application calculating area of a disk (not to be confused with area
+  of a circle which is zero):
+
+<pre>
+#include &lt;math.h>
+#include &lt;stdio.h>
+#include &lt;stdlib.h>
+
+int main(int argc, char **argv) {
+	for (int i = 1; i &lt; argc; ++i) {
+		const double r = atof(argv[i]);
+		printf("%f\n", M_PI * r * r);
+	}
+}
+</pre>
+
+<p>It uses features introduced in the 1999 edition of the C standard (often
+  referred to as C99) so it might be good to inform the compiler of that fact
+  with a <code>-std=c99</code> flag.  Unfortunately, doing so leads to an error:
+
+<pre>
+$ gcc -std=c99 -o area area.c
+area.c: In function ‘main’:
+area.c:8:18: error: ‘M_PI’ undeclared (first use in this function)
+    8 |   printf("%f\n", M_PI * r * r);
+      |                  ^~~~
+</pre>
+
+<p>What’s going on?  Shouldn’t <code>math.h</code> provide the definition
+  of <code>M_PI</code> symbol?  It’s
+  what <a href="https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/math.h.html">the
+  specification</a> claims after all.  ‘glibc is broken’ some may even proclaim.
+  In this article I’ll explain why the compiler conspire with the standard
+  library to behave this way and why it’s the only valid thing it can do.
+
+<!-- FULL -->
+
+<h2>The problem</h2>
+
+<p id=b1>First of all, it needs to be observed that the aforecited specification
+  is <em>not</em> the C standard.  Instead, it’s POSIX and it
+  tags <code>M_PI</code> with an [XSI] tag.  That marking means
+  that <code>M_PI</code> ‘is part of the X/Open Systems Interfaces option’ and
+  ‘is an extension to the ISO C standard.’
+  Indeed, <a href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf">The
+  C99 standard</a><a href="#f1">†</a> doesn’t define this constant.
+
+<p>Trying to support multiple standards, gcc and glibc behave differently
+  depending on arguments.  With <code>-std=c99</code> switch the compiler
+  conforms to C standard; without the switch, it includes all the POSIX
+  extensions.
+
+<p>A naïve approach would be to make life easier and unconditionally provide the
+  constant.  Alas, the <code>M_PI</code> identifier is neither defined nor
+  reserved by the C standard.  This means it can be used freely by the
+  programmer and a conforming compiler cannot define.  For example, the
+  following is a well-formed C program and C compiler has no choice but to
+  accept it:
+
+<pre>
+#include &lt;math.h>
+#include &lt;stdio.h>
+#include &lt;stdlib.h>
+
+int main(int argc, char **argv) {
+	const double M_PI = 22.0 / 7.0;
+	for (int i = 1; i &lt; argc; ++i) {
+		const double r = atof(argv[i]);
+		printf("%f\n", M_PI * r * r);
+	}
+}
+</pre>
+
+<p>If compiler always defined <code>M_PI</code> in <code>math.h</code> the above
+  code wouldn’t work.
+
+
+<h2>The solution</h2>
+
+<p>The developer who needs π constant has a few ways to solve the problem.  For
+  maximum portability it has to be defined in the program itself.  To make
+  things work even when building on a Unix-like system, an <code>ifdef</code>
+  guard can be used.  For example:
+
+<pre>
+⋮
+#ifndef M_PI
+#  define M_PI  3.141592653589793238462643383279502884
+#endif
+⋮
+</pre>
+
+<p>Another solution is to limit compatibility to Unix-like systems.  In this
+  case, <code>M_PI</code> constant can be freely used and <code>-std</code>
+  switch shouldn’t be passed when building the program.
+
+
+<h3>Feature test macros</h3>
+
+<p>glibc provides one more approach.  The C standard has a notion of reserved
+  identifiers which cannot be freely used by programmers.  They are used for
+  future language development and to allow implementations to provide their own
+  extensions to the language.
+
+<p>For example, when C99 added boolean type to the language, it did it by
+  defining a <code>_Bool</code> type.  A <code>bool</code>, <code>true</code>
+  and <code>false</code> symbols became available only through
+  a <code>stdbool.h</code> file.  Such approach means that C89 code continues to
+  work when built with C99 compiler even if it
+  used <code>bool</code>, <code>true</code> or <code>false</code> identifiers in
+  its sown way..
+
+<p>Similarly, glibc introduced <a href="https://lwn.net/Articles/590381">feature
+  test macros</a>.  They all start with an underscore followed by a capital
+  letter.  Identifiers in this form are reserved by the C standard thus using
+  them in a program invokes undefined behaviour.  Technically speaking, the
+  following is not a well-formed C program:
+
+<pre>
+#define _XOPEN_SOURCE
+
+#include &lt;math.h>
+#include &lt;stdio.h>
+#include &lt;stdlib.h>
+
+int main(int argc, char **argv) {
+	for (int i = 1; i &lt; argc; ++i) {
+		const double r = atof(argv[i]);
+		printf("%f\n", M_PI * r * r);
+	}
+}
+</pre>
+
+<p>However,
+  glibc <a href="https://gnu.org/software/libc/manual/html_node/Feature-Test-Macros.html">documents
+    the behaviour</a> making the program well-defined.
+
+<p>It’s worth noting that uClibc and musl libraries handle the cases in much the
+  same way.  Microsoft uses the same technique though different macros. To get
+  access to <code>M_PI</code> in particular, a <code>_USE_MATH_DEFINES</code>
+  symbol needs to be defined.  Newlib will define symbols conflicting with
+  C standard unless code is compiled in strict mode
+  (e.g. with <code>-std=c99</code> flag).  Lastly, Bionic and Diet Libc define
+  the constant unconditionally which strictly speaking means that they don’t
+  conform to the C standard.
+
+
+<p id=f1><a href="#b1">†</a> Yes, I’m aware this link is to a draft.  The actual
+  standard
+  is <a href="https://webstore.ansi.org/Standards/INCITS/INCITSISOIEC98991999R2005">60
+  USD from ANSI webstore</a>.  Meanwhile, for most practical uses the draft is
+  entirely sufficient.  It’s certainly enough for the discussion in this
+  article.
