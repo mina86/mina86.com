@@ -659,7 +659,7 @@
 
 	if (query('#c')) {
 		/* Don’t load comments unless there’s comment DIV. */
-		talkyardServerUrl = 'https://comments-for-mina86-com.talkyard.net';
+		talkyardServerUrl = 'https://site-hz95jhr8je.talkyard.net';
 		a('//c1.ty-cdn.net/-/talkyard-comments.min.js');
 	}
 
