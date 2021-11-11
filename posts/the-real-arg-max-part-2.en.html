@@ -338,7 +338,7 @@ out:
   take value of <code>ARG_MAX</code> with a grain of salt but ideally also
   recover from <code>E2BIG</code> error by reducing number of arguments.
 
-<p>Fortunately, Unix-like systems provide a simple solution in the form
+<p>Fortunately, UNIX-like systems provide a simple solution in the form
   of <code>xargs</code> and <code>find … -exec … +</code> commands.  Those
   should be much easier to use and sufficient for most cases.  They will
   typically know how to deal with the command’s argument size limit.
