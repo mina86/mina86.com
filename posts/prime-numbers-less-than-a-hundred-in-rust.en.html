@@ -54,10 +54,10 @@
 <p>Let’s break it down a little taking this opportunity to talk about Rust.
 
 <p>Commonality between the two variants is lack of type declarations.  It’s
-  important to note that, while in C this was due to since deprecated rule that
-  variables are implicitly integers, Rust performs type inference.  In many
+  important to note that, while in C this was due to (since deprecated) rule
+  that variables are implicitly integers, Rust performs type inference.  In many
   situations in Rust there’s no need to declare types and the compiler will
-  figure the correct one out.
+  figure out the correct one.
 
 <p>Rust doesn’t have a C-style <code>for</code> syntax and offers range loop
   instead.  <code>for n in 2..99 { <var>body</var> }</code> will execute body
@@ -112,6 +112,6 @@ fn main(){for n in b"&#2;&#3;&#5;&#7;&#11;\r&#17;&#19;&#23;&#29;&#31;%)+/5;=CGIO
   the above listing.  Copying and pasting should work though.
 
 <p>The <code>b</code> sigil in front of the string is necessary to declare
-  a byte-array rather than a <code>str</code> object.  The latter doesn’t cannot
-  be iterated over without invoking <code>bytes</code> or <code>chars</code>
-  method which would make the solution too long.
+  a byte-array rather than a <code>str</code> object.  The latter cannot be
+  iterated over without invoking <code>bytes</code> or <code>chars</code> method
+  which would make the solution too long.
