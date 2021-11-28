@@ -1,5 +1,6 @@
 <!-- subject: Emacs remote file editing over TRAMP -->
 <!-- date: 2021-01-31 03:25:42 -->
+<!-- update: 2021-11-28 21:01:21 -->
 <!-- tags: emacs -->
 <!-- categories: Articles, Techblog -->
 
@@ -34,36 +35,30 @@
   emacs-version</code> in a terminal should result in Emacs version being
   printed.
 
-<pre class="fr sm" style="--w:25em">
-$ emacsclient -e '
-(if server-use-tcp (error "Using TCP")
-  (concat server-socket-dir "/" server-name))
-'
-"/run/user/1000/emacs/server"
-</pre>
-
 <p>There
   are <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html">other
-  ways to start a server</a>.  Whichever method one picks, the important points
-  are to i) make sure TCP is not used and ii) note where the UNIX-domain socket
-  is created.  The former is the case if <code>server-use-tcp</code>
+  ways to start a server</a> but whichever method one picks, the important
+  points are to i) make sure TCP is not used and ii) note where the UNIX-domain
+  socket is created.  The former is the case if <code>server-use-tcp</code>
   is <code>nil</code>; the later is indicated by <code>server-socket-dir</code>
   and <code>server-name</code> variables.  Their values can be inspected by
   typing <kbd>C-h v <var>variable-name</var> RET</kbd> (which
   runs <code>describe-variable</code> command).
 
-<table class="fr sm" style="--w:25em">
-  <thead>
-    <tr><th>Variable<th>Expected value
-  <tbody>
-    <tr><td><code>server-use-tcp</code><td><code>nil</code>
-    <tr><td><code>server-socket-dir<code>
-        <td>"<code>/run/user/<var>&lt;UID&gt;</var>/emacs</code>"
-    <tr><td><code>server-name</code><td>"<code>server</code>"
-</table>
+<figure>
+  <table>
+    <thead>
+      <tr><th>Variable<th>Expected value
+    <tbody>
+      <tr><td><code>server-use-tcp</code><td><code>nil</code>
+      <tr><td><code>server-socket-dir<code>
+          <td>"<code>/run/user/<var>&lt;UID&gt;</var>/emacs</code>"
+      <tr><td><code>server-name</code><td>"<code>server</code>"
+  </table>
+</figure>
 
 <p>Note that where exactly the socket ends up may vary.  To keep things simple,
-  this article assumes values as listed in the table on the right.  Depending on
+  this article assumes values as listed in the table above.  Depending on
   particular system, commands and configuration described further down may need
   adjustments to match where the server’s socket is actually located.
 
@@ -85,42 +80,54 @@ $ emacsclient -e '
 
 <h2>Forwarding the socket</h2>
 
-<p>Rather than talking abstracting about local and remote hosts, it might be
-  more fun to pick some names for machines in question.  Naming things is the
-  most difficult things in it, but let us settle on the local machine being
-  earth.local while the remote one phobos.mars.uac.
+<p>Rather than talking abstractly about local and remote hosts, it might be more
+  fun to pick some names for machines in question.  Naming things is the most
+  difficult things in software engineering, but let’s try and settle on the
+  local machine being earth.local while the remote one being phobos.mars.uac.
 
 <p>To allow emacsclient running on Phobos to communication with Emacs back on
   Earth, socket created by the edit server needs to be forwarded.  Fortunately,
   analogous to TCP, OpenSSH supports UNIX-domain socket forwarding.  To know
   what to forward, two paths need to be determined: i) location of the
-  UNIX-domain socket which local Emacs is listening on; and ii) path where remote
-  emacsclient will look for a socket.  Both typically lay under user’s XDG
-  runtime directory and thus can be determined with a little help from
-  xdg-user-dir tool:
+  UNIX-domain socket which local Emacs is listening on; and ii) path where
+  remote emacsclient will look for a socket.  Both can be obtained by
+  reading <code>server-socket-dir</code> and <code>server-name</code> variables
+  as mentioned above:
 
 <pre>
-user@earth$ <b>local_socket=$(xdg-user-dir RUNTIME)/emacs/server</b>
-user@earth$ <b>remote_socket=$(ssh -aknxSnone phobos.mars.uac \
-                          xdg-user-dir RUNTIME)/emacs/earth</b>
-user@earth$ <b>test -S "$local_socket" || echo Missing local socket</b>
+user@earth$ <b>local_socket=$(
+    emacs --batch --execute "(progn
+        (require 'server)
+        (princ (expand-file-name server-name server-socket-dir)
+               #'external-debugging-output))")</b>
+user@earth$ <b>remote_socket=$(
+    ssh -aknx phobos.mars.uac emacs --batch --execute "(progn
+        (require 'server)
+        (princ (expand-file-name \"earth\" server-socket-dir)
+               #'external-debugging-output))")</b>
 user@earth$ <b>printf '‘%s’\n' "$local_socket" "$remote_socket"</b>
 ‘/run/user/1000/emacs/server’
-‘/run/user/1234/emacs/earth
+‘/run/user/1234/emacs/earth’
 </pre>
 
-<p>It is good idea to use a non-standard server name on remote side to avoid
+<p>It is a good idea to use a non-standard server name on remote side to avoid
   clashes if an unrelated Emacs server happened to be running there already.
   The snippet above uses the default ‘<code>server</code>’ on local side while
   ‘<code>earth</code>’ on remote side indicating which computer the socket leads
-  to.  With the paths determined, the next step is to enable socket forwarding
-  when opening a new SSH session.  Options and syntax for UNIX-domain socket
+  to.
+
+<p>With the paths determined, the next step is to enable socket forwarding when
+  opening a new SSH session.  Options and syntax for UNIX-domain socket
   forwarding are the same as for TCP port forwarding.  In particular
   the <code>-R</code> switch is used on command line used as follows:
 
 <pre>
 user@earth$ <b>ssh -R "$remote_socket:$local_socket" phobos.mars.uac</b>
 </pre>
+
+<p>Note that tilde-expansion won’t really work in the above command so if the
+  socket is located in <code>~/.emacs/server</code> directory it may be
+  necessary to sell out the exact path.
 
 <p>Once authenticated, SSH will create <code>$remote_socket</code> on Phobos and
   forward all incoming connections to <code>$local_socket</code> on Earth.  With
@@ -155,7 +162,7 @@ user@phobos$ <b>emacsclient -s earth -T /ssh:phobos.mars.uac: <var>filename</var
 <pre id="alias">
 Host phobos
     HostName phobos.mars.uac
-    RemoteForward /run/user/1234/emacs/earth /run/user/100/emacs/server
+    RemoteForward /run/user/1234/emacs/earth /run/user/1000/emacs/server
     StreamLocalBindUnlink yes
     ControlMaster auto
     ControlPersist 30m  # or 1
