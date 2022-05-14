@@ -136,7 +136,7 @@ def format_byline(lang, author, email, date):
         date = '%s of %s %d' % (day, month, year)
         fmt = 'Posted by %s on %s'
 
-    return jinja2.utils.Markup(fmt % (author, date))
+    return jinja2.utils.markupsafe.Markup(fmt % (author, date))
 
 
 class _Addresable(object):
@@ -220,7 +220,7 @@ class Body(object):
             self.excerpt_needs_math = self.full_needs_math = needs_math
 
     def html(self, full=True):
-        return jinja2.utils.Markup(self.__data[full])
+        return jinja2.utils.markupsafe.Markup(self.__data[full])
 
     def __str__(self):
         return self.__data[1]
@@ -567,7 +567,7 @@ def generate(writer, site):
 
         def write_html(filename, tpl, data):
             data['lang'] = lang
-            data['T'] = lambda text: jinja2.utils.Markup(
+            data['T'] = lambda text: jinja2.utils.markupsafe.Markup(
                 get_translation(lang, text))
             data['byline'] = lambda author, email, date: format_byline(
                 lang, author, email, date)
