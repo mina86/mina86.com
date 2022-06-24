@@ -15,21 +15,22 @@
   elements, it would be much preferred.
 
 <p>In a twist of fate, I’ve been recently discussing an algorithm which reminded
-  my of that conversation I had all those years ago.  But this time I was
-  arguing against a node-based data structure.  Rather than ending things at
-  a conversation, I’ve decided to benchmark a few solutions to make sure which
-  approach is the best.
+  my of that conversation.  Except this time I was the one arguing against
+  a node-based data structure.  Rather than ending things at a conversation,
+  I’ve decided to benchmark a few solutions to make sure which approach is the
+  best.
 
 
 <h2>The problem</h2>
 
 <p>The task at hand is simple.  Design a data structure which stores a set of
-  words all of the same length and is able to return all words matching globs in
-  the form ‘<var>prefix</var>*<var>suffix</var>’.  That is, words which start
-  with a given prefix and end with a given suffix.  Either part of the pattern
-  may be empty and their concatenation is never longer than length of the words
-  in the collection.  Initialisation time and memory footprint are not
-  a concern.  Complexity of returning a result can be assumed to be constant.
+  words, all of the same length, and offers lookup operation which returns all
+  words matching globs in the form ‘<var>prefix</var>*<var>suffix</var>’.  That
+  is, words which start with a given prefix and end with a given suffix.  Either
+  part of the pattern may be empty and their concatenation is never longer than
+  length of the words in the collection.  Initialisation time and memory
+  footprint are not a concern.  Complexity of returning a result can be assumed
+  to be constant.
 
 <!-- EXCERPT ONLY -->
 

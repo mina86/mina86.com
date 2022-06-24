@@ -15,30 +15,25 @@
   mentioned method.  Inaccuracy of the method is usually acknowledged and
   justified by its simplicity and speed.  That’s a fair trade-off except that
   equally simple and fast algorithms which are noticeably more accurate exist.
-  One such method it is built on an observation that green contributes the most
-  to the perceived brightens of a colour.  The formula is (r + 2g + b) / 4 and
-  it increases accuracy of the calculation by taking green channel twice and
-  speed by changing division operation into a bit shift.  But that’s not all.
-  Even if speed is an important factor, there are better algorithms.
+  One such method is built on an observation that green contributes the most to
+  the perceived brightens of a colour.  The formula is (r + 2g + b) / 4 and it
+  increases accuracy (by taking green channel twice) as well as speed (by
+  changing division operation into a bit shift).  But that’s not all.  Even
+  better formulæ exist.
 
-<div style="font-size: .85em; margin: 0 4em">
-  <h2>TL;DR</h2>
+<h2>TL;DR</h2>
 
-  <pre>
+<pre>
 fn grey_from_rgb_avg_32bit(r: u8, g: u8, b: u8) -&gt; u8 {
     let y = 3567664 * r as u32 + 11998547 * g as u32 + 1211005 * b as u32;
     ((y + (1 &lt;&lt; 23)) &gt;&gt; 24) as u8
 }
-  </pre>
+</pre>
 
-  <p>The above implements the best algorithm for converting sRGB into greyscale
-    if speed and simplicity is main concern.  It does not involve gamma thus
-    forgoes most complicated and time-consuming arithmetic.  It’s much more
-    precise and as fast as arithmetic mean.
-
-  <p>That’s hardly the end of the story though as slightly more complicated
-    methods can increase accuracy much more.
-</div>
+<p>The above implements the best algorithm for converting sRGB into greyscale if
+  speed and simplicity is main concern.  It does not involve gamma thus forgoes
+  most complicated and time-consuming arithmetic.  It’s much more precise and as
+  fast as arithmetic mean.
 
 <!-- FULL -->
 
@@ -417,9 +412,9 @@ fn grey_from_rgb_avg_32bit(r: u8, g: u8, b: u8) -&gt; u8 {
 <h3>Histogram</h3>
 
 <p>Lastly, table and chart below shows a histogram of ΔE values.  It’s important
-  to note that ranges of delta values used in buckets are not the all the same
-  size.  Furthermore, the table represents a cumulative histogram.  Raw data
-  with equally-sized buckets is available
+  to note that ranges of delta values used in buckets are not all the same size.
+  Furthermore, the table represents a cumulative histogram.  Raw data with
+  equally-sized buckets is available
   as <a href="https://pastebin.com/tfFZr884">a CSV
   file</a>.  <a href="https://github.com/mina86/ansi_colours/blob/master/tools/src/bin/luminance.rs">The
   benchmark</a> produces that data as well and can be further modified to
