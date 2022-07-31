@@ -42,10 +42,10 @@
 
 <h2>The solution</h2>
 
-<p>Now back to the matter at hand.  Let’s first go with a 68-character long
+<p>Now back to the matter at hand.  Let’s first go with a 67-character long
   solution I came up with.  It is as follows:
 
-<pre>fn main(){for n in 2..99{if(2..n).all(|k|n%k!=0){println!("{}",n)}}}</pre>
+<pre>fn main(){for n in 2..99{if(2..n).all(|k|n%k!=0){println!("{n}")}}}</pre>
 
 <p>For comparison, here’s the aforementioned C variant:
 
@@ -57,7 +57,7 @@
   important to note that, while in C this was due to (since deprecated) rule
   that variables are implicitly integers, Rust performs type inference.  In many
   situations in Rust there’s no need to declare types and the compiler will
-  figure out the correct one.
+  figure out the correct ones.
 
 <p>Rust doesn’t have a C-style <code>for</code> syntax and offers range loop
   instead.  <code>for n in 2..99 { <var>body</var> }</code> will execute body
@@ -73,7 +73,7 @@
   can get used to.
 
 <p>The <code>n % k != 0</code> expression demonstrates Rust
-  dosn’t <a href="/2021/explicit-isnt-better-than-implicit/">implicitly</a>
+  doesn’t <a href="/2021/explicit-isnt-better-than-implicit/">implicitly</a>
   convert integers to booleans.  In fact, the exclamation mark unary operator
   performs binary (not logical) negation when applied to integer types.  That’s
   something tilde does in C.  Tilde used to declare boxed types and values in
@@ -84,28 +84,30 @@
   implementing <a href="https://doc.rust-lang.org/std/iter/trait.IntoIterator.html"><code>IntoIterator</code>
   trait</a>) which means that methods such as <code>all</code> are available on
   them.  <code>all</code>, of course, checks whether all elements satisfy the
-  predicate given as argument.  This means
+  predicate given as an argument.  This means
   that <code>(2..n).all(<var>predicate</var>)</code> will test
   the <var>predicate</var> for all integers from 2 to n-1 inclusively (again,
   ranges are right-open unless different operator is used).
 
 <p>And
     finally, <a href="https://doc.rust-lang.org/std/macro.println.html"><code>println!</code></a>
-    is rather self-explanatory.  For people interested in the future, it’s worth
-    noting that
-    if <a href="https://rust-lang.github.io/rfcs/2795-format-args-implicit-identifiers.html"><code>format_args_implicits</code>
-    feature</a> gets stabilised, the code will be shortened by one more
-    character.
+    is rather self-explanatory.
+    Since <a href="https://rust-lang.github.io/rfcs/2795-format-args-implicit-identifiers.html"><code>format_args_implicits</code>
+    feature</a> is now stable, the <code>"{n}"</code> syntax can be used to save
+    one character.  This is something Python programmers should be familiar with
+    though in Rust the <code>f</code> sigil is not necessary.  Programmer needs
+    to know from context when <code>"{n}"</code> means string interpolation and
+    when it’s just a plain string literal.
 
 
-<h2>67-character solution?</h2>
+<h2>66-character solution?</h2>
 
-<p>There is a way to reach 67 characters.  It’s much more boring and I’m not
+<p>There is a way to reach 66 characters.  It’s much more boring and I’m not
   sure if it’s in the spirit of the challenge.  The trick is to hard-code the
   list of primes as a byte buffer.  It’s not pretty, but it works:
 
 <pre>
-fn main(){for n in b"&#2;&#3;&#5;&#7;&#11;\r&#17;&#19;&#23;&#29;&#31;%)+/5;=CGIOSYa"{println!("{}",n)}}
+fn main(){for n in b"&#2;&#3;&#5;&#7;&#11;\r&#17;&#19;&#23;&#29;&#31;%)+/5;=CGIOSYa"{println!("{n}")}}
 </pre>
 
 <p>Note that your user agent may fail to display control characters present in
