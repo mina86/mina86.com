@@ -3,7 +3,7 @@
 <!-- tags: c -->
 <!-- categories: Articles, Techblog -->
 
-<p>π is one of those a constant which pops up when least expected.  At the same
+<p>π is one of those constants which pops up when least expected.  At the same
   time it’s sometimes missing when most needed.  For example, consider the
   following application calculating area of a disk (not to be confused with area
   of a circle which is zero):
@@ -46,9 +46,9 @@ area.c:8:18: error: ‘M_PI’ undeclared (first use in this function)
 
 <p id=b1>First of all, it needs to be observed that the aforecited specification
   is <em>not</em> the C standard.  Instead, it’s POSIX and it
-  tags <code>M_PI</code> with an [XSI] tag.  That marking means
-  that <code>M_PI</code> ‘is part of the X/Open Systems Interfaces option’ and
-  ‘is an extension to the ISO C standard.’
+  marks <code>M_PI</code> with an [XSI] tag.  This means that <code>M_PI</code>
+  ‘is part of the X/Open Systems Interfaces option’ and ‘is an extension to the
+  ISO C standard.’
   Indeed, <a href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf">The
   C99 standard</a><a href="#f1">†</a> doesn’t define this constant.
 
@@ -59,10 +59,9 @@ area.c:8:18: error: ‘M_PI’ undeclared (first use in this function)
 
 <p>A naïve approach would be to make life easier and unconditionally provide the
   constant.  Alas, the <code>M_PI</code> identifier is neither defined nor
-  reserved by the C standard.  This means it can be used freely by the
-  programmer and a conforming compiler cannot define.  For example, the
-  following is a well-formed C program and C compiler has no choice but to
-  accept it:
+  reserved by the C standard.  In other words, programmer can freely use it and
+  a conforming compiler cannot complain.  For example, the following is
+  a well-formed C program and C compiler has no choice but to accept it:
 
 <pre>
 #include &lt;math.h>
@@ -78,8 +77,8 @@ int main(int argc, char **argv) {
 }
 </pre>
 
-<p>If compiler always defined <code>M_PI</code> in <code>math.h</code> the above
-  code wouldn’t work.
+<p>Should compiler always define <code>M_PI</code> in <code>math.h</code> the
+  above code wouldn’t work.
 
 
 <h2>The solution</h2>
