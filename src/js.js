@@ -1,3 +1,6 @@
+dataLayer = [];
+function gtag(){dataLayer.push(arguments)}
+
 (x => {
 	/* Apart from those two, x and z are also variables available for
 	   use. */
@@ -662,9 +665,9 @@
 		talkyardServerUrl = 'https://site-hz95jhr8je.talkyard.net';
 		a('//c1.ty-cdn.net/-/talkyard-comments.min.js');
 	}
-
-	_gaq = [['_setAccount', 'UA-240278-1'], ['_trackPageview']];
-	a('//www.google-analytics.com/ga.js');
+	a('//www.googletagmanager.com/gtag/js?id=G-2KN8BH0V6Z');
+	gtag('js', (x = new Date));
+	gtag('config', 'G-2KN8BH0V6Z');
 
 
 	/* Add prefetch and prerender links to the first article if this is an
@@ -686,7 +689,7 @@
 
 
 	/* April 1st */
-	if ((x = new Date()).getDate() == 1 && x.getMonth() == 3) {
+	if (x.getDate() == 1 && x.getMonth() == 3) {
 		doc.querySelectorAll('.y').forEach(byline => {
 			byline.innerHTML = byline.innerHTML.replace(/(Michał) .mina86. (Nazarewicz)/, (isPL ? 'Hrabia' : 'Count') + ' $1 P. $2');
 		});
