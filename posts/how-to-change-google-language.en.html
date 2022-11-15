@@ -1,0 +1,48 @@
+<!-- subject: Secret command Google doesn’t want you to know -->
+<!-- date: 2022-11-20 17:55:45 -->
+<!-- tags: google -->
+<!-- categories: Articles, Techblog -->
+
+<p style="text-align: center">Or how to change language of Google website.
+
+<p id=b4>If you’ve travelled abroad you might have noticed Google <em>tries</em>
+  to be helpful and uses language of the region you’re in on its websites.  It
+  doesn’t matter that your operating system is in, say, Spanish; Google Search
+  will still use Portuguese if you happen to be in Brazil.
+
+<p>Fortunately, there’s a way to coerce it into using specific language.  All
+  you need to do is append <code>?hl=<var>lang</var></code> to website’s address
+  replacing <var>lang</var>
+  by <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">a two-letter
+  code</a> of the desired language.  For
+  instance, <a href="https://www.google.com/?hl=es"><code>?hl=es</code></a> for
+  Spanish, <a href="https://www.google.com/?hl=ht"><code>?hl=ht</code></a> for
+  Haitian or <a href="https://www.google.com/?hl=uk"><code>?hl=uk</code></a> for
+  Ukrainian.
+
+<p>If the URL already contains a question mark, you need to
+  append <code>&amp;hl=<var>lang</var></code> instead.  Furthermore, if it
+  contains a hash symbol, rather than appending the string, it needs to be
+  inserted just prior to the hash.  For example:
+
+<ul>
+  <li><code>https://www.google.com/<strong>?hl=es</strong></code>
+  <li><code>https://www.google.com/search?q=bread+sandwich<strong>&amp;hl=es</strong></code>
+  <li><code>https://analytics.google.com/analytics/web/<strong>?hl=es</strong>#/report-home/</code>
+</ul>
+
+<!-- FULL -->
+
+<p>This doesn’t work on all Google properties.  Thankfully, it seems to do the
+  trick where it matters: on pages which try to guess the preference without
+  option to override it.  For example, while Gmail ignores the parameter, its
+  display language can be changed in its settings (accessible via gear icon near
+  the top right of the page).  Similarly, YouTube strips the parameter but it
+  respects preferences configured in the web browser.
+
+<p>PS. Anyone familiar with HTTP might wonder why Google doesn’t just look at
+  the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language"><code>Accept-Language</code>
+  header</a>.  Apparently the issue is that many users have their browser
+  configured with defaults of sending English as the only option even though
+  they would prefer another language.  In those cases it’s more user-friendly to
+  ignore that header.  Turns out localisation is really hard.
