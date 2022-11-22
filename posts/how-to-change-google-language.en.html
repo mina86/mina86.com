@@ -5,25 +5,25 @@
 
 <p style="text-align: center">Or how to change language of Google website.
 
-<p id=b4>If you’ve travelled abroad you might have noticed Google <em>tries</em>
-  to be helpful and uses language of the region you’re in on its websites.  It
-  doesn’t matter that your operating system is in, say, Spanish; Google Search
-  will still use Portuguese if you happen to be in Brazil.
+<p>If you’ve travelled abroad, you may have noticed that Google <em>tries</em>
+  to be helpful and uses the language of the region you’re in on its websites.
+  It doesn’t matter if your operating system is set to Spanish, for example;
+  Google Search will still use Portuguese if you happen to be in Brazil.
 
-<p>Fortunately, there’s a way to coerce it into using specific language.  All
-  you need to do is append <code>?hl=<var>lang</var></code> to website’s address
-  replacing <var>lang</var>
-  by <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">a two-letter
-  code</a> of the desired language.  For
+<p>Fortunately, there’s a simple way to force Google to use a specific language.
+  All you need to do is append <code>?hl=<var>lang</var></code> to the website’s
+  address, replacing <var>lang</var>
+  with <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">a two-letter
+  code</a> for the desired language. For
   instance, <a href="https://www.google.com/?hl=es"><code>?hl=es</code></a> for
   Spanish, <a href="https://www.google.com/?hl=ht"><code>?hl=ht</code></a> for
-  Haitian or <a href="https://www.google.com/?hl=uk"><code>?hl=uk</code></a> for
-  Ukrainian.
+  Haitian, or <a href="https://www.google.com/?hl=uk"><code>?hl=uk</code></a>
+  for Ukrainian.
 
 <p>If the URL already contains a question mark, you need to
-  append <code>&amp;hl=<var>lang</var></code> instead.  Furthermore, if it
-  contains a hash symbol, rather than appending the string, it needs to be
-  inserted just prior to the hash.  For example:
+  append <code>&amp;hl=<var>lang</var></code> instead.  Additionally, if it
+  contains a hash symbol, you need to insert the string just before the hash
+  symbol.  For example:
 
 <ul>
   <li><code>https://www.google.com/<strong>?hl=es</strong></code>
@@ -31,18 +31,21 @@
   <li><code>https://analytics.google.com/analytics/web/<strong>?hl=es</strong>#/report-home/</code>
 </ul>
 
+<p>By the way, as a legacy of Facebook having hired many ex-Google employees,
+  the parameter also work on some of the Facebook properties.
+
 <!-- FULL -->
 
-<p>This doesn’t work on all Google properties.  Thankfully, it seems to do the
-  trick where it matters: on pages which try to guess the preference without
-  option to override it.  For example, while Gmail ignores the parameter, its
-  display language can be changed in its settings (accessible via gear icon near
-  the top right of the page).  Similarly, YouTube strips the parameter but it
-  respects preferences configured in the web browser.
+<p>This trick doesn’t work on all Google properties.  However, it seems to be
+  effective on pages that try to guess your language preference without giving
+  you the option to override it.  For example, while Gmail ignores the
+  parameter, you can change its display language in the settings (accessible via
+  the gear icon near the top right of the page).  Similarly, YouTube strips the
+  parameter, but it respects preferences configured in the web browser.
 
-<p>PS. Anyone familiar with HTTP might wonder why Google doesn’t just look at
-  the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language"><code>Accept-Language</code>
-  header</a>.  Apparently the issue is that many users have their browser
-  configured with defaults of sending English as the only option even though
-  they would prefer another language.  In those cases it’s more user-friendly to
-  ignore that header.  Turns out localisation is really hard.
+<p>Anyone familiar with HTTP may wonder why Google doesn’t just look
+  at <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language">the <code>Accept-Language</code>
+  header</a>.  The issue is that many users have their browser configured with
+  defaults that send English as the only option, even though they would prefer
+  another language.  In those cases, it’s more user-friendly to ignore that
+  header.  As it turns out, localisation is really hard.

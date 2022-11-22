@@ -9,9 +9,8 @@
   I wonder if we could do the same to Java?
 
 <p>To remind ourselves of the ‘problem’, strings in Java are immutable but
-  because Java has no concept of ownership or <code>const</code> keyword (can we
-  move the industry to Rust already?) to make true on that promise, Java runtime
-  has to make
+  because Java has no concept of ownership or <code>const</code> keyword to make
+  true on that promise, Java runtime has to make
   a <a href="https://www.javacreed.com/what-is-defensive-copying">defensive
   copy</a> each time a new string is created or when string’s characters are
   returned.
