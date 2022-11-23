@@ -1,0 +1,17 @@
+<!-- subject: URLs with <code>//</code> at the beginning -->
+<!-- date: 2022-12-04 02:09:04 -->
+<!-- tags: url, parsing, lazydevs -->
+<!-- categories: Articles, Techblog -->
+
+<p>Just a quick message to remained/inform everyone that relative URLs can start
+  with a double slash and that it means something different than a single slash
+  at the beginning.  Specifically, such relative addresses are resolved by
+  taking schema of the website they are on (and keeping everything else as is).
+
+<p>For example, code for the link to my repositories in the site’s header
+  is <code>&lt;a href="//github.com/mina86"&gt;Code&lt;/a&gt;</code>.  Since
+  this page uses <code>https</code> schema, browsers will navigate
+  to <code>https://github.com/mina86</code> if the link is activated.
+
+<p>This may save you some typing but more importantly, if you’re developing
+  a URL parsing code or a crawler make sure that it handles this case correctly.
