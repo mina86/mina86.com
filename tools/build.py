@@ -118,6 +118,26 @@ class Writer(object):
         with open(filename, 'wb') as fd:
             fd.write(content)
 
+    def link(self, src, dst):
+        dst = os.path.join(self._out_dir, dst)
+        self._files.append(dst)
+
+        # If link already exists and has the same content, do not overwrite it
+        # so we don’t print the action unnecessarily.
+        if os.path.exists(dst):
+            if os.path.islink(dst):
+                got = os.readlink(dst)
+                if got == src:
+                    return
+            os.unlink(dst)
+        else:
+            dirname = os.path.dirname(dst)
+            if not os.path.isdir(dirname):
+                os.makedirs(dirname)
+
+        print_action('LNK', dst)
+        os.symlink(src, dst)
+
 
 def build_static(writer):
     for dirname, dirnames, filenames in os.walk(STATIC_SUBDIR):

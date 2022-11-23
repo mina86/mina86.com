@@ -549,6 +549,9 @@ class Writer(object):
     def write_file(self, filename, content):
         self._writer.write_file(filename, content)
 
+    def link(self, src, dst):
+        self._writer.link(src, dst)
+
 
 def generate(writer, site):
     sitemap = Sitemap()
@@ -689,6 +692,12 @@ def generate(writer, site):
             writer.write_atom(filename, entries, href=cat.href, feed_id=feed_id,
                               title=T(cat))
         Post.PREFERRED_LANGUAGE = lang
+
+        # Link ‘english’ and ‘polish’ to ‘in-$lang’.  I’ve stupidly change the
+        # names of the categories and now people who use old paths don’t get any
+        # feed.
+        writer.link('in-english', 'c/english')
+        writer.link('in-polish', 'c/polish')
 
         # Generate pagination pages (10 entries per page)
         generate_pages(entries=posts,
