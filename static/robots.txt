@@ -2,3 +2,21 @@ User-agent: *
 Disallow: /p/
 
 Sitemap: https://mina86.com/sitemap.xml
+
+# SEOkicks doesn’t accept XML and fills error_log with negotiation:error lines
+# when trying to fetch Atom files.  Unfortunately patterns aren’t standardised
+# so need to list all /atom paths.
+User-agent: SEOkicks
+Disallow: /atom
+Disallow: /c/articles/atom
+Disallow: /c/downloads/atom
+Disallow: /c/english/atom
+Disallow: /c/games/atom
+Disallow: /c/in-english/atom
+Disallow: /c/in-polish/atom
+Disallow: /c/misc/atom
+Disallow: /c/polish/atom
+Disallow: /c/reviews/atom
+Disallow: /c/site-news/atom
+Disallow: /c/techblog/atom
+Disallow: /c/weiti/atom
