@@ -309,13 +309,13 @@ function gtag(){dataLayer.push(arguments)}
 		el = target.closest('a');
 		if (!el) {
 			target = 0;
-		} else if ('#n' == target.hash) {
+		} else if ('#n' == el.hash) {
 			target = ddContact;
-		} else if ('#k' == target.hash) {
+		} else if ('#k' == el.hash) {
 			target = ddCats;
-		} else if (/github/.exec(target.href)) {
-			target = ddCode;
-		} else if ('#s' == target.hash) {
+		} else if (/github/.exec(el.href)) {
+			target = ddCode.contains(target) ? 0 : ddCode;
+		} else if ('#s' == el.hash) {
 			target = ddSettings;
 		} else {
 			target = 0;
@@ -609,9 +609,7 @@ function gtag(){dataLayer.push(arguments)}
 		   where hover and click events happen immediately after each
 		   other.  250 milliseconds should be enough of a delay to cover
 		   this case. */
-		showDropDown((ev == visibleDropDown) &&
-		             (Date.now() - shownOnOver > 250) &&
-		             ev);
+		showDropDown((ev == visibleDropDown) && (Date.now() - shownOnOver > 250) ? 0 : ev);
 		shownOnOver = 0;
 		return false;
 	};
