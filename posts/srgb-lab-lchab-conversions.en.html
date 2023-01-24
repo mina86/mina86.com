@@ -117,24 +117,24 @@ fn xyz_from_srgb(srgb: [u8; 3]) -> [f32; 3] {
     a^*  &= 500 (f_x - f_y) \\
     b^*  &= 200 (f_y - f_z) \\[.5em]
 
-    f_x  &= f(X / X_r) \\
-    f_y  &= f(Y / Y_r) \\
-    f_z  &= f(Z / Z_r) \\[.5em]
+    f_x  &= f(X / X_w) \\
+    f_y  &= f(Y / Y_w) \\
+    f_z  &= f(Z / Z_w) \\[.5em]
 
     f(v) &= \begin{cases}
       (κ v + 16) / 116 & \text{if }v ≤ ε \\
       \sqrt[3]{v}      & \text{otherwise}
     \end{cases} \\[.5em]
 
-    ε &= 216 / 24389 \\
-    κ &= 24389 / 27 \\[.5em]
+    ε &= (6 / 29)^3 = 216 / 24389 \\
+    κ &= (29 / 3)^3 = 24389 / 27 \\[.5em]
 
-    X_r &= 0.9504492182750991 \\
-    Y_r &= 1 \\
-    Z_r &= 1.0889166484304715
+    X_w &= 0.9504492182750991 \\
+    Y_w &= 1 \\
+    Z_w &= 1.0889166484304715
   \end{align} $$
 
-<p>Naïvely one might change \(X_r\), \(Y_r\) and \(Z_r\) values to use
+<p>Naïvely one might change \(X_w\), \(Y_w\) and \(Z_w\) values to use
   a different white point.  In some sense that would work, but the recommended
   way of performing the change is to use Bradford transform.  It is
   what <a href="https://drafts.csswg.org/css-color/#lab-colors">CSS mandates</a>
@@ -181,9 +181,9 @@ fn lab_from_xyz(xyz: [f32; 3]) -> [f32; 3] {
   sRGB.  The first step of this process is governed by the following equations:
 
   $$ \begin{align}
-    X           &= f^{-1}(f_x) X_r \\
-    Y           &= f^{-1}(f_y) Y_r \\
-    Z           &= f^{-1}(f_z) Z_r \\[.5em]
+    X           &= f^{-1}(f_x) X_w \\
+    Y           &= f^{-1}(f_y) Y_w \\
+    Z           &= f^{-1}(f_z) Z_w \\[.5em]
 
     f_y         &= {L^* + 16 \over 116} \\
     f_x         &= {a^* \over 500} + f_y \\
@@ -259,7 +259,7 @@ fn xyz_from_lab(lab: [f32; 3]) -> [f32; 3] {
     b_8    &= g_c(B) \\[.5em]
 
     \begin{bmatrix}R \\ G \\ B\end{bmatrix}
-           &= M^{-1} \begin{bmatrix}X \\ Y \\ Z\end{bmatrix}^T \\[.5em]
+           &= M^{-1} \begin{bmatrix}X \\ Y \\ Z\end{bmatrix} \\[.5em]
 
     g_c(s) &= g_e^{-1}(s) \\
            & = \begin{cases}

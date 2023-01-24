@@ -65,14 +65,14 @@
       24389 Y / 27         & \text{if }24389 Y ≤ 216 \\
       116 \sqrt[3]{Y} - 16 & \text{otherwise}
     \end{cases} \\
-    u^*  &= 13 L^* (u' - u_r') \\
-    v^*  &= 13 L^* (v' - v_r') \\[.5em]
+    u^*  &= 13 L^* (u' - u_w') \\
+    v^*  &= 13 L^* (v' - v_w') \\[.5em]
 
-    u_r' &= 0.1978330369967827 \\
-    v_r' &= 0.4683304743525223
+    u_w' &= 0.1978330369967827 \\
+    v_w' &= 0.4683304743525223
   \end{align} $$
 
-<p>The \(u_r'\) and \(v_r'\) variables specify chromaticity of the reference
+<p>The \(u_w'\) and \(v_w'\) variables specify chromaticity of the reference
   white point.  As discussed earlier, provided values are for D<sub>65</sub>
   illuminant.  The \(u'\) and \(v'\) values for any colour can be calculated
   from XYZ coordinates or xy chromaticity as follows:
@@ -126,8 +126,8 @@ fn luv_from_xyz(xyz: [f32; 3]) -&gt; [f32; 3] {
       \left({L^* + 16 \over 116}\right)^3  & \text{if }L^* > 8 \\
       {27 L^* \over 24389}                 & \text{otherwise}
     \end{cases} \\
-    u' &= {u^* \over 13 L^*} + u_r' \\
-    v' &= {v^* \over 13 L^*} + v_r'
+    u' &= {u^* \over 13 L^*} + u_w' \\
+    v' &= {v^* \over 13 L^*} + v_w'
   \end{align} $$
 
 <p>Like before, depending on whether conversion to XYZ or xyY colour space is
