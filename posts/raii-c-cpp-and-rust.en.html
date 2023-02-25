@@ -1,0 +1,389 @@
+<!-- subject: RAII: Tragedy in three acts -->
+<!-- date: 2023-04-01 13:13:13 -->
+<!-- tags: c, c++, null, null pointer -->
+<!-- categories: Articles, Techblog -->
+
+<p>In <a href="https://www.youtube.com/watch?v=pTMvh6VzDls">a recent
+    Computerphile video</a>, Ian Knight talked about RAII idiom and it’s
+    application in C++ and Rust.  While the video described the general
+    concepts, I felt different examples could be more clearly convey essence of
+    the topic.
+
+<p>I’ve decided to give my own explanation to hopefully better illustrate what
+  RAII is and how it relates to Rust’s ownership.  Then again, for whatever
+  reason I’ve decided to write it as a play with dialogue in faux Old English so
+  it may well be even more confusing instead.
+
+<!-- FULL -->
+
+<style>
+  .play h3 { font-size: 1.25em; margin: 0 }
+  .play td { vertical-align: top }
+  .play td:not(:last-child) {
+      font-size: 0.875em;
+      font-variant: small-caps;
+      text-align: right;
+      text-transform: uppercase;
+  }
+  .play td:not(:last-child) abbr {
+      font-variant: small-caps;
+      text-transform: uppercase;
+  }
+  .play td:last-child {
+      text-align: justify;
+  }
+  .dir { font-style: oblique }
+</style>
+
+<table class=play>
+  <tbody>
+    <tr><td><td><h2>Cast of characters</h2>
+    <tr><td><td class=sm>(In the order of appearance)
+    <tr><td>Gregory<td>A software engineer and Putuel’s employee
+        number #1
+    <tr><td>Sampson<td>A software engineer and a self-proclaimed 10× developer
+    <tr><td>Paris<td>An apprentice returning to Putuel two summers in a row
+    <tr><td>CTO<td>Puteal’s Chief Technical Officer spending most of his time in
+        meetings
+    <tr><td>Admin<td>Administrative assistant working in Puteal Corporation’s
+        headquarters in Novear
+  <tbody>
+    <tr><td><td><h2>Act I</h2>
+  <tbody>
+    <tr><td><h3>Scene I</h3><td>Novear.  A public place.
+    <tr><td><td class=dir>Enter Sampson and Gregory, two senior engineers of the
+        Puteal Corporation, carrying laptops and phones
+    <tr><td>Gregory<td>Pray tell, what doth the function’s purpose?
+    <tr><td>Sampson<td>It doth readeth a number from a file.  A task as trivial
+        as can be and yet QA reports memory leak after my change.  Hence, I come
+        to thee for help.
+    <tr><td><td class=dir>Both look at a laptop showing code Sampson has written
+        [error handling omitted for brevity from all source code listings]:
+    <tr><td colspan=2><pre>
+double read_double(FILE *fd) {
+	char *buffer = malloc(1024);       <i>/* allocate temporary buffer */</i>
+	fgets(buffer, 1024, fd);           <i>/* read first line of the file */</i>
+	return atof(buffer);               <i>/* parse and return the number */</i>
+}
+</pre>
+    <tr><td>Gregory<td>Thine mistake is apparent.  Thou didst allocate memory
+        but ne’er freed it.  Verily, in C thou needs’t to explicitly free any
+        memory thou dost allocate.  Submit this fix and thy code shall surely
+        pass.
+    <tr><td colspan=2><pre>
+double read_double(FILE *fd) {
+	char *buffer = malloc(1024);       <i>/* allocate temporary buffer */</i>
+	fgets(buffer, 1024, fd);           <i>/* read first line of the file */</i>
+	double result = atoi(buffer);      <i>/* parse the line */</i>
+	<ins>free(buffer);                      <i>/* free the temporary buffer */</i></ins>
+	return result;                     <i>/* return parsed number */</i>
+}
+</pre>
+
+  <tbody>
+    <tr><td><h3>Scene II</h3><td>A hall.
+    <tr><td><td class=dir>Enter Puteal CTO, an apprentice called Paris and an
+        Admin
+    <tr><td>Paris<td>I’ve done as Sampson beseeched of me.  I’ve taken
+        the <code>read_double</code> function and changed it so that it doth
+        taketh file path as an argument.  He hath warned me about managing
+        memory and so I’ve made sure all temporary buffers are freed.
+        Nonetheless, tests fail.
+    <tr><td colspan=2><pre>
+double read_double(const char *path) {
+	FILE *fd = fopen(path, "r");       <i>/* open file */</i>
+	<small>char *buffer = malloc(1024);</small>
+	<small>fgets(buffer, 1024, fd);</small>
+	<small>double result = atof(buffer);</small>
+	<small>free(buffer);</small>
+	<small>return result;</small>
+}
+</pre>
+    <tr><td>CTO<td>Thou didst well managing memory, but memory isn’t the only
+        resource that needs to be freed.  Just like allocations, if thou dost
+        open a file, thou must close it anon once thou art done with it.
+    <tr><td><td class=dir>Exit CTO and Admin towards sounds of a starting
+        meeting
+    <tr><td>Paris<td>Managing resources is no easy task but I think I’m starting
+        to get the hang of it.
+    <tr><td colspan=2><pre>
+double read_double(const char *path) {
+	FILE *fd = fopen(path, "r");       <i>/* open file */</i>
+	<small>char *buffer = malloc(1024);</small>
+	<small>fgets(buffer, 1024, fd);</small>
+	<ins>fclose(fd);                        <i>/* close the file */</i></ins>
+	<small>double result = atof(buffer);</small>
+	<small>free(buffer);</small>
+	<small>return result;</small>
+}
+</pre>
+
+  <tbody>
+    <tr><td><h3 na>Scene III</h3><td>Novear.  A room in Puteal’s office.
+    <tr><td><td class=dir>Enter Paris and Sampson they set them down on two low
+        stools, and debug
+    <tr><td>Paris<td>The end of my apprenticeship is upon me and yet my code
+        barely doth work.  It canst update the sum once but as soon as I try
+        doing it for the second time, nothing happens.
+    <tr><td colspan=2><pre>
+double update_sum_from_file(mtx_t *lock,
+                            double *sum,
+                            const char *path)  {
+	double value = read_double(path);  <i>/* read next number from file */</i>
+	mtx_lock(lock);                    <i>/* reserve access to `sum` */</i>
+	value += sum->value;               <i>/* calculate sum */</i>
+	sum->value = value;                <i>/* update the sum */</i>
+	return value;                      <i>/* return new sum */</i>
+}
+</pre>
+    <tr><td>Sampson<td>Thou hast learned well that resources need to be acquired
+        and released.  But what thou art missing is that not only system memory
+        or a file descriptor are resources.
+    <tr><td>Paris<td>So just like memory needs to be freed, files need to be
+        closed and locks needs to be unlocked!
+    <tr><td colspan=2><pre>
+double update_sum_from_file(mtx_t *lock,
+                            double *sum,
+                            const char *path)  {
+	double value = read_double(path);  <i>/* read next number from file */</i>
+	mtx_lock(lock);                    <i>/* reserve access to `sum` */</i>
+	value += *sum;                     <i>/* calculate sum */</i>
+	*sum = value;                      <i>/* update the sum */</i>
+	<ins>mtx_unlock(lock);                  <i>/* release `sum` */</i></ins>
+	return value;                      <i>/* return new sum */</i>
+}
+</pre>
+    <tr><td rowspan=2>Paris<td>I’m gladdened I partook the apprenticeship.
+        Verily, I’ve learned that resources need to be freed once they art no
+        longer used.  But also that many things can be modelled like a resource.
+    <tr><td>I don’t comprehend why it all needs to be done manually?
+    <tr><td><td class=dir>Exit Sampson while Paris monologues leaving him
+        puzzled
+
+  <tbody>
+    <tr><td><td><h2>Act II</h2>
+
+  <tbody>
+    <tr><td><h3>Scene I</h3><td>Court of Puteal headquarters.
+    <tr><td><td class=dir>Enter Sampson and Paris bearing a laptop before him
+    <tr><td>Paris<td>Mine last year’s apprenticeship project looks naught like
+        mine own handiwork.
+    <tr><td>Sampson<td>Thou seest, in the year we migrated our code base to
+        C++.
+    <tr><td>Paris<td>Aye, I understandeth.  But I spent so much time learning
+        about managing resources and yet the new code doth not close its file.
+    <tr><td><td class=dir>Enter Gregory and an Admin with a laptop.  They all
+        look at code on Paris’ computer:
+    <tr><td colspan=2><pre>
+double read_double(const char *path) {
+	std::fstream file{path};           <i>/* open file */</i>
+	double result;                     <i>/* declare variable to hold result */</i>
+	file &gt;&gt; result;                    <i>/* read the number */</i>
+	return result;                     <i>/* return the result */</i>
+}
+        </pre>
+    <tr><td>Sampson<td>Oh, that’s RAII.  <dfn>Resource Acquisition
+          Is Initialisation</dfn> idiom.  C++ usetht it commonly.
+    <tr><td rowspan=2>Gregory<td>Resource is acquired when object is initialised
+        and released when it’s destroyed.  The compiler tracks lifetimes of
+        local variables and thusly handles resources for us.
+    <tr><td>By this method, all manner of resources can be managed.  And
+        forsooth, for more abstract concepts without a concrete object
+        representing them, such as the concept of exclusive access to
+        a variable, a guard class can be fashioned.  Gaze upon this other
+        function:
+    <tr><td colspan=2><pre>
+double update_sum_from_file(std::mutex &amp;lock,
+                            double *sum,
+                            const char *path)  {
+	double value = read_double(path);  <i>/* read next number from file */</i>
+	std::lock_guard&lt;std::mutex&gt; lock{mutex}; <i>/* reserve access to `sum` */</i>
+	value += *sum;                     <i>/* calculate sum */</i>
+	*sum = value;                      <i>/* update the sum */</i>
+	return value;                      <i>/* return new sum */</i>
+}
+</pre>
+    <tr><td>Paris<td>I perceive it well.  When the <code>lock</code> goes out of
+        scope, the compiler shall run its destructor, which shall release the
+        mutex.  Such was my inquiry yesteryear.  Thus, compilers can render
+        managing resources more automatic.
+
+  <tbody>
+    <tr><td><h3>Scene II</h3><td>Novear.  Sampson’s office.
+    <tr><td><td class=dir>Enter Gregory and Sampson
+    <tr><td>Sampson<td>Verily, this bug doth drive me mad! To make use of the
+        RAII idiom, I’ve writ an <code>nptr</code> template to automatically
+        manage memory.
+    <tr><td colspan=2><pre>
+template&lt;class T>
+struct nptr {
+	nptr(T *ptr) : ptr(ptr) {}         <i>/* take ownership of the memory */</i>
+	~nptr() { delete ptr; }            <i>/* free memory when destructed */</i>
+	T *operator->() { return ptr; }
+	T &amp;operator*() { return *ptr; }
+private:
+	T *ptr;
+};
+</pre>
+    <tr><td>Gregory<td>I perceive…    And what of the code that bears the bug?
+    <tr><td>Sampson<td>'Tis naught but a simple code which calculates sum of
+        numbers in a file:
+    <tr><td colspan=2><pre>
+std::optional&lt;double> try_read_double(nptr&lt;std::istream> file) {
+	double result;
+	return *file >> result ? std::optional{result} : std::nullopt;
+}
+
+double sum_doubles(const char *path) {
+	nptr&lt;std::istream> file{new std::fstream{path}};
+	std::optional&lt;double> number;
+	double result = 0.0;
+	while ((number = try_read_double(file))) {
+		result += *number;
+	}
+	return result;
+}
+</pre>
+    <tr><td><td class=dir>Enter Paris with an inquiry for Sampson; seeing them
+        talk he pauses and listens in
+    <tr><td rowspan=2>Gregory<td>The bug lies in improper ownership tracking.
+        When ye call the <code>try_read_double</code> function, a copy of
+        thy <code>nptr</code> is made pointing to the file stream.  When that
+        function doth finish, it frees that very stream, for it believes that it
+        doth own it.  Alas, then you try to use it again in next loop iteration.
+    <tr><td>Why hast thou not made use of <code>std::unique_ptr</code>?
+    <tr><td>Sampson<td>Ah! I prefer my own class, good sir.
+    <tr><td>Gregory<td>Thine predicament would have been easier to discern if
+        thou hadst used standard classes.  In truth, if thou wert to switch to
+        the usage of <code>std::unique_ptr</code>, the compiler would verily
+        find the issue and correctly refuse to compile the code.
+    <tr><td colspan=2><pre>
+std::optional&lt;double> try_read_double(<ins>std::unique_ptr&lt;std::istream></ins> file) {
+	double result;
+	return *file >> result ? std::optional{result} : std::nullopt;
+}
+
+double sum_doubles(const char *path) {
+	<ins>auto file = std::make_unique&lt;std::fstream>(path);</ins>
+	std::optional&lt;double> number;
+	double result = 0.0;
+	while ((number = try_read_double(file))) {  <i>/* compile error */</i>
+		result += *number;
+	}
+	return result;
+}
+</pre>
+    <tr><td><td class=dir>Exit Gregory, exit Paris moment later
+
+  <tbody>
+    <tr><td><h3 na>Scene III</h3><td>Before Sampson’s office.
+    <tr><td><td class=dir>Enter Gregory and Paris, meeting
+    <tr><td>Paris<td>I’m yet again vexed.  I had imagined that with RAII, the
+        compiler would handle all resource management for us?
+    <tr><td>Gregory<td>Verily, for RAII to function, each resource must be owned
+        by a solitary object.  If the ownership may be duplicated then problems
+        shall arise.  Ownership may only be moved.
+    <tr><td>Paris<td>Couldn’t compiler enforce that just like it can
+        automatically manage resources?
+    <tr><td>Gregory<td>Mayhap the compiler can enforce it, but it’s not
+        a trivial matter.  Alas, if thou art willing to spend time to model
+        ownership in a way that the compiler understands, it can prevent some of
+        the issues.  However, thou wilt still require an escape hatch, for in
+        the general case, the compiler cannot prove the correctness of the code.
+    <tr><td><td class=dir>Exit Gregory and Paris, still talking
+
+  <tbody>
+    <tr><td><td><h2 na>Act III</h2>
+
+  <tbody>
+    <tr><td><h3>Scene I</h3><td>A field near Novear.
+    <tr><td><td class=dir>Enter Gregory and Paris
+    <tr><td>Gregory<td>Greetings, good fellow! How hast thou been since thy
+        apprenticeship?
+    <tr><td>Paris<td>I’ve done as thou hast instructed and looked into Rust.  It
+        is as thou hast said.  I’ve recreated Sampson’s code and the compiler
+        wouldn’t let me run it:
+    <tr><td colspan=2><pre>
+fn try_read_double(rd: Box&lt;dyn std::io::Read>) -> Option&lt;f64> {
+	todo!()
+}
+
+fn sum_doubles(path: &amp;std::path::Path) -> f64 {
+	let file = std::fs::File::open(path).unwrap();
+	let file: Box&lt;dyn std::io::Read> = Box::new(file);
+	let mut result = 0.0;
+	while let Some(number) = try_read_double(file) {
+		result += number;
+	}
+	result
+}
+</pre>
+    <tr><td>Gregory<td>Verily, the compiler hath the vision to behold the
+        migration of file’s ownership into the realm
+        of <code>try_read_double</code> function during the first iteration and
+        lo, it is not obtainable any longer by <code>sum_doubles</code>.
+    <tr><td colspan=2><pre>
+error[E0382]: use of moved value: `file`
+
+    let file: Box&lt;dyn std::io::Read> = Box::new(file);
+        ---- move occurs because `file` has type `Box&lt;dyn std::io::Read>`,
+             which does not implement the `Copy` trait
+    let mut result = 0.0;
+    while let Some(number) = try_read_double(file) {
+                                             ^^^^ value moved here, in previous
+                                                  iteration of loop
+</pre>
+    <tr><td>Paris<td>Alas, I see not what thou hast forewarned me of.  The
+        syntax present doth not exceed that which wouldst be used had this been
+        writ in C++:
+    <tr><td colspan=2><pre>
+fn try_read_double(rd: &amp;dyn std::io::Read) -> Option&lt;f64> {
+	todo!()
+}
+
+fn sum_doubles(path: &amp;std::path::Path) -> f64 {
+	let file = std::fs::File::open(path).unwrap();
+	let file: Box&lt;dyn std::io::Read> = Box::new(file);
+	let mut result = 0.0;
+	while let Some(number) = try_read_double(&amp;*file) {
+		result += number;
+	}
+	result
+}
+</pre>
+    <tr><td>Gregory<td>Verily, the Rust compiler is of great wit and often
+        elides lifetimes.  Nonetheless, other cases may prove more intricate.
+    <tr><td colspan=2><pre>
+struct Folder&lt;T, F>(T, F);
+
+impl&lt;T, F: for &lt;'a, 'b> Fn(&'a mut T, &'b T)> Folder&lt;T, F> {
+    fn push(&amp;mut self, element: &amp;T) {
+        (self.1)(&amp;mut self.0, element)
+    }
+}
+</pre>
+    <tr><td>Paris<td>Surely though, albeit this code is more wordy, it is
+        advantageous if I cannot commit an error in ownership.
+    <tr><td>Gregory<td>Verily, there be manifold factors in the selection of
+        a programming tongue.  And there may be aspects which may render other
+        choices not imprudent.
+</table>
+
+<h2>Aforeword</h2>
+
+<p>A thing to keep in mind is that the examples are somewhat contrived.  For
+  example, the buffer and file object present in <code>read_double</code>
+  function can easily live on the stack.  A real-life code wouldn’t bother
+  allocating them on the heap.  Then again, I could see a beginner make
+  a mistake of trying to bypass <code>std::unique_ptr</code> not having a copy
+  constructor by creating objects on heap and passing pointers around.
+
+<p>In the end, is this better explanation than the one in aforementioned
+  Computerphile video?  I’d argue code examples represent discussed concepts
+  better though to be honest form of presentation hinders clarity of
+  explanation.  Yet, I had too much fun messing around with this post so here it
+  is in this form.
+
+<p>Lastly, I don’t know Old English so the dialogue is probably incorrect.  I’m
+  happy to accept corrections but otherwise I don’t care that much.  One
+  shouldn’t take this post too seriously.
