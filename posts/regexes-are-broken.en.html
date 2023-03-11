@@ -1,5 +1,6 @@
 <!-- subject: Regular expressions are broken -->
 <!-- date: 2021-02-28 00:00:00 -->
+<!-- update: 2023-03-11 19:33:31 -->
 <!-- tags: regex, regular expression, short -->
 <!-- categories: Articles, Techblog -->
 
@@ -52,7 +53,7 @@
 
 <p>I’ve decided to check a whole bunch of tools, languages and libraries to see
   how they all behave.  For those curious, code for all tests is of
-  course <a href="https://github.com/mina86/regexes-arebroken">available in
+  course <a href="https://github.com/mina86/regexes-are-broken">available in
   a source repository</a>.  Various UNIX utilities passed the verification so
   long as they did not use Perl Compatible Regular Expressions
   (PCRE).  <dfn>Passed</dfn> here means they produced the same result regardless
@@ -113,3 +114,15 @@
 <p>And there you have it.  Another one to the ‘regular expressions are weird’
   box giving some more credence to the old adage: ‘A man had a problem and
   decided to use a regex.  Now he has two problems.’
+
+<h2>Addendum</h2>
+
+<p>In March 2023, Andrew Gallant (author of Rust regex
+  crate) <a href="https://www.reddit.com/r/rust/comments/11nxp0j/comment/jbtxx9c/">pointed
+  out</a> that the described behaviour is intended and corresponds to how POSIX
+  and Perl define regexes.  He also mentioned advantages of the behaviour chosen
+  in regex crate.  This suggest that labelling it ‘broken’ is perhaps unfair.
+  I maintain my opinion based on alternation being a commutative operation.
+  Just like <code>3 + 6</code> and <code>6 + 3</code> should produce results
+  which behave the same way, <code>foo|foobar</code> and <code>foobar|foo</code>
+  should behave the same way.
