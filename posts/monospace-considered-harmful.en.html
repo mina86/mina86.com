@@ -1,0 +1,117 @@
+<!-- subject: Monospace considered harmful -->
+<!-- date: 2023-03-19 16:34:53 -->
+<!-- tags: typography, monospaced -->
+<!-- categories: Articles, Techblog -->
+
+<p>No, I haven’t gone completely mad yet and still, I write this as an appeal to
+  stop using monospaced fonts for code <small>(conditions may apply)</small>.
+  While fixed-width fonts have undeniable benefits when authoring software,
+  their use is excessive and even detrimental in certain contexts.
+  Specifically, when displaying inline code within a paragraph of text,
+  proportional fonts are a better choice.
+
+<!-- FULL -->
+
+<h2>The downsides</h2>
+
+<figure class=fr>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+       width="17.5em" height="10em" viewBox="0 0 280 160"
+       stroke-width="1">
+    <g fill="var(--i)" stroke="var(--e)">
+      <circle cx=16 cy=12 r=4></circle>
+      <circle cx=32 cy=30 r=4></circle>
+      <circle cx=80 cy=48 r=4></circle>
+      <circle cx=92 cy=66 r=4></circle>
+      <circle cx=96 cy=84 r=4></circle>
+      <circle cx=132 cy=102 r=4></circle>
+      <circle cx=160 cy=120 r=4></circle>
+    </g>
+    <path stroke="var(--e)" d="M20,0v135M140,0v135M260,0v135"/>
+    <text font-size=0.75em text-anchor=middle fill="var(--e)"><!--
+      --><tspan x=20 y=144>4′30″</tspan><!--
+      --><tspan x=140 y=144>5′</tspan><!--
+      --><tspan x=260 y=144>5′30″</tspan><!--
+      --></text>
+    <text font-size=0.75em><!--
+      --><tspan x=26  y=16>Tahoma</tspan><!--
+      --><tspan x=42  y=34>Times New Roman</tspan><!--
+      --><tspan x=90  y=52>Verdana</tspan><!--
+      --><tspan x=102 y=70>Arial</tspan><!--
+      --><tspan x=106 y=88>Comic Sans</tspan><!--
+      --><tspan x=142 y=106>Georgia</tspan><!--
+      --><tspan x=170 y=124>Courier New</tspan><!--
+      --></text>
+  </svg>
+  <figcaption>Fig. 1.  Comparison of time needed to read text set with different
+    fonts.  Reading fixed-width Courier New is 13% slower than reading
+    Tahoma.</figcaption>
+</figure>
+
+<p>Fixed-width fonts for inline code have a handful of downsides.  Firstly, text
+  set in such font takes up more space and, depending on the font pairing,
+  individual letters may appear larger.  This creates unbalanced look and
+  opportunities for awkward line wrapping.
+
+<p>Moreover, a fixed-width
+  typeface <a href="https://blog.codinghorror.com/comparing-font-legibility/">has
+  been shown to be slower to read</a>.  Even disregarding the speed differences,
+  switching between two drastically different types of font isn’t comfortable.
+
+<p>To make matters worse, many websites apply too many styles to inline code
+  fragments.  For example GitHub and GitLab (i) change the font, (ii) decrease
+  its size, (iii) add background and (iv) add padding.  This overemphasis
+  detracts from the content rather than enhancing it.
+
+
+<h2>A better way</h2>
+
+<p id=b1>A better approach is using serif (sans-serif) font for the main text
+  and a sans-serif (serif) font for inline code<a href="#f1">†</a>.  Or if
+  serif’s aren’t one’s cup of tea, even within the same font group a pairing
+  allowing for clear differentiation between the main text and the code is
+  possible.  For example a humanist font paired with a complementary geometric
+  font.
+
+<p id=b2>Another option is to format code with a different colour.  To avoid
+  using <a href="https://www.w3.org/WAI/WCAG21/Understanding/use-of-color.html">it
+  as the only mean of conveying information</a>, a subtle colour change may be
+  used in conjunction with font change.  This is the approach I’ve taken on this
+  blog<a href="#f2">‡</a>.
+
+<p>It’s also worth considering whether inline code even needs any kind of style
+  change.  For example, the sentence ‘Execution of a C program starts from the
+  main function’ is perfectly understandable whether or not ‘main’ is styled
+  differently.
+
+
+<h2>Epilogue</h2>
+
+<p>What about code blocks?  Using proportional typefaces for them can be done
+  with some care.  Indentation isn’t a major problem but some alignment may need
+  adjustments.  Depending on the type of code listings, it may be an option.
+  Having said that, I don’t claim this as the only correct option for web
+  publishing.
+
+<p>As an aside, what’s the deal with parenthesise after a function name?  To
+  demonstrate, lets reuse an earlier example: ‘Execution of a C program starts
+  from the <code>main()</code> function’.  The brackets aren’t part of the
+  function name and unless they are used to disambiguate between multiple
+  overloaded functions, there’s no need for them.
+
+<p>To conclude, while fixed-width fonts have their place when writing code,
+  their use in displaying inline code is often unnecessary.  Using
+  a complementary pairing of proportional typefaces is a better options that can
+  enhance readability.  Changing background of inline code is virtually never
+  a good idea.
+
+
+<p id=f1><a href="#b1">†</a> Using serif faces on websites used to carry risk of
+  aliasing reducing legibility.  Thankfully, the rise of high DPI displays
+  largely alleviated those concerns.
+
+<p id=f2><a href="#b2">‡</a> Combining colour change and typeface change breaks
+  principle of using small style changes.  Nonetheless, I believe some leniency
+  for websites is in order.  It’s not always guaranteed that readers will see
+  fonts author has chosen making colour change kind of a backup.  Furthermore,
+  compared to books, change in colour isn’t as focus-grabbing on the Internet.
