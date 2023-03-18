@@ -64,7 +64,7 @@
 @visited-colour:      var(--g);
 @hover-colour:        var(--h);
 @code-colour:         var(--i);
-@acc-bg-colour:       var(--j);
+@acc-bg-colour:       var(--j); /* Used in SVG images */
 @head-bg-colour:      var(--k);
 @head-colour:         var(--l);
 @nav-bg-colour:       var(--m);
@@ -571,26 +571,23 @@ aside {
 pre, code, kbd {
 	font-variant: lining-nums slashed-zero;
 	break-inside: avoid;
+	color: @code-colour;
 }
 code, kbd {
 	font-family: var(--S);
 	font-weight: 400;
-	color: @code-colour;
 	hyphens: manual;
 }
 pre, pre code, pre kbd {
 	font-family: @mono-font;
-	color: inherit;
 }
 pre {
 	font-size: @small;
-	margin: (round(1em / @small, 2)) 0;
+	margin: (round(1em / @small, 2));
 	padding: (round(1em / @small, 2));
+	border: 1px dashed @border-colour;
 	line-height: 1.375;
 	overflow-x: auto;
-	border: 1px solid @border-colour;
-	border-style: solid none;
-	background: @acc-bg-colour;
 	i {
 		font-style: normal;
 		font-family: @body-font;
@@ -615,11 +612,8 @@ table {
 	border-collapse: collapse;
 	margin: 1em auto;
 }
-thead {
-	background: @acc-bg-colour;
-	th {
-		text-align: center;
-	}
+thead th {
+	text-align: center;
 }
 th, td {
 	padding: 0.25em 0.5em;

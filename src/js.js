@@ -191,7 +191,7 @@ function gtag(){dataLayer.push(arguments)}
 			clVisited  + z(el(1), 4, x + 1),
 			clHover    + z(el(0), 4, x - 1),
 			clCode     + z(el(1), isDark?2:8, y),
-			clAccBg    + z(el(3), isDark?0.5:1, y),
+			clAccBg    + z(el(3), 1, y),
 			clBorder   + z(el(2), 2),
 
 			clHdrBg    + z(   0 , 2, 8*isDark)+'e0',
