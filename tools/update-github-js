@@ -13,7 +13,7 @@ import urllib.request
 
 def fetch() -> typing.Sequence[typing.Tuple[str, str]]:
         req = urllib.request.Request(
-                'https://api.github.com/users/mina86/repos?sort=updated',
+                'https://api.github.com/users/mina86/repos?sort=pushed',
                 headers={'Accept': 'application/vnd.github.v3+json'})
         with urllib.request.urlopen(req) as res:
                 data = res.read()

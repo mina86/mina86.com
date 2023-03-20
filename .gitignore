@@ -4,6 +4,8 @@ public/files.mina86.com/.htaccess
 .tmp
 static/cv/index.html
 static/mina86.pub
+static/d/g.js
+static/d/g.js.gz
 *.pyc
 .mypy_cache/
 __pycache__/
