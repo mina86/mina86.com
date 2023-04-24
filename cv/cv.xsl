@@ -13,6 +13,7 @@
   <xsl:template match="/cv">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="https://mina86.com/" />
     <title>Michał Nazarewicz — Curriculum Vitæ</title>
     <style>
       body {
@@ -30,24 +31,19 @@
         }
       }
 
-      h1, h2, h3 {
-        line-height: 1em;
+      h1, h2 {
+        text-align: center;
       }
       h1 {
-        text-align: center;
         font-size: 2em;
-        margin: 0.5em 0;
         page-break-after: avoid;
         page-break-before: avoid;
-        line-height: 1em;
       }
       h2 {
-        text-align: center;
         font-size: 1.25em;
         margin: 1.2em 0 0;
         color: #FFF;
         background: #000;
-        padding: 0.2em 1em;
         page-break-after: avoid;
       }
       @media print {
@@ -60,7 +56,6 @@
       }
       h3 {
         font-size: 1em;
-        margin: 1.5em 0 0;
       }
       section.entry {
         page-break-inside: avoid;
@@ -96,12 +91,17 @@
         margin: 0.5em 0;
         text-align: justify;
       }
+      li {
+        text-align: justify;
+      }
       small {
         font-size: 0.8em;
         color: #666;
       }
+      ul, .tech {
+        padding-left: 2em;
+      }
       .tech {
-        font-size: 0.8em;
         color: #666;
       }
 
@@ -115,7 +115,7 @@
       }
       .compact > section > * {
         display: table-cell;
-        padding: 0.25em 1em;
+        padding: 0.1em 1em;
       }
 
       a, a:link, a:visited {
@@ -134,7 +134,7 @@
       }
     </style>
     <main>
-      <h1>Curriculum Vitæ</h1>
+      <h1>Michał Nazarewicz</h1>
       <xsl:apply-templates />
     </main>
   </xsl:template>
@@ -184,7 +184,7 @@
           <xsl:apply-templates select="head" />
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="p" />
+      <xsl:apply-templates select="p | ul" />
       <xsl:apply-templates select="tech" />
     </section>
   </xsl:template>

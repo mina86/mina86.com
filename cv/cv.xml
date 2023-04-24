@@ -3,13 +3,16 @@
 <cv>
   <group style="compact">
     <entry>
-      <head>Name</head>
-      <p>Michał Nazarewicz</p>
-    </entry>
-
-    <entry>
       <head>Email</head>
       <p><a href="mailto:mina86@mina86.com">mina86@mina86.com</a></p>
+    </entry>
+    <entry>
+      <head>Website</head>
+      <p><a href="https://mina86.com/">mina86.com</a></p>
+    </entry>
+    <entry>
+      <head>GitHub</head>
+      <p><a href="https://github.com/mina86">mina86</a></p>
     </entry>
   </group>
 
@@ -19,9 +22,10 @@
 
     <entry>
       <head>Programming languages</head>
-      <p>Good knowledge of C, C++, Rust, Python, JavaScript,
-      TypeScript, shell scripting and Perl.  Some Java, Lisp and Go.
-      Basics of Assembly, Prolog and Haskell.</p>
+      <p>Over the years I’ve used multitude of programming languages.
+      I’m proficient in <b>C</b>, <b>C++</b>, <b>Rust</b>,
+      <b>Python</b>, <b>TypeScript</b> and <b>shell scripting</b>.
+      I’m also competent in Perl, Java, Go and Lisp.</p>
     </entry>
 
     <!--entry>
@@ -32,39 +36,37 @@
     <entry>
       <head>Systems</head>
 
-      <p>Comprehensive knowledge of GNU/Linux systems from user and
-      administrator perspective as well as system and kernel
-      developer.</p>
+      <p>I have comprehensive knowledge of GNU/Linux systems.  This
+      includes experience as a user and to lesser extent
+      administrator.  I’ve maintained distributed systems running on
+      cloud infrastructure (Google, AWS) and owned servers.</p>
     </entry>
 
-    <entry>
+    <!--entry>
       <head>Natural languages</head>
       <p>Native Polish speaker, fluent in English.</p>
-    </entry>
+    </entry-->
   </group>
 
 
   <group>
-    <head>Work</head>
+    <head>Work Experience</head>
 
     <entry logo="near.svg">
       <time>June 2021–October 2022</time>
       <head>Senior Software Engineer (NEAR)</head>
 
-      <p>I’ve worked on the stability and performance of the NEAR
-      protocol node.  My largest project revolved around archival
-      nodes where I’ve managed to reduce storage requirements by over
-      50% and further worked on allowing data to be moved from SSDs to
-      HDDs.  Since archival nodes keep terabytes of data, those effort
-      meant considerable reduction in costs.</p>
-
-      <p>I’ve become perhaps quite <a
-      href="https://github.com/near/nearcore/search?q=author%3Amina86&amp;type=commits">prolific
-      contributor to the code base</a> and worked on improved external
-      interfaces such as monitoring metrics, configuration and JSON
-      and Rosetta RPC integration; as well as optimising the code and
-      cleaning up technical debt collected through early growth of the
-      code.</p>
+      <ul>
+        <li>Become the <a
+        href="https://github.com/near/nearcore/search?q=author%3Amina86&amp;type=commits">top
+        contributor</a> working on the stability and performance of
+        the NEAR node.</li>
+        <li>Reduced storage requirements of archival nodes by over 50%
+        and enabled data migration from SSDs to HDDs, resulting in
+        significant cost savings.</li>
+        <li>Worked on external interfaces such as Coinbase
+        integration.</li>
+      </ul>
 
       <tech>Rust, Python</tech>
     </entry>
@@ -73,23 +75,16 @@
       <time>March 2019–September 2020</time>
       <head>Core Developer (Hudson River Trading)</head>
 
-      <p>I’ve added low-latency integration to traditional and
-      cryptocurrency exchanges.  Those include market data feeds as
-      well as order entry interfaces using a mixture of protocols
-      (HTTP, FIX, custom binary protocols etc.).</p>
-
-      <p>I’ve worked on improving and optimising HRT’s internal
-      libraries.  For example by devising a more robust time-zone API
-      (which not only improved performance but also prevented bugs
-      during DST switch), pushing more use of new C++ features such as
-      string_views (which helped remove memory allocation from hot
-      paths) and speeding up some operations through use of SIMD
-      instructions.</p>
-
-      <p>I’ve been responsible for ongoing maintenance and live
-      troubleshooting during trading hours.  My previous experiences
-      have allowed me to promote a better ops practices which have
-      improved robustness of HRT’s systems.</p>
+      <ul>
+        <li>Integrated low-latency market data feeds and order entry
+        interfaces with traditional and cryptocurrency exchanges.</li>
+        <li>Optimised HRT’s internal libraries, including devising
+        a more robust time-zone API, utilising new C++ features to
+        remove memory allocation and speeding up operations with SIMD
+        instructions.</li>
+        <li>Performed live troubleshooting during trading hours and
+        promoted better ops practices to improve system robustness.</li>
+      </ul>
 
       <tech>C++</tech>
     </entry>
@@ -98,16 +93,11 @@
       <time>March 2018–January 2019</time>
       <head>Quant Developer, VP (Barclays Capital)</head>
 
-      <p>I’ve worked on models for algorithmic trading of futures and
-      currencies.  I’ve developed a framework for automated
-      verification of implementation’s behaviour to make sure it does
-      not expose the firm to bigger risk than expected and that it
-      follows bank’s often strict regulatory and contractual
-      obligations.</p>
-
-      <p>As a person fluent in Python and git, I’ve developed several
-      utilities integrating with source repository and our development
-      workflows.</p>
+      <ul>
+        <li>Created a framework for automated verification of
+        algorithms’s behaviour, ensuring compliance with regulations
+        and risk exposure policies.</li>
+      </ul>
 
       <tech>Java, Python</tech>
     </entry>
@@ -116,23 +106,18 @@
       <time>January 2011–February 2018</time>
       <head>Site Reliability Engineer/Software Engineer (Google)</head>
 
-      <p>I’ve worked on myriad of services and projects including:
-      ⅰ) a large scale <a href="https://payments.google.com">payments
-      processing infrastructure</a> processing and recording all
-      transactions made to or by Google, ⅱ) a <a
-      href="https://support.google.com/">customer support centre</a>
-      serving customised help pages to users, ⅲ) a customer
-      relationship management system helping marketers provide best
-      support to customers, ⅳ) an HR systems tracking teams’
-      headcount, ⅴ) service managing the state of production systems
-      and making changes to it and ⅵ) several development and
-      productivity applications.</p>
-
-      <p>My roles varied from Site Reliability Engineer (where I was
-      responsible for stability and monitoring of services under my
-      care), Software Engineer (where I was developing new features)
-      and Tech Lead (where I managed a team and directed development
-      of a system), often involving a mixture of the three.</p>
+      <ul>
+        <li>Worked on myriad of services including
+        a large scale payments processing infrastructure,
+        a service managing and automating changes to state of production systems,
+        a customer support centre,
+        a customer relationship management system,
+        an HR systems tracking teams’ headcount
+        and a various of development and productivity applications.</li>
+        <li>My roles varied from Site Reliability Engineer through
+        Software Engineer to Tech Lead, often involving a mixture of
+        the three.</li>
+      </ul>
 
       <tech>Python, shell scripts, C++, MySQL, App Engine and plethora
         of internal Google technologies</tech>
@@ -142,19 +127,19 @@
       <time>May 2008–December 2010</time>
       <head>Linux kernel hacker (Samsung Electronics)</head>
 
-      <p>I’ve worked on the Linux kernel and have <a
-      href="https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/log/?qt=author&amp;q=nazarewicz">written
-      over 180 accepted patches</a>.  I was involved with the <a
-      href="https://lwn.net/Articles/395712/">USB composite
-      framework</a> and memory management authoring multiple drivers
-      and frameworks including <a
-      href="https://mina86.com/cma/">Contiguous Memory Allocator</a>,
-      Mass Storage USB function and FunctionFS framework.</p>
+      <ul>
+        <li>Contributed <a
+        href="https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/log/?qt=author&amp;q=nazarewicz">over 180 accepted patches</a> to the Linux kernel.</li>
+        <li>Authored <a href="https://mina86.com/cma/">Contiguous
+        Memory Allocator</a> and Mass Storage USB function driver.</li>
+        <li>Worked on <a href="https://lwn.net/Articles/395712/">USB
+        composite framework</a> and FunctionFS API.</li>
+      </ul>
 
-      <p>Prior to working on the Linux kernel I worked on a mobile web
+      <!--p>Prior to working on the Linux kernel I worked on a mobile web
       browser based on Mozilla suite including extensions development
       as well as investigation of Flash plugin support on ARM
-      systems.</p>
+      systems.</p-->
 
       <tech>C, shell scripts, C++</tech>
     </entry>
@@ -185,7 +170,7 @@
   </group>
 
 
-  <group>
+  <!--group>
     <head>Other projects</head>
 
     <entry logo="git.png">
@@ -226,7 +211,7 @@
       broad variety of topics.</p>
     </entry>
 
-  </group>
+  </group-->
 
 
   <group>
@@ -241,14 +226,14 @@
       Electronics Department</a>.</p>
     </entry>
 
-    <entry logo="uw.jpg">
+    <!--entry logo="uw.jpg">
       <time>2005–2006</time>
       <head><a href="http://www.uw.edu.pl">Warsaw University</a></head>
 
       <p><a href="http://www.mimuw.edu.pl">Mathematics, Informatics,
       Applied Mathematics</a> department.  Left to pursue computer
       science at WUT instead.</p>
-    </entry>
+    </entry-->
 
     <!-- <entry logo="staszic.png"> -->
     <!--   <time>2002–2005</time> -->

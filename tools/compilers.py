@@ -170,7 +170,7 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
                                      'meta content'):
             # Comma separated lists, remove unnecessary spaces around commas.
             value = re.sub(r' ?, ?', ',', value)
-        elif attr in ('href', 'src'):
+        elif attr in ('href', 'src') and tag != 'base':
             if value.startswith('https://'):
                 value = value[6:]
             if value.startswith('//mina86.com/'):
