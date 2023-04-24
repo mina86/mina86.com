@@ -43,7 +43,6 @@
 @main-id:          #b; /* The MAIN element */
 @comments-id:      #c; /* Comments under a post */
 @dark-theme-id:    #d; /* ID set on HTML when dark theme is used */
-@foot-id:          #f; /* The footer at the very bottom of the page */
 @head-id:          #h; /* The header */
 @categories-id:    #k; /* The Categories section in bottom nav */
 /* Reserve #m for more links if those ever come back. */
@@ -185,7 +184,6 @@ text {
 /**** Page layout ****/
 @media screen {
 	@{main-id} a:after,
-	@{foot-id} a:after,
 	@{header-link-li-cls} > a:after,
 	@{atom-cls},
 	@{linked-in-link-cls},
@@ -260,7 +258,7 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 	main a:hover {
 		text-decoration: underline;
 	}
-	@{article-text-cls}, @{foot-id} {
+	@{article-text-cls} {
 		a[href^="https://"]:after,
 		a[href^="http://"]:after,
 		a[href^="//"]:after {
@@ -954,40 +952,6 @@ abbr, @{unicode-name} {
 
 
 
-@{foot-id} {
-	margin-top: auto;
-
-	font-family: var(--S);
-	font-size: @tiny;
-	background: @foot-bg-colour;
-	color: @foot-colour;
-
-	@media screen {
-		box-shadow: inset 0 0.55em 0.3em -0.3em #000;
-	}
-
-	p {
-		text-align: center;
-		max-width: 100rem;
-		margin: 1rem auto;
-		padding: 0 5rem;
-	}
-	a {
-		color: @foot-acc-colour;
-	}
-	a:hover {
-		text-decoration: underline;
-	}
-	a:focus {
-		outline: none;
-		box-shadow: 0 0 0 2px @foot-bg-colour,
-			    0 0 1px 4px @foot-acc-colour;
-	}
-}
-
-
-
-
 @media print {
 	@{no-print-cls} {
 		display: none;
@@ -1000,7 +964,7 @@ abbr, @{unicode-name} {
 		font-size: unit(@tiny, rem);
 	}
 
-	@{article-text-cls}, @{foot-id} {
+	@{article-text-cls} {
 		a[href^="http://"]:after, a[href^="https://"]:after {
 			content: " 〈" attr(href) "〉";
 		}
