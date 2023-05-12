@@ -7,15 +7,15 @@
   I’d never do in professional settings.  Most notably, I’m rather found of
   trying everything I can to reduce the size of the page.  This goes beyond mere
   minification and eventually lead me to wonder if all those characters I’ve
-  been escaping in HTML code really need such treatment.
+  been escaping in HTML code require such treatment.
 
 <p>Libraries offering HTML support will typically provide a function to
   indiscriminately replace all ampersands, quote characters, less-than and
   greater-then signs with their corresponding HTML-safe representation.  This
   allows the result to be used in any context in the document and is a good
   choice for user-input validation.  It’s a different matter when it comes to
-  squeezing every last byte.  Herein I will explore just which characters and
-  when exactly really need to be escaped in an HTML document.
+  squeezing every last byte.  Herein I will explore which characters and under
+  what conditions need to be escaped in an HTML document.
 
 <!-- FULL -->
 
@@ -23,7 +23,7 @@
 <h2>Greater- and less-than signs</h2>
 
 <p>U+003E <span class=ud>greater-than sign</span> is a deeply misunderstood
-  character.  All it really wants is to be left alone to live in peace.  Sadly,
+  character.  All it wants is to be left alone to live in peace.  Sadly,
   all those pesky web developers keep escaping it and replacing
   with <code>&amp;gt;</code> even though in vast majority of cases it’s not
   necessary.  U+003C <span class=ud>less-than sign</span>, greater-than sign’s
@@ -50,7 +50,7 @@
 <h2>Ampersand</h2>
 
 <p>U+0026 <span class=ud>ampersand</span>, is a whole other story.  She leads
-  a tumultuous life full of change and adventure where in the end no one really
+  a tumultuous life full of change and adventure where in the end no one
   knows what she wants.  Life was simple in the olden days.  Ampersand had to be
   escaped in every context.  But HTML5 has complicated things quite a bit.
 

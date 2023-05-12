@@ -105,7 +105,7 @@
 
 <p>Rust’s <code>regex</code> crate is noteworthy for another reason.  It
   includes a <code>shortest_match</code> method which turns out to be a lie.
-  Rather than returning the <em>shortest</em> match it’s just an optimisation
+  Rather than returning the <em>shortest</em> match it’s an optimisation
   returning position of the end of the matching substring.  It’s a step between
   answering whether regex matched at all and returning full capture group
   information.  While it may be useful, the name is confusing.

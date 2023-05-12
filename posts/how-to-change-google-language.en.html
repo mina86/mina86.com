@@ -22,8 +22,8 @@
 
 <p>If the URL already contains a question mark, you need to
   append <code>&amp;hl=<var>lang</var></code> instead.  Additionally, if it
-  contains a hash symbol, you need to insert the string just before the hash
-  symbol.  For example:
+  contains a hash symbol, you need to insert the string immediately before the
+  hash symbol.  For example:
 
 <ul>
   <li><code>https://www.google.com/<strong>?hl=es</strong></code>
@@ -43,9 +43,9 @@
   the gear icon near the top right of the page).  Similarly, YouTube strips the
   parameter, but it respects preferences configured in the web browser.
 
-<p>Anyone familiar with HTTP may wonder why Google doesn’t just look
+<p>Anyone familiar with HTTP may wonder why Google doesn’t simply look
   at <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language">the <code>Accept-Language</code>
-  header</a>.  The issue is that many users have their browser configured with
+  header</a>.  Problem is that many users have their browser configured with
   defaults that send English as the only option, even though they would prefer
   another language.  In those cases, it’s more user-friendly to ignore that
-  header.  As it turns out, localisation is really hard.
+  header.  As it turns out, localisation is hard.

@@ -83,7 +83,7 @@ $ sshfs -o idmap=user,transform_symlinks phobos.mars.uac:/ ~/.phobos
 
 <p>However, once SSHFS mounts remote machine’s file system in user’s home
   directory, those operations start to involve traversing the entirety of the
-  remote host.  There’s really no way to address this issue other than to
+  remote host.  There’s no way to address this issue other than to
   remember about the mount points and act accordingly.  In case
   of <code>du</code> the <code>-x</code> option does the trick;
   <code>find</code> has <code>-xdev</code> switch which will address the

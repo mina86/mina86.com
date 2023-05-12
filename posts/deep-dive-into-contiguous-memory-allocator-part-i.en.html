@@ -8,10 +8,10 @@
   of boring code samples.
 
 <p><a href=http://thread.gmane.org/gmane.linux.kernel.mm/76241>Contiguous
-Memory Allocator</a> (or CMA) has been developed to allow big
+Memory Allocator</a> (or CMA) has been developed to allow large
 physically contiguous memory allocations.  By initialising early at
 boot time and with some fairly intrusive changes to Linux memory
-management, it is able to allocate big memory chunks without a need to
+management, it is able to allocate large memory chunks without a need to
 grab memory for exclusive use.
 
 <p>Simple in principle, it grew to be a quite complicated system which
@@ -82,10 +82,9 @@ called <dfn>CMA area</dfn> or <dfn>CMA context</dfn>, is later
 returned to the buddy system so it can be used by regular
 applications.  To make reservation happen, one needs to call:
 
-<pre>
-void dma_contiguous_reserve(phys_addr_t limit);</pre>
+<pre>void dma_contiguous_reserve(phys_addr_t limit);</pre>
 
-<p>just after memblock is initialised but prior to the buddy allocator
+<p>after memblock is initialised but prior to the buddy allocator
 setup.
 
 <p>The <code>limit</code> argument, if not zero, specifies physical
@@ -113,7 +112,7 @@ diff --git a/arch/arm/mm/init.c b/arch/arm/mm/init.c
  	memblock_allow_resize();
  	memblock_dump_all();</pre>
 
-<p>On x86 it is called just after memblock is set up in
+<p>On x86 it is called after memblock is set up in
 <code>setup_arch</code> function with no limit specified:
 
 <pre>
@@ -151,7 +150,7 @@ Furthermore, it may be called several times, but no more than
 <code>MAX_CMA_AREAS</code> times.
 
 <p>If an architecture does not need any special handling, the header
-file may just say:
+file may say:
 
 <pre>
 #ifndef H_ARCH_ASM_DMA_CONTIGUOUS_H
@@ -501,7 +500,7 @@ refer to the original email.
 It does not work. I get an error:<br />
 <code>echo 1024 &gt; /dev/cma_test</code><br />
 <code>misc cma_test: no mem in CMA area.</code><br />
-Of course, CMA patch was included in kernel and CMA area was reserved successfully. 
+Of course, CMA patch was included in kernel and CMA area was reserved successfully.
 
 <p><code>dma_alloc_coherent()</code> return NULL at this point (dma-mapping.h):
 

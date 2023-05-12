@@ -24,10 +24,9 @@
 
 <p>glibc is a cross-platform library which supports many kernels and
   architectures.  It often includes multiple definitions of the same function
-  each tailored for particular platform — such is the case
+  each tailored for particular platform.  Such is the case
   with <code>sysconf</code>.  Thankfully, our analysis is limited to Linux and
-  we can limit ourselves to just one of them.  In glibc 2.33, the implementation
-  we’re interested in is located
+  in glibc 2.33, the implementation we’re interested in is located
   in <code>sysdeps/unix/sysv/linux/sysconf.c</code> file and looks as follows:
 
 <pre>
@@ -99,7 +98,7 @@ SYSCALL_DEFINE3(execve,
 }
 </pre>
 
-<p>Definition of <code>do_execve</code> can be found just a few lines earlier in
+<p>Definition of <code>do_execve</code> can be found a few lines earlier in
   the same file.  All it does is call <code>do_execveat_common</code> function
   so that’s what we’re going to take a closer look at.  It is where most of the
   checks and calculations happen:

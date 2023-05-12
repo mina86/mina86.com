@@ -117,7 +117,7 @@ $ /bin/echo "$s" "$s" "$s" "$s" "$s" "$s" "$s" "$s" \
   overlooked method, is environment variables such
   as <code>PATH</code>, <code>TERM</code> or <code>USER</code>.  All of them
   contribute to the limit in the same way command line arguments do.  To measure
-  just how much, we can simply invoke <code>env |wc</code> which will produce
+  how much, we can simply invoke <code>env |wc</code> which will produce
   the number as well as total length of all the variables.  This isn’t robust
   against variables containing newline characters, but other than that it
   correctly measures used space including NUL bytes terminating each value.
@@ -241,7 +241,7 @@ $ ulimit -Ss $((1024 * 1024)); getconf ARG_MAX
 <p>Correlating maximum stack size with value of the <code>ARG_MAX</code> limit
   we can easily see that the latter is set to one fourth of the former with
   additional restriction that <code>ARG_MAX</code> is no lower than 128 KiB.
-  Upper limit on the other hand does not seem to exist.  Or does it?  Let’s try
+  Upper limit on the other hand doesn’t appear to exist.  Or does it?  Let’s try
   a stack size of 42 MiB:
 
 <pre id=bigstack>

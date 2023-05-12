@@ -49,7 +49,7 @@
   <tbody>
     <tr><td>‘*’<td>‘foo’, ‘bar’, ‘baz’
         <td rowspan=2>Prefix and suffix can be empty.  Sole asterisk matches
-          everything or just a fragment of the word.
+          everything.
     <tr><td>‘b*’<td>‘bar’, ‘baz’
     <tr><td>‘b*r’<td>‘bar’<td>
     <tr><td>‘f*r’<td>∅<td>
@@ -175,7 +175,7 @@
 <p id=b2>Overall, the lookup ends up having \(\mathcal O(p+(k-p)n)\) run time.
   Interestingly, it does not depend on the suffix<a href="#f2">‡</a>.  On the
   other hand, the longer the prefix the faster the algorithm will run.  On one
-  extreme, if the glob is just a literal string (and thus prefix length equal
+  extreme, if the glob is a literal string (and thus prefix length equal
   word length), we end up with a linear lookup.  In those cases, trie should be
   faster than vector-based data structure.
 
@@ -276,14 +276,14 @@ M547,241h8m0,10h-8
   lookup (situation where prefix length is equal word length which is shown in
   the last column), prefix tree is over ten times faster at times.
 
-<p>The second thing however is that overall, tries are very bad compared to much
-  simpler vector-based structures.  Starting at word length of a thousand, tries
-  are ten times slower than using a sorted array of the keys.  (I haven’t made
-  any measurements for length between those two sizes).  Furthermore, the longer
-  the words in the set, the worst prefix tree becomes.  But even with short
-  words, depending on type of queries vector-based algorithm can be thousands
-  times faster.  There were only a handful of tests in which prefix tree bode
-  better than an array:
+<p>Second of all,, tries’ performance is regrettable compared to much simpler
+  vector-based structures.  Starting at word length of a thousand, tries are ten
+  times slower than using a sorted array of the keys.  (I haven’t made any
+  measurements for length between those two sizes).  Furthermore, the longer the
+  words in the set, the worst prefix tree becomes.  But even with short words,
+  depending on type of queries vector-based algorithm can be thousands times
+  faster.  There were only a handful of tests in which prefix tree bode better
+  than an array:
 
   <table class=r>
     <thead style="text-align:center">
@@ -318,7 +318,7 @@ M547,241h8m0,10h-8
   sort or why Coppersmith–Winograd algorithm is never used in practice.
 
 <p>It’s good to sometimes remind ourselves in practice of those facts.
-  Sometimes a naïve, almost brute-force, approach may be faster just because it
+  Sometimes a naïve, almost brute-force, approach may be faster because it
   uses tighter loops or has better cache-locality.  And cache-locality is
   something node-based data structures (such as linked lists or trees) don’t
   have.

@@ -30,12 +30,10 @@
   that 16 bits, which is the size of a single UTF-16 <dfn>code
   unit</dfn>, aren’t enough to identify each code point uniquely.
 
-<p>To solve that problem, a somehow awkward concept of surrogate pairs
-  has been introduced.  (On unrelated note, is it just me who finds
-  spelling of ‘awkward’ so <em>meta</em>?) Anyway, 2048 code points
-  have been carved out to make room for high and low surrogates.  In
-  UTF-16, a high surrogate followed by a low surrogate — four octets
-  total — encodes a single code point outside of BMP.
+<p>To solve that problem, a somehow awkward concept of surrogate pairs has been
+  introduced.  2048 code points have been carved out to make room for high and
+  low surrogates.  In UTF-16, a high surrogate followed by a low
+  surrogate — four octets total — encodes a single code point outside of BMP.
 
 <p>The encoding method is relatively simple.  For example, to
   represent U+1F574: <span class=ud>man in business suit
@@ -162,7 +160,7 @@
 <h2>Single letter may map to multiple code points</h2>
 
 <p>Above examples show that concepts of a letter or a character may be
-  blurry and confusing.  Is aforementioned ‘ß’ a letter or just
+  blurry and confusing.  Is aforementioned ‘ß’ a letter or
   a fancy way of writing ‘ss’? ‘sz’? What of ligatures and digraphs?
   But at least everyone agrees ‘é’ is a single letter, right?  Here it
   is again: ‘é’, except this time it’s a regular letter e followed by
@@ -222,7 +220,7 @@
 
 <p>An argument sometimes put in favour of UTF-16 (over UTF-8) is that
   it is better for far eastern scripts.  For majority of Chinese,
-  Japanese and Korean (CJK) ideographs UTF-16 takes just two octets
+  Japanese and Korean (CJK) ideographs UTF-16 takes two octets
   while UTF-8 takes three.  Clearly, Asia should abandon UTF-8 and use
   UTF-16 then, right?
 
@@ -244,7 +242,7 @@
   unit, it often more than makes up for octets ‘lost’ when encoding
   ideographs.
 
-<p>To see just how big of a role this effect plays in real life
+<p>To see how big of a role this effect plays in real life
   I looked at a bunch of websites popular in China, Japan and South
   Korea and compared their size (in kibibytes) when different
   encodings were used.  The results are as follows:
@@ -331,7 +329,7 @@ U+1F34D which isn’t even an apple nor grows on pine trees).
 
 <p>Speaking of Apple, removing characters from the end of Unicode string may
   expand its rendered representation.  Tom Scott made a video about it so rather
-  than duplicating all of his observations, I’ll just point to
+  than duplicating all of his observations, I’ll point to
   <a href="https://www.youtube.com/watch?v=hJLMSllzoLA">his work on
   the subject</a>.  It’s not a long video and is worth the watch.
 
@@ -355,8 +353,7 @@ U+1F34D which isn’t even an apple nor grows on pine trees).
   interpreted from the beginning and having random access to each code
   point doesn’t speed anything up.
 
-<p>And finally, don’t be fooled by false UTF-16 propaganda.  The encoding
-  combines disadvantages of UTF-8 (being variable-length) with
-  disadvantages of UTF-32 (taking up a lot of space) and as such is
-  the worst possible solution for Unicode text.  Just use UTF-8
-  everywhere and be done with it.
+<p>And finally, don’t be fooled by UTF-16 propaganda.  The encoding combines
+  disadvantages of UTF-8 (being variable-length) with those of UTF-32 (taking up
+  a lot of space) and as such is the worst possible solution for text.  Simply
+  use UTF-8 everywhere and be done with it.

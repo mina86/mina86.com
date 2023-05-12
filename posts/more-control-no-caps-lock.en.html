@@ -4,10 +4,10 @@
 <!-- categories: Articles, Techblog -->
 
 <p>Have you ever wondered why Caps Lock, a key you press twice
-a decade (once to turn it on and then to turn it off), is in such
-a lucrative position on the keyboard? And how about Ctrl?
-Compared to Caps Lock it seems like miles away.  If you think about it
-old unix keyboards with those keys swapped seem to got it right.
+a decade (once to turn it on by accident and then to turn it off), is in such
+a lucrative position on the keyboard? And what about Ctrl?
+It’s miles away compared to Caps Lock.  If you think about it
+old Unix keyboards with those keys swapped seem to got it right.
 
 <p>I’ve gone one step further and recommend turning Caps Lock into
 Ctrl key altogether.  In this article I will describe how to
@@ -34,10 +34,9 @@ not having to stretch your little finger so much.
 stop SCREAMING on IRC and in mails so much! No, honestly — flame wars
 are not good for you health.
 
-<p>I’ve basically forced this settings on one of my colleagues at work
-(he asked me for help and I kept toggling Caps Lock when
-I wanted to press Ctrl so I’ve made the change) who was not
-pleased at first but then seemed to like it.
+<p>I’ve basically forced this settings on one of my colleagues at work (he asked
+me for help and I kept toggling Caps Lock when I wanted to press Ctrl so I’ve
+made the change).  He wasn’t pleased at first but eventually grew like it.
 
 
 <h3>Swap?</h3>
@@ -104,7 +103,8 @@ invoking as root:
 
 <pre>dpkg-reconfigure console-setup</pre>
 
-<p>I’ve been told it should work (ie. that’s what console-setup package is for) but if it does not for you (didn’t for me) just move to the next section.
+<p>I’ve been told it should work (ie. that’s what console-setup package is for)
+but if it does not for you (didn’t for me) consult the next section.
 
 <h3>XKb, Configuration file</h3>
 
@@ -216,7 +216,7 @@ write here is going to work for all kinds of *nix systems.
 or vtt) is not what you get in graphical interface
 (<code><i>?</i>term</code>, <code>konsole</code>, <code>gnome-terminal</code>,
 etc.).  On some GNU/Linux distributions users may not even see it — a funky
-bootsplash can hide it pretty well.  If you don’t know what it is just skip this
+bootsplash can hide it pretty well.  If you don’t know what it is, skip this
 section — you probably don’t need that knowledge.
 
 
@@ -301,9 +301,8 @@ instance <code>-nocaps</code> or <code>-swapcaps</code>.  Also this will swap
 the Caps Lock and Ctrl key — if you’d rather use two Ctrls skip the
 second <code>-e</code> line.
 
-<p>If you can’t seem to find proper map file invoke <code>dumpkeys</code>
-instead of <code>gzip -d &lt;<i>kaymap</i>.map.gz</code> in the above
-command.
+<p>If you can’t find proper map file invoke <code>dumpkeys</code> instead
+of <code>gzip -d &lt;<i>kaymap</i>.map.gz</code> in the above command.
 
 <p>After you’ve created your new keymap test it with <code>loadkeys
 <i>keymap</i>-my</code> command.  If that’s what you want instruct your

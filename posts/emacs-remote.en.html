@@ -125,7 +125,7 @@ user@earth$ <b>printf '‘%s’\n' "$local_socket" "$remote_socket"</b>
 user@earth$ <b>ssh -R "$remote_socket:$local_socket" phobos.mars.uac</b>
 </pre>
 
-<p>Note that tilde-expansion won’t really work in the above command so if the
+<p>Note that tilde-expansion won’t work in the above command so if the
   socket is located in <code>~/.emacs/server</code> directory it may be
   necessary to sell out the exact path.
 

@@ -14,7 +14,7 @@ for everyone.  You have been warned.
 
 <h2>New user</h2>
 
-<p>The very first step is creation of a new user account.  Since I have recently
+<p>The first step is creation of a new user account.  Since I have recently
 discovered benefits of having a group for each user I now do it with the
 following commands:
 
@@ -58,7 +58,7 @@ privileges (namely via first logging in a user account and then switching to
 root via su) is more secure and easier to audit.
 
 <p>Login restrictions are set in a <code>/etc/login.access</code> file and to give
-only a single user access just run:
+only a single user access run:
 
 <pre>echo '-:ALL EXCEPT <var>username</var>:ALL' &gt;&gt;/etc/login.access</pre>
 
@@ -224,7 +224,7 @@ except for a single user:
 cut -d: -f1 /etc/passwd |\
     grep -v '^<var>username</var>$' &gt;&gt;/etc/ftpusers</pre>
 
-<p>Or just block it to everyone if FTP is not used with:
+<p>Or block it to everyone if FTP is not used with:
 
 <pre>cut -d: -f1 /etc/passwd &gt;&gt;/etc/ftpusers</pre>
 
@@ -283,7 +283,7 @@ in the <code>/etc/fstab</code> file.  There are a few options that’s worth ad
 
 <h2>LILO</h2>
 
-<p>Slackware comes with a splash screen used in LILO and a 30-second prompt timeout.  For me both are just
+<p>Slackware comes with a splash screen used in LILO and a 30-second prompt timeout.  For me both are
 annoyances.  To improve the situation, note down value of the <code>boot</code>
 option as well as <code>root</code> options for all the images, run <code>chmod 600
 /etc/lilo.conf</code>, and finally edit it to have the following content:
@@ -389,8 +389,7 @@ echo "chmod 4750 $cmds" &gt;&gt;/etc/rc.d/rc.local</pre>
 <p>Depending on the way Slackware was installed, it may contain many packages
 that aren’t used.  Those should be removed since the fewer packages system has,
 the fewer bugs it contains.  For instance, I haven’t used finger or talk for
-ages, and really don’t see a need for those as well as some other packages
-to be installed:
+ages and don’t see a need for those nor various other programs:
 
 <pre>
 cd /var/log/packages
@@ -427,7 +426,7 @@ care, but for other series my motto is ‘if in doubt, removepkg’.  This is
 especially true for n series which includes many servers.
 
 <p>Besides packages, Slackware comes with a bunch of user accounts and groups
-that aren’t really used for anything.  First make sure that those are really
+that aren’t used for anything.  First make sure that those are actually
 unused by invoking:
 
 <pre>

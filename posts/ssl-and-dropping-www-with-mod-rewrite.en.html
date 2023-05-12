@@ -59,7 +59,7 @@ RewriteRule ^(.*)$ http://%1$1 [L,R=301]</pre>
 
 
 <p>mod_rewrite has also a <code>REQUEST_SCHEME</code> variable and it’s
-tempting to use it, but it seems that it’s value is not what is
+tempting to use it, but it’s value isn’t exactly is
 advertised and instead it contains scheme and host name which is not
 that useful.
 
@@ -76,7 +76,7 @@ href="http://no-www.org/">check out this site</a>.
 <!-- date: 2015-04-15 14:13:59 -->
 <!-- nick: recurse -->
 
-<p>You could do things easier and drop the www. in your DNS configuration, remove the www. from ServerName in your vhost config, then forward all requests to www. back to http://domain.com/requesting-page.blah using: 
+<p>You could do things easier and drop the www. in your DNS configuration, remove the www. from ServerName in your vhost config, then forward all requests to www. back to http://domain.com/requesting-page.blah using:
 
 <p>RewriteEngine On<br />
 RewriteCond %{HTTP_HOST} ^www.<br />

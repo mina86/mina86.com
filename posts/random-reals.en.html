@@ -25,10 +25,10 @@ levels.
 
 <p>The ‘floating’ in ‘floating-point’ refers to decimal point’s ability to move
   around to scale number’s <em>absolute</em> precision while
-  maintaining <em>relative</em> precision.  This allows very large as well as
-  very small numbers to be represented.  For example, while an IEEE 754 double
-  precision number can encode 2<sup>100</sup> and 2<sup>-100</sup>, it cannot
-  represent their sum.
+  maintaining <em>relative</em> precision.  This enables representation of
+  numbers spanning a broad range of magnitudes.  For example, an IEEE 754 double
+  precision number can encode 2<sup>100</sup> and 2<sup>-100</sup> (but their
+  sum is rounded to 2<sup>100</sup>).
 
 <p>This impacts how densely ‘representable’ integers are distributed on a number
   line.  All positive integers less than 2<sup>53</sup> can be represented, but

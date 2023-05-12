@@ -7,8 +7,8 @@
 
 <p>I’ve recently found myself in need of an RGB↔XYZ transformation matrix
   expressed to the maximum possible precision.  Sources on the Internet
-  typically limit the precision to just a few decimal places so I've decided to
-  do the calculations by myself.
+  typically limit the precision to a handful decimal places so I’ve performed
+  do the calculations myself.
 
 <p>What we’re looking for is a 3-by-3 matrix \(M\) which, when multiplied by
   red, green and blue coordinates of a colour, produces its XYZ coordinates.  In
@@ -249,7 +249,7 @@ def inverse_3x3_matrix(matrix):
   trivially calculated using \(\bigl|\begin{smallmatrix} a & b \\ c &
   d \end{smallmatrix}\bigr| = a d - b c\) formula.  Once the comatrix is
   constructed, <a href="https://en.wikipedia.org/wiki/Minor_(linear_algebra)#Applications_of_minors_and_cofactors">calculating
-  the determinant of the input matrix and its inverse</a> becomes just a matter
+  the determinant of the input matrix and its inverse</a> becomes a matter
   of executing a few loops.
 
 <p>The above code works for any RGB system.  To get result for sRGB its sRGB’s

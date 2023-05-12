@@ -113,10 +113,9 @@ public static char[] toChars(final String string) {
 <p>Until Java 7u6, <code>String::substring</code> created objects which shared
   character array with the ‘parent’ string.  This had some advantages — the
   operation was constant time and constant memory operation — but could lead to
-  memory leaks (if the base string got garbage collected its entire contents
-  would remain in memory even if the substring needed just a small portion of
-  it) and complicated the <code>String</code> class (by requiring offset and
-  length fields).
+  memory leaks (the entire contents of the base string would remain in memory
+  even if a substring needed a tiny portion of it) and complicated
+  the <code>String</code> class (by requiring offset and length fields).
 
 <p>In the end, the implementation has been changed and strings now own the
   entire character array.  Interestingly,

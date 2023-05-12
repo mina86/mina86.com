@@ -181,7 +181,7 @@ fn grey_from_rgb_gamma2_isqrt(r: u8, g: u8, b: u8) -&gt; u8 {
 
 <p>Pushing the idea of simplifying gamma correction further eventually leads to
   the point where conversion to and from linear values is skipped entirely.  The
-  result is a weighted average just as discussed at the beginning.  This time,
+  result is a weighted average as discussed at the beginning.  This time,
   however, knowing what coefficients to use allows for a much better choice of
   weights:
 
@@ -194,7 +194,7 @@ fn grey_from_rgb_avg_float(r: u8, g: u8, b: u8) -&gt; u8 {
 </pre>
 
 <p>This can be speed up by once again turning to integer arithmetic.  There are
-  many possible sets of integer weights but really the only two worth mentioning
+  many possible sets of integer weights but the only two worth mentioning
   are (54, 183, 19) and (3567454, 11998779, 1210983).  The former makes the
   calculations fit 16-bit integers while the later 32-bit ones.
 
@@ -553,7 +553,7 @@ fn grey_from_rgb_avg_32bit(r: u8, g: u8, b: u8) -&gt; u8 {
 <p>If accuracy isn’t that important, gamma correction step can be skipped
   resulting in a weighted average.  The best choice here appears to be either
   one of <a href="#bit">32-bit or 16-bit weights</a>.  Small, 16-bit platforms
-  might benefit from the former but other than that there’s really no reason to
+  might benefit from the former but other than that there’s no reason to
   shy away from the 32-bit variant.
 
 <p>No other methods are worth bothering with.  <a href="#float">Float

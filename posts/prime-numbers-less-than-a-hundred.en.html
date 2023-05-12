@@ -3,7 +3,7 @@
 <!-- tags: c, primes, brain-teaser -->
 <!-- categories: Articles, Misc, Techblog -->
 
-<p>Anyone working in a big corporation must have been hit by some
+<p>Anyone working in a major company must have been hit by some
 ‘funny’ mail from a coworker that helps everyone gets through the
 day.  No different at my office — at one point all
 engineers have been challenged to write the shortest code in
@@ -50,7 +50,7 @@ historic importance only but nonetheless may be interested for
 a C programmer curious about ins and outs of the
 language.
 
-<p><b>Implicit return type</b>.  Starting from the very beginning, the
+<p><b>Implicit return type</b>.  Starting from the beginning, the
 <code>main</code> function has no return type specified.  That is
 actually quite all right since C89 defaults function’s return type to
 <code>int</code>.
@@ -136,11 +136,10 @@ where <code>b/a</code> will yield undesired true value hence it is
 better to use <code>j&lt;i</code> comparison.
 
 <p><b>Implicit declaration</b>.  Obviously, to output the number we’ve
-used <code>printf</code> function.  This is a straight-forward approach,
-yet we seem to be missing said function’s declaration.  And yet another
-time, this is quite all right from C89’s point of view.  If function
-declaration is missing an implicit declaration based on types of passed
-arguments with <code>int</code> as a return type is assumed.
+used <code>printf</code> function.  This is a straight-forward approach, yet we
+are missing its declaration.  And yet again, this is quite all right from C89’s
+point of view.  If function declaration is missing an implicit declaration based
+on types of passed arguments with <code>int</code> as a return type is assumed.
 
 <p>Let’s stay here for a second because this is a good
 opportunity to yet again remind everybody not to cast result of

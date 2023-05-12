@@ -70,7 +70,7 @@ func Bytes(str string) []byte {
 
 <p>As expected, unsafe variant stays constant since it always
   allocates the same amount of memory (a single structure) and copies
-  just two or three values.  The safe version on the other hand scales
+  two or three values.  The safe version on the other hand scales
   roughly linearly since it has to copy the data but is slower even
   when dealing with an empty string.  This could be an overhead of
   a function call which unsafe version avoids by getting inlined.
