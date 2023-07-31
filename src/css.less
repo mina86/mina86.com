@@ -159,10 +159,7 @@
 }
 @{shade-id} {
 	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+	inset: 0;
 	background: #0008;
 	opacity: 0;
 	z-index: 5;
@@ -221,9 +218,7 @@ text {
 
 	@{head-id} {
 		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
+		inset: 0 0 auto;
 
 		font-family: var(--S);
 		background: @head-bg-colour;
@@ -433,9 +428,7 @@ article {
 		padding-top: 6em;
 		&::before {
 			position: absolute;
-			top: 2em;
-			left: 0;
-			right: 0;
+			inset: 2em 0 auto;
 			height: 1em;
 			content: "";
 			color: @border-colour;
@@ -921,20 +914,17 @@ div:focus {
 @{hue-slide-cls} div {
 	position: absolute;
 	width: 10px;
-	top: -5px;
-	bottom: -5px;
+	inset: -5px auto -5px calc(@slide-position - 5px);
 	border: 2px solid #000;
 	background: @slide-colour;
-	left: calc(@slide-position - 5px);
 }
-
 
 
 
 @{float-right-cls}, @{float-left-cls} {
 	clear: both;
 	width: var(--w,20em);
-	margin: 1em ~"clamp(calc(max(-10em,5em - var(--w,20em))),calc(31em - 50vw),1em)";
+	margin: 1em ~"clamp(max(-10em,5em - var(--w,20em)),31em - 50vw,1em)";
 	max-width: 100%;
 }
 @{float-right-cls} {
