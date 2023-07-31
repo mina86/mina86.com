@@ -19,21 +19,6 @@
   {%- endif -%}
 {%- endmacro -%}
 
-{%- macro social(entry) -%}
-  <ul class="f">
-    <li><a href="https://twitter.com/intent/tweet?text={{
-        entry.subject | urlencode
-      }}&amp;url=https://mina86.com{{
-        entry.href | urlencode
-      }}{% if entry.tags -%}
-        &amp;hashtags={{ entry.tags | join(',') | urlencode }}
-        {%- endif -%}" class=x>{{ T('Tweet') }}</a>
-    <li><a href="https://www.facebook.com/sharer/sharer.php?u=https://mina86.com{{
-        entry.href | urlencode
-      }}" class=z>{{ T('Share') }}</a>
-  </ul>
-{%- endmacro -%}
-
 {%- macro prev_next() -%}
   {% if prev or next %}
     <ul id=p>
@@ -77,8 +62,6 @@
           <a href="{{ entry.href }}#c">{{ T('See comments') }} »</a>
         {%- endif -%}
       {%- endif -%}
-
-      {{ social(entry) }}
 
       {%- if entry.categories -%}
         <ul>

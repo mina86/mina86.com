@@ -80,10 +80,6 @@ TRANSLATIONS = {
     'Tagged with:': {'pl': 'Tagi:'},
 
     'Resume': {'pl': 'CV'},
-
-    # Social
-    'Tweet': {'pl': 'Ćwierknij'},
-    'Share': {'pl': 'Udostępnij'},
 }
 
 

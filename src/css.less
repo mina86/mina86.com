@@ -6,8 +6,7 @@
 @header-link-li-cls:   .b; /* LIs in the header excluding site name and cog */
 @header-cog-li-cls:    .c; /* LI in the header with the cog settings link */
 @header-site-li-cls:   .d; /* LI in the header with the H1 with site name */
-/* e */
-@social-links-cls:     .f;
+/* e, f */
 @code-dd-ul-cls:       .g;
 /* h */
 @linked-in-link-cls:   .i;
@@ -23,9 +22,9 @@
 @article-text-cls:     .t;
 /* u, v */
 @hue-slide-cls:        .w;
-@tweet-link-cls:       .x;
+/* x */
 @byline-cls:           .y;
-@fb-link-cls:          .z;
+/* z */
 
 @float-right-cls:      .fr;
 @float-left-cls:       .fl;
@@ -480,7 +479,7 @@ article {
 	}
 }
 
-/* Meta and Social */
+/* Meta */
 aside {
 	overflow: auto;
 	break-inside: avoid;
@@ -516,41 +515,9 @@ aside {
 	li:before {
 		content: '» ';
 	}
-	@{meta-label-cls}:before, @{social-links-cls} li:before {
+	@{meta-label-cls}:before {
 		content: '';
 	}
-}
-@{social-links-cls} {
-	.no-print();
-	margin-bottom: 1em;
-}
-@{social-links-cls} a {
-	font: bold 1em 'Helvetica Neue', var(--S);
-	background: var(--g);
-	color: @head-colour;
-	border-radius: 3px;
-	padding: 1px 8px;
-	&:before {
-		font-family: @icon-font;
-		font-weight: 400;
-		content: var(--c);
-		color: #fff;
-	}
-	&:focus, &:hover {
-		text-decoration: none;
-		background-color: var(--h);
-		color: #fff;
-	}
-}
-@{tweet-link-cls} {
-	--g: #1b95e0;
-	--h: #0c7abf;
-	--c: '🐤 ';
-}
-@{fb-link-cls} {
-	--g: #577fbc;
-	--h: #3871C6;
-	--c: 'f ';
 }
 
 /* Comments */
