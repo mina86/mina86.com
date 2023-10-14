@@ -52,6 +52,21 @@
   <group>
     <head>Work Experience</head>
 
+    <entry logo="composable.png">
+      <time>May 2023–<present/></time>
+      <head>Senior Software Engineer (Composable Finance)</head>
+
+      <ul>
+        <li>Working on a cross-blockchain connection between Cosmos
+        ecosystem and other chains.</li>
+        <li>Collaborating with Universidade de Lisboa on methods for
+        using IBC protocol on blockchains which don’t meet all of
+        IBC’s requirements.</li>
+      </ul>
+
+      <tech>Rust, Python</tech>
+    </entry>
+
     <entry logo="near.svg">
       <time>June 2021–October 2022</time>
       <head>Senior Software Engineer (NEAR)</head>
