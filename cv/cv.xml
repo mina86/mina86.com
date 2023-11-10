@@ -104,7 +104,7 @@
       <tech>C++</tech>
     </entry>
 
-    <entry logo="barclays.jpg">
+    <entry logo="barclays.svg">
       <time>March 2018–January 2019</time>
       <head>Quant Developer, VP (Barclays Capital)</head>
 
@@ -117,7 +117,7 @@
       <tech>Java, Python</tech>
     </entry>
 
-    <entry logo="google.png">
+    <entry logo="google.svg">
       <time>January 2011–February 2018</time>
       <head>Site Reliability Engineer/Software Engineer (Google)</head>
 
@@ -138,7 +138,7 @@
         of internal Google technologies</tech>
     </entry>
 
-    <entry logo="samsung.png">
+    <entry logo="samsung.svg">
       <time>May 2008–December 2010</time>
       <head>Linux kernel hacker (Samsung Electronics)</head>
 
