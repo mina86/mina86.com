@@ -16,120 +16,145 @@
     <base href="https://mina86.com/" />
     <title>Michał Nazarewicz — Curriculum Vitæ</title>
     <style>
-      body {
-        font-family: Verdana, "Trebuchet MS", Tahoma, Helvetica, sans-serif;
-        background-color: #FFF;
-        color: #000;
-      }
-      main {
-        max-width: 50em;
-        margin: 0 auto;
-      }
-      @media print {
-        main {
-          max-width: 60em;
-        }
+      @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&amp;family=Libre+Baskerville:wght@400;700&amp;family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=swap');
+
+      * {
+        box-sizing: content-box;
+        margin: 0;
+        padding: 0
       }
 
+      body, main {
+        font-family: Lato, DejaVu Sans, Noto Sans, Verdana, sans-serif;
+        background: #FFF;
+        color: #000;
+        line-height: 1.5;
+      }
+
+      h1, h2, h3 {
+        font-family: Libre Baskerville, Georgia, Charter, Utopia, serif;
+        font-weight: bold;
+        page-break-after: avoid;
+      }
       h1, h2 {
         text-align: center;
       }
       h1 {
         font-size: 2em;
-        page-break-after: avoid;
+        margin: 0.25em 0 0;
         page-break-before: avoid;
       }
       h2 {
         font-size: 1.25em;
-        margin: 1.2em 0 0;
-        color: #FFF;
-        background: #000;
-        page-break-after: avoid;
-      }
-      @media print {
-        h2 {
-          background: #FFF;
-          border-top: 1px dotted #000;
-          border-bottom: 1px dotted #000;
-          color: #000;
-        }
+        padding: 0.125em 0;
+        margin: 1rem 0;
       }
       h3 {
+        margin: 1em 0;
         font-size: 1em;
+        font-weight: normal;
       }
-      section.entry {
+      .entry {
+        margin-bottom: 1.5em;
         page-break-inside: avoid;
       }
 
-      .two-cols-header {
-        margin: 1em 0 0;
-        display: table;
-        width: 100%;
-        clear: both;
+      .contact {
+        page-break-inside: avoid;
+        page-break-before: avoid;
       }
-      .two-cols-header > * {
-        display: table-cell;
+      .contact ul {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 1em;
       }
-      .two-cols-header > *:nth-child(2) {
-        text-align: right;
-      }
-
-      .time {
-        font-weight: bold;
-        font-size: 0.8em;
-        color: #333;
+      .contact li {
+        display: block;
       }
 
-      .logo {
-        max-height: 3em;
-        max-width: 10em;
-        float: right;
-        margin: 1em;
+      .icon {
+        font-family: Material Symbols Rounded;
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+        color: #657b83;
+        margin-right: 0.25em;
+        position: relative;
+        top: 0.125em;
       }
 
-      p {
+      p, .entry ul {
         margin: 0.5em 0;
         text-align: justify;
       }
-      li {
-        text-align: justify;
+      .entry ul {
+        padding-left: 1.5em;
       }
-      small {
-        font-size: 0.8em;
-        color: #666;
+      .time {
+        margin: -1em 0 0;
+        font-weight: bold;
+        font-size: 0.75em;
+        color: #586e75;
       }
-      ul, .tech {
-        padding-left: 2em;
+      .logo, svg {
+        width: auto;
+        height: auto;
+        max-width:  8em; max-width:  min(20vw, 8em);
+        max-height: 3em; max-height: min(54vw, 3em);
+        float: right;
+        margin: 0 0 0.5em 1em;
+      }
+      @media (max-width: 20em) {
+        .logo, svg { display: none }
       }
       .tech {
-        color: #666;
+        color: #586e75;
       }
 
-      .compact {
-        display: table;
-        margin: 0 2em;
-        page-break-inside: avoid;
-      }
-      .compact > section {
-        display: table-row;
-      }
-      .compact > section > * {
-        display: table-cell;
-        padding: 0.1em 1em;
-      }
 
-      a, a:link, a:visited {
-        color: #009;
+      a, a:link, a:visited, a:hover, a:focus, a:active {
+        color: inherit;
+        background: transparent;
         text-decoration: none;
       }
-      a:hover, a:active, a:focus {
-        background-color: #FF9;
+
+      @media screen {
+        body { background: #93a1a1; }
+        @media (prefers-color-scheme: dark) {
+          body { background: #073642; }
+        }
+        main {
+          background: #fdf6e3;
+          color: #073642;
+          max-width: 44em;
+          margin: 0 auto;
+          padding: 1em;
+          padding: 1em clamp(1em, calc(25vw - 11em), 5em);
+          box-shadow: 0 0 1em #000;
+        }
+
+        h1, h2 {
+          color: #0fa74a;
+        }
+        h1 {
+          margin: 0;
+          page-break-before: avoid;
+        }
+        h2 {
+          border-bottom: 1px dashed #0fa74a;
+        }
+
+        a, a:link, a:visited {
+          color: #268bd2;
+        }
+        a:hover, a:active, a:focus {
+          text-decoration: underline;
+        }
       }
+
       @media print {
-        a, a:link, a:visited, a:hover, a:focus, a:active {
-          color: #000;
-          background-color: #FFF;
-          text-decoration: none;
+        body {
+          line-height: 1.25;
         }
       }
     </style>
@@ -139,11 +164,16 @@
     </main>
   </xsl:template>
 
-  <xsl:template match="present"><span class="present">present</span></xsl:template>
+  <xsl:template match="/cv/contact">
+    <section class="contact">
+      <ul>
+        <xsl:apply-templates select="li" />
+      </ul>
+    </section>
+  </xsl:template>
 
   <xsl:template match="/cv/group">
     <section>
-      <xsl:attribute name="class">group <xsl:value-of select="@style"/></xsl:attribute>
       <xsl:apply-templates select="head" />
       <xsl:apply-templates select="entry" />
     </section>
@@ -160,33 +190,35 @@
   <xsl:template match="entry">
     <section class="entry">
       <xsl:choose>
-        <xsl:when test="time">
-          <div class="two-cols-header">
-            <xsl:apply-templates select="head" />
-            <xsl:apply-templates select="time" />
-          </div>
-          <xsl:if test="@logo">
-            <img alt="" class="logo">
-              <xsl:attribute name="src">
-                <xsl:value-of select="@logo" />
-              </xsl:attribute>
-            </img>
-          </xsl:if>
+        <xsl:when test="contains(@logo, '.svg')">
+          <xsl:copy-of select="document(@logo)" />
         </xsl:when>
-        <xsl:otherwise>
-          <xsl:if test="@logo">
-            <img alt="" class="logo">
-              <xsl:attribute name="src">
-                <xsl:value-of select="@logo" />
-              </xsl:attribute>
-            </img>
-          </xsl:if>
-          <xsl:apply-templates select="head" />
-        </xsl:otherwise>
+        <xsl:when test="@logo">
+          <img alt="" class="logo">
+            <xsl:attribute name="src">
+              <xsl:value-of select="@logo" />
+            </xsl:attribute>
+          </img>
+        </xsl:when>
       </xsl:choose>
+
+      <xsl:apply-templates select="head" />
+      <xsl:if test="position | company">
+        <h3>
+          <xsl:if test="position">
+            <xsl:apply-templates select="position" /> at
+          </xsl:if>
+          <xsl:apply-templates select="company" />
+        </h3>
+      </xsl:if>
+      <xsl:apply-templates select="time" />
       <xsl:apply-templates select="p | ul" />
       <xsl:apply-templates select="tech" />
     </section>
+  </xsl:template>
+
+  <xsl:template match="position | company">
+    <b><xsl:apply-templates select="node()" /></b>
   </xsl:template>
 
   <xsl:template match="time">
@@ -199,4 +231,12 @@
     <p class="tech">Technologies: <strong><xsl:apply-templates select="node()" /></strong></p>
   </xsl:template>
 
+  <xsl:template match="li">
+    <li>
+      <xsl:if test="@icon">
+        <span class="icon"><xsl:value-of select="@icon" /></span>
+      </xsl:if>
+      <xsl:apply-templates select="node()" />
+    </li>
+  </xsl:template>
 </xsl:stylesheet>
