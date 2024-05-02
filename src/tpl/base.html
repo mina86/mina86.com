@@ -71,12 +71,6 @@
           {%- endfor -%}
         </ul>
       {%- endif %}
-      {%- if entry.tags -%}
-        <ul>
-          <li class=lb>{{ T('Tagged with:') }}
-          {%- for tag in entry.tags %}<li>{{ tag }}{% endfor -%}
-        </ul>
-      {%- endif -%}
     </aside>
   </article>
 {%- endmacro -%}
