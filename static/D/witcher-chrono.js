@@ -48,19 +48,22 @@
 	});
 	tr.style.cursor = 'pointer';
 
-	// Replace titles and links with Polish ones if user prefers Polish.
+	/* Replace titles and links based on user’s preferred language. */
 	let wantPolish = false;
-	for (const lang of (navigator.languages || [])) {
-		if (lang.startsWith('pl')) {
-			wantPolish = true;
+	let wantGwentleman = false;
+	for (let lang of (navigator.languages || [])) {
+		lang = lang.substring(0, 2);
+		if (lang == 'pl') {
+			wantPolish = wantGwentleman = true;
 			break;
-		} else if (lang.startsWith('en')) {
+		} else if (lang == 'en') {
 			break;
 		}
+		useGwentleman = useGwentleman || /fr|de|es|it|pt/.test(lang);
 	}
 	if (wantPolish) {
 		const re = /^pl\. ‘(.*)’/;
-		for (const span of table.getElementsByTagName('SPAN')) {
+		for (const span of table.parentNode.getElementsByTagName('SPAN')) {
 			const m = re.exec(span.title || '');
 			if (m) {
 				span.title = '‘' + span.innerText + '’';
@@ -69,10 +72,28 @@
 				span.lang = 'pl';
 			}
 		}
+	}
+	if (wantGwentleman) {
+		/* https://forums.cdprojektred.com/index.php?threads/tales-from-the-path-the-stories-of-gwents-journeys.11038958/
+		   → https://trendygwentleman.com/journey/stories
+		     Except for the Yennefer and Triss stories which are just
+		     slide shows and aren’t translated on the Trendy Gwentleman
+		     website.
+
+		 * https://www.playgwent.com/en/news/39646/aretuza-journey-story
+		   → https://trendygwentleman.com/journey/stories
+
+		 * https://forums.cdprojektred.com/index.php?threads/novigrad-confidential-the-journal-of-walter-veritas.11008597/
+		   → https://wiedzmin.fandom.com/wiki/Walter_Veritas?file=Walter_dziennik_1.jpg */
 		for (const lnk of table.getElementsByTagName('A')) {
-			const href = lnk.dataset.plHref;
-			if (href) {
-				lnk.href = href;
+			if (lnk.search.endsWith('.11038958/')) {
+				if (lnk.hash != '#post-12945487' && lnk.hash != '#post-13071184') {
+					lnk.href = 'https://trendygwentleman.com/journey/stories';
+				}
+			} else if (lnk.pathname.startsWith('/en/news/39646/')) {
+				lnk.href = 'https://trendygwentleman.com/journey/stories';
+			} else if (wantPolish && lnk.search.endsWith('.11008597/')) {
+				lnk.href = 'https://wiedzmin.fandom.com/wiki/Walter_Veritas?file=Walter_dziennik_1.jpg';
 			}
 		}
 	}
