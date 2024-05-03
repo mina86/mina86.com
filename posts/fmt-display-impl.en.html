@@ -1,0 +1,190 @@
+<!-- subject: You’re implementing <code>fmt::Display</code> wrong -->
+<!-- date: 2024-05-12 18:48:17 -->
+<!-- tags: rust -->
+<!-- categories: Articles, Techblog -->
+
+<p>TL;DR: When implementing <code>Display</code> trait for a wrapper type,
+  use <code>self.0.fmt(fmtr)</code> rather than invoking <code>write!</code>
+  macro.  See <a href="/self#the-proper-way">The proper way</a> section below.
+
+<!-- FULL -->
+
+<p>Imagine a <code>TimeOfDay</code> type which represents time as shown on
+a 24-hour clock.  It could look something like the following:
+
+<pre>
+pub struct TimeOfDay {
+    pub hour: u8,
+    pub minute: u8,
+}
+
+impl core::fmt::Display for TimeOfDay {
+    fn fmt(&amp;self, fmtr: &amp;mut core::fmt::Formatter) -> core::fmt::Result {
+        write!(fmtr, "{:02}:{:02}", self.hour, self.minute)
+    }
+}
+
+fn main() {
+    let hour = 2;
+    let minute = 5;
+    assert_eq!("02:05", TimeOfDay { hour, minute }.to_string());
+}
+</pre>
+
+<p>White it’s a serviceable solution, one might tremble at the lack of type
+  safety.  Nothing prevents the creation of nonsensical times such as ‘42:69’.
+  In real life hour rarely goes past 23 and minute sticks to values below 60.
+  Possible approach to prevent invalid time is to
+  use <a href="https://doc.rust-lang.org/rust-by-example/generics/new_types.html">a newtype
+  idiom</a> with structs imposing limits on the wrapped value, for example:
+
+<pre>
+use core::fmt;
+
+struct TimeOfDay {
+    hour: Hour,
+    minute: Minute,
+}
+
+struct Hour(u8);
+struct Minute(u8);
+
+impl Hour {
+    fn new(val: u8) -> Option&lt;Self> { (val &lt; 24).then_some(Self(val)) }
+}
+
+impl Minute {
+    fn new(val: u8) -> Option&lt;Self> { (val &lt; 60).then_some(Self(val)) }
+}
+
+impl fmt::Display for TimeOfDay {
+    fn fmt(&amp;self, fmtr: &amp;mut fmt::Formatter) -> fmt::Result {
+        write!(fmtr, "{:02}:{:02}", self.hour, self.minute)
+    }
+}
+
+fn main() {
+    let hour = Hour::new(2).unwrap();
+    let minute = Minute::new(5).unwrap();
+    assert_eq!("02:05", TimeOfDay { hour, minute }.to_string());
+}
+</pre>
+
+<p>Alas, since the new types don’t implement <code>Display</code> trait, the
+  code won’t compile.  Fortunately the trait isn’t complicated and one might
+  quickly whip out the following definitions:
+
+<pre>
+impl fmt::Display for Hour {
+    fn fmt(&amp;self, fmtr: &amp;mut fmt::Formatter) -> fmt::Result {
+        write!(fmtr, "{}", self.0)
+    }
+}
+
+impl fmt::Display for Minute {
+    fn fmt(&amp;self, fmtr: &amp;mut fmt::Formatter) -> fmt::Result {
+        write!(fmtr, "{}", self.0)
+    }
+}
+</pre>
+
+<p>Having <code>Display</code>, <code>Debug</code>, <code>Octal</code> etc.
+  implementations which call <code>write!</code> macro only is quite common.
+  But while common, it’s at times incorrect.  While the above example with such
+  definitions will build, the test in the <code>main</code> will fail
+  (<a href="https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=90a212d165e79ceefe6805bc8d48f918">playground</a>)
+  producing the following error:
+
+<pre>
+thread 'main' panicked at src/main.rs:40:5:
+assertion `left == right` failed
+  left: "02:05"
+ right: "2:5"
+</pre>
+
+<p>The issue is that invoking <code>write!</code> erases any formatting flags
+  passed through the `fmtr` argument.  Even though <code>TimeOfDay::fmt</code>
+  used <code>{:02}</code> format, the <code>Display</code> implementations
+  disregard the width and padding options by calling <code>write!</code>
+  with <code>{}</code> format.
+
+<p>Fortunately, the solution is trivial and in fact even simpler than
+  calling <code>write!</code>.
+
+
+<h2 id="the-proper-way">The proper way</h2>
+
+<p>In majority of cases, the proper way to implement traits such
+  as <code>Display</code> or <code>Debug</code> is to
+  use <a href="https://www.lurklurk.org/effective-rust/newtype.html#newtype-limitations">delegation</a>
+  as follows:
+
+<pre>
+impl fmt::Display for Hour {
+    fn fmt(&amp;self, fmtr: &amp;mut fmt::Formatter) -> fmt::Result {
+        self.0.fmt(fmtr)
+    }
+}
+
+impl fmt::Display for Minute {
+    fn fmt(&amp;self, fmtr: &amp;mut fmt::Formatter) -> fmt::Result {
+        self.0.fmt(fmtr)
+    }
+}
+</pre>
+
+<p>Since the same <code>Formatter</code> is used, any configuration that the
+  caller specified (such as width and fill) will be applied when formatting the
+  inner type
+  (<a href="https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=6e2dea8e92b5b116ad18e0e68536eb68">playground</a>).
+
+<p>In fact, there is a crate for
+  that.  <a href="https://crates.io/crates/derive_more"><code>derive_more</code></a>
+  offers derives for various traits including <code>Display</code>.  When used
+  with no additional options on a newtype struct, the crate will generate
+  a delegating implementation of the trait.  In other words, the above impls can
+  be replaced by the following derive annotations:
+
+<pre>
+#[derive(derive_more::Display)]
+struct Hour(u8);
+
+#[derive(derive_more::Display)]
+struct Minute(u8);
+</pre>
+
+
+<h2><code>Display</code> vs <code>Debug</code></h2>
+
+<p>Related trick is delegating between <code>Display</code>
+  and <code>Debug</code> traits (or any other formatting traits).  This is
+  especially useful when implementation for both types should be identical.
+  A naïve approach would be to use something like <code>write!(fmtr,
+  "{self:?}")</code>  in <code>Display</code> implementation but this suffers
+  from aforementioned issues.  Delegation is once again the better approach
+  (<a href="https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=9964ea87128599d08c4a960f114d655b">playground</a>):
+
+<pre>
+use core::fmt;
+
+#[derive(Debug)]
+enum DayOfWeek {
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday,
+    Sunday,
+}
+
+impl fmt::Display for DayOfWeek {
+    fn fmt(&amp;self, fmtr: &amp;mut fmt::Formatter) -> fmt::Result {
+        fmt::Debug::fmt(self, fmtr)
+    }
+}
+
+fn main() {
+    println!("dbg={:?} disp={}", DayOfWeek::Monday, DayOfWeek::Monday);
+}
+</pre>
