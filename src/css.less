@@ -393,10 +393,12 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 			    0 0 1px 4px @hover-colour;
 	}
 }
-article, @{main-id} > div, @{pagination-id} {
-	width: min(50rem, 100vw);
-	margin-left: auto;
-	margin-right: auto;
+@media screen {
+	article, @{main-id} > div, @{pagination-id} {
+		max-width: 50rem;
+		margin-left: auto;
+		margin-right: auto;
+	}
 }
 
 @{byline-cls} {
