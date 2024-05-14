@@ -92,13 +92,14 @@ print(func())
   <li>converts error type when question mark operator is used,
   <li>implicitly returns <code>()</code> from functions lacking tail or
     return expression and
-  <li>resolves `format!` named arguments not explicitly listed in invocation of
-    the macro.
+  <li>resolves <code>format!</code> named arguments not explicitly listed in
+    invocation of the macro.
 </ul>
 
-<p>To be even more contrarian, I could claim <code>sort</code>
-  method <em>implicitly</em> uses natural ordering.  Or that order of operations
-  in <code>230 - 220 / 2</code> expression isn’t explicitly specified.
+<p>I could even claim <code>sort</code> method <em>implicitly</em> uses natural
+  ordering.  While this example is purposefully
+  contrarian, <a href="https://new.reddit.com/r/rust/comments/1bdqocw/why_is_ord_implemented_on_option/">ordering</a>
+  for some types isn’t as obvious as one might think.
 
 <p>But the point here isn’t to demonstrate that Python or Rust aren’t
   ‘explicit’.  Rather, it is to show that even languages which seemingly
