@@ -1,10 +1,9 @@
 dataLayer = [];
 function gtag(){dataLayer.push(arguments)}
 
-(x => {
-	/* Apart from those two, x and z are also variables available for
-	   use. */
-	var a, el;
+(date => {
+	/* Apart from those three, z is also variables available for use. */
+	var a, x, el;
 
 	var doc = document;
 	var root = doc.documentElement;
@@ -20,11 +19,17 @@ function gtag(){dataLayer.push(arguments)}
 		}
 		return tag;
 	};
+	var createText = (text, parent) => {
+		text = doc.createTextNode(text);
+		if (parent) {
+			parent.appendChild(text);
+		}
+		return text;
+	};
 	var query = selector => doc.querySelector(selector);
 	var queryAll = selector => doc.querySelectorAll(selector);
 
 	var header = query('#h');
-
 	var isPL = root.lang == 'pl';
 
 	/* Converts kind of L*uv colour into #RRGGBB string.
@@ -232,9 +237,10 @@ function gtag(){dataLayer.push(arguments)}
 
 	/* Constructs a drop down panel from widget in the navigation at the
 	   bottom of the page.  ‘selector’ selects the UL of the widget.
-	   Returns a deep clone of that element.  (Note that this is called ‘z’
-	   because it’s used immediately and later the variable is being resude
-	   as global temporary variable). */
+	   Returns a deep clone of that element.
+
+	   Note: this is called ‘z’ because it’s used immediately and later the
+	   variable is reused as global temporary variable. */
 	var z = selector => query(selector).cloneNode(1);
 	/* ‘Contact’ drop down. */
 	var ddContact = z('#n ul');
@@ -424,8 +430,7 @@ function gtag(){dataLayer.push(arguments)}
 				z = z.substr(1);
 			}
 			if (x.index > a) {
-				fragment.appendChild(doc.createTextNode(
-					text.substring(a, x.index)));
+				createText(text.substring(a, x.index), fragment);
 			}
 			if (z) {
 				matched = a = x.index + z.length;
@@ -433,6 +438,97 @@ function gtag(){dataLayer.push(arguments)}
 			}
 		} while (z);
 		matched && parent.replaceChild(fragment, el);
+	};
+
+	/* Displays citation dialogue. */
+	var citationDialog = null;
+	var showCitation = link => {
+		if (citationDialog == null) {
+			citationDialog = create('DIALOG', doc.body);
+			citationDialog.onclick = ev => {
+				a = citationDialog.getBoundingClientRect();
+				if (ev.clientY < a.top ||
+				    a.top + a.height < ev.clientY ||
+				    ev.clientX < a.left ||
+				    a.left + a.width < ev.clientX) {
+					citationDialog.close();
+				}
+			};
+		}
+		citationDialog.innerHTML =
+			`<table><thead><tr><th colspan="2">${isPL ? 'Cytuj' : 'Cite'}</th></tr></thead><tfoot><tr><td colspan="2"><form method=dialog><button>${isPL ? 'Zamknij' : 'Close'}</button></form></td></tfoot><tbody></tbody></table>`;
+		createCitationTable(link, citationDialog.firstChild.lastChild);
+		citationDialog.showModal();
+		return false;
+	};
+	/* Generates rows with citations for the article.  `link` is the
+	   A element inside of the H1 element holding title of the article. Rows
+	   are appended to `tbody` which is assumed to be a TBODY element. */
+	var createCitationTable = (link, tbody) => {
+		var pubdate = link.dataset['date'];
+		var pub = processDate(new Date(pubdate));
+		var acc = processDate(date);
+		var url = link.href;
+		var title = create('SPAN');
+		var mina86_com = create('I');
+
+		var addRow = (th, ...rest) => {
+			el = create('TR', tbody);
+			createText(th, create('TH', el));
+			el = create('TD', el);
+			for (z of rest) {
+				el.appendChild(typeof z == 'string' ? doc.createTextNode(z) : z.cloneNode(true));
+			}
+		};
+
+		var field = (key, value) => {
+			key = (key + '           ').substring(0, 12);
+			return `,\n  ${key} = {${value}}`;
+		};
+		var bib = '@misc{Nazarewicz' + pub.fullYear +
+		    String.fromCharCode(97 + pub.doy / 26 | 0, 97 + pub.doy % 26) +
+		    field('title', link.dataset['title'] || link.innerText) +
+		    field('author', 'Michał Nazarewicz') +
+		    field('year', pub.fullYear) +
+		    field('month', pubdate.substring(5, 7)) +
+		    field('howpublished', `\\url{${url}}`) +
+		    field('note', `Accessed: ${acc}`) +
+		    field('url', url) +
+		    field('urldate', acc) + '\n}';
+
+		title.innerHTML = link.innerHTML.replace(/<\/?(code|kbd)>/g, '');
+		mina86_com.innerHTML = 'mina86.com';
+
+		addRow('BibTeX');
+		createText(bib, create('PRE', el));
+
+		addRow('ACM',
+		       `Michał Nazarewicz. ${pub.fullYear}. `,
+		       title,
+		       `. (${pub.monthName} ${pub.fullYear}). Retrieved ${acc.monthName} ${acc.dom}, ${acc.fullYear} from ${url}`);
+
+		addRow('IEEE',
+		       'M. Nazarewicz, “', title, ',” ', mina86_com,
+		       `, ${pub.ieeeDate}. [Online]. Available: ${url}. [Accessed: ${acc.ieeeDate}].`);
+
+		addRow('ISO 690',
+		       `NAZAREWICZ, Michał, ${pub.fullYear}, `, title, '. ', mina86_com,
+		       ` [online]. ${pub.isoDate}. [Accessed ${acc.isoDate}]. Available from: ${url}`);
+	};
+	var months = 'January February March April May June July August September October November December'.split(' ');
+	var shortMonths = 'Jan. Feb. Mar. Apr. May Jun. Jul. Aug. Sept. Oct. Nov. Dec.'.split(' ');
+	var processDate = date => {
+		x = date.getMonth(),
+		a = {
+			fullYear: date.getFullYear(),
+			monthName: months[x],
+			dom: date.getDate(),
+			'toString': _ => date.toISOString().substring(0, 10),
+		};
+		a.doy = x * 52 + a.dom;
+		a.ieeeDate = `${shortMonths[x]} ${a.dom}, ${a.fullYear}`;
+		a.isoDate = `${a.dom} ${a.monthName} ${a.fullYear}`;
+		return a;
 	};
 
 	/* Construct ‘Code’ drop down.  Only the link to GitHub is added; the
@@ -659,7 +755,7 @@ function gtag(){dataLayer.push(arguments)}
 		a('//c1.ty-cdn.net/-/talkyard-comments.min.js');
 	}
 	a('//www.googletagmanager.com/gtag/js?id=G-2KN8BH0V6Z');
-	gtag('js', (x = new Date));
+	gtag('js', date);
 	gtag('config', 'G-2KN8BH0V6Z');
 
 
@@ -681,14 +777,27 @@ function gtag(){dataLayer.push(arguments)}
 	}
 
 
-	/* April 1st */
-	if (x.getDate() == 1 && x.getMonth() == 3) {
-		doc.querySelectorAll('.y').forEach(byline => {
-			byline.innerHTML = byline.innerHTML.replace(/(Michał) .mina86. (Nazarewicz)/, (isPL ? 'Hrabia' : 'Count') + ' $1 P. $2');
-		});
-	}
+	/* Handle byline.  Add (cite) button showing citation and on 1st of
+	   April change the author. */
+	doc.querySelectorAll('.y').forEach(byline => {
+		/* Cite button. */
+		el = create('SPAN', byline, 'np');
+		createText(' | ', el);
+		el = create('A', el);
+		el.innerText = isPL ? '(cytuj)' : '(cite)';
+		el.href = '#';
+		el.onclick = _ => showCitation(byline.previousElementSibling.firstChild);
+
+		/* 1st of April */
+		if (date.getDate() == 1 && date.getMonth() == 3) {
+			byline.innerHTML = byline
+				.innerHTML
+				.replace(/(Michał) .mina86. (Nazarewicz)/,
+					 (isPL ? 'Hrabia' : 'Count') + ' $1 P. $2');
+		}
+	});
 
 
 	/* Decorate the main content by adding ABBR elements for acronyms. */
 	processAbbr(query('#b'));
-})();
+})(new Date);

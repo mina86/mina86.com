@@ -28,7 +28,7 @@
                >« {% if next.subject -%}<i>{{ next.subject | safe }}</i>
                   {%- else %}{{ T('newer posts') | safe }}
                   {%- endif %}</a>
-       {%- endif -%}
+      {%- endif -%}
       {%- if prev -%}
         <li class="r"><a href="{{ prev.href }}" rel="prev"
                  {{ attr('title', prev.title, not prev.subject) }}
@@ -44,6 +44,8 @@
 {%- set full = post_page or not entry.body.has_excerpt -%}
   <article self="{% if not post_page %}{{ entry.href }}{% endif %}">
     <h1><a lang="{{ entry.lang }}" href="{{ entry.href }}"
+           data-date="{{ entry.date.__str__()[:10] }}"
+           {{ attr('data-title', entry.bib_title) }}
            title="{{ T('Permanent link to the entry.') }}">{{
         entry.subject | safe }}</a></h1>
 

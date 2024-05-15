@@ -1,4 +1,4 @@
-<!-- subject: Stałość fizyczna i logiczna w C++ -->
+<!-- subject: Stałość fizyczna i logiczna w {C++} -->
 <!-- date: 2008-03-21 13:48:41 -->
 <!-- tags: const, mutable, c++, c -->
 <!-- categories: Articles, Techblog, WEiTI -->
@@ -469,7 +469,7 @@ http://kerneltrap.org/Linux/C_Semantics_Constants_and_Pointers
 <!-- nick: GiM -->
 <!-- nick_url: http://gim.jogger.pl -->
 
-<p>„W obu przypadkach, wołając funkcję, mamy pewność, iż wektor przekazany jako argument nie zostanie zmodyfikowany” 
+<p>„W obu przypadkach, wołając funkcję, mamy pewność, iż wektor przekazany jako argument nie zostanie zmodyfikowany”
 
 <p>No właśnie problem w tym, że nie mamy, to jest tylko wskazówka, nigdy nie wiadomo czy genialnemu autorowi danej metody/funkcji, nie przyszło do głowy zrobić sobie od tak const_cast, albo dajmy na funkcja/metoda, przyjmuje jako jeden z parametrów obiekt/strukturę, a element przekazywanej klasy/struktury ma atrybutu mutable.
 
@@ -487,11 +487,11 @@ staje się moim zdaniem automatycznie jaśniejszy.
 <!-- nick: mina86 -->
 <!-- nick_url: http://mina86.com -->
 
-<p>„No właśnie problem w tym, że nie mamy, to jest tylko wskazówka, nigdy nie wiadomo czy genialnemu autorowi danej metody/funkcji, nie przyszło do głowy zrobić sobie od tak const_cast” 
+<p>„No właśnie problem w tym, że nie mamy, to jest tylko wskazówka, nigdy nie wiadomo czy genialnemu autorowi danej metody/funkcji, nie przyszło do głowy zrobić sobie od tak const_cast”
 
 <p>Oczywiście masz rację, ale milcząco założyłem, iż autor funkcji/metody poprawnie ją zaprojektował.
 
-<p>„albo dajmy na funkcja/metoda, przyjmuje jako jeden z parametrów obiekt/strukturę, a element przekazywanej klasy/struktury ma atrybutu mutable.” 
+<p>„albo dajmy na funkcja/metoda, przyjmuje jako jeden z parametrów obiekt/strukturę, a element przekazywanej klasy/struktury ma atrybutu mutable.”
 
 <p>Ponownie może źle się wyraziłem — faktycznie fizycznie obiekt może się zmienić, choć z naszego punktu widzenia nie ma to znaczenia, bo logicznie jest to ciągle ten sam obiekt przechowujący taką samą wartość (ponownie pomijam sytuacje, gdy klasa jest źle zaprojektowana).
 

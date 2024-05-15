@@ -233,10 +233,16 @@ class Post(_Addresable):
     # This is an *ugly*, *ugly* global variable.
     PREFERRED_LANGUAGE = None
 
-    class _Data(collections.namedtuple('PostData',
-                                       'subject body date updated lang')):
+    class _Data(collections.namedtuple(
+            'PostData', 'subject bib_title body date updated lang')):
 
         def __new__(cls, d):
+            sub = d['subject'].strip()
+            subject = re.sub('[{}]', '', sub)
+            bib_title = cls.__make_bib_title(sub)
+            if bib_title == subject:
+                bib_title = None
+
             date = d.get('date')
             if date:
                 date = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
@@ -245,11 +251,37 @@ class Post(_Addresable):
                 updated = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
             return super(Post._Data, cls).__new__(
                 cls,
-                subject=d['subject'].strip(),
+                subject=subject,
+                bib_title=bib_title,
                 body=d['__body__'],
                 date=date,
                 updated=updated,
                 lang=d['__lang__'])
+
+        @classmethod
+        def __make_bib_title(cls, subject):
+            def repl_chr(m):
+                ch = m.group(0)
+                if ch == '↔':
+                    return '$\\leftrightarrow$'
+                elif ch == '∞':
+                    return '$\\infty$'
+                else:
+                    return '\\' + ch
+
+            def repl_tag(m):
+                tag, val = m.groups()
+                if tag == 'sup':
+                    return '$^{' + val + '}$'
+                elif tag == 'sub':
+                    return '$_{' + val + '}$'
+                else:
+                    return '{' + val + '}'
+
+            subject = re.sub('[#$%&_∞↔]', repl_chr, subject)
+            subject = re.sub(
+                r'<(code|kbd|sup|sub)>(.*?)</\1>', repl_tag, subject)
+            return subject
 
     def __init__(self, permalink, categories, tags, versions):
         self.permalink = permalink

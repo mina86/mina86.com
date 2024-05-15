@@ -1,12 +1,13 @@
-<!-- subject: SSL and dropping ‘www.’ with mod_rewrite -->
+<!-- subject: {SSL} and dropping <code>www.</code> prefix using <code>mod_rewrite</code> -->
 <!-- date: 2013-02-10 21:51:43 -->
 <!-- tags: apache, ssl, mod_rewrite, www -->
 <!-- categories: Articles, Techblog -->
 
-<p>Surprisingly I couldn’t find any HTTPS-aware examples how to drop the <code>www.</code> prefix from web hosts in Apache,
-so I had to come up with one myself.  Firstly, the following lines
-need to find their way to the end of Apache configuration file
-(<code>/etc/httpd/conf/httpd.conf</code> or something):
+<p>Surprisingly I couldn’t find any HTTPS-aware examples how to drop
+the <code>www.</code> prefix from web hosts in Apache, so I had to come up with
+one myself.  Firstly, the following lines need to find their way to the end of
+Apache configuration file (<code>/etc/httpd/conf/httpd.conf</code> or
+something):
 
 <pre>
 RewriteEngine on

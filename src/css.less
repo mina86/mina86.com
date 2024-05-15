@@ -146,18 +146,6 @@
 	padding: 0;
 }
 
-@{shade-id} {
-	transition: opacity 0.5s;
-}
-@{shade-id} {
-	position: fixed;
-	inset: 0;
-	background: #0008;
-	opacity: 0;
-	z-index: 5;
-	backdrop-filter: grayscale(100%) blur(2px);
-}
-
 
 body {
 	background: @bg-colour;
@@ -215,6 +203,7 @@ text {
 		font-family: var(--S);
 		background: @head-bg-colour;
 		color: @head-colour;
+		backdrop-filter: blur(3px);
 
 		box-shadow: 0 0 0.5rem 0 #000;
 
@@ -383,7 +372,7 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 			text-shadow: 2px 2px 3px @fg-low-colour;
 		}
 	}
-	h1 code {
+	h1 code, h1 kbd {
 		color: inherit;
 	}
 
@@ -406,7 +395,12 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 	font-style: italic;
 	color: @fg-low-colour;
 	break-before: avoid;
+
+	a:visited, a:hover, a:focus {
+		color: @link-colour;
+	}
 }
+
 
 article, aside {
 	clear: both;
@@ -576,8 +570,10 @@ th, td {
 th small {
 	font-weight: 400;
 }
-thead, tfoot, thead + tbody, tbody + tbody {
-	border-top: 1px solid @border-colour;
+article {
+	thead, tfoot, thead + tbody, tbody + tbody {
+		border-top: 1px solid @border-colour;
+	}
 }
 
 /* Lists */
@@ -838,7 +834,7 @@ figcaption {
 		border-radius: (0.8em / 2);
 		border: 2px solid @nav-link-colour;
 		background: @nav-link-colour;
-		transition: left 0.3s;
+		transition: left 0.15s;
 	}
 	&:hover:after {
 		background: @nav-hover-colour;
@@ -881,7 +877,96 @@ div:focus {
 }
 
 
+/* Citation dialogue and settings shade */
+dialog {
+	margin: 5vh auto;
+	max-width: 40rem;
 
+	background: @nav-bg-colour;
+	color: @head-colour;
+	border: none;
+	box-shadow: 0 0 0.5rem 0.2rem #000;
+
+	table {
+		margin: 0rem;
+	}
+	td, th {
+		/* Setting size on td and th individually rather than on dialog
+		   so it’s simple to override with ‘thead th’ and ‘tbody td’
+		   selectors. */
+		font-size: @small;
+	}
+	thead th {
+		font-size: 1em;
+		padding: 0.25em;
+		background: @head-bg-colour;
+	}
+	thead {
+		background: @head-bg-colour;
+	}
+	tbody td {
+		font-size: @tiny;
+	}
+	tbody tr > * {
+		padding: .5rem .875rem;
+	}
+	pre {
+		margin: 0;
+		padding: 0;
+		border: none;
+		color: inherit;
+		white-space: pre-wrap;
+	}
+	form {
+		text-align: center;
+		margin: 1rem auto;
+	}
+	@media (max-width: 30em) {
+		table, tr, td, th {
+			display: block;
+		}
+		tbody tr > * {
+			padding: .25rem .5rem;
+		}
+	}
+}
+
+button {
+	padding: 0.25em 0.5em;
+	cursor: pointer;
+	outline: 0;
+	color: #000;
+	background: @head-colour;
+	border-radius: 5px;
+	display: inline-block;
+	box-shadow: 0px -1px 0px 0px #0004 inset;
+	border: 1px solid #000;
+	line-height: 1.5;
+}
+button:hover {
+	box-shadow: 0px -1px 0px 0px #000 inset;
+}
+button:focus {
+	outline: none;
+	box-shadow: 0px -1px 0px 0px #000 inset,
+		    0 0 0 2px @nav-bg-colour,
+		    0 0 1px 4px @nav-link-colour;
+}
+
+@{shade-id}, dialog::backdrop {
+	background: #0008;
+	backdrop-filter: blur(2px);
+	transition: opacity 0.5s;
+}
+@{shade-id} {
+	position: fixed;
+	inset: 0;
+	opacity: 0;
+	z-index: 5;
+}
+
+
+/* Floats */
 @{float-right-cls}, @{float-left-cls} {
 	clear: both;
 	width: var(--w,20em);
@@ -913,8 +998,7 @@ abbr, @{unicode-name} {
 }
 
 
-
-
+/* Print-specific */
 @media print {
 	@{no-print-cls} {
 		display: none;
