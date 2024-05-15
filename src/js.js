@@ -259,7 +259,7 @@ function gtag(){dataLayer.push(arguments)}
 	   that element’s transition property is set to ‘opacity .5s’ so that
 	   the elements fades out and once that’s done the function will remove
 	   it from display completely. */
-	var hideElement = el => {
+	var fadeOut = el => {
 		el.style.opacity = 0;
 		if (el['t']) {
 			clearTimeout(el['t']);
@@ -287,8 +287,8 @@ function gtag(){dataLayer.push(arguments)}
 	var hideDropDown = _ => {
 		if (visibleDropDown) {
 			visibleDropDown['l'].className = '';
-			hideElement(visibleDropDown);
-			hideElement(shade);
+			visibleDropDown.style.display = 'none';
+			fadeOut(shade);
 			visibleDropDown = 0;
 		}
 	};
@@ -328,8 +328,8 @@ function gtag(){dataLayer.push(arguments)}
 	/* Shows specified drop down.  Apart from ‘target’ argument, excepts
 	   ‘el’ variable to be the link corresponding to the drop down.  Returns
 	   true iff a new drop down has been shown (i.e. returns false if target
-	   yields false – in which case the drop down is hidden – or if it’s
-	   already visible drop down).  */
+	   evaluates to false value – in which case the drop down is hidden – or
+	   if it’s an already visible drop down).  */
 	var showDropDown = target => {
 		if (visibleDropDown == target) {
 			return false;
@@ -339,19 +339,21 @@ function gtag(){dataLayer.push(arguments)}
 		}
 		if (visibleDropDown) {
 			visibleDropDown['l'].className = '';
-			hideElement(visibleDropDown);
+			visibleDropDown.style.display = 'none';
 		}
 		visibleDropDown = target;
 		el.className = 's';
 		if (!target['l']) {
 			(target['l'] = el).parentNode.appendChild(target);
 		}
-		[shade, target].map(el => (
-			(el['t'] = el['t'] && clearTimeout(el['t'])),
-			(el.style.display = '')
-		));
-		setTimeout(_ => (shade.style.opacity=target.style.opacity=1),
-			   0);
+		target.style.display = '';
+		if (target == ddSettings) {
+			fadeOut(shade);
+		} else {
+			shade['t'] = shade['t'] && clearTimeout(shade['t']);
+			shade.style.display = '';
+			setTimeout(_ => (shade.style.opacity = 1), 0);
+		}
 		positionDropDown();
 		return true;
 	};

@@ -146,7 +146,7 @@
 	padding: 0;
 }
 
-@{drop-down-ul-cls}, @{shade-id} {
+@{shade-id} {
 	transition: opacity 0.5s;
 }
 @{shade-id} {
@@ -155,6 +155,7 @@
 	background: #0008;
 	opacity: 0;
 	z-index: 5;
+	backdrop-filter: grayscale(100%) blur(2px);
 }
 
 
@@ -353,7 +354,6 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 }
 
 @{head-id} @{drop-down-ul-cls} {
-	opacity: 0;
 	width: max-content;
 	position: fixed;
 	top: max(3.5em, 2rem);
