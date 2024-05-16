@@ -3,42 +3,36 @@
 <!-- tags: arp, dhcp, mac, ip, arpping, arping -->
 <!-- categories: Articles, Techblog -->
 
-<p>Czas jakiś temu zainstała u mnie potrzeba sprawdzenia, na
-  komputerze bez przydzielonego adresu sieciowego, czy komputer
-  o danym adresie istnieje.  Chciałem mianowicie, zależnie od wyników
-  sprawdzenia skonfigurować sieć statycznie lub dynamicznie.
-  Stosunkowo szybko doszedłem do wniosku, iż szczególną uwagę należy
-  zwrócić na
-  protokół <a href=https://tools.ietf.org/html/rfc826>ARP</a>.
+<p>Czas jakiś temu potrzebowałem sprawdzić, na komputerze bez przydzielonego
+  adresu sieciowego, czy komputer o podanym adresie istnieje.  Chciałem
+  mianowicie, zależnie od wyniku tego testu skonfigurować sieć statycznie lub
+  dynamicznie.  Szybko szczególną uwagę zwróciłem na protokół
+  <a href=https://tools.ietf.org/html/rfc826>ARP</a>.
 
-<p>W protokole Ethernet urządzenia są rozpoznawane za pomocą
-  adresów MAC,
-  a więc, aby móc wysłać pakiet do komputera
-  o danym <span lang=en>IP</span> należy najpierw poznać jego adres
-  sprzętowy.  Do tego właśnie służy protokół ARP (gwoli ścisłości,
-  może on być wykorzystany również przy innych protokołach warstwy
-  drugiej i trzeciej).
+<p>W protokole Ethernet urządzenia są rozpoznawane za pomocą adresów MAC,
+  a więc, aby móc wysłać pakiet do komputera o danym <span lang=en>IP</span>
+  należy najpierw poznać jego adres sprzętowy.  Do tego właśnie służy protokół
+  ARP (gwoli ścisłości, może on być wykorzystany również przy innych protokołach
+  warstwy drugiej i trzeciej).
 
 <p>Jak to działa? Pierwsza strona rozsyła do wszystkich (na adres broadcast,
   tj.q <code>FF:FF:FF:FF:FF:FF</code>) zapytanie, wypełniając swój adres IP
   i MAC oraz adres IP, o który chce się zapytać.  W odpowiedzi, druga strona
   wysyła ramkę z oboma adresami, swoimi i komputera wysyłającego pytanie.
 
-<p>Nie każdy zdaje sobie sprawę, iż protokół ten można wykorzystywać
-  nawet jeżeli nie ma się swojego adresu sieciowego — wówczas
-  w odpowiednie pole wpisujemy same zera.  W niczym to nie
-  przeszkadza — w żadnym momencie protokół warstwy trzeciej nie
-  jest wszak wykorzystywany.
+<p>Nie każdy zdaje sobie sprawę, iż protokół ten można wykorzystywać nawet
+  jeżeli nie ma się swojego adresu sieciowego — wówczas w odpowiednie pole
+  wpisujemy same zera.  W niczym to nie przeszkadza — w żadnym momencie protokół
+  warstwy trzeciej nie jest wszak wykorzystywany.
 
-<p>Warto wspomnieć, iż mechanizm ten jest wykorzystywany przez
-  klienty DHCP, do sprawdzania (na wszelki wypadek), czy
-  adres im nadany jest faktycznie wolny — nazywa się to <a lang=en
-  href=https://tools.ietf.org/html/rfc5227>Adress
-  Conflict Detection</a>.
+<p>Warto wspomnieć, iż mechanizm ten jest wykorzystywany przez klienty DHCP, do
+  sprawdzania (na wszelki wypadek), czy adres im nadany jest faktycznie
+  wolny — nazywa się to <a lang=en
+  href=https://tools.ietf.org/html/rfc5227>Adress Conflict Detection</a>.
 
-<p>Dla zainteresowanych <a href=https://github.com/mina86/tinyapps/blob/master/arpping.c>aplikacja</a>,
-  która próbuje wykryć adres sprzętowy urządzenia o podanym adresie
-  sieciowym.
+<p>Dla zainteresowanych
+  <a href=https://github.com/mina86/tinyapps/blob/master/arpping.c>aplikacja</a>,
+  która próbuje wykryć adres sprzętowy urządzenia o podanym adresie sieciowym.
 
 <!-- COMMENT -->
 <!-- date: 2008-06-07 07:53:29 -->

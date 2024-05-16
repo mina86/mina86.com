@@ -291,7 +291,7 @@ fn grey_from_rgb_avg_32bit(r: u8, g: u8, b: u8) -&gt; u8 {
 
 <p>When evaluating the methods two metrics were taken into account.  First one
   was time to convert all 16 million colours into greyscale.  This metric is
-  quite noisy and shouldn’t be take literally.  Still it gives a sense of scale
+  quite noisy and shouldn’t be taken literally.  Still it gives a sense of scale
   to compare classes of algorithms.  The measurement has been performed on
   a relatively modern and capable CPU, an i7-7600U processor at 2.8 GHz.  The
   result will vary widely on different architectures so as usual it’s important
@@ -535,10 +535,9 @@ fn grey_from_rgb_avg_32bit(r: u8, g: u8, b: u8) -&gt; u8 {
 
 <p>As seen from the analysis the naïve method of calculating arithmetic mean of
   red, green and blue components to get a shade of grey doesn’t have much going
-  for it.  Even if a quick, dirty and easy to remember method is needed, it’s
-  much better to use (r + 2g + b) / 4 formula but even that is best avoided.  Of
-  course the choice of method depends on application and trade-offs one is
-  willing to make.
+  for it.  If an easy-to-remember method is needed, it’s much better to use (r +
+  2g + b) / 4 formula but even that is best avoided.  Of course the choice of
+  method depends on application and trade-offs one is willing to make.
 
 <p>If accuracy of the conversion is paramount and cannot be sacrificed there’s
   only one possible algorithm.  <a href="#exact">The exact method</a> which
@@ -552,17 +551,17 @@ fn grey_from_rgb_avg_32bit(r: u8, g: u8, b: u8) -&gt; u8 {
 
 <p>If accuracy isn’t that important, gamma correction step can be skipped
   resulting in a weighted average.  The best choice here appears to be either
-  one of <a href="#bit">32-bit or 16-bit weights</a>.  Small, 16-bit platforms
-  might benefit from the former but other than that there’s no reason to
-  shy away from the 32-bit variant.
+  one of <a href="#bit">32-bit or 16-bit weights</a>.  16-bit platforms might
+  benefit from the former but other than that there’s no reason to shy away from
+  the 32-bit variant.
 
 <p>No other methods are worth bothering with.  <a href="#float">Float
   weights</a> give virtually the same results as 32-bit weights but are
   considerably slower.  Similarly, <a href="#gamma22">the γ = 2.2
-  approximation</a> is slower than doing gamma correction correctly so it’s
-  better to do the precise calculation.  And lastly, plain average and average
-  which takes green twice makes sense only on the most constraint platforms
-  (think 8-bit processor with kilobytes of memory).
+  approximation</a> is slower than doing gamma correction the proper way.  And
+  lastly, plain average and average which takes green twice makes sense only on
+  the most constraint platforms (think 8-bit processor with kilobytes of
+  memory).
 
 
 

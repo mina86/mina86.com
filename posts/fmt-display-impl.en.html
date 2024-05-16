@@ -103,10 +103,10 @@ assertion `left == right` failed
 </pre>
 
 <p>The issue is that invoking <code>write!</code> erases any formatting flags
-  passed through the `fmtr` argument.  Even though <code>TimeOfDay::fmt</code>
-  used <code>{:02}</code> format, the <code>Display</code> implementations
-  disregard the width and padding options by calling <code>write!</code>
-  with <code>{}</code> format.
+  passed through the <code>fmtr</code> argument.  Even
+  though <code>TimeOfDay::fmt</code> used <code>{:02}</code> format,
+  the <code>Display</code> implementations disregard the width and padding
+  options by calling <code>write!</code>  with <code>{}</code> format.
 
 <p>Fortunately, the solution is trivial and in fact even simpler than
   calling <code>write!</code>.
