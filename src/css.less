@@ -272,7 +272,7 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 	a:hover {
 		color: @nav-colour;
 	}
-	a:focus {
+	a:focus-visible {
 		outline: none;
 		box-shadow: 0 0 0 2px @head-bg-colour,
 			    0 0 1px 4px @nav-colour;
@@ -376,7 +376,7 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 		color: inherit;
 	}
 
-	a:focus {
+	a:focus-visible {
 		outline: none;
 		box-shadow: 0 0 0 2px @bg-colour,
 			    0 0 1px 4px @hover-colour;
@@ -698,7 +698,7 @@ figcaption {
 		a:hover {
 			text-decoration: underline;
 		}
-		a:focus {
+		a:focus-visible {
 			outline: none;
 			box-shadow: 0 0 0 2px @nav-bg-colour,
 				    0 0 1px 4px @nav-hover-colour;
@@ -842,7 +842,7 @@ figcaption {
 		background: @nav-header-colour;
 	}
 }
-div:focus {
+div:focus-visible {
 	outline: none;
 	box-shadow: 0 0 0 2px @nav-bg-colour,
 		    0 0 1px 4px @nav-link-colour;
@@ -945,7 +945,7 @@ button {
 button:hover {
 	box-shadow: 0px -1px 0px 0px #000 inset;
 }
-button:focus {
+button:focus-visible {
 	outline: none;
 	box-shadow: 0px -1px 0px 0px #000 inset,
 		    0 0 0 2px @nav-bg-colour,
