@@ -138,9 +138,6 @@ function gtag(){dataLayer.push(arguments)}
 		var clNavFg       = 'n:';
 		var clNavHover    = 'p:';
 		var clNavHdr      = 'q:';
-		var clFootBg      = 'r:';
-		var clFootFg      = 's:';
-		var clFootAcc     = 't:';
 		var clSlide       = 'z:';
 
 		el = v => (isDark ? 3 - v : v);
@@ -202,10 +199,6 @@ function gtag(){dataLayer.push(arguments)}
 			/* clNavLink == clHdr */
 			clNavHover + z(   2 , 4),
 			clNavHdr   + z(   2 , 4, 4),
-
-			clFootBg   + z(   1 , 0),
-			clFootFg   + z(   3 , 1),
-			clFootAcc  + z(   3 , 4),
 
 			clSlide    + z(   2 , 9),
 
