@@ -458,7 +458,10 @@ class Sitemap(object):
         if priority is not None and priority != '0.5':
             url.append(('priority', priority))
 
-    def format(self):
+    def build_txt(self):
+        return '\n'.join(sorted(self._urls)) + '\n'
+
+    def build_xml(self):
         output = io.StringIO()
         output.write('<?xml version="1.0" encoding="UTF-8"?><urlset '
                      'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
@@ -763,8 +766,8 @@ def generate(writer, site):
             sitemap_add(entry.url, priority='1.0')
 
     # Finalise with writing out sitemap
-    sitemap = sitemap.format()
-    writer.write_file('sitemap.xml', sitemap)
+    writer.write_file('sitemap.txt', sitemap.build_txt())
+    writer.write_file('sitemap.xml', sitemap.build_xml())
 
 
 def build(writer, static_mappings):

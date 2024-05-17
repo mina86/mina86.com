@@ -2,11 +2,11 @@
 RewriteEngine On
 RewriteBase /
 
-# Old paths for post URLs and category indexes.  Also catch
-# /2010/01/16/ntp-over-http%C2%A0Tambi%C3%A9n et al coming come from some
-# Chinese site.
+# Old paths for post URLs and category indexes.  This also catches
+# broken code which uses Atom entry’s id as URL (to keep old ids we
+# continue using /yyyy/mm/dd/name as entry id).
 RewriteCond %{DOCUMENT_ROOT}/$1/$2 -d
-RewriteRule ^(20[01][0-9])/[0-1][0-9]/[0-3][0-9]/([!-$&-.0-~]+)(?:/trackback)? \
+RewriteRule ^(20[0-9][0-9])/[01][0-9]/[0-3][0-9]/([!-$&-.0-~]+)(?:/trackback)? \
             /$1/$2/             [END,R=permanent]
 
 # Atom and RSS feeds.  Current code doesn’t have as much configuration as the
@@ -21,17 +21,17 @@ RewriteRule ^atom(?:\.en|\.pl)?(?:\.xml)?(?:\.gz)?/ \
             /atom               [END,R=permanent]
 
 # Icons
-RewriteCond %{DOCUMENT_ROOT}/d/$1 -f
-RewriteRule ^(?:apple-)?touch-icon-[0-9]+x([0-9]+(?:-precomposed)?\.png)$ \
-            /d/$1               [END,R=permanent]
+RewriteCond %{DOCUMENT_ROOT}/d/$1.png -f
+RewriteRule ^(?:apple-)?touch-icon-[0-9]+x([0-9]+)(?:-precomposed)?\.png$ \
+            /d/$1.png           [END,R=permanent]
 RewriteRule ^(?:apple-)?touch-icon.png(?:-precomposed)?$ \
             /d/192.png          [END,R=temp]
 
 # no-you-dont-need-to-escape-that Easter egg
 RewriteCond %{QUERY_STRING}       book=Ecc&sect=1&para=2
-RewriteRule ^$                    http://tiny.cc/wy9rtz  [END,R=temp]
+RewriteRule ^$                    https://r33b.net/  [END,R=temp]
 RewriteCond %{QUERY_STRING}       book=Ecc%[Cc]2%[Aa]7=1%[Cc]2%[Bb]6=2
-RewriteRule ^$                    http://tiny.cc/vy9rtz  [END,R=temp]
+RewriteRule ^$                    https://r33b.net/  [END,R=temp]
 
 # If browser supports gzip and we have compressed file, send it.
 Options +MultiViews
