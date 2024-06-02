@@ -1,0 +1,147 @@
+<!-- subject: <code>cd</code>’s long lost sibling finally here!  -->
+<!-- date: 2024-06-02 15:52:31 -->
+<!-- tags: shell, cd -->
+<!-- categories: Articles, Downloads, Techblog -->
+
+<p><code>cd</code> is a straightforward command.  As per the name, it changes
+  the directory and does its job perfectly well.  But what if it could do more?
+  One scenario is wanting to execute a command inside a specific location
+  without affecting the current working directory (CWD).  This article
+  introduces a <code>cd</code> replacement which offers that feature as well as
+  provides more ways to specify the target directory.
+
+<p>It is important to note that it’s not intended for scripting.  Rather, it’s
+  only meant for interactive use where it streamlines some operations.
+
+<!-- FULL -->
+
+<h2>New Features</h2>
+
+<p id=b1>For impatient readers, the code
+  is <a href="https://github.com/mina86/dot-files/blob/master/bin/pcd.sh">available
+  on GitHub</a><a href="#f1">†</a>.  Otherwise, let’s first go through the new
+  features of this enhanced <code>cd</code>.
+
+<ul>
+  <li>
+    <p>It takes a command as an optional argument.  The command is launched
+      inside of the target directory without changing CWD, for example:
+<pre>
+<u>~/code/rust-rocksdb/librocksdb-sys$</u> <b>cd .. cargo build</b>
+# <i>... builds rust-rocksdb rather than librocksdb-sys</i>
+<u>~/code/rust-rocksdb/librocksdb-sys$</u>
+</pre>
+
+  <li>
+    <p>The target directory can be specified as a file.  The code will change to
+      directory containing that file.  This is convenient when copying and
+      pasting paths.  A file location can be passed without having to strip the
+      last path component, for example (border around text symbolises copying
+      and pasting):
+<pre>
+<u>~/code/linux$</u> <b>git whatchanged -n1 |grep ^:</b>
+:100644 100644 8ddb2219a84b 6b384065c013 M	<span style="outline: 1px solid">include/uapi/linux/kd.h</span>
+<u>~/code/linux$</u> <b>cd <span style="outline: 1px solid">include/uapi/linux/kd.h</span></b>
+<u>~/code/linux/include/uapi/linux$</u>
+</pre>
+
+  <li>
+    <p>The target directory can be specified using a path starting
+      with <code>.../</code>.  The code navigates up the directory tree until
+      a matching path is found, for example:
+<pre>
+<u>~/code/linux/drivers/usb/gadget/udc$</u> <b>cd .../Documentation</b>
+<u>~/code/linux/Documentation$</u>
+</pre>
+
+  <li>
+    <p>The enhancement integrates with Bash’s <code>autocd</code> option.  With
+      it enabled, invoking a directory followed by a command executes that
+      command inside of said directory, for example:
+<pre>
+<u>/tmp/bash-5.2$</u> <b>./examples pwd</b>
+cd -- ./examples/ pwd
+/tmp/bash-5.2/examples
+<u>/tmp/bash-5.2$</u>
+</pre>
+
+  <li>
+    <p><code>cd -P</code> resolves all symlinks in <code>PWD</code>.  I’ve found
+      this is more useful than POSIX-mandated behaviour.  For consistency,
+      of <code>cd -L</code> also doesn’t switch to home directory.
+</ul>
+
+
+<h2>Installation</h2>
+
+<p>The new <code>cd</code> comes as a shell script which needs to be sourced
+  in <code>~/.shellrc</code>, <code>~/.bashrc</code> or equivalent file.
+
+<p>I further recommend adding an alias for <code>-</code> command.  This may
+  look strange, but creating a hyphen alias is perfectly fine even though it
+  requires some care.  <code>autocd</code> in Bash is also worth a try.
+
+<p>The enhanced <code>cd</code> together with those optional configuration
+  options can be installed by executing the following commands:
+
+<pre>
+mkdir -p ~/.local/opt
+cd ~/.local/opt
+
+# <i>Replace with ‘master’ to get the latest version though</i>
+# <i>be warned that there are no guarantees of compatibility</i>
+# <i>between the versions.</i>
+commit=8ca6070ce2e58581b1aeec748513bbd33904b41d
+wget "<a href="https://raw.githubusercontent.com/mina86/dot-files/8ca6070ce2e58581b1aeec748513bbd33904b41d/bin/pcd.sh">https://raw.githubusercontent.com/mina86/dot-files/${commit?}/bin/pcd.sh</a>"
+. pcd.sh
+
+install='
+if [ -e ~/.local/opt/pcd.sh ]; then
+    . ~/.local/opt/pcd.sh
+fi
+
+# <i>Bash interprets ‘-=…’ as a flag so ‘--’ is needed but</i>
+# <i>BusyBox complains about it so silence the warning.</i>
+alias -- -="cd -" 2>/dev/null
+'
+
+# <i>Add to Bash</i>
+echo "${install?}"      &gt;&gt;~/.bashrc
+echo "shopt -qs autocd" &gt;&gt;~/.bashrc
+# <i>Add to other shells</i>
+echo "${install?}"      &gt;&gt;~/.shellrc
+</pre>
+
+
+<h2>Limitations</h2>
+
+<p>Firstly, the enhanced command does not support any other switches
+  shell’s <code>cd</code> might offer such as <code>-e</code>
+  or <code>-@</code>.  Anyone who relies on them should be able to add them to
+  the script with relative ease.
+
+<p>Secondly, the command doesn’t fully integrate with <code>CDPATH</code>.
+  While basic functionality of <code>CDPATH</code> works, it cannot be combined
+  with alternative target directory specification used by the
+  new <code>cd</code>.
+
+
+<h2>Conclusion</h2>
+
+<p>There are commands a seasoned shell user may use without giving them a second
+  thought.  Certainly, <code>cd</code> is so obvious and straightforward that
+  there’s nothing to change about it.  However, accepting that even fundamental
+  commands could be changed may lead to improvements in one’s workflow.
+
+<p>I’ve been using various forms of enhanced <code>cd</code> for over a decade.
+  And with this post I hope I’ve inspired you, Dear Reader, to give it a shot as
+  well.  The exact set of features may not be to your liking, but nothing stops
+  you from writing your own <code>cd</code> replacement.
+
+
+<p id=f1><a href="#b1">†</a> Note that the repository includes my dot-files and
+  I may with time update functionality of the <code>pcd.sh</code> script to the
+  point where description in this article is no longer accurate.  This post is
+  describing <a href="https://github.com/mina86/dot-files/blob/8ca6070ce2e58581b1aeec748513bbd33904b41d/bin/pcd.sh">version
+  at commit 8ca6070c</a>.  Setup instructions in Installation section are pinned
+  to that version.
