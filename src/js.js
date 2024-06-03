@@ -187,7 +187,7 @@ function gtag(){dataLayer.push(arguments)}
 
 		storage.setItem('c', root.style = [
 			'color:'   + z(el(0), 2),
-			clBg       + z(el(3), 2),
+			clBg       + z(el(3), 2 - isDark),
 			clFgLow    + z(el(1), 2),
 			clLink     + z(el(1), 4, x),
 			clVisited  + z(el(1), 4, x + 1),
@@ -196,7 +196,7 @@ function gtag(){dataLayer.push(arguments)}
 			clAccBg    + z(el(3), 1, y),
 			clBorder   + z(el(2), 2),
 
-			clHdrBg    + z(   0 , 2, 8*isDark)+'e0',
+			clHdrBg    + z(   0 , 2 + isDark)+'e0',
 			clHdr      + z(   3 , 2),
 
 			clNavBg    + z(   1 , 2),

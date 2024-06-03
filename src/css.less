@@ -105,8 +105,8 @@
 @tiny:     0.75em;   /* =  6/8 ≈ 2^-0.4 */
 @small:    0.875em;  /* =  7/8 ≈ 2^-0.2 */
 @large:    1.25em;   /* = 10/8 ≈ 2^0.4 */
-@huge:     1.75em;   /* = 14/8 ≈ 2^0.8 */
-@title:    2em;
+@huge:     1.5em;    /* = 12/8 ≈ 2^0.6 */
+@title:    1.75em;   /* = 14/8 ≈ 2^0.8 */
 @logo:     2.5em;
 
 
@@ -155,6 +155,7 @@ body {
 	font-family: var(--B);
 	font-variant: common-ligatures oldstyle-nums proportional-nums;
 	text-rendering: optimizelegibility;
+	line-height: 1.5;
 }
 
 text {
@@ -208,6 +209,10 @@ text {
 		box-shadow: 0 0 0.5rem 0 #000;
 
 		height: 4em;
+	}
+
+	@{nav-id} {
+		box-shadow: 0 .5rem 0.5rem -.5rem inset #000;
 	}
 }
 
@@ -399,22 +404,13 @@ article {
 
 @{main-id} {
 	margin: 5rem auto 8rem;
-	line-height: 2;
 	@media print {
 		margin: 0 0 2rem;
-		line-height: 1.5;
 	}
 
 	h1 {
 		font-size: @title;
 		font-style: italic;
-		line-height: 1;
-		@media screen {
-			text-shadow: 2px 2px 3px @fg-low-colour;
-		}
-	}
-	h1 code, h1 kbd {
-		color: inherit;
 	}
 
 	a:focus-visible {
@@ -438,11 +434,11 @@ article {
 @{article-text-cls} {
 	h2 {
 		font-size: @huge;
-		margin: (round(1em / @huge, 2)) 0;
+		margin-top: 1.5em;
 	}
 	h3 {
 		font-size: @large;
-		margin: (round(1em / @large, 2)) 0;
+		margin-top: 1.5em;
 	}
 	ul, ol, dl, p {
 		font-size: 1em;
@@ -480,11 +476,10 @@ article {
 
 /* Meta */
 aside {
+	clear: both;
 	overflow: auto;
 	break-inside: avoid;
-	padding: 1em;
 	font-style: italic;
-	line-height: 1.5;
 
 	a {
 		border-style: none;
@@ -530,6 +525,7 @@ pre, code, kbd {
 	break-inside: avoid;
 	color: @code-colour;
 }
+h1, h2, h3 { code, kbd { color: inherit; } }
 code, kbd {
 	font-family: var(--S);
 	font-weight: 400;
@@ -543,7 +539,7 @@ pre {
 	margin: (round(1em / @small, 2));
 	padding: (round(1em / @small, 2));
 	border: 1px dashed @border-colour;
-	line-height: 1.375;
+	line-height: 1.25;
 	overflow-x: auto;
 	i {
 		font-style: normal;
@@ -574,7 +570,6 @@ thead th {
 }
 th, td {
 	padding: 0.25em 0.5em;
-	line-height: 1.5;
 }
 th small {
 	font-weight: 400;
@@ -765,7 +760,6 @@ figcaption {
 @{contact-dd-ul-cls} {
 	list-style: none;
 	text-align: center;
-	line-height: 1.5;
 	li {
 		font-size: 1rem;
 	}
