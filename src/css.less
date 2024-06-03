@@ -197,20 +197,6 @@ text {
 		min-height: 100%;
 	}
 
-	@{head-id} {
-		position: fixed;
-		inset: 0 0 auto;
-
-		font-family: var(--S);
-		background: @head-bg-colour;
-		color: @head-colour;
-		backdrop-filter: blur(3px);
-
-		box-shadow: 0 0 0.5rem 0 #000;
-
-		height: 4em;
-	}
-
 	@{nav-id} {
 		box-shadow: 0 .5rem 0.5rem -.5rem inset #000;
 	}
@@ -262,6 +248,18 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 @{head-id} {
 	.no-print();
 
+	position: fixed;
+	inset: 0 0 auto;
+
+	font-family: var(--S);
+	background: @head-bg-colour;
+	color: @head-colour;
+	backdrop-filter: blur(3px);
+
+	box-shadow: 0 0 0.5rem 0 #000;
+
+	height: 4em;
+
 	z-index: 9;
 	h1 {
 		font-family: @head-font;
@@ -303,36 +301,24 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 		}
 	}
 
-	@{header-link-li-cls}:last-child {
-		margin-right: 0;
-	}
 	@{header-site-li-cls} {
-		width: 15rem;
-		margin-right: 2rem;
+		width: 16rem;
 	}
 	@{header-cog-li-cls} {
 		margin-left: auto;
 	}
-	/* Hide Code if too narrow */
+	/* Hide elements of the header if the screen is too narrow */
 	@media (max-width: 45em) {
-		@{header-link-li-cls}:nth-child(3) {
-			display: none;
-		}
+		@{header-link-li-cls}:nth-child(3) { display: none; }
 	}
-	/* Hide site name but show Code if even more narrow. */
-	@media (max-width: 35em) {
-		@{header-site-li-cls} {
-			display: none;
-		}
-		@{header-link-li-cls}:nth-child(3) {
-			display: block;
-		}
+	@media (max-width: 40em) {
+		@{header-link-li-cls}:nth-child(4) { display: none; }
 	}
-	/* Hide site name and Code if even more narrow. */
-	@media (max-width: 25em) {
-		@{header-link-li-cls}:nth-child(3) {
-			display: none;
-		}
+	@media (max-width: 31em) {
+		@{header-link-li-cls}:nth-child(2) { display: none; }
+	}
+	@media (max-width: 20em) {
+		@{header-cog-li-cls} { display: none; }
 	}
 
 	@{header-link-li-cls} > a {
