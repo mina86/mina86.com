@@ -342,6 +342,47 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 	}
 }
 
+article {
+	clear: both;
+	margin: 3em 1em;
+	@media print {
+		&:first-child {
+			margin-top: 0;
+		}
+	}
+}
+
+@media screen {
+	@media (min-width: 52rem) {
+		article, @{pagination-id} {
+			max-width: 50rem;
+			margin: 3em auto;
+		}
+	}
+
+	@{main-id} > div {
+		max-width: 50rem;
+		margin: 0 auto;
+	}
+
+	article + article {
+		position: relative;
+		padding-top: 4em;
+		&::before {
+			position: absolute;
+			inset: 0 0 auto;
+			height: 1em;
+			content: "";
+			color: @border-colour;
+			background: @bg-colour url(DATA<separator.svg>) 50% 50% / 6.45em 1em no-repeat;
+			background-blend-mode: luminosity;
+			opacity: 0.25;
+		}
+	}
+}
+
+
+
 @{head-id} @{drop-down-ul-cls} {
 	width: max-content;
 	position: fixed;
@@ -382,13 +423,6 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 			    0 0 1px 4px @hover-colour;
 	}
 }
-@media screen {
-	article, @{main-id} > div, @{pagination-id} {
-		max-width: 50rem;
-		margin-left: auto;
-		margin-right: auto;
-	}
-}
 
 @{byline-cls} {
 	font-size: @small;
@@ -398,31 +432,6 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 
 	a:visited, a:hover, a:focus {
 		color: @link-colour;
-	}
-}
-
-
-article, aside {
-	clear: both;
-	padding: 0 0.5em;
-}
-article {
-	padding-top: 3em;
-}
-@media screen {
-	article + article {
-		position: relative;
-		padding-top: 6em;
-		&::before {
-			position: absolute;
-			inset: 2em 0 auto;
-			height: 1em;
-			content: "";
-			color: @border-colour;
-			background: @bg-colour url(DATA<separator.svg>) 50% 50% / 6.45em 1em no-repeat;
-			background-blend-mode: luminosity;
-			opacity: 0.5;
-		}
 	}
 }
 
