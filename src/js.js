@@ -756,8 +756,13 @@ function gtag(){dataLayer.push(arguments)}
 	}
 	a('//www.googletagmanager.com/gtag/js?id=G-2KN8BH0V6Z');
 	gtag('js', date);
+	gtag('consent', 'default', {
+		'ad_storage': 'denied',
+		'ad_user_data': 'denied',
+		'ad_personalization': 'denied',
+		'analytics_storage': 'denied'
+	});
 	gtag('config', 'G-2KN8BH0V6Z');
-
 
 	/* Add prefetch and prerender links to the first article if this is an
 	   index page*/
