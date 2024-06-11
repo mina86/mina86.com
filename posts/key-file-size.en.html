@@ -25,7 +25,7 @@
 <p id=b1>Bet let’s crank it up to eleven.  The largest cryptosetup supports (and
   will
   likely <a href="http://security.stackexchange.com/questions/6141/amount-of-simple-operations-that-is-safely-out-of-reach-for-all-humanity/6149#6149">ever
-  need to support</a>) are 512-bit keys<a href=#f1>†</a>.  No matter how
+  need to support</a>) are 512-bit keys<a href=#f1><sup>†</sup></a>.  No matter how
   enormous encryption password is, ultimately at most 512 bits will be used.  In
   other words, if key file is bigger it becomes easier to attack the derived
   encryption key instead.
@@ -60,7 +60,7 @@
   a binary key file for a LUKS container, 64 bytes is plenty and even
   half of that is more than enough.
 
-<p id=f1><a href=#b1>†</a> 512-bit encryption key is used for 256-bit block
+<p id=f1><a href=#b1><sup>†</sup></a> 512-bit encryption key is used for 256-bit block
   ciphers in XTS mode.  And even here the doubling of the size appears to be
   caused by misunderstanding of XEX algorithm rather than need for better
   security,

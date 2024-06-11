@@ -76,7 +76,7 @@ __sysconf (int name)
 <p>The good news is that situation with glibc is about to improve.  My
   recent <a href="https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=a9880586eedb3ba89ca6a7c5e3f0664c279cf636">commit
   updating <code>sysconf</code> implementation</a> makes the function aware of
-  the 6 MiB upper bound<a href=#f1>†</a>.  Once the change finds its way into a glibc release,
+  the 6 MiB upper bound<a href=#f1><sup>†</sup></a>.  Once the change finds its way into a glibc release,
   the library will report <code>ARG_MAX</code> correctly even for large stacks.
 
 
@@ -346,5 +346,5 @@ out:
   provided further understanding of the kernel and it’s interaction with
   user-space}.
 
-<p id=f1><a href=#b1>†</a> glibc 2.34 has since been released with this fix
+<p id=f1><a href=#b1><sup>†</sup></a> glibc 2.34 has since been released with this fix
   included.
