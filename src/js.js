@@ -177,7 +177,7 @@ function gtag(){dataLayer.push(arguments)}
 			h = a[h || 0] || cosSin(schemeHue + h);
 			shade = [
 				12, 30, 70, 88,
-				05, 20, 80, 95,
+				5, 20, 80, 95,
 			][shade + 4 * isHighContrast]
 			if (shade < 10 || shade > 90) {
 				ch /= 2;
