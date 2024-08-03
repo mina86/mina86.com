@@ -196,7 +196,7 @@ function gtag(){dataLayer.push(arguments)}
 			clAccBg    + z(el(3), 1, y),
 			clBorder   + z(el(2), 2),
 
-			clHdrBg    + z(   0 , 2 + isDark)+'e0',
+			clHdrBg    + z(   0 , 3),
 			clHdr      + z(   3 , 2),
 
 			clNavBg    + z(   1 , 2),

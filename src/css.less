@@ -252,11 +252,10 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 	inset: 0 0 auto;
 
 	font-family: var(--S);
-	background: @head-bg-colour;
+	background: @head-bg-colour linear-gradient(#000, @head-bg-colour);
 	color: @head-colour;
-	backdrop-filter: blur(3px);
 
-	box-shadow: 0 0 0.5rem 0 #000;
+	box-shadow: 0 0 1rem 0 #000;
 
 	height: 4em;
 
