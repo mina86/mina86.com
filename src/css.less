@@ -18,7 +18,8 @@
 /* o, p */
 @full-text-shown-cls:  .q;
 @right-align-cls:      .r; /* text-align: right */
-@selected-dd-lnk-cls:  .s;
+@dd-selected-cls:      .s; /* Selected’s drop down’s A plus if non-setting drop
+                              down shown this is added to body. */
 @article-text-cls:     .t;
 /* u, v */
 @hue-slide-cls:        .w;
@@ -47,7 +48,6 @@
 /* Reserve #m for more links if those ever come back. */
 @contact-id:       #n; /* The Contact section in bottom nav */
 @pagination-id:    #p; /* Pagination at the bottom of a page */
-@shade-id:         #s; /* ID of the shade over the page when drop down shown. */
 @high-contrast-id: #t; /* ID set on BODY when high contrast scheme is used */
 @nav-id:           #v; /* The bottom navigation section */
 
@@ -229,7 +229,7 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 		text-decoration: none;
 		color: inherit;
 	}
-	main a:hover {
+	@{main-id} a:hover {
 		text-decoration: underline;
 	}
 	@{article-text-cls} {
@@ -328,7 +328,7 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 		content: ' ⌄';
 	}
 
-	@{header-link-li-cls} a@{selected-dd-lnk-cls}:after {
+	@{header-link-li-cls} a@{dd-selected-cls}:after {
 		visibility: hidden;
 	}
 }
@@ -934,16 +934,28 @@ button:focus-visible {
 		    0 0 1px 4px @nav-link-colour;
 }
 
-@{shade-id}, dialog::backdrop {
+@{nav-id}::after, dialog::backdrop {
 	background: #0008;
 	backdrop-filter: blur(2px);
-	transition: opacity 0.5s;
 }
-@{shade-id} {
+@{nav-id}::after {
+	content: '';
 	position: fixed;
 	inset: 0;
-	opacity: 0;
 	z-index: 5;
+	opacity: 0;
+	visibility: hidden;
+	transition: visibility .25s, opacity .25s;
+}
+
+/* TODO: Replace this with body:has(.s) once :has reaches over 95% support.  At
+   the moment, Firefox is lagging behind and dragging support down to 92%.  With
+   that change, it won’t be necessary for JavaScript to set .s on BODY any
+   longer. */
+@{dd-selected-cls} > @{nav-id}::after {
+	opacity: 1;
+	visibility: visible;
+	transition: visibility 0s, opacity .5s;
 }
 
 

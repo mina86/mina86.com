@@ -251,7 +251,6 @@ function gtag(){dataLayer.push(arguments)}
 	var ddCode = create('ul', 0, 'g m np');
 	/* ‘Settings’ drop down. */
 	var ddSettings = create('ul', 0, 'c m np');
-	var shade = create('div', doc.body);
 	/* Currently visible drop down. */
 	var visibleDropDown;
 	/* If a drop down was shown as a result of mouse hover event, timestamp
@@ -289,12 +288,11 @@ function gtag(){dataLayer.push(arguments)}
 		visibleDropDown.style.left = x > 0 ? x + 'px' : 0;
 	};
 
-	/* Hides drop down if it’s visible.  Also hides shade. */
+	/* Hides drop down if it’s visible. */
 	var hideDropDown = _ => {
 		if (visibleDropDown) {
-			visibleDropDown['l'].className = '';
+			doc.body.className = visibleDropDown['l'].className = '';
 			visibleDropDown.style.display = 'none';
-			fadeOut(shade);
 			visibleDropDown = 0;
 		}
 	};
@@ -349,17 +347,11 @@ function gtag(){dataLayer.push(arguments)}
 		}
 		visibleDropDown = target;
 		el.className = 's';
+		doc.body.className = target == ddSettings ? '' : 's';
 		if (!target['l']) {
 			(target['l'] = el).parentNode.appendChild(target);
 		}
 		target.style.display = '';
-		if (target == ddSettings) {
-			fadeOut(shade);
-		} else {
-			shade['t'] = shade['t'] && clearTimeout(shade['t']);
-			shade.style.display = '';
-			setTimeout(_ => (shade.style.opacity = 1), 0);
-		}
 		positionDropDown();
 		return true;
 	};
@@ -633,10 +625,6 @@ function gtag(){dataLayer.push(arguments)}
 		el.ontouchstart = el.ontouchmove = el.ontouchend =
 			ev => moveHueSlider(el, ev.touches[0]);
 	});
-
-	/* Set up shade which fades page when drop down is shown. */
-	shade.style.display = 'none';
-	shade.id = 's';
 
 	/* Construct Settings cog link which activates the drop down. */
 	(el = create('li', header.firstChild, 'c')).innerHTML =
