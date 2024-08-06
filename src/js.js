@@ -259,20 +259,6 @@ function gtag(){dataLayer.push(arguments)}
 	   would normally result in a toggle. */
 	var shownOnOver = 0;
 
-	/* Hides specified element by first setting it’s opacity to zero and
-	   then, after half a second, it’s display to ‘none’.  The intention is
-	   that element’s transition property is set to ‘opacity .5s’ so that
-	   the elements fades out and once that’s done the function will remove
-	   it from display completely. */
-	var fadeOut = el => {
-		el.style.opacity = 0;
-		if (el['t']) {
-			clearTimeout(el['t']);
-		}
-		el['t'] = setTimeout(_ => ((el.style.display = 'none'),
-					   el['t'] = 0), 500);
-	};
-
 	/* Positions the drop down such that it’s centred below the link
 	   corresponding to it but makes sure that the drop down does not go
 	   past the left or right view-port border.  Does nothing if no drop
@@ -291,8 +277,8 @@ function gtag(){dataLayer.push(arguments)}
 	/* Hides drop down if it’s visible. */
 	var hideDropDown = _ => {
 		if (visibleDropDown) {
-			doc.body.className = visibleDropDown['l'].className = '';
-			visibleDropDown.style.display = 'none';
+			doc.body.classList.remove('s');
+			visibleDropDown['p'].classList.remove('s');
 			visibleDropDown = 0;
 		}
 	};
@@ -342,16 +328,14 @@ function gtag(){dataLayer.push(arguments)}
 			return false;
 		}
 		if (visibleDropDown) {
-			visibleDropDown['l'].className = '';
-			visibleDropDown.style.display = 'none';
+			visibleDropDown['p'].classList.remove('s');
 		}
 		visibleDropDown = target;
-		el.className = 's';
-		doc.body.className = target == ddSettings ? '' : 's';
 		if (!target['l']) {
-			(target['l'] = el).parentNode.appendChild(target);
+			(target['p'] = (target['l'] = el).parentNode).appendChild(target);
 		}
-		target.style.display = '';
+		target['p'].classList.add('s');
+		doc.body.className = target == ddSettings ? '' : 's';
 		positionDropDown();
 		return true;
 	};
@@ -576,7 +560,6 @@ function gtag(){dataLayer.push(arguments)}
 	el = query('#n');
 	create('h2', el).innerText = isPL ? 'Ustawienia' : 'Settings';
 	el.appendChild(el = ddSettings.cloneNode(1));
-	ddSettings.style.display = 'none';
 
 	/* Handles click event on the settings widget.  When clicking the Reset
 	   link, reset the scheme; when clicking one of the toggle buttons,

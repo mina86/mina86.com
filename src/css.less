@@ -296,8 +296,8 @@ menu {
 		display: inline-block;
 		margin: 0 1rem;
 	}
-	/* Upcase all but the first link.  This works because the first link has an H1
-	   in between LI and A so this rule doesn’t match. */
+	/* Set style of all but the first link.  This works because the first link has
+	   an H1 in between LI and A so this rule doesn’t match. */
 	& > li > a {
 		font-weight: bold;
 		text-transform: uppercase;
@@ -308,9 +308,27 @@ menu {
 @{header-site-li-cls} {
 	width: 16rem;
 }
-li@{header-cog-li-cls} {
+@{header-link-li-cls} > a {
+	white-space: nowrap;
+}
+@{header-link-li-cls} > a:after {
+	content: ' ⌄';
+}
+@{header-cog-li-cls} {
 	margin-left: auto;
 }
+@{header-link-li-cls} > a:after, @{header-cog-li-cls} > a {
+	display: inline-block;
+	transition: all .35s;
+}
+@{header-link-li-cls}@{dd-selected-cls} a:after {
+	transform: translateY(.5em);
+	opacity: 0;
+}
+@{header-cog-li-cls}@{dd-selected-cls} > a {
+	transform: rotate(90deg);
+}
+
 /* Hide elements of the header if the screen is too narrow */
 @media (max-width: 45em) {
 	@{header-link-li-cls}:nth-child(3) { display: none; }
@@ -323,17 +341,6 @@ li@{header-cog-li-cls} {
 }
 @media (max-width: 20em) {
 	li@{header-cog-li-cls} { display: none; }
-}
-
-@{header-link-li-cls} > a {
-	white-space: nowrap;
-}
-@{header-link-li-cls} > a:after {
-	content: ' ⌄';
-}
-
-@{header-link-li-cls} a@{dd-selected-cls}:after {
-	visibility: hidden;
 }
 
 
@@ -379,6 +386,9 @@ article {
 
 
 @{head-id} @{drop-down-ul-cls} {
+	display: none;
+	animation: v .35s;
+
 	width: max-content;
 	position: fixed;
 	top: max(3.5em, 2rem);
@@ -386,6 +396,34 @@ article {
 	box-shadow: 0 0 0.5rem 0.2rem #000;
 	li {
 		font-size: 1rem;
+	}
+}
+@{head-id} @{dd-selected-cls} @{drop-down-ul-cls} {
+	display: block;
+	animation: a .35s;;
+}
+
+@keyframes a {
+	from {
+		opacity: 0;
+		translate: 0 -.5rem;
+	}
+	to {
+		opacity: 1;
+		translate: 0;
+	}
+}
+
+@keyframes v {
+	from {
+		display: block;
+		opacity: 1;
+		translate: 0;
+	}
+	to {
+		display: none;
+		opacity: 0;
+		translate: 0 -.5rem;
 	}
 }
 
@@ -750,9 +788,6 @@ figcaption {
 	li {
 		font-size: 1rem;
 	}
-	strong {
-		font-size: @large;
-	}
 }
 @{linked-in-link-cls} {
 	@{nav-hover-colour-var}: #0977b5;
@@ -814,13 +849,13 @@ figcaption {
 		display: block;
 		position: absolute;
 		top:  ((0.45em - 0.8em) / 2);
-		left: (-0.8em / 2 + 0.1em);
+		left: (0.1em - 0.8em / 2);
 		width:  0.8em;
 		height: 0.8em;
 		border-radius: (0.8em / 2);
 		border: 2px solid @nav-link-colour;
 		background: @nav-link-colour;
-		transition: left 0.15s;
+		transition: transform 0.15s;
 	}
 	&:hover:after {
 		background: @nav-hover-colour;
@@ -849,7 +884,7 @@ div:focus-visible {
 
 @{dark-theme-id} @{dark-toggle-cls}:after,
 @{high-contrast-id} @{contrast-toggle-cls}:after {
-	left: (1.3em - (0.8em / 2) - 0.1em);
+	transform: translateX(1.3em);
 }
 
 @{hue-slide-cls} {
@@ -952,7 +987,7 @@ button:focus-visible {
 	z-index: 5;
 	opacity: 0;
 	visibility: hidden;
-	transition: visibility .25s, opacity .25s;
+	transition: visibility .5s, opacity .5s;
 }
 
 /* TODO: Replace this with body:has(.s) once :has reaches over 95% support.  At
