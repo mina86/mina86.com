@@ -554,19 +554,22 @@ function gtag(){dataLayer.push(arguments)}
 
 	/* Construct ‘Settings’ drop down */
 	ddSettings.innerHTML =
-		'<li><div class="tg td" tabindex=0 title="' +
+		'<li><div class="tg td" tabindex=0 role=switch title="' +
 		       (isPL ? 'Przełącz tryb ciemny' : 'Toggle dark mode') +
 		       '"></div>  ' +
-		    '<div class="tg tc" tabindex=0 title="' +
+		    '<div class="tg tc" tabindex=0 role=switch title="' +
 		       (isPL ? 'Przełącz tryb wysokiego kontrastu'
-		           : 'Toggle high contrast mode') +
+		             : 'Toggle high contrast mode') +
 		       '"></div>  ' +
 		    '<a href=#r>Reset</a>' +
-		'<li class=w style=background:linear-gradient(90deg,' +
+		'<li class=w  tabindex=0 role=slider title="' +
+		       (isPL ? 'Zmień motyw kolorystyczny'
+		             : 'Change colour theme') +
+		'" style=background:linear-gradient(90deg,' +
 		[...Array(12)].map((_, h) => {
 			h = cosSin(h);
 			return rgbFromLuv(50, 6 * h.c, 6 * h.s);
-		}).join(',') + ')><div tabindex=0></div>';
+		}).join(',') + ')><div></div>';
 
 	/* Add ‘Setting’ panel at the bottom of the page.  This is a clone of
 	   the drop down. */
@@ -632,17 +635,17 @@ function gtag(){dataLayer.push(arguments)}
 	el.appendChild(ddSettings);
 
 	/* Handles moving over and out of the drop down links.  Specifically,
-	   handles moving over and out of the UL that contains all those links
-	   and drop downs.
+	   handles moving over and out of the HEADER that contains all those
+	   links and drop downs.
 
-	   The general structure of the UL element is:
+	   The general structure of the MENU element is:
 
-	       <ul>… <li><a …>Link Text</a><ul>…</ul></li> …</ul>
+	       <menu>… <li><a …>Link Text</a><ul>…</ul></li> …</menu>
 
-	   Hovering (or clicking) the A element is what shows the drop down.
-	   The nested UL element is the drop down to be shown.  The drop down is
-	   nested this way because moving mouse within it counts as being within
-	   the LI that holds the drop down link.
+	   Hovering (or clicking) the A element shows the drop down (i.e. the
+	   nested UL element).  The drop down is nested this way because moving
+	   mouse within it counts as being within the LI that holds the drop
+	   down link.
 
 	   If no drop down is visible, as soon as pointer moves over one of the
 	   links, the drop down is shown.  When drop down is visible mouse over
@@ -673,7 +676,7 @@ function gtag(){dataLayer.push(arguments)}
 	   which case clicking the link will keep it shown.  This is to handle
 	   touch screen devices where mouse over and click are executed
 	   immediately one after the other. */
-	header.onclick = ev => {
+	header.firstChild.onclick = ev => {
 		ev = chooseDropDown(ev.target);
 		if (!ev) {
 			return true;

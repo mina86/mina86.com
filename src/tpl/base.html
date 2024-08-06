@@ -43,14 +43,16 @@
 {%- macro post(entry, post_page) -%}
 {%- set full = post_page or not entry.body.has_excerpt -%}
   <article self="{% if not post_page %}{{ entry.href }}{% endif %}">
-    <h1><a lang="{{ entry.lang }}" href="{{ entry.href }}"
-           data-date="{{ entry.date.__str__()[:10] }}"
-           {{ attr('data-title', entry.bib_title) }}
-           title="{{ T('Permanent link to the entry.') }}">{{
-        entry.subject | safe }}</a></h1>
+    <hgroup>
+      <h1><a lang="{{ entry.lang }}" href="{{ entry.href }}"
+             data-date="{{ entry.date.__str__()[:10] }}"
+             {{ attr('data-title', entry.bib_title) }}
+             title="{{ T('Permanent link to the entry.') }}">{{
+          entry.subject | safe }}</a></h1>
 
-    <p class="y">{{ byline('Michał ‘mina86’ Nazarewicz', 'mina86@mina86.com',
-                           entry.date) }}
+      <p class="y">{{ byline('Michał ‘mina86’ Nazarewicz', 'mina86@mina86.com',
+                             entry.date) }}
+    </hgroup>
 
     <div class="{% if full %}q {% endif %} t" lang="{{ entry.lang }}">{{
       entry.body.html(post_page)
@@ -112,12 +114,12 @@
 {%- endif -%}
 
 <header id=h>
-  <ul>
+  <menu>
     <li class=d><h1><a href="/">mina86.com</a></h1>
     <li class=b><a href="#k">{{ T('Categories') }}</a>
     <li class=b><a href="https://github.com/mina86">{{ T('Code') }}</a>
     <li class=b><a href="#n">{{ T('Contact') }}</a>
-  </ul>
+  </menu>
 </header>
 
 <main id=b>{% block main %}{% endblock %}</main>

@@ -239,7 +239,9 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 		a[href^="http://"]:after,
 		a[href^="//"]:after {
 			content: '⎋';
-			opacity: .75;
+			font-size: @small;
+			vertical-align: super;
+			display: inline-block;
 		}
 	}
 }
@@ -281,58 +283,59 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 		box-shadow: 0 0 0 2px @head-bg-colour,
 			    0 0 1px 4px @nav-colour;
 	}
-	& > ul {
-		height: 4em;
-		display: flex;
-		align-items: center;
-		width: 60rem;
-		max-width: 100%;
-		margin: 0 auto;
-		& > li {
-			display: inline-block;
-			margin: 0 1rem;
-		}
-		/* Upcase all but the first link.  This works because the first
-		   link has an H1 in between LI and A so this rule doesn’t
-		   match. */
-		& > li > a {
-			font-weight: bold;
-			text-transform: uppercase;
-			font-size: 1rem;
-		}
-	}
+}
 
-	@{header-site-li-cls} {
-		width: 16rem;
+menu {
+	height: 4em;
+	display: flex;
+	align-items: center;
+	width: 60rem;
+	max-width: 100%;
+	margin: 0 auto;
+	& > li {
+		display: inline-block;
+		margin: 0 1rem;
 	}
-	@{header-cog-li-cls} {
-		margin-left: auto;
-	}
-	/* Hide elements of the header if the screen is too narrow */
-	@media (max-width: 45em) {
-		@{header-link-li-cls}:nth-child(3) { display: none; }
-	}
-	@media (max-width: 40em) {
-		@{header-link-li-cls}:nth-child(4) { display: none; }
-	}
-	@media (max-width: 31em) {
-		@{header-link-li-cls}:nth-child(2) { display: none; }
-	}
-	@media (max-width: 20em) {
-		@{header-cog-li-cls} { display: none; }
-	}
-
-	@{header-link-li-cls} > a {
-		white-space: nowrap;
-	}
-	@{header-link-li-cls} > a:after {
-		content: ' ⌄';
-	}
-
-	@{header-link-li-cls} a@{dd-selected-cls}:after {
-		visibility: hidden;
+	/* Upcase all but the first link.  This works because the first link has an H1
+	   in between LI and A so this rule doesn’t match. */
+	& > li > a {
+		font-weight: bold;
+		text-transform: uppercase;
+		font-size: 1rem;
 	}
 }
+
+@{header-site-li-cls} {
+	width: 16rem;
+}
+li@{header-cog-li-cls} {
+	margin-left: auto;
+}
+/* Hide elements of the header if the screen is too narrow */
+@media (max-width: 45em) {
+	@{header-link-li-cls}:nth-child(3) { display: none; }
+}
+@media (max-width: 40em) {
+	@{header-link-li-cls}:nth-child(4) { display: none; }
+}
+@media (max-width: 31em) {
+	@{header-link-li-cls}:nth-child(2) { display: none; }
+}
+@media (max-width: 20em) {
+	li@{header-cog-li-cls} { display: none; }
+}
+
+@{header-link-li-cls} > a {
+	white-space: nowrap;
+}
+@{header-link-li-cls} > a:after {
+	content: ' ⌄';
+}
+
+@{header-link-li-cls} a@{dd-selected-cls}:after {
+	visibility: hidden;
+}
+
 
 article {
 	clear: both;
@@ -833,11 +836,13 @@ div:focus-visible {
 }
 
 @{dark-toggle-cls}:before     {
+	color: @head-colour;
 	content: '☀';
 	top: -.3em;
 	@{dark-theme-id} & { content: '☾'; }
 }
 @{contrast-toggle-cls}:before {
+	color: @head-colour;
 	content: '◐';
 	top: -.4em;
 }
