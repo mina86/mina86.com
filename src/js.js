@@ -583,10 +583,10 @@ function gtag(){dataLayer.push(arguments)}
 		el = ev.target;
 		if (/#r/.exec(el.hash)) {
 			resetScheme();
-		} else if ((a = /\btd\b/.exec(el = el.className)) ||
-			   /\btc\b/.exec(el)) {
-			saveScheme(a ? (isDark = !isDark) :
-				   (isHighContrast = !isHighContrast));
+		} else if ((a = /\bt[cd]\b/.exec(el.className))) {
+			saveScheme(a[0] == 'td'
+					? (isDark = !isDark)
+					: (isHighContrast = !isHighContrast));
 		}
 		return false;
 	};
@@ -606,9 +606,9 @@ function gtag(){dataLayer.push(arguments)}
 			if (!ev.ctrlKey) x /= 4;
 			schemeHue = (schemeHue + 12 + x) % 12.0;
 			return saveScheme();
-		} else if (x == 13 && (el = ev.target.closest('div'))) {
-			/* Enter toggles theme if slider is focused. */
-			saveScheme(isDark = !isDark);
+		} else if (x == 13) {
+			/* Enter simulates a click. */
+			ev.target.click();
 			return true;
 		} else {
 			return true;
