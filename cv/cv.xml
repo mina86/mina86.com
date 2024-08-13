@@ -28,16 +28,25 @@
     <head>Work Experience</head>
 
     <entry logo="composable.png">
-      <time>May 2023–present</time>
+      <time>May 2023–Oct 2024</time>
       <position>Software Engineer</position>
       <company>Composable Finance</company>
 
       <ul>
-        <li>Working on a cross-blockchain connection between Cosmos
-        ecosystem and other chains.</li>
-        <li>Collaborating with Universidade de Lisboa on methods for
-        using IBC protocol on blockchains which don’t meet all of
-        IBC’s requirements.</li>
+        <li>Researched and implemented Solana IBC bridge connecting
+        Solana with Cosmos ecosystem.  It required a novel approach to
+        deploy IBC module on Solana which doesn’t naively support
+        features required by the IBC protocol.</li>
+
+        <li>Designed SVM-based rolloup on Solana using <a
+        href="https://research.composable.finance/t/state-proofs-on-solana/332">a novel
+        state proofs</a> and <a
+        href="https://research.composable.finance/t/mantis-svm-rollup/333">IBC
+        communication layer</a>.</li>
+
+        <li>Collaborated and continuing to collaborate with
+        Universidade de Lisboa on research papers on IBC connectivity
+        and blockchain optimisations.</li>
       </ul>
 
       <tech>Rust, Python</tech>
