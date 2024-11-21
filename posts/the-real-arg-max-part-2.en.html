@@ -5,10 +5,10 @@
 
 <p>In <a href="/2021/the-real-arg-max-part-1/">part one</a> we’ve looked at
   the <code>ARG_MAX</code> parameter on Linux-based systems.  We’ve established
-  experimentally how it affects arguments passed programs and what influences
+  experimentally how it limits arguments passed to programs and what influences
   the value.  This time, we’ll look directly at the source to verify our
-  findings and see how the limit looks from the point of view of system
-  libraries and kernel itself.
+  findings and see how <code>ARG_MAX</code> looks from the point of view of
+  system libraries and kernel itself.
 
 <!-- FULL -->
 
@@ -73,20 +73,20 @@ __sysconf (int name)
   uClibc-ng 1.0.38 behaves the same way glibc does while bionic 10.0, dietlibc
   0.34 and musl 1.2 return 128 KiB as <code>ARG_MAX</code>.
 
-<p>The good news is that situation with glibc is about to improve.  My
-  recent <a href="https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=a9880586eedb3ba89ca6a7c5e3f0664c279cf636">commit
-  updating <code>sysconf</code> implementation</a> makes the function aware of
-  the 6 MiB upper bound<a href=#f1><sup>†</sup></a>.  Once the change finds its way into a glibc release,
-  the library will report <code>ARG_MAX</code> correctly even for large stacks.
+<p>The good news is that situation with glibc has since improved.  glibc 2.34
+  has released
+  with <a href="https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=a9880586eedb3ba89ca6a7c5e3f0664c279cf636">my
+  commit</a> which makes <code>sysconf</code> aware of the 6 MiB upper bound.
+  Recent GNU/Linux systems will report <code>ARG_MAX</code> correctly even for
+  large stacks.
 
 
 <h2>Linux kernel</h2>
 
 <p>On the kernel side, we want to look at the <code>execve</code> system call.
-  Like all other system calls, it is defined using
-  a <code>SYSCAL_DEFINE<var>n</var></code> macro.  It doesn’t take long to find
-  its implementation in <code>fs/exec.c</code> file.  In Linux 5.11.11 it looks
-  as follows:
+  It is defined using a <code>SYSCAL_DEFINE<var>n</var></code> macro and it
+  doesn’t take long to find its implementation in <code>fs/exec.c</code> file.
+  In Linux 5.11.11 it looks as follows:
 
 <pre>
 SYSCALL_DEFINE3(execve,
@@ -223,7 +223,7 @@ static int bprm_stack_limits(struct linux_binprm *bprm)
 
 <h3>Copying strings</h3>
 
-<p>Finally, <code>do_execveat_common</code> checks the lengths of the strings
+<p>Eventually, <code>do_execveat_common</code> checks the lengths of the strings
   while copying them to the new program’s memory.  First, the path to program’s
   executable is transferred with the help of <code>copy_string_kernel</code>
   function which is defined as follows:
@@ -345,6 +345,3 @@ out:
 <p>Whatever the case may be, I hope this article has been informative and
   provided further understanding of the kernel and it’s interaction with
   user-space}.
-
-<p id=f1><a href=#b1><sup>†</sup></a> glibc 2.34 has since been released with this fix
-  included.

@@ -111,8 +111,8 @@ user@earth$ <b>printf '‘%s’\n' "$local_socket" "$remote_socket"</b>
 </pre>
 
 <p>It is a good idea to use a non-standard server name on remote side to avoid
-  clashes if an unrelated Emacs server happened to be running there already.
-  The snippet above uses the default ‘<code>server</code>’ on local side while
+  clashes if an unrelated Emacs server happens to be running already.  The
+  snippet above uses the default ‘<code>server</code>’ on local side while
   ‘<code>earth</code>’ on remote side indicating which computer the socket leads
   to.
 
@@ -127,7 +127,7 @@ user@earth$ <b>ssh -R "$remote_socket:$local_socket" phobos.mars.uac</b>
 
 <p>Note that tilde-expansion won’t work in the above command so if the
   socket is located in <code>~/.emacs/server</code> directory it may be
-  necessary to sell out the exact path.
+  necessary to spell out the exact path.
 
 <p>Once authenticated, SSH will create <code>$remote_socket</code> on Phobos and
   forward all incoming connections to <code>$local_socket</code> on Earth.  With
@@ -143,11 +143,11 @@ user@phobos$ <b>emacsclient -s earth -T /ssh:phobos.mars.uac: <var>filename</var
 
 <p>Thanks to <a href="https://www.gnu.org/software/tramp/">TRAMP</a> (which
   enables transparent access to remote files from within Emacs), Emacs running
-  on Earth will open <var>filename</var> located on Phobos.  If instead it tries
-  to open a local file, there may be issues with TRAMP configuration.
-  Adding <code>(require 'tramp)</code>
+  on Earth will open <var>filename</var> located on Phobos.  If this doesn’t
+  happen and instead it tries to open a local file, there may be an issue with
+  TRAMP configuration.  Adding <code>(require 'tramp)</code>
   to <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html">Emacs’
-  initialisation file</a> should fix that issue.
+  initialisation file</a> should fix it.
 
 
 <h2>Making it permanent</h2>
@@ -155,9 +155,8 @@ user@phobos$ <b>emacsclient -s earth -T /ssh:phobos.mars.uac: <var>filename</var
 <p>Explicitly specifying the <code>-R</code> flag each time would be rather
   tedious.  On top of that, things break once SSH session is terminated and new
   one established.  The socket on remote side is never cleaned and as a result
-  a new tunnel cannot be created.  Both of those issues can be easily solved
-  with some configuration.  To get it sorted, the following section should be
-  added to <code>~/.ssh/config</code>:
+  a new tunnel cannot be created.  Both of those issues can be solved by adding
+  the following section to <code>~/.ssh/config</code> file:
 
 <pre id="alias">
 Host phobos
@@ -171,8 +170,7 @@ Host phobos
 <p><code>Host</code> defines an alias for the host such that full domain name
   does not need to by typed each time.  Instead, <code>HostName</code> specifies
   the full domain.  <code>RemoteForward</code> cakes care of the <code>-R</code>
-  switch.  Paths given in the example may, of course, need to be
-  adjusted.  <code>StreamLocalBindUnlink yes</code> addresses the issue of stale
+  switch.  <code>StreamLocalBindUnlink yes</code> addresses the issue of stale
   sockets blocking new forwarding attempts.
 
 <p>Lastly, <code>ControlMaster</code> and <code>ControlPersist</code>

@@ -90,8 +90,8 @@ impl fmt::Display for Minute {
 
 <p>Having <code>Display</code>, <code>Debug</code>, <code>Octal</code> etc.
   implementations which call <code>write!</code> macro only is quite common.
-  But while common, it’s at times incorrect.  While the above example with such
-  definitions will build, the test in the <code>main</code> will fail
+  But while common, it’s at times incorrect.  While the above example will build
+  with such definitions, the test in <code>main</code> will fail
   (<a href="https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=90a212d165e79ceefe6805bc8d48f918">playground</a>)
   producing the following error:
 
@@ -158,10 +158,10 @@ struct Minute(u8);
 
 <p>Related trick is delegating between <code>Display</code>
   and <code>Debug</code> traits (or any other formatting traits).  This is
-  especially useful when implementation for both types should be identical.
-  A naïve approach would be to use something like <code>write!(fmtr,
-  "{self:?}")</code>  in <code>Display</code> implementation but this suffers
-  from aforementioned issues.  Delegation is once again the better approach
+  especially useful when implementation for both types is identical.  A naïve
+  approach would be to use something like <code>write!(fmtr, "{self:?}")</code>
+  in <code>Display</code> but this suffers from aforementioned issues.
+  Delegation is once again a better approach
   (<a href="https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=9964ea87128599d08c4a960f114d655b">playground</a>):
 
 <pre>

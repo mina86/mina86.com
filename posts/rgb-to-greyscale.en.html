@@ -142,10 +142,10 @@ fn grey_from_rgb_gamma2(r: u8, g: u8, b: u8) -&gt; u8 {
 
 <p>Using the γ = 2 approximation has additional benefit for platforms without
   a fast floating point unit.  With a minor degradation in accuracy, the
-  algorithm can be rewritten to consist entirely of integer arithmetic.  While
-  the trade-off may not be worth it on modern desktop machines which perform
-  square root operation as fast as division but less powerful systems may still
-  benefit from this approach:
+  algorithm can be rewritten to use integer arithmetic operations only.  The
+  trade-off may not be worth it on machines which can perform square root
+  operation as fast as a division, but less powerful systems may benefit from
+  this approach:
 
 <pre id=isqrt>
 fn grey_from_rgb_gamma2_isqrt(r: u8, g: u8, b: u8) -&gt; u8 {

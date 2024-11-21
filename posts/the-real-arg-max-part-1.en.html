@@ -4,12 +4,10 @@
 <!-- categories: Articles, Techblog -->
 
 <p>arg max is a set of values from function’s domain at which said function
-  reaches its maxima.  That’s certainly <em>an</em> arg max but spelled without
-  an underscore thus not the one we are searching for.  No, this article is
-  regarding the <code>ARG_MAX</code> that limits the length of arguments to an
-  executable.
-
-<p>Or in other words, why you are getting:
+  reaches its maxima.  That’s certainly <em>an</em> arg max but not the one
+  we’re after.  No, this article is regarding the <code>ARG_MAX</code> that
+  limits the length of arguments to an executable.  Or in other words, why you
+  are getting:
 
 <pre>
 bash: <var>command</var>: Argument list too long
@@ -18,10 +16,10 @@ bash: <var>command</var>: Argument list too long
 <!-- FULL -->
 
 <p>The <code>ARG_MAX</code> parameter is common among UNIX-like platforms but
-  since most such systems have fallen into obscurity, are BSD or rubbish
-  systems, herein I will focus on a GNU/Linux environment running on a x86_64
-  platform.  While this limits the applicability of the information, many
-  concepts will apply to other systems and architectures as well.
+  since most such systems have fallen into obscurity, are BSD or are rubbish,
+  herein I will focus on a GNU/Linux environment running on a x86_64 platform.
+  While this limits the applicability of the information, many concepts will
+  apply to other systems and architectures as well.
 
 
 <h2>Experimentation</h2>
@@ -37,8 +35,8 @@ bash: <var>command</var>: Argument list too long
       investigation demonstrates that an argument three times as long works just
       as well which shouldn’t be the case.
 
-    <p style="margin-bottom:0">Turns out that even in minimal shells such as
-      dash and posh the <code>echo</code> command is a built-in.  Its execution
+    <p style="margin-bottom:0">Turns out that even in minimal shells, such as
+      dash and posh, the <code>echo</code> command is a built-in.  Its execution
       is performed entirely within the shell and as such isn’t subject to
       kernel-imposed limitations.  For the <code>ARG_MAX</code> limit to take
       effect the <code>execve</code> system call has to be used.  This can be
@@ -69,14 +67,13 @@ sh: /bin/echo: Argument list too long
   </pre>
 </div>
 
-<p>But this time, after redoing the experiment with that executable, the command
+<p>This time, after redoing the experiment with that executable, the command
   fails even for mere one million characters which should be within
-  the <code>ARG_MAX</code> limit.  Has <code>getconf</code> lied to us?  Is the
-  limit some other value?  With some trial and error we can determined that the
-  longest argument the kernel will accept is 131072 bytes long including the
-  terminating NUL byte.  However, that’s clearly not the end of the story since
-  it’s easy to see that while <em>a single argument</em> is limited to 128
-  KiB, <em>the whole command line</em> is not.
+  the <code>ARG_MAX</code> limit.  With some trial and error we can determined
+  that the longest argument the kernel will accept is 131072 bytes long
+  (including the terminating NUL byte).  However, that’s clearly not the end of
+  the story.  It’s easy to see that while <em>a single argument</em> is limited
+  to 128 KiB, <em>the whole command line</em> is not.
 
 <pre>
 $ /bin/echo "$(./gen-str 131072)"
@@ -96,12 +93,12 @@ $ /bin/echo "$s" "$s" "$s" "$s" "$s" "$s" "$s" "$s" \
 2093730
 </pre>
 
-<p>Do determine the apparent limit we can try passing more and more arguments
-  until we get the ‘Argument list too long’ error message.  As we’ll see the one
-  gets is highly dependent on the environment.  In the shell session shown in
-  listing above, I got a limit of 2093730 characters which is only 3422 bytes
-  shy of the 2 MiB we got as the value <code>ARG_MAX</code>.  What could account
-  for this difference?
+<p>To determine the apparent limit we can try passing more and more arguments
+  until we get the ‘Argument list too long’ error.  As we’ll see the value one
+  gets is dependent on the environment.  In the shell session shown in listing
+  above, I got a limit of 2093730 characters which is only 3422 bytes shy of the
+  2 MiB we got as the value <code>ARG_MAX</code>.  What could account for this
+  difference?
 
 <p>Since <code>echo</code> prints a white-space character after each argument,
   the number reported by <code>wc -c</code> does effectively count NUL bytes so
@@ -113,14 +110,14 @@ $ /bin/echo "$s" "$s" "$s" "$s" "$s" "$s" "$s" "$s" \
   unaccounted for.
 
 <p>The next breakthrough comes once we realise that command line arguments are
-  not the only way information is passed to an application.  The other, commonly
-  overlooked method, is environment variables such
+  not the only way information is passed to an application.  The other (commonly
+  overlooked) method are environment variables such
   as <code>PATH</code>, <code>TERM</code> or <code>USER</code>.  All of them
   contribute to the limit in the same way command line arguments do.  To measure
-  how much, we can simply invoke <code>env |wc</code> which will produce
-  the number as well as total length of all the variables.  This isn’t robust
-  against variables containing newline characters, but other than that it
-  correctly measures used space including NUL bytes terminating each value.
+  how much, we can invoke <code>env |wc</code> which will produce the number as
+  well as total length of all the variables.  This isn’t robust against
+  variables containing newline characters, but other than that it correctly
+  measures used space including NUL bytes terminating each value.
 
 <pre>
 $ env |wc
@@ -197,9 +194,7 @@ $ check /bin/echo  $((131071 - 17*8 - 1*8 - 2*10 - 8)) |wc -c
 <p>Knowing the limit, the next step is to understand how, if at all, can it be
   changed.  There’s no <code>setconf</code> counterpart to
   the <code>getconf</code> tool which would allow setting the parameter.
-  Indeed, we could search far and wide for a method to directly
-  change <code>ARG_MAX</code> and not find anything.  Alas, there is a way to
-  influence the value on Linux.
+  However, there is a way to influence the value on Linux.
 
 <p>To realise how we should consider what do all of the objects counted in the
   limit — command line arguments, environment variables and auxiliary
