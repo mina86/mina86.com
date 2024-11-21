@@ -4,11 +4,11 @@
 <!-- tags: regex, regular expression, short -->
 <!-- categories: Articles, Techblog -->
 
-<p>Quick! What does <code>re.search('foo|foobar', 'foobarbaz').group()</code>
-  produce?  Or for those not fluent in Python, how
-  about <code>/foo|foobar/.exec('foobarbaz')</code>?  Or to put it into words,
-  what part of string <code>foobarbaz</code> will a <code>foo|foobar</code>
-  regular expression match?
+<p>Quick! What does <code>re.search(<wbr>'foo|foobar',
+  'foobarbaz'<wbr>).group()</code> produce?  Or for those not fluent in Python,
+  how about <code>/foo|foobar/.exec(<wbr>'foobarbaz')</code>?  Or to put it into
+  words, what part of string <code>foobarbaz</code> will
+  a <code>foo|foobar</code> regular expression match?
 
 <figure>
   <svg width="32em" height="5.6em" viewBox="0 0 320 56" style="max-width: 90%"
@@ -36,8 +36,8 @@
   Alas, that’s not what is happening.  Instead, Python’s and JavaScript’s regex
   engine will only match <code>foo</code> prefix.
 
-<p>Knowing that, what does <code>re.search('foobar|foo',
-  'foobarbaz').group()</code> produce (notice the subexpressions in the
+<p>Knowing that, what does <code>re.search(<wbr>'foobar|foo',
+  'foobarbaz'<wbr>).group()</code> produce (notice the subexpressions in the
   alternation are swapped).  This can be reasoned in two ways: either order of
   branches in the alternation doesn’t matter — in which case the result should
   be the same as before, i.e. <code>foo</code> — or it does matter — and now the

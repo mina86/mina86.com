@@ -19,20 +19,36 @@
 <style>
   .play h3 { font-size: 1.25em; margin: 0 }
   .play td { vertical-align: top }
+  /* :not(:last-child) and :not(:first-child) are used to not match cells
+     containing PRE elements. */
   .play td:not(:last-child) {
       font-size: 0.875em;
       font-variant: small-caps;
       text-align: right;
       text-transform: uppercase;
   }
-  .play td:not(:last-child) abbr {
+  .play td abbr {
       font-variant: small-caps;
       text-transform: uppercase;
   }
   .play td:last-child {
       text-align: justify;
   }
+  .play td[colspan="2"] {
+      padding: 0;
+  }
   .dir { font-style: oblique }
+  @media (max-width: 30em) {
+    .play, .play tr, .play th, .play td {
+      display: block;
+    }
+    .play td:not(:last-child) {
+      text-align: left;
+    }
+    .play td:not(:first-child) {
+      padding-left: 2em;
+    }
+  }
 </style>
 
 <table class=play>

@@ -26,9 +26,9 @@
   hash symbol.  For example:
 
 <ul>
-  <li><code>https://www.google.com/<strong>?hl=es</strong></code>
-  <li><code>https://www.google.com/search?q=bread+sandwich<strong>&amp;hl=es</strong></code>
-  <li><code>https://analytics.google.com/analytics/web/<strong>?hl=es</strong>#/report-home/</code>
+  <li><code>https://<wbr>www.google.com/<wbr><strong>?hl=es</strong></code>
+  <li><code>https://<wbr>www.google.com/<wbr>search<wbr>?q=bread+sandwich<strong>&amp;hl=es</strong></code>
+  <li><code>https://<wbr>analytics.google.com/<wbr>analytics/<wbr>web/<strong>?hl=es</strong>#/report-home/</code>
 </ul>
 
 <p>By the way, as a legacy of Facebook having hired many ex-Google employees,
@@ -44,7 +44,7 @@
   parameter, but it respects preferences configured in the web browser.
 
 <p>Anyone familiar with HTTP may wonder why Google doesn’t simply look
-  at <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language">the <code>Accept-Language</code>
+  at <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language">the <code>Accept-<wbr>Language</code>
   header</a>.  Problem is that many users have their browser configured with
   defaults that send English as the only option, even though they would prefer
   another language.  In those cases, it’s more user-friendly to ignore that

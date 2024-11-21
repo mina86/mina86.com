@@ -38,13 +38,13 @@
   is not a valid statement.
 
 <p>What’s also not alright is using either of those characters in an unquoted
-  attribute value.  For example <code>&lt;em title=Rust>Go>this
-  code&lt;/em></code> would be rendered as a single EM element with ‘Rust’ title
-  and ‘Go>this code’ text.  If that’s not the intention, the value has to be
-  escaped.  This is hardly a legitimate use-case though.  Rather than escaping
-  the characters it’s better to quote the value.  The code ends up shorter and
-  easier to read as evident by <code>&lt;em title="PW>UW">this
-  code&lt;/em></code>.
+  attribute value.  For example <code>&lt;em title=Rust><wbr>Go><wbr>this
+  code<wbr>&lt;/em></code> would be rendered as a single EM element with ‘Rust’
+  title and ‘Go><wbr>this code’ text.  If that’s not the intention, the value
+  has to be escaped.  This is hardly a legitimate use-case though.  Rather than
+  escaping the characters it’s better to quote the value.  The code ends up
+  shorter and easier to read as evident by <code>&lt;em
+  title="PW><wbr>UW"><wbr>this code<wbr>&lt;/em></code>.
 
 
 <h2>Ampersand</h2>
@@ -109,10 +109,10 @@
   tags — semicolon is not always required, when parsing attribute values a named
   character reference must be terminated by a semicolon or else it will be taken
   verbatim.  For example, <code>&lt;a
-  href="/?book=Ecc&amp;sect=1&amp;para=2">/?book=Ecc&amp;sect=1&amp;para=2&lt;/a></code>
-  defines a link whose hypertext reference is ‘/?book=Ecc&amp;sect=1&amp;para=2’
-  but whose text is ‘/?book=Ecc§=1¶=2’ (despite the same code being used for
-  both strings).
+  href="/<wbr>?book=Ecc&amp;sect=1&amp;para=2">/<wbr>?book=Ecc&amp;sect=1&amp;para=2<wbr>&lt;/a></code>
+  defines a link whose hypertext reference is
+  ‘/<wbr>?book=Ecc&amp;sect=1&amp;para=2’ but whose text is
+  ‘/<wbr>?book=Ecc§=1¶=2’ (despite the same code being used for both strings).
 
 <p>As inconsistent as all of it sounds, this is what browsers were often doing
   anyway even before the behaviour was codified.  They always tried to be

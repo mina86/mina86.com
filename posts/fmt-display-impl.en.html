@@ -50,11 +50,15 @@ struct Hour(u8);
 struct Minute(u8);
 
 impl Hour {
-    fn new(val: u8) -> Option&lt;Self> { (val &lt; 24).then_some(Self(val)) }
+    fn new(val: u8) -> Option&lt;Self> {
+        (val &lt; 24).then_some(Self(val))
+    }
 }
 
 impl Minute {
-    fn new(val: u8) -> Option&lt;Self> { (val &lt; 60).then_some(Self(val)) }
+    fn new(val: u8) -> Option&lt;Self> {
+        (val &lt; 60).then_some(Self(val))
+    }
 }
 
 impl fmt::Display for TimeOfDay {
@@ -185,6 +189,7 @@ impl fmt::Display for DayOfWeek {
 }
 
 fn main() {
-    println!("dbg={:?} disp={}", DayOfWeek::Monday, DayOfWeek::Monday);
+    let dow = DayOfWeek::Monday;
+    println!("dbg={dow:?} disp={dow}");
 }
 </pre>
