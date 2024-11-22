@@ -1,0 +1,88 @@
+<!-- subject: Human error is not the root cause -->
+<!-- date: 2025-01-12 00:11:53 -->
+<!-- tags: design, root cause analysis, human error -->
+<!-- categories: Articles, Techblog -->
+
+<p>In 2023 UniSuper, an Australian retirement fund, decided to migrate part of
+  its operations to Google Cloud.  As port of the migration, they needed to
+  create virtual machines provisioned with limits higher than what Google’s user
+  interface allowed to set.  To achieve their goals, UniSuper contacted Google
+  support.  Having access to internal tools, Google engineer was able to create
+  requested instances.
+
+<p>Fast forward to May 2024.  UniSuper members lose access to their accounts.
+  The fund blames Google.  Some people are sceptical, but eventually UniSuper
+  and Google Cloud
+  publish <a href="https://www.unisuper.com.au/about-us/media-centre/2024/a-joint-statement-from-unisuper-and-google-cloud">a joint
+  statement</a> which points at ‘a misconfiguration during provisioning’ as
+  cause of the outage.
+  Later, <a href="https://cloud.google.com/blog/products/infrastructure/details-of-google-cloud-gcve-incident">a postmortem
+  of the incident</a> sheds even more light on events which have transpired.
+
+<p>Turns out that back in 2023, Google engineer used a command line tool to
+  manually create cloud instances according to UniSuper’s requirements.  Among
+  various options, said tool had a switch setting cloud instance’s term.  The
+  engineer omitted it leading to the instance being created with a fixed term
+  which triggered automatic deletion a year later.
+
+<p>So, human error. Scold the engineer and case closed. Or is it?
+
+<!-- FULL -->
+
+<p id=b1>Things are rarely so easy.  ‘The outcome knowledge poisons the ability
+  of after-accident observers to recreate the view of practitioners before the
+  accident of those same factors,’ writes Richard Cook.  This hindsight bias
+  ‘makes it seem that events leading to the outcome should have appeared more
+  salient to practitioners at the time than was actually the
+  case.’<a href="#f1"><sup>1</sup></a> Don Norman further observes that even
+  when analysing our own actions, ‘we are apt to blame ourselves.’
+
+<p id=b2>But ‘suppose the fault really lies in the device, so that lots of
+  people have the same problems.  Because everyone perceives the fault to be
+  their own, nobody wants to admit to having trouble.  This creates a conspiracy
+  of silence,’ resulting in fault never being
+  addressed.<a href="#f2"><sup>2</sup></a>
+
+
+<p id=b3>It’s easy to finish a post-accident analysis by pointing at a human
+  error.  Especially when there exist numerous safety procedures, devices and
+  fallback mechanisms designed to prevent catastrophic outcomes.  However, as
+  James Reason warns us, while ‘this is an understandable reactions, it
+  nonetheless blocks the discovery of effective countermeasures and contribute
+  to further fallible decisions.’<a href="#f3"><sup>3</sup></a>
+
+<p>If what we are concerned with is efficiency and safety of systems, assigning
+  blame to individuals is counterproductive.  Firing ‘responsible’ party in
+  particular may ironically cause more accidents rather than preventing them.
+  Having experienced a failure, the operator ‘responsible’ for it is better
+  equipped to handle similar situation in the future.  Meanwhile, a new person
+  is prone to making the same error.
+
+<p>Fundamentally, people make mistakes and if they fear being held accountable
+  they are less likely to admit to errors.  This destroys a feedback loop which
+  allows for latent failures to be analysed and addressed.  An organisation
+  which repair bad outcomes by disciplining ‘offending’ operators doesn’t end up
+  with operators who make no mistakes; it ends up with operators who are great
+  at hiding their mistakes.
+
+
+<p>This is why practice of <dfn>blameless postmortems</dfn> (where incidents are
+  analysed without assigning blame) is important.  And it is why attributing the
+  root cause to human error is feckless.
+
+
+<p id=f1><a href=#b1>1</a> Richard Cook. 2018.
+  How Complex Systems Fail (Revision G).
+  Cognitive Technologies Laboratory, University of Chicago.
+  Retrieved from <a clas=nl href="https://researchgate.net/publication/228797158">researchgate.net/publication/228797158</a>.
+
+<p id=f2><a href=#b2>2</a> Donald A. Norman. 2013.
+  <i>The Design of Everyday Things: Revised and Expanded Edition.</i>
+  Basic Books, New York.
+  ISBN 978-0-465-05065-9.
+
+<p id=f3><a href=#b3>3</a> James Reason. 1990.
+  The Contribution of Latent Human Failures to the Breakdown of Complex Systems.
+  <i>Philosophical Transactions of the Royal Society of London, Series B, Biological Sciences</i>.
+  <a class=nl href="https://doi.org/10.1098/rstb.1990.0090">doi:10.1098/rstb.1990.0090</a>.
+  <a class=nl href="https://pubmed.ncbi.nlm.nih.gov/1970893/">PMID:1970893</a>.

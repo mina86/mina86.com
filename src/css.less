@@ -37,6 +37,7 @@
 @dark-toggle-cls:      .td;
 @contrast-toggle-cls:  .tc;
 @no-print-cls:         .np; /* Don’t print. */
+@no-print-link-cls:    .nl; /* Don’t include link’s href in print. */
 
 /**** Identifiers ****/
 
@@ -1046,14 +1047,14 @@ abbr, @{unicode-name} {
 		font-size: unit(@tiny, rem);
 	}
 
-	@{article-text-cls} {
-		a[href^="http://"]:after, a[href^="https://"]:after {
+	@{article-text-cls} a:not(@{no-print-link-cls}) {
+		&[href^="http://"]:after, &[href^="https://"]:after {
 			content: " 〈" attr(href) "〉";
 		}
-		a[href^="/"]:after {
+		&[href^="/"]:after {
 			content: " 〈mina86.com" attr(href) "〉";
 		}
-		a[href^="//"]:after {
+		&[href^="//"]:after {
 			content: " 〈https:" attr(href) "〉";
 		}
 	}
