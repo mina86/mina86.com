@@ -10,7 +10,7 @@
 
 <p id=b1>On the other hand, strings are immutable which means that conversion
   between a <code>string</code> and <code>[]byte</code> requires memory
-  allocation and copying of the data<a href=/self#f1><sup>†</sup></a>.  Often this might be
+  allocation and copying of the data<a href=/self#f1><sup>1</sup></a>.  Often this might be
   acceptable but to squeeze every last cycle the following two functions might
   help achieve zero-copy implementation:
 
@@ -79,6 +79,6 @@ func Bytes(str string) []byte {
   above, can be found in a git repository
   at <a href="https://github.com/mina86/unsafeConvert">github.com/mina86/unsafeConvert</a>.
 
-<p id=f1><a href=#b1><sup>†</sup></a> As of now and to the best of my knowledge Go compiler
+<p id=f1><a href=#b1>1</a> As of now and to the best of my knowledge Go compiler
   is not smart enough to recognise when the copying can be avoided without
   sacrificing any promises the language is making.
