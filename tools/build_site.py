@@ -493,10 +493,10 @@ class Writer(object):
         self._tpl_dir = tpl_dir
         self._static_mappings = static_mappings
 
-    def write_html(self, filename, tpl_name, data):
+    def write_html(self, filename, tpl_name, data, **kw):
         data = self._env.get_template(tpl_name + '.html').render(data)
         data = compilers.minify_html(
-            data, static_mappings=self._static_mappings)
+            data, static_mappings=self._static_mappings, **kw)
         self.write_file(filename, data)
 
     def write_atom(self, filename, entries, href, feed_id, title=None):
@@ -599,13 +599,13 @@ def generate(writer, site):
         else:
             sitemap_add = lambda *args, **kw: None
 
-        def write_html(filename, tpl, data):
+        def write_html(filename, tpl, data, **kw):
             data['lang'] = lang
             data['T'] = lambda text: jinja2.utils.markupsafe.Markup(
                 get_translation(lang, text))
             data['byline'] = lambda author, email, date: format_byline(
                 lang, author, email, date)
-            writer.write_html(filename, tpl, data)
+            writer.write_html(filename, tpl, data, **kw)
 
         posts = sorted(site.posts, key=lambda post: post.date, reverse=True)
 
@@ -664,7 +664,7 @@ def generate(writer, site):
                 'entries': by_year[year],
                 'archives': archives,
                 'categories': categories,
-            })
+            }, strip_back_ids=True)
             sitemap_add('%s/%d/' % (BASE_HREF, year),
                         by_year[year][0].date,
                         'weekly' if year == NOW.year else 'monthly',
@@ -688,7 +688,7 @@ def generate(writer, site):
                     'entries': entries[idx:idx + 10],
                     'archives': archives,
                     'categories': categories,
-                })
+                }, strip_back_ids=True)
                 if not title and not page:
                     changefreq = 'daily'
                     priority = '1.0'

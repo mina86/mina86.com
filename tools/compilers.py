@@ -112,6 +112,7 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
         self._static_mappings = kw.pop('static_mappings', None)
         self._src_dir = kw.pop('src_dir', None)
         self._self = [[1, kw.pop('self_url', None)]]
+        self.__strip_back_ids = kw.pop('strip_back_ids', False)
         super().__init__(*args, **kw)
 
     def handle_starttag(self, tag: str, attrs: _Attributes) -> None:
@@ -135,25 +136,30 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
         i = 0
         while i < len(attrs):
             attr, value = attrs[i]
-            if (tag in ('path', 'text', 'use', 'rect', 'circle') and
-                attr in ('x', 'cx', 'y', 'cy') and
-                value == '0'):
+            if self._filter_attr(tag, attr, value):
+                if value:
+                    typing.cast(typing.List, attrs)[i] = (
+                        attr, self._transform_attr(tag, attr, value))
+                i += 1
+            else:
                 del attrs[i]
-                continue
-            if attr == 'self':
-                self._self.append([0, value])
-                del attrs[i]
-                continue
-            if value:
-                typing.cast(typing.List, attrs)[i] = (
-                    attr, self._transform_attr(tag, attr, value))
-            i += 1
+
+    def _filter_attr(self, tag: str, attr: str, value: typing.Optional[str]) -> bool:
+        if (tag in ('path', 'text', 'use', 'rect', 'circle') and
+            attr in ('x', 'cx', 'y', 'cy') and
+            value == '0'):
+            return False
+        if attr == 'self':
+            self._self.append([0, value])
+            return False
+        if (self.__strip_back_ids and
+            attr == 'id' and re.search('^b[0-9]+$', value)):
+            return False
+        return True
 
     def _transform_attr(self, tag: str, attr: str, value: str) -> str:
-        if self._static_mappings:
-            ret = self._static_mappings.get(value)
-            if ret:
-                return ret
+        if self._static_mappings and (ret := self._static_mappings.get(value)):
+            return ret
 
         if self._src_dir and tag == 'img' and attr == 'src':
             return _insert_data(self._src_dir, value).decode('utf-8')
