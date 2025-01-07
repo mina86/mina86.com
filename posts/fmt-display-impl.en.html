@@ -95,8 +95,7 @@ impl fmt::Display for Minute {
 <p>Having <code>Display</code>, <code>Debug</code>, <code>Octal</code> etc.
   implementations which call <code>write!</code> macro only is quite common.
   But while common, it’s at times incorrect.  While the above example will build
-  with such definitions, the test in <code>main</code> will fail
-  (<a href="https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=90a212d165e79ceefe6805bc8d48f918">playground</a>)
+  with such definitions, the test in <code>main</code> will fail <span class=np>(<a href="https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=90a212d165e79ceefe6805bc8d48f918">playground</a>)</span>
   producing the following error:
 
 <pre>
@@ -139,8 +138,7 @@ impl fmt::Display for Minute {
 
 <p>Since the same <code>Formatter</code> is used, any configuration that the
   caller specified (such as width and fill) will be applied when formatting the
-  inner type
-  (<a href="https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=6e2dea8e92b5b116ad18e0e68536eb68">playground</a>).
+  inner type<span class=np> (<a href="https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=6e2dea8e92b5b116ad18e0e68536eb68">playground</a>)</span>.
 
 <p>In fact, there is a crate for
   that.  <a href="https://crates.io/crates/derive_more"><code>derive_more</code></a>
@@ -165,8 +163,7 @@ struct Minute(u8);
   especially useful when implementation for both types is identical.  A naïve
   approach would be to use something like <code>write!(fmtr, "{self:?}")</code>
   in <code>Display</code> but this suffers from aforementioned issues.
-  Delegation is once again a better approach
-  (<a href="https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=9964ea87128599d08c4a960f114d655b">playground</a>):
+  Delegation is once again a better approach<span class=np> (<a href="https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=9964ea87128599d08c4a960f114d655b">playground</a>)</span>:
 
 <pre>
 use core::fmt;
