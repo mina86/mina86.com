@@ -246,9 +246,9 @@ class Post(_Addresable):
             date = d.get('date')
             if date:
                 date = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
-            updated = d.get('updated')
+            updated = d.get('update')
             if updated:
-                updated = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+                updated = datetime.datetime.strptime(updated, '%Y-%m-%d %H:%M:%S')
             return super(Post._Data, cls).__new__(
                 cls,
                 subject=subject,

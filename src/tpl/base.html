@@ -45,7 +45,7 @@
   <article self="{% if not post_page %}{{ entry.href }}{% endif %}">
     <hgroup>
       <h1><a lang="{{ entry.lang }}" href="{{ entry.href }}"
-             data-date="{{ entry.date.__str__()[:10] }}"
+             data-date="{{ (entry.updated or entry.date).__str__()[:10] }}"
              {{ attr('data-title', entry.bib_title) }}
              title="{{ T('Permanent link to the entry.') }}">{{
           entry.subject | safe }}</a></h1>
