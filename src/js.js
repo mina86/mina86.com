@@ -446,7 +446,7 @@ function gtag(){dataLayer.push(arguments)}
 		var acc = processDate(date);
 		var url = link.href;
 		var title = create('SPAN');
-		var mina86_com = create('I');
+		var title_italic = create('I');
 
 		var addRow = (th, ...rest) => {
 			el = create('TR', tbody);
@@ -461,49 +461,51 @@ function gtag(){dataLayer.push(arguments)}
 			key = (key + '           ').substring(0, 12);
 			return `,\n  ${key} = {${value}}`;
 		};
-		var bib = '@misc{Nazarewicz' + pub.fullYear +
-		    String.fromCharCode(97 + pub.doy / 26 | 0, 97 + pub.doy % 26) +
+		var bib = '@misc{Nazarewicz' + pub.year +
+		    String.fromCharCode(97 + pub.month * 2 + pub.dom / 26 | 0, 97 + pub.dom % 26) +
 		    field('title', link.dataset['title'] || link.innerText) +
 		    field('author', 'Michał Nazarewicz') +
-		    field('year', pub.fullYear) +
+		    field('year', pub.year) +
 		    field('month', pubdate.substring(5, 7)) +
+		    field('day', pubdate.substring(8, 10)) +
 		    field('howpublished', `\\url{${url}}`) +
 		    field('note', `Accessed: ${acc}`) +
 		    field('url', url) +
 		    field('urldate', acc) + '\n}';
 
-		title.innerHTML = link.innerHTML.replace(/<\/?(code|kbd)>/g, '');
-		mina86_com.innerHTML = 'mina86.com';
+		title.innerHTML = title_italic.innerHTML =
+			link.innerHTML.replace(/<\/?(code|kbd)>/g, '');
 
 		addRow('BibTeX');
 		createText(bib, create('PRE', el));
 
 		addRow('ACM',
-		       `Michał Nazarewicz. ${pub.fullYear}. `,
+		       `Michał Nazarewicz. ${pub.year}. `,
 		       title,
-		       `. (${pub.monthName} ${pub.fullYear}). Retrieved ${acc.monthName} ${acc.dom}, ${acc.fullYear} from ${url}`);
+		       `. (${pub.dom} ${pub.monthName} ${pub.year}). Retrieved ${acc.monthDayYear} from ${url}`);
+
+		addRow('APA',
+		       `Nazarewicz, M. (${pub.year}, ${pub.monthDay}). `,
+		       title_italic,
+		       `. Retrieved ${acc.monthDayYear}, from ${url}`);
 
 		addRow('IEEE',
-		       'M. Nazarewicz, “', title, ',” ', mina86_com,
-		       `, ${pub.ieeeDate}. [Online]. Available: ${url}. [Accessed: ${acc.ieeeDate}].`);
-
-		addRow('ISO 690',
-		       `NAZAREWICZ, Michał, ${pub.fullYear}, `, title, '. ', mina86_com,
-		       ` [online]. ${pub.isoDate}. [Accessed ${acc.isoDate}]. Available from: ${url}`);
+		       'M. Nazarewicz, “', title,
+		       `,” ${pub.monDayYear}. [Online]. Available: ${url}. [Accessed: ${acc.monDayYear}].`);
 	};
 	var months = 'January February March April May June July August September October November December'.split(' ');
 	var shortMonths = 'Jan. Feb. Mar. Apr. May Jun. Jul. Aug. Sept. Oct. Nov. Dec.'.split(' ');
 	var processDate = date => {
-		x = date.getMonth(),
 		a = {
-			fullYear: date.getFullYear(),
-			monthName: months[x],
+			year: date.getFullYear(),
+			month: date.getMonth(),
 			dom: date.getDate(),
 			'toString': _ => date.toISOString().substring(0, 10),
 		};
-		a.doy = x * 52 + a.dom;
-		a.ieeeDate = `${shortMonths[x]} ${a.dom}, ${a.fullYear}`;
-		a.isoDate = `${a.dom} ${a.monthName} ${a.fullYear}`;
+		a.monthName = months[a.month];
+		a.monthDay = `${a.monthName} ${a.dom}`;
+		a.monthDayYear = `${a.monthDay}, ${a.year}`;
+		a.monDayYear = `${shortMonths[a.month]} ${a.dom}, ${a.year}`;
 		return a;
 	};
 
