@@ -1,0 +1,118 @@
+<!-- subject: Regular expressions aren’t broken after all -->
+<!-- date: 2025-02-23 16:42:34 -->
+<!-- tags: regex, regular expression, short -->
+<!-- categories: Articles, Techblog -->
+
+<p>Four years ago I proclaimed that <a href="/2021/regexes-are-broken/">regular
+  expressions were broken</a>.  Two years ago I discussed this with BurntSushi
+  and even though his expertise in the subject could not be denied, he did not
+  manage to change my opinion.  But now, two more years after that, I adjusted
+  my stance.
+
+<p>Everything factual I’ve written previously is still accurate, but calling
+  regular expressions broken might have been a bit too much of a hyperbole.
+  There’s definitely something funky going on with regex engines but I’ve
+  realised an analogy which makes it make sense.
+
+<!-- FULL -->
+
+<h2>Recap</h2>
+
+<p>In formal language theory, alternation, i.e. the | operator, is commutative.
+  For two grammars α and β, α|β and β|α define the same language just like 1 + 2
+  and 2 + 1 equal the same number (there are no two different 3s, depending how
+  they were constructed).
+
+<p>Nevertheless, most regex engines care about the order of arguments in an
+  alternation.  As demonstrated <a href="/2021/regexes-are-broken/#tab"
+  class=nl>in my previous post</a>, when matching the string ‘foobar’
+  against <code>foo|foobar</code> regular expression, the regex engines will
+  match ‘foo’ substring but when matching it against <code>foobar|foo</code>
+  they will match the entire ‘foobar’ string.
+
+<p>This is a bit like saying that 5x should give different results depending on
+  whether x was constructed as x = 1 + 2 or x = 2 + 1.  Of course software
+  engineering and Maths are different disciplines and things don’t directly
+  translate between the two.  Nevertheless, I felt justified in calling such
+  regex engines broken.
+
+<h2>Prior Art</h2>
+
+<p>Adjustment of my stance on the issue was thanks to other examples where
+  programming practice clashes with its theoretical roots.  Below I’ll give
+  a handful of examples culminating with one that really changed my position.
+
+<h4>String concatenation</h4>
+<p id=b1>Many languages use a plus symbol as a string concatenation operator,
+  which isn’t commutative.  Meanwhile in Maths, plus is by convention used for
+  commutative operations only.<a href="#f1"><sup>1</sup></a> Indeed, some
+  languages opt for using different concatenation operators:
+  D uses <code>~</code>, Haskell uses <code>++</code>, Perl uses <code>.</code>
+  (dot), SQL uses <code>||</code> and Visual Basic uses <code>&amp;</code> to
+  name a few examples.<a href="#f2"><sup>2</sup></a>
+
+<p>However, this is a different situation than the case of alternation in
+  regular expressions.  Using plus symbol for concatenation may be considered
+  unfortunate, but the operation itself behaves the same way its counterpart in
+  Maths does.
+
+<h4>Floating point numbers</h4>
+<p id=b3>Another example where Maths disagrees with programming are floating
+  point numbers.  They pretend to be real numbers but in reality they aren’t
+  even good at being rational numbers.  Most notably for this discussion,
+  addition of floating point numbers is not associative and can lead to
+  catastrophic cancellation.<a href="#f3"><sup>3</sup></a> Plus there are NaN
+  values which infamously do not equal themselves and can really mess up array
+  sorting if not handled properly.
+
+<p>However, this didn’t convince me that regular expression weren’t broken
+  either.  After all, I’m perfectly happy to call floating point numbers broken.
+  I don’t mean by this that they are unusable or don’t solve real (no pun
+  intended) problems.  Rather this is only to emphasise that there are many
+  details that engineer needs to be vary of when using them.  This is the same
+  sense I used the word in regards to regex engines.
+
+<h4>Logic operations</h4>
+<p>In the end what made me more open to the ‘broken’ behaviour of regular
+  expressions were logic operators.  In many (most? all?) imperative languages,
+  the logic or operator use a short-circuit evaluation.  For example,
+  while <code>puts("foo") || puts("bar")</code> and <code>puts("bar") ||
+  puts("foo")</code> C expressions evaluate to the same value (one), their
+  behaviours differ — the first one outputs ‘foo’ and the second one outputs
+  ‘bar’ to standard output.
+
+<p>This is analogous to regular expressions.  When matching
+  <code>foo|foobar</code> and <code>foobar|foo</code> regular expressions, the
+  result (whether the string matches) is the same, but the side effects of the
+  execution may differ.
+
+
+<h2>Conclusion</h2>
+
+<p>To be clear, I still have doubts whether <code>foo|foobar</code>
+  and <code>foobar|foo</code> behaving differently is the right option.
+  However, it’s also clear to say that it’s not as broken as I used to think;
+  rather, it’s one of the peculiarities of regexes that one needs to be aware
+  of.  And specifically, aware of how regex engine they use behave.
+
+
+<p id=f1><a href=#b1>1</a> John B. Fraleigh and Neal E. Brand. 2020.
+  §4 Nonabelian Example.
+  <i>A First Course in Abstract Algebra (8th ed.).</i>
+  Pearson, Hoboken, NJ, USA.
+  ISBN 978-0-13-575816-8.
+
+<p id=f2><a href=#b1>2</a> Admittedly, at least in some of the cases choice of
+  a different operator may have been influenced by factors other than
+  ‘mathematical purity’.  Perl has separate set of operators for strings and
+  numbers (e.g. <code>$x == $y</code> converts operands to numbers if necessary
+  while <code>$x eq $y</code> converts them to strings).  Visual Basic has
+  both <code>+</code> and <code>&amp;</code> operators with the latter always
+  converting operands to strings first.  In contrast JavaScript is infamous with
+  its type coercion and it would likely benefit from having separate
+  concatenation operator.
+
+<p id=f3><a href=#b3>3</a> David Goldberg. 1991.
+  What every computer scientist should know about floating-point arithmetic.
+  <i>ACM Computing Surveys,</i> Vol 23, Issue 1 (March 1991), 5–48.
+  <a href=https://doi.org/10.1145/103162.103163 class=nl>doi:10.1145/103162.103163</a>.
