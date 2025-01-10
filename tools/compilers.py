@@ -220,7 +220,7 @@ _MINIFY_HTML_RE = re.compile(r'''
         'address', 'article', 'aside', 'base', 'blockquote', 'body', 'br',
         'canvas', 'caption', 'col(?:group)?', 'd[dlt]', 'div',
         'fig(?:caption|ure)', 'footer', 'form', 'h[1-6r]', 'head(?:er)?',
-        'hgroup', 'iframe', 'li(?:nk)?', 'main', 'meta', 'nav', 'noscript',
+        'iframe', 'li(?:nk)?', 'main', 'meta', 'nav', 'noscript',
         '[ou]l', 'opt(?:group|ion)', 'p', 'script', 'section', 'style',
         't(?:able|head|body|foot|[dhr]|itle)',
 
