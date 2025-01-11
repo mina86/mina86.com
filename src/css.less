@@ -432,7 +432,7 @@ article {
 /**** Main ****/
 
 @{main-id} {
-	margin: 5rem auto 8rem;
+	margin: 4rem auto 6rem;
 	@media print {
 		margin: 0 0 2rem;
 	}
@@ -455,6 +455,7 @@ article {
 	font-style: italic;
 	color: @fg-low-colour;
 	break-before: avoid;
+	margin-bottom: (round(1.5em / @small, 2));
 
 	a:visited, a:hover, a:focus {
 		color: @link-colour;
@@ -464,11 +465,11 @@ article {
 @{article-text-cls} {
 	h2 {
 		font-size: @huge;
-		margin-top: 1.5em;
+		margin: 1em 0;
 	}
 	h3 {
 		font-size: @large;
-		margin-top: 1.5em;
+		margin: (round(1em / @large, 2)) 0;
 	}
 	ul, ol, dl, p {
 		font-size: 1em;
@@ -558,9 +559,9 @@ pre, pre code, pre kbd {
 }
 pre {
 	font-size: @small;
-	margin: (round(1em / @small, 2));
-	padding: (round(1em / @small, 2));
-	border: 1px dashed @border-colour;
+	margin: (round(0.75em / @small, 2));
+	padding: (round(0.75em / @small, 2));
+	/* border: 1px dashed @border-colour; */
 	line-height: 1.25;
 	overflow-x: auto;
 	i {
