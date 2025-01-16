@@ -1,6 +1,3 @@
-dataLayer = [];
-function gtag(){dataLayer.push(arguments)}
-
 (date => {
 	/* Apart from those three, z is also variables available for use. */
 	var a, x, el;
@@ -708,23 +705,11 @@ function gtag(){dataLayer.push(arguments)}
 	(onresize = e => (onscroll(), positionDropDown()))();
 
 
-	/* Add third party scripts. */
-	a = src => create('script', doc.head).src = src;
-
+	/* Load comments if there’s a comment DIV. */
 	if (query('#c')) {
-		/* Don’t load comments unless there’s comment DIV. */
-		talkyardServerUrl = 'https://site-hz95jhr8je.talkyard.net';
-		a('//c1.ty-cdn.net/-/talkyard-comments.min.js');
+		create('script', doc.head).src =
+			'//c1.ty-cdn.net/-/talkyard-comments.min.js';
 	}
-	a('//www.googletagmanager.com/gtag/js?id=G-2KN8BH0V6Z');
-	gtag('js', date);
-	gtag('consent', 'default', {
-		'ad_storage': 'denied',
-		'ad_user_data': 'denied',
-		'ad_personalization': 'denied',
-		'analytics_storage': 'denied'
-	});
-	gtag('config', 'G-2KN8BH0V6Z');
 
 	/* Add prefetch and prerender links to the first article if this is an
 	   index page*/
@@ -768,3 +753,5 @@ function gtag(){dataLayer.push(arguments)}
 	/* Decorate the main content by adding ABBR elements for acronyms. */
 	processAbbr(query('#b'));
 })(new Date);
+
+talkyardServerUrl = 'https://site-hz95jhr8je.talkyard.net';
