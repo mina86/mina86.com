@@ -711,15 +711,13 @@
 			'//c1.ty-cdn.net/-/talkyard-comments.min.js';
 	}
 
-	/* Add prefetch and prerender links to the first article if this is an
-	   index page*/
+
+	/* Add prefetch and prerender links to the first article if this is the
+	   first page of an index.  We are on an index page if we have multiple
+	   `article h1` elements.  We are on first index page if there’s no
+	   left-aligned link in pagination table. */
 	el = queryAll('article h1 a');
-	if (el.length > 1 && !query('#p .r')) {
-		/* If there are multiple articles we’re on an index page (this
-		   may yield false negative on last index page if there’s only
-		   one entry but we don’t care about last page anyway.  And
-		   then, if there’s no right-aligned link in pagination table
-		   than we’re on the first index page. */
+	if (el.length > 1 && !query('#p .l')) {
 		['prefetch', 'prerender'].map(rel => {
 			a = create('link', doc.head);
 			a.crossOrigin = '';
@@ -731,7 +729,7 @@
 
 	/* Handle byline.  Add (cite) button showing citation and on 1st of
 	   April change the author. */
-	doc.querySelectorAll('.y').forEach(byline => {
+	queryAll('.y').forEach(byline => {
 		/* Cite button. */
 		el = create('SPAN', byline, 'np');
 		createText(' | ', el);
