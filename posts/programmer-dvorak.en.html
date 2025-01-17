@@ -135,6 +135,22 @@
   out their parenthesise much quicker than someone writing in Haskell.  Turns
   out, I write mostly in languages whose syntax is based on C.
 
+<!-- Format the LaTeX symbol correctly (a higher up, e lower).  Based on
+     https://github.com/vincentdoerig/latex-css/blob/master/style.css -->
+<style>
+.latex span {
+	text-transform: uppercase;
+	line-height: 1ex;
+	vertical-align: -0.5ex;
+	margin: 0 -.125em 0 -.1667em;
+}
+.latex span:nth-child(1) {
+	font-size: 0.75em;
+	vertical-align: 0.28em;
+	margin: 0 -.15em 0 -.48em;
+}
+</style>
+
 <table>
   <thead>
     <tr><th>File type<th>Percentage of lines
@@ -162,7 +178,7 @@
     <tr style="background:linear-gradient(to right,var(--j) 6%,#fff0 6%)">
       <td>Lisp<td class=r> 2.55%
     <tr style="background:linear-gradient(to right,var(--j) 6%,#fff0 6%)">
-      <td>LaTeX<td class=r> 2.33%
+      <td class=latex>L<span>a</span>T<span>e</span>X<td class=r> 2.33%
     <tr style="background:linear-gradient(to right,var(--j) 3%,#fff0 3%)">
       <td>Makefile<td class=r> 1.34%
     <tr style="background:linear-gradient(to right,var(--j) 4%,#fff0 4%)">
