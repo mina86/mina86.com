@@ -350,24 +350,29 @@
 		return false;
 	};
 
-	/* Recursively decorates contents of the element by adding ABBR elements
-	   around acronyms found in text elements.  Does not descends into KBD,
-	   ABBR, PRE or CODE elements (and in fact a few more; see body of the
-	   function) nor into elements which have NA attribute. */
-	var processAbbr = parent => {
+	/* Recursively decorates contents of the element by adding ABBR and WBR
+	   elements.  Does not affect ABBR, KBD or PRE elements; nor elements
+	   with NA attribute set.
+
+	   Within elements it descends into:
+	   - adds ABBR around acronyms found in text elements except inside of
+	     CODE or if justWbr argument is true and
+	   - adds WBR after each sequence of two or more colons (i.e. ‘::’) to
+	     help the browser wrap long lines of text.
+	*/
+	var processAbbrAndWbr = (parent, justWbr) => {
 		for (var next = parent.firstChild; next;) {
 			el = next;
 			next = el.nextSibling;
 			if (el.nodeType == 3) {
-				processAbbrText(parent);
+				processAbbrAndWbrText(parent, justWbr);
 			} else if (el.nodeType == 1 &&
 				   el.getAttribute('na') == null &&
-				   /* kbd, abbr, pre, code; the regex also
-				      matches progress, colgroup and col but
-				      that’s fine since we don’t care about
-				      processing those either. */
-				   !/[KB]B|PR|CO/.exec(el.tagName)) {
-				processAbbr(el);
+				   /* KBD, ABBR, PRE */
+				   !/[KB]B|PR/.exec(el.tagName)) {
+				/* Don’t add ABBR inside of CODE elements;
+				   Handle WBR only. */
+				processAbbrAndWbr(el, justWbr || el.tagName == 'CODE');
 			}
 		}
 	};
@@ -375,19 +380,28 @@
 	/* Decorates contents of a text node by adding ABBR elements around
 	   acronyms.  Expects ‘el’ to be the text node to operate on.  ‘parent’
 	   is element containing the node. */
-	var processAbbrText = parent => {
+	var processAbbrAndWbrText = (parent, justWbr) => {
 		var fragment = new DocumentFragment;
 		/* We match sole ‘$’ so that once we’re done we get one final
 		   empty match at the end of the string.  This way we never
 		   leave the loop and it simplifies handling of text which is
 		   not affected. */
-		var re = /\b(GNU.Li.*?|HTML[45]|sRGB|W3C|TL;DR|U\+[A-F]{4,6}|([A-Z]{3,}[- \/]+)*[A-Z]{3,})(?=s?\b)|$/g;
+		var re = justWbr
+		    ? /(::+)|$/g
+		    : /(::+)|\b((GNU.Li.*?|U\+[A-F]{4,6})|HTML[45]|(sRGB)|W3C|TL;DR|([A-Z]{3,}[- \/]+)*[A-Z]{3,})(?=s?\b)|(::+)|$/g;
 		var text = el.nodeValue;
 		var matched = a = 0;
 		do {
 			x = re.exec(text);
 			z = x[0];
-			if (/[i+]/.exec(z)) {
+			if (x[1]) {
+				/* ‘::’ doesn’t need to be wrapped in any
+				   element.  We just want to add WBR after
+				   it. */
+				x.index += z.length;
+				z = '';
+			}
+			if (x[3]) {
 				/* GNU/Linux, GNU/Linuksa and U+#### don’t get
 				   converted.  They are handled by the regular
 				   expression so that ‘GNU’ in the first two and
@@ -395,21 +409,25 @@
 				   get caught as an acronym. */
 				continue;
 			}
-			if (z == 'sRGB') {
+			if (x[4]) {
 				/* With sRGB we want ‘RGB’ part to be treated
 				   but ‘s’ to stay untouched.  Modify match as
 				   if it matched one character later. */
 				++x.index;
-				z = z.substr(1);
+				z = 'RGB';
 			}
 			if (x.index > a) {
 				createText(text.substring(a, x.index), fragment);
 			}
-			if (z) {
+			if (x[0]) {
 				matched = a = x.index + z.length;
-				create('abbr', fragment).innerText = z;
+				if (x[1]) {
+					create('wbr', fragment);
+				} else {
+					create('abbr', fragment).innerText = z;
+				}
 			}
-		} while (z);
+		} while (x[0]);
 		matched && parent.replaceChild(fragment, el);
 	};
 
@@ -748,8 +766,8 @@
 	});
 
 
-	/* Decorate the main content by adding ABBR elements for acronyms. */
-	processAbbr(query('#b'));
+	/* Decorate the main content by adding ABBR and WBR elements. */
+	processAbbrAndWbr(query('#b'));
 })(new Date);
 
 talkyardServerUrl = 'https://site-hz95jhr8je.talkyard.net';
