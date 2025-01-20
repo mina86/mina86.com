@@ -222,11 +222,11 @@ fn xyz_from_lab(lab: [f32; 3]) -> [f32; 3] {
     const KAPPA: f32 = 24389.0 / 27.0;
 
     fn f_inv(v: f32) -> f32 {
-        if v > CBRT_EPSILON: {
+        if v > CBRT_EPSILON {
             v.powi(3)
         } else {
             (v * 116.0 - 16.0) / KAPPA
-        };
+        }
     }
 
     let fy = (lab[0] + 16.0) / 116.0;
@@ -234,11 +234,11 @@ fn xyz_from_lab(lab: [f32; 3]) -> [f32; 3] {
     let fz = fy - (lab[2] / 200.0);
 
     let x = f_inv(fx) * 0.9504492182750991;
-    let y = if lab[0] > 8 {
+    let y = if lab[0] > 8.0 {
         fy.powi(3)
     } else {
         lab[0] / KAPPA
-    }
+    };
     let z = f_inv(fz) * 1.0889166484304715;
 
     [x, y, z]
@@ -279,11 +279,11 @@ fn xyz_from_lab(lab: [f32; 3]) -> [f32; 3] {
 /// equal 1) into an sRGB colour specified as a triple of 8-bit integers.
 fn srgb_from_xyz(xyz: [f32; 3]) -> [u8; 3] {
     // Gamma compression from linear [0, 1] value to 8-bit integer.
-    fn gamma_compression(linear: f32): u8 {
+    fn gamma_compression(linear: f32) -> u8 {
         let v = if linear &lt;= 0.00313066844250060782371 {
             3294.6 * linear
         } else {
-            269.025 * linear.pow(5.0 / 12.0) - 14.025
+            269.025 * linear.powf(5.0 / 12.0) - 14.025
         };
         v.round().min(255.0).max(0.0) as u8
     }
@@ -316,7 +316,7 @@ fn srgb_from_xyz(xyz: [f32; 3]) -> [u8; 3] {
 <h2 id=lch>L*a*b* and LCh<sub>ab</sub></h2>
 
 <p>The a* and b* components of the L*a*b* colour are not easy to interpret.
-  Even knowing that they component represents green-red and blue-yellow axes
+  Even knowing that they corresponding to green-red and blue-yellow axes
   respectively, it’s tricky to visualise the colour space.  To make it easier
   for humans to work with, CIE defined an LCh<sub>ab</sub> colour space as
   a conversion of L*a*b* into a cylindrical coordinate system.  It replaces a*
