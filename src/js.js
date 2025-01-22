@@ -745,23 +745,21 @@
 	}
 
 
-	/* Handle byline.  Add (cite) button showing citation and on 1st of
-	   April change the author. */
 	queryAll('.y').forEach(byline => {
 		/* Cite button. */
-		el = create('SPAN', byline, 'np');
-		createText(' | ', el);
+		el = create('LI', byline);
+		el.className = 'np';
 		el = create('A', el);
-		el.innerText = isPL ? '(cytuj)' : '(cite)';
+		el.innerText = isPL ? 'Cytuj' : 'Cite';
 		el.href = '#';
 		el.onclick = _ => showCitation(byline.previousElementSibling.firstChild);
 
 		/* 1st of April */
 		if (date.getDate() == 1 && date.getMonth() == 3) {
-			byline.innerHTML = byline
-				.innerHTML
-				.replace(/(Michał) .mina86. (Nazarewicz)/,
-					 (isPL ? 'Hrabia' : 'Count') + ' $1 P. $2');
+			el = byline.firstChild;
+			el.innerText = el.innerText.replace(
+				/(Michał) .mina86. (Nazarewicz)/,
+				(isPL ? 'Hrabia' : 'Count') + ' $1 P. $2');
 		}
 	});
 
