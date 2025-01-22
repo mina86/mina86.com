@@ -77,9 +77,7 @@ TRANSLATIONS = {
     'See comments': {'pl': 'Zobacz komentarze'},
     'Continue reading': {'pl': 'Czytaj dalej'},
     'In categories:': {'pl': 'Kategorie:'},
-    'Tagged with:': {'pl': 'Tagi:'},
-
-    'Resume': {'pl': 'CV'},
+    'Share on': {'pl': 'Udostępnij na'},
 }
 
 
@@ -121,11 +119,10 @@ def format_byline(lang, author, email, date):
     day = date.day
     month = date.month
     year = date.year
-#     month_roman = unichr(0x215F + date.month)
 
     if lang == 'pl':
         date = '%d %s %d' % (day, MONTHS_PL[month], year)
-        fmt = '%s | %s'
+        fmt = '%s<li class=yy>%s'
     else:
         day = format_ordinal('en', day)
         month = date.strftime('%B')
@@ -509,7 +506,7 @@ class Writer(object):
         fd = io.StringIO()
 
         def write(val, **kw):
-            val = re.sub('\s+', ' ', val)
+            val = re.sub(r'\s+', ' ', val)
             if kw:
                 kw.setdefault('author', author)
                 for key in ('date', 'updated'):

@@ -49,9 +49,13 @@
            title="{{ T('Permanent link to the entry.') }}">{{
         entry.subject | safe }}</a></h1>
 
-    <p class="y">{{ byline('Michał ‘mina86’ Nazarewicz', 'mina86@mina86.com',
-                           entry.date) }}
-
+    <ul class="y">
+      <li>{{byline('Michał ‘mina86’ Nazarewicz', 'mina86@mina86.com', entry.date)}}
+      <li class=np><a href="https://bsky.app/intent/compose?text={{
+            (entry.subject + ' at ' + entry.url) | urlencode
+        }}"
+      >{{ T('Share on') }} <span class=z>Bluesky</span></a>
+    </ul>
     <div class="{% if full %}q {% endif %} t" lang="{{ entry.lang }}">{{
       entry.body.html(post_page)
     }}</div>
@@ -142,7 +146,13 @@
 
 
   <section id=n>
-    <h2>{{ T('Contact') }}</h2><ul class="m n"><li><strong>Michał Nazarewicz</strong><li><a href=mailto:mina86@mina86.com>mina86@mina86.com</a><li><a href=//matrix.to/#/@mina86:matrix.org>@mina86:matrix.org</a><li class=np><a href=/cv>{{ T('Resume') }}</a>  <a href="https://www.linkedin.com/in/mina86/" class=i>LinkedIn</a>
+    <h2>{{ T('Contact') }}</h2>
+    <ul class="m n">
+      <li>Michał Nazarewicz
+      <li><a href=mailto:mina86@mina86.com>mina86@mina86.com</a>
+      <li><a href=//matrix.to/#/@mina86:matrix.org>@mina86:matrix.org</a>
+      <li><span class=z>Bluesky</span> <a href="https://bsky.app/profile/mina86.com" class=nl>@mina86.com
+      <li class=np><a href=/cv title="Curriculum Vitae">CV</a> — <a href="https://www.linkedin.com/in/mina86/" class=i>LinkedIn</a>
   </ul></section>
   </div>
 </nav>
