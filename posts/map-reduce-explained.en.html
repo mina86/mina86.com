@@ -102,10 +102,10 @@ for nick, count in map(getWords, sys.stdin):
   Because of process creation and synchronisation overhead, such
   approach would turn out to be slower.
 
-<p>The way to go is to <dfn>shard</dfn> the whole log into smaller
-  chunks and map entries in each of them separately.  Fortunately, the
-  data is already split into per-day files.  Parallelising the process
-  is as simple as running a process for each file:
+<p>The way to go is to <dfn>shard</dfn> the whole log into smaller chunks and
+  map entries in each of them separately.  Fortunately, the data are already
+  split into per-day files.  Parallelising the process is as simple as running
+  a process for each file:
 
 <pre>
 mkdir -p temp/words
