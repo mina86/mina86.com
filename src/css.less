@@ -15,8 +15,7 @@
 @left-align-cls:       .l; /* text-align: left */
 @drop-down-ul-cls:     .m;
 @contact-dd-ul-cls:    .n;
-/* o, p */
-@full-text-shown-cls:  .q;
+/* o, p, q */
 @right-align-cls:      .r; /* text-align: right */
 @dd-selected-cls:      .s; /* Selected’s drop down’s A plus if non-setting drop
                               down shown this is added to body. */
@@ -72,7 +71,9 @@
 @nav-link-colour:     @head-colour;
 @nav-hover-colour:    var(--p); @nav-hover-colour-var: --p;
 @nav-header-colour:   var(--q);
-/* r, s, t, u, v */
+/* r */
+@scroll-bar-width:    var(--s,1rem);
+/* t, u, v */
 @float-with:          var(--w);
 @slide-position:      var(--x, 66%);
 /* y */
@@ -196,12 +197,12 @@ text {
 	body {
 		display: flex;
 		flex-direction: column;
-		align-items: stretch;
 		min-height: 100%;
 	}
 
 	@{nav-id} {
 		box-shadow: 0 .5rem 0.5rem -.5rem inset #000;
+		flex-grow: 1;
 	}
 }
 
@@ -580,13 +581,17 @@ pre, pre code, pre kbd {
 }
 pre {
 	font-size: @small;
-	margin:  (round(.75em / @small, 2)) ~"min(.75em, 1.5vw)";
-	padding: (round(.75em / @small, 2)) ~"min(.75em, 1.5vw)";
+	padding: .5em ~"min(1.5em, 2vw)";
+	margin: .5em 0;
+	max-width: ~"calc(100vw - 2rem - @{scroll-bar-width})";
 	overflow-x: auto;
 	i {
 		font-style: normal;
 		font-family: @body-font;
 	}
+}
+li pre, dd pre {
+	max-width: ~"calc(100vw - 4rem - @{scroll-bar-width})";
 }
 
 blockquote {
@@ -640,7 +645,8 @@ figure {
 	text-align: center;
 	pre {
 		text-align: left;
-		margin: 0 0 0.75em;
+		margin: 0 0 .75em;
+		padding: 0;
 	}
 	img, svg {
 		max-width: 100%;

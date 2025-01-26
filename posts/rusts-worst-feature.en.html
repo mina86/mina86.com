@@ -1,7 +1,7 @@
 <!-- subject: Rust’s worst feature* -->
 <!-- date: 2025-01-26 12:06:58 -->
 <!-- tags: rust -->
-<!-- categories: Articles -->
+<!-- categories: Articles, Techblog -->
 
 <p><small>* available in Rust nightly.</small></p>
 
@@ -53,9 +53,7 @@ pub fn unsound_copy(
     mut wr: impl std::io::Write,
 ) -> std::io::Result&lt;()&gt; {
   loop {
-    let mut buf = [
-      MaybeUninit::&lt;u8&gt;::uninit(); 4096
-    ];
+    let mut buf = [MaybeUninit::&lt;u8&gt;::uninit(); 4096];
     // <i>SAFETY: <strong>This is unsound.</strong></i>
     // <i>For demonstration purposes only.</i>
     let buf = unsafe {
@@ -285,9 +283,7 @@ fn copy(
 <pre>
   let buf = MaybeUninit::frozen();
   // SAFETY: u8 has no invalid bit patterns.
-  let mut buf: [u8; 4096] = unsafe {
-    buf.assume_init()
-  };
+  let mut buf: [u8; 4096] = unsafe { buf.assume_init() };
 </pre>
 
 <p>Unsafe blocks are required to account for invalid bit patterns.  With a trait
@@ -367,22 +363,19 @@ tautology_ok:
   const PAGE_SIZE: usize = 4096;
   let ptr = slice.as_mut_ptr() as *mut _;
   let len = slice.len() * size_of::&lt;T&gt;();
-  // SAFETY: It’s always safe to split MU
-  // object into MU bytes.
+  // SAFETY: It’s always safe to split MU object into MU bytes.
   let bytes: &amp;mut [MaybeUninit&lt;u8&gt;] = unsafe {
     core::slice::from_raw_parts(ptr, len);
   };
   for el in bytes.iter_mut().step_by(PAGE_SIZE) {
     let p = el.as_mut_ptr();
-    // SAFETY: Unsafe without language semantics
-    // change since we’re reading uninitialised
-    // byte.
+    // SAFETY: Unsafe without language semantics change
+    // since we’re reading uninitialised byte.
     unsafe { p.write_volatile(p.read()) };
   }
-  // SAFETY: Caller promises that T has no invalid
-  // bit patterns, but this is still unsafe without
-  // language semantics change since we haven’t
-  // initialised all the bytes.
+  // SAFETY: Caller promises that T has no invalid bit patterns,
+  // but this is still unsafe without language semantics change
+  // since we haven’t initialised all the bytes.
   unsafe { &amp;mut *(slice as *mut _ as *mut [T]) }
 }</pre>
 
