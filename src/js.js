@@ -182,7 +182,7 @@
 			return rgbFromLuv(shade, ch * h.c, ch * h.s);
 		};
 
-		storage.setItem('c', root.style = [
+		a = [
 			'color:'   + z(el(0), 2),
 			clBg       + z(el(3), 2 - isDark),
 			clFgLow    + z(el(1), 2),
@@ -205,7 +205,9 @@
 			clSlide    + z(   2 , 9),
 
 			'x:' + schemeHue / 0.12 + '%',
-		].join(';--'));
+		].join(';--');
+		storage.setItem('c', a);
+		root.style = a + ';--s:' + (innerWidth - root.clientWidth) + 'px';
 		root.id = isDark ? 'd' : '';
 		doc.body.id = isHighContrast ? 't' : '';
 	};
