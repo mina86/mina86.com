@@ -2,7 +2,7 @@
 <!-- date: 2021-02-07 20:06:46 -->
 <!-- update: 2021-03-21 01:21:33 -->
 <!-- tags: rgb, greyscale -->
-<!-- categories: Articles, Techblog -->
+<!-- categories: Articles, Techblog, Colour -->
 
 <p>While working on <a href=https://crates.io/crates/ansi_colours>ansi_colours
   crate</a> I’ve learned about colour spaces more than I’ve ever thought
@@ -72,11 +72,10 @@ fn distance(r: u8, g: u8, b: u8, y: u8) -&gt; f32 {
 <p>The perfect conversion algorithm would be to move to L*a*b* colour space, set
   a* and b* to zero and go back to sRGB.  This can be optimised significatly by
   recognising that L* component depends on the Y coordinate
-  of <a href="https://en.wikipedia.org/wiki/CIE_1931_color_space">the XYZ colour
-  space</a> only.  Going all the way isn’t necessary and it’s enough to
-  calculate the Y component (without bothering with X and Z) and apply gamma
-  correction to it to get the desired shade of grey.  This method is implemented
-  by the following code:
+  of <a href="/2025/know-my-xyz/">the XYZ colour space</a> space</a> only.
+  Going all the way isn’t necessary and it’s enough to calculate the Y component
+  (without bothering with X and Z) and apply gamma correction to it to get the
+  desired shade of grey.  This method is implemented by the following code:
 
 <pre id=exact>
 fn grey_from_rgb_exact(r: u8, g: u8, b: u8) -&gt; u8 {

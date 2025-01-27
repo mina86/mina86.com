@@ -1,7 +1,7 @@
 <!-- subject: {sRGB↔L*a*b*↔LCh<sub>ab</sub>} conversions -->
 <!-- date: 2021-03-21 01:21:33 -->
 <!-- tags: rgb, srgb, cielab, colorimetry  -->
-<!-- categories: Articles, Techblog -->
+<!-- categories: Articles, Techblog, Colour -->
 <!-- math: true -->
 
 <p>After writing about <a href="/2019/srgb-xyz-conversion/">conversion between
@@ -32,10 +32,11 @@
   LCh<sub>ab</sub> aim to make L*a*b* easier to interpret by replacing a* and b*
   axes with more intuitive chroma and hue parameters.
 
-<p>Importantly, the conversion between sRGB and L*a*b* goes through XYZ colour
-  space.  As such, the full process has multiple steps with a round trip
-  conversion being: sRGB​→​XYZ​→​L*a*b*​→​XYZ​→​sRGB.  Because of that structure I will
-  describe each of the steps separately.
+<p>Importantly, the conversion between sRGB and L*a*b* goes through
+  <a href="/2025/know-my-xyz/">XYZ colour space</a>.  As such, the full process
+  has multiple steps with a round trip conversion being:
+  sRGB​→​XYZ​→​L*a*b*​→​XYZ​→​sRGB.  Because of that structure I will describe each of
+  the steps separately.
 
 <!-- FULL -->
 

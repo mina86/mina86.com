@@ -169,19 +169,19 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
         if self._static_mappings and (ret := self._static_mappings.get(value)):
             return ret
 
-        if self._src_dir and tag == 'img' and attr == 'src':
+        tag_attr = f'{tag} {attr}'
+        if self._src_dir and tag_attr in ('img src', 'image href'):
             return _insert_data(self._src_dir, value).decode('utf-8')
 
         value = re.sub(r'\s+', ' ', value.strip())
         if attr == 'style':
             value = self._minify_css(value)
-        elif attr == 'd' and tag == 'path':
+        elif tag_attr == 'path d':
             # In SVG’s D attribute of PATH element the only required white-space
             # is between numbers (except space is not necessary before minus
             # sign).
             value = re.sub(r' ?([-a-zA-Z,]) ?', r'\1', value)
-        elif '%s %s' % (tag, attr) in ('link media', 'area coords',
-                                     'meta content'):
+        elif tag_attr in ('link media', 'area coords', 'meta content'):
             # Comma separated lists, remove unnecessary spaces around commas.
             value = re.sub(r' ?, ?', ',', value)
         elif attr in ('href', 'src') and tag != 'base':

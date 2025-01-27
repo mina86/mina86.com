@@ -57,8 +57,8 @@ TRANSLATIONS = {
     'Downloads': {'pl': 'Do pobrania'},
     'In English': {'pl': 'Po angielsku'},
     'In Polish': {'pl': 'Po polsku'},
-    'Misc': {'pl': 'Różne'},
-    'Reviews': {'pl': 'Recenzje'},
+    'Colour': {'en': 'Colour Theory', 'pl': 'Teoria koloru'},
+    'Misc': {'en': 'Miscellaneous', 'pl': 'Różne'},
     'Site News': {'pl': 'Aktualności'},
 
     # Pagination

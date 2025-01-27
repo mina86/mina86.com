@@ -1,0 +1,127 @@
+<!-- subject: Now I know my {XYZ’s} -->
+<!-- date: 2025-03-02 00:32:24 -->
+<!-- tags: xyz colour space  -->
+<!-- categories: Articles, Techblog, Colour -->
+
+<p>When dealing with colour spaces, one eventually
+  encounters <a href="https://en.wikipedia.org/wiki/CIE_1931_color_space">the
+  XYZ colour space</a>.  It is a mathematical model that maps any visible colour
+  into a triple of X, Y and Z coordinates.  Defined in 1931, it's nearly
+  a century old and serves as a foundation upon which other colour spaces are
+  built.  However, XYZ has one aspect that can easily confuse programmers.
+
+<!-- https://en.wikipedia.org/wiki/File:CIE1931xy_blank.svg -->
+<div style="float:left;
+            shape-outside:polygon(30% 0,100% 60%,100% 100%,0 100%,0 0);
+            margin-left: clamp(-5em,26em - 50vw,0em)">
+<svg style="width:min(20em,40vw);height:auto"
+     viewBox="0 0 494.6 525.8">
+  <style>
+    path { fill: none; stroke: var(--c) }
+    text { font-size: 19 }
+    .hi text { fill: var(--i) }
+  </style>
+  <path id="br"
+        stroke-width="4"
+        d="M150,473C147,473 145,471 142,469C135,462 129,455 124,446C121,441 118,436 116,431C113,424 110,416 107,408C103,396 99,385 95,373C86,339 77,298 72,264C66,226 61,179 62,141C63,118 65,81 80,60C84,54 91,50 98,49C105,48 112,51 118,53C140,60 160,76 178,90C236,135 287,191 339,243C360,264 380,284 401,305C409,313 417,321 426,329C428,332 430,334 433,337C434,337 434,338 435,339C435,339 436,340 436,340" />
+  <path stroke-dasharray="1 3"
+        stroke-width="1"
+        d="M85.5,475.5l0,-460.8M111.5,475.5l0,-460.8M136.5,475.5l0,-435.2M162.5,475.5l0,-409.6M188.5,475.5l0,-384M213.5,475.5l0,-358.4M239.5,475.5l0,-332.8M264.5,475.5l0,-307.2M290.5,475.5l0,-281.6M316.5,475.5l0,-256M341.5,475.5l0,-230.4M367.5,475.5l0,-204.8M392.5,475.5l0,-179.2M418.5,475.5l0,-153.6M444.5,475.5l0,-128M469.5,475.5l0,-102.4M60.5,450.5l409.6,0M60.5,424.5l409.6,0M60.5,399.5l409.6,0M60.5,373.5l409.6,0M60.5,347.5l384,0M60.5,322.5l358.4,0M60.5,296.5l332.8,0M60.5,271.5l307.2,0M60.5,245.5l281.6,0M60.5,219.5l256,0M60.5,194.5l230.4,0M60.5,168.5l204.8,0M60.5,143.5l179.2,0M60.5,117.5l153.6,0M60.5,91.5l128,0M60.5,66.5l102.4,0M60.5,40.5l76.8,0M60.5,15.5l51.2,0M111.5,15.5L469.5,373.5" />
+  <path stroke-width="1"
+        d="M148.4,473.3l-0.4,6M148.1,473.3l-1.3,5.9M147.8,473.2l-4.5,8.9M147.2,472.8l-3.4,4.9M146.5,472.3l-3.8,4.7M145.5,471.4l-4,4.5M144.2,470.2l-6.7,7.4M142.5,468.7l-4,4.5M140.2,466.7l-4,4.5M137.3,464.2l-4.1,4.4M133.7,460.6l-7.4,6.8M129.4,455.4l-4.8,3.5M123.5,446.2l-5.2,3M116.1,431.3l-5.5,2.5M106.7,407.9l-9.4,3.4M95.2,373l-5.8,1.7M83.2,324.8l-5.9,1.3M72,264.5l-5.9,0.9M64.2,200.1l-10,0.8M62,140.5l-6,-0.2M67.1,91.7l-5.8,-1.5M79.9,60l-4.6,-3.9M98,48.9l-1.8,-9.8M118.5,52.8l1.9,-5.7M139.2,63.2l3,-5.2M158.8,75.6l3.4,-4.9M177.6,89.6l6.2,-7.9M196.1,104.9l3.9,-4.5M214.4,121.3l4,-4.4M232.7,138.5l4.1,-4.4M251,156.1l7,-7.2M269.3,173.9l4.2,-4.3M287.4,191.8l4.2,-4.3M305.1,209.5l4.2,-4.3M322.4,226.7l7.1,-7.1M338.9,243.1l4.2,-4.3M354.5,258.6l4.2,-4.3M368.7,272.8l4.2,-4.2M381,285.1l7.1,-7.1M391.9,295.9l4.2,-4.3M400.9,304.8l4.2,-4.3M408.2,312.1l4.2,-4.2M414.1,317.9l7.1,-7.1M418.7,322.6l4.2,-4.3M422.5,326.3l4.2,-4.3M425.6,329.4l4.2,-4.2M428.1,332l7.1,-7.1M430.2,334l4.2,-4.3M431.7,335.5l4.2,-4.2M432.9,336.7l4.2,-4.2M433.7,337.5l7.1,-7.1M434.3,338.1l4.2,-4.2M434.8,338.6l4.2,-4.2M435.2,339l4.2,-4.2M435.5,339.3l7.1,-7.1M435.8,339.6l4.2,-4.2M436,339.8l4.2,-4.2M436.1,339.9l4.2,-4.2" />
+  <clipPath id="cl"><use href="#br" /></clipPath>
+  <g clip-path="url(#cl)">
+    <filter id="bl"><feGaussianBlur stdDeviation="0.5" /></filter>
+    <image width="27"
+           height="28"
+           x="2.25"
+           y="2.24"
+           filter="url(#bl)"
+           transform="scale(16)"
+           href="data:image/webp;base64,UklGRkgDAABXRUJQVlA4TDsDAAAvGsAGAAEzbdtIPSuXP+QNQkT/JyAJXNp5N0AaSWpWo1Bo+q+KXiCpgUzaNpWrTMbIhCH2EUP/eBL0fwISbA4AFAAM2BqqBatx2AS/BomRJCmSFDWnv2YnxDMzzkx3VdrA6pAlR7Zt1VbG+u64Q+ruEEJK12kAmUvkzn3n3UU7si1FkuQ34kXkMDOqMZKPDMxMn8xMCxEK27Zt3HrmE7lo/IO/+IPf+Ilv+IRXuMHzR1zEWZzAETpM+2pX7pib5oaxZl+1MxglvdFtG2VjAisIYAWlAJWrKHD7ttwexokWDYJSiabAjW4p1C1gnGICLK4kTJlAGV36LZ9gFdGtEAqhajjph82+QdGgUBVNiZPBdZHC6Ma8wAoLRZWwCpgRFLRUo2wZF7EBa1hBiEIkKsqEG4yylDHcJxtYxwqFyBVV5wZUBNjS++yYMrF1YwfHLvDrrla+QFZSoQLKEQICuK5uzMaOZmMHx08zTrJ4l57lUlIF4lwDcCDVLcMysckO7MBOnuzg2FGWo3owR43F9YQyAcGlQgqFjgoDo8OEgJuTw0NGde4OTMezlygi8P2XkkJdhw494NbG4VnGyNgzM7vD2XQfnx9gKZT0q8qO0LnRObZxZM701ch02jBxJH2WF7AAV0hVSqrUwbLJDuk83HRQebjvalsjDS00FPZOfXoOwQIEUMoCEZIQ6eh1fuNfy9HW/6pgEUno0srOYe9vjxYC21OBLUFKnKZO9vrXxqLVaFQIElpJaVP/a6zO4z/831g9dRASKEqbjGdTL+TUa6K5LVpokiLlv/w0sAcDy4D/PTRLRBfTGuSFlp97TanRl3YSUbLKB8EOFGDBSe+6sQon3tAx9UeOVY3aJLu8SDAasMDGAmNtAhKRVjJYL3j6Zk5yadRI+6KhDPad9qZBWYUnO3lZvjOGtb6v5m+DIo2G5JYQLAQL/mNJWSmTv3DC+tvvrndrYcbcSUNIqIaH5//iskomO9+Yh7z8DxiLEdoQ0gABI7cJgX/iIpn85fkmPmHCPywWcxDakNOI24pgwT+ceOMD3McrBxlhRkPiBoQiELgu/gMUg998fIqX+IVpsQzzYg7NmRECqL4dDQA="></image>
+  </g>
+  <path stroke-width="2"
+        stroke-linecap="square"
+        d="M60,15l0,461l410,0M60,476l0,4M86,476l0,4M111,476l0,4M137,476l0,4M162,476l0,4M188,476l0,4M214,476l0,4M239,476l0,4M265,476l0,4M290,476l0,4M316,476l0,4M342,476l0,4M367,476l0,4M393,476l0,4M418,476l0,4M444,476l0,4M470,476l0,4M60,476l-4,0M60,450l-4,0M60,425l-4,0M60,399l-4,0M60,373l-4,0M60,348l-4,0M60,322l-4,0M60,297l-4,0M60,271l-4,0M60,245l-4,0M60,220l-4,0M60,194l-4,0M60,169l-4,0M60,143l-4,0M60,117l-4,0M60,92l-4,0M60,66l-4,0M60,41l-4,0M60,15l-4,0" />
+  <g class="hi">
+    <g text-anchor="end">
+      <text x="124.9" y="474.7">460</text>
+      <text x="95.5"  y="418"  >480</text>
+      <text x="52.2"  y="207.1">500</text>
+    </g>
+    <text x="95.9"  y="37.1"  text-anchor="middle">520</text>
+    <text x="185"   y="80.1" >540</text>
+    <text x="259.4" y="147.5">560</text>
+    <text x="330.9" y="218.2">580</text>
+    <text x="389.5" y="276.6">600</text>
+    <text x="422.5" y="309.4">620</text>
+  </g>
+  <g text-anchor="middle">
+    <text x="264.8" y="515.8" font-style="italic">x</text>
+    <text x="60" y="495.8">.0</text>
+    <text x="111.2" y="495.8">.1</text>
+    <text x="162.4" y="495.8">.2</text>
+    <text x="213.6" y="495.8">.3</text>
+    <text x="264.8" y="495.8">.4</text>
+    <text x="316" y="495.8">.5</text>
+    <text x="367.2" y="495.8">.6</text>
+    <text x="418.4" y="495.8">.7</text>
+    <text x="469.6" y="495.8">.8</text>
+  </g>
+  <g text-anchor="end">
+    <text x="20" y="251.4" font-style="italic">y</text>
+    <text x="52" y="481.8">.0</text>
+    <text x="52" y="430.6">.1</text>
+    <text x="52" y="379.4">.2</text>
+    <text x="52" y="328.2">.3</text>
+    <text x="52" y="277">.4</text>
+    <text x="52" y="225.8">.5</text>
+    <text x="52" y="174.6">.6</text>
+    <text x="52" y="123.4">.7</text>
+    <text x="52" y="72.2">.8</text>
+    <text x="52" y="21">.9</text>
+  </g>
+</svg>
+</div>
+
+<p>You implement a conversion function and, to check it, compare its results
+  with an existing implementation.  You search
+  for <a href="/2019/srgb-xyz-conversion/#demo">an online converter</a>, only to
+  realise that the coordinates you obtain differ by two orders of magnitude.  Do
+  not despair! If the ratio is exactly 1:100, your implementation is probably
+  correct.
+
+<p>This is because the XYZ colour space can use an arbitrary scale.  For
+  example, the Y component corresponds to colour’s luminance but nothing
+  specifies whether the maximum is 1, 100 or another
+  value.  <a href="/c/colour/">I typically use 1</a>, such that the D65
+  illuminant (i.e. sRGB’s white colour) has coordinates (0.95, 1, 1.089), but
+  a different implementation could report them as (95, 100, 108.9).  (Notice
+  that all components are scaled by the same factor).
+
+<p>This is similar to sRGB.  In 24-bit True Colour representation, each
+  component is an integer in the 0–255 range.  However, a 15-bit High Colour
+  uses the 0–31 range, Rec. 709 uses the 16–235 range and high-depth standards
+  might use the 0–1023 range.
+
+<!--figure>
+  <table>
+    <thead>
+      <tr><td><th>Y = 1 scale<th>Y = 100 scale
+    <tbody style="text-align:center">
+      <tr><th>D<sub>65</sub><td>(0.95, 1.00, 1.09)<td>(95, 100, 109)
+      <tr><th>Red           <td>(0.41, 0.21, 0.02)<td>(41, 21, 2)
+      <tr><th>Green         <td>(0.36, 0.72, 0.12)<td>(36, 72, 12)
+      <tr><th>Blue          <td>(0.18, 0.07, 0.95)<td>(18, 7, 95)
+  </table>
+  <figcaption>XYZ coordinates of the D<sub>65</sub> white point and sRGB primary
+    colours.  The columns use different scales for the coordinates.  In first
+    maximum luminance corresponds to Y = 1, while in the second to
+    Y = 100.</figcaption>
+</figure-->
+
+<p>A closely related colour space is xyY.  Its Y coordinate is the same as in
+  XYZ and can scale arbitrarily, but x and y have well-defined ranges.  They
+  define chromaticity, i.e. hue, and can be calculated using the following
+  formulæ: x = X / (X + Y + Z) and y = Y / (X + Y + Z).  Both fall within the
+  [0, 1) range.

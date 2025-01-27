@@ -2,7 +2,7 @@
 <!-- date: 2019-02-03 07:42:06 -->
 <!-- update: 2021-03-21 01:21:33 -->
 <!-- tags: rgb, srgb, colorimetry -->
-<!-- categories: Articles, Techblog -->
+<!-- categories: Articles, Techblog, Colour -->
 <!-- math: true -->
 
 <p>I’ve recently found myself in need of an RGB↔XYZ transformation matrix
@@ -11,8 +11,8 @@
   do the calculations myself.
 
 <p>What we’re looking for is a 3-by-3 matrix \(M\) which, when multiplied by
-  red, green and blue coordinates of a colour, produces its XYZ coordinates.  In
-  other words,
+  red, green and blue coordinates of a colour, produces
+  its <a href="/2025/know-my-xyz/">XYZ</a> coordinates.  In other words,
   a <a href="https://www.khanacademy.org/math/linear-algebra/alternate-bases/change-of-basis/v/linear-algebra-change-of-basis-matrix">change
   of basis matrix</a> from a space whose basis vectors are RGB’s primary
   colours:
