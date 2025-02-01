@@ -324,7 +324,7 @@ li@{header-cog-li-cls} {
 	display: inline-block;
 	transition: all .35s;
 }
-@{header-link-li-cls}@{dd-selected-cls} a:after {
+@{header-link-li-cls}@{dd-selected-cls} > a:after {
 	transform: translateY(.5em);
 	opacity: 0;
 }
@@ -677,13 +677,14 @@ figcaption {
 
 /* Flags */
 
-.en, .pl {
-	background: url(DATA<pl.svg>) 0 50% / 1.12em .7em no-repeat;
-	text-indent: 1.25em;
+.en::after, .pl::after {
+	vertical-align: top;
+	font-style: normal;
+	font-weight: normal;
+	font-size: @small;
 }
-.en {
-	background-image: url(DATA<uk.svg>);
-}
+.en::after { content: ' 🇬🇧' }
+.pl::after { content: ' 🇵🇱' }
 
 
 /* Pagination */
