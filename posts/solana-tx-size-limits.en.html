@@ -1,0 +1,306 @@
+<!-- subject: Solana transaction size limit -->
+<!-- date: 2025-02-09 23:18:53 -->
+<!-- tags: solana -->
+<!-- categories: Articles, Techblog -->
+
+<p>Solana transactions
+  are <a href="https://solana.com/docs/core/transactions">limited to 1232
+  bytes</a>.  While adequate for simple programs, the size limit was too
+  restrictive when I was implementing
+  Solana <a href="https://ibcprotocol.dev/">IBC</a> bridge while working
+  at <a href="/2024/beware-composable-foundation/">Composable Foundation</a>.
+  I needed the bridge smart contract to be able to ingest
+  signed <a href="https://tendermint.com/">Tendermint</a> block headers which
+  were a few kilobytes in size.
+
+<p>To overcome this obstacle, I’ve used what I came to call <dfn>chunking</dfn>.
+  By sending the instruction data in multiple transactions (similarly to the
+  way <a href="https://solana.com/docs/programs/deploying#program-buffer-accounts">Solana
+  programs are deployed</a>), the Solana IBC smart contract is capable of
+  working on arbitrarily-large instructions.  This article describes how this
+  process works and how to incorporate it with other smart contracts (including
+  those using the Anchor framework).
+
+<!-- FULL -->
+
+<p>This article assumes familiarity with Solana; it’s not a step-by-step guide
+  on creating Solana programs.  Nevertheless, code samples are
+  from <a href="https://github.com/mina86/solana-write-account/tree/master/examples">examples
+  available in the <code>solana-write-account</code> repository</a>
+  (a <code>chsum-program</code> Solana program and <code>chsum-client</code>
+  command line tool used to invoke said program) which can be used as a starting
+  point when incorporating the chunking method described below.
+
+
+<h2>Demonstration of the problem</h2>
+
+<p>First let’s reproduce the described issue.  Consider the following (somewhat
+  contrived) <code>chsum</code> Solana program which computes a simple
+  parameterised checksum.  When called, the first byte of its instruction data
+  is the checksum parameter and the rest is the data to calculate the checksum
+  of.
+
+<pre>
+solana_program::entrypoint!(process_instruction);
+
+fn process_instruction&lt;'a&gt;(
+    _program_id: &amp;'a Pubkey,
+    _accounts: &amp;'a [AccountInfo],
+    instruction: &amp;'a [u8],
+) -&gt; Result&lt;(), ProgramError&gt; {
+    let (mult, data) = instruction
+        .split_first()
+        .ok_or(ProgramError::InvalidInstructionData)?;
+    let sum = data.chunks(2).map(|pair| {
+        u64::from(pair[0]) * u64::from(*mult) +
+            pair.get(1).copied().map_or(0, u64::from)
+    }).fold(0, u64::wrapping_add);
+    solana_program::msg!("{}", sum);
+    Ok(())
+}
+</pre>
+
+<p>The program works on data of arbitrary length which can be easily observed by
+  executing it with progressively longer buffers.  However, due to
+  aforementioned transaction size limit, eventually the operation fails:
+
+<pre style="white-space:pre-wrap">
+$ <b>chsum-client 2 ab</b>
+Program log: 292
+
+$ <b>chsum-client 2 abcdefghijklmnopqrstuvwxyz</b>
+Program log: 4264
+
+$ <b>data=<i>…</i></b>
+$ <b>echo "${#data}"</b>
+1062
+$ <b>chsum-client 2 "$data"</b>
+RPC response error -32602: decoded solana_sdk::<wbr>transaction::<wbr>versioned::<wbr>VersionedTransaction too large: 1233 bytes (max: 1232 bytes)
+</pre>
+
+
+<h2 id=write-account>The <code>write-account</code> program</h2>
+
+<p>To solve the problem, the overlarge instruction can be split into
+  smaller <dfn>chunks</dfn> which can be sent to the blockchain in separate
+  transactions and stored inside of a Solana account.  For this to work two
+  things are needed: i) a smart contract which can receive and concatenate all
+  those chunks; and ii) support in the target smart contract for reading
+  instruction data from an account (rather than from transaction’s payload).
+
+<p>The first requirement is addressed
+  by <a href="https://github.com/mina86/solana-write-account">the <code>write-account</code>
+  program</a>.  It copies bytes from its instruction data into a given account
+  at specified offset.  Subsequent calls allow arbitrary (and most importantly
+  arbitrarily-long) data to be written into the account.
+
+
+<h2>RPC Client</h2>
+
+<p>The simplest way to send the chunks to the smart contract is to use client
+  library functions packaged alongside the <code>write-account</code> program.
+  First, add a new dependency to the RPC client:
+
+<pre>
+[dependencies.solana-write-account]
+git = "https://github.com/mina86/solana-write-account"
+features = ["client"]
+</pre>
+
+<p>And with that, the <code>WriteIter</code> can be used to split overlong
+  instruction data into chunks and create all the necessary instructions.  By
+  default the <code>data</code> is length-prefixed when it’s written to the
+  account.  This simplifies reuse of the account since the length of written
+  data can be decoded without a need to resize the account.
+
+<pre>
+// <i>Write chunks to a new account</i>
+let (chunks, write_account, write_account_bump) =
+    solana_write_account::instruction::WriteIter::new(
+        &amp;WRITE_ACCOUNT_PROGRAM_ID,
+        signer.pubkey(),
+        WRITE_ACCOUNT_SEED,
+        data,
+    )?;
+// <i><strong>Note</strong>: All of those instructions can be executed in parallel.</i>
+for inst in chunks {
+    send_and_confirm_instruction(client, signer, inst)?;
+}
+
+// <i>Invoke the target smart contract. </i>write_account<i> is the</i>
+// <i>account with the instruction data.  It will need to be</i>
+// <i> passed to the smart contract as last account.</i>
+todo!("Invoke the target smart contract");
+
+// <i>Optionally, free the account to recover deposit</i>
+let inst = solana_write_account::instruction::free(
+    WRITE_ACCOUNT_PROGRAM_ID,
+    signer.pubkey(),
+    Some(write_account),
+    WRITE_ACCOUNT_SEED,
+    write_account_bump,
+)?;
+send_and_confirm_instruction(client, signer, inst)?;
+</pre>
+
+<p>The data is copied into <a href="https://solana.com/docs/core/pda">a Program
+  Derived Address (PDA) account</a> owned by the <code>write-account</code>
+  program.  The smart contract makes sure that different signers get their own
+  accounts so that they won’t override each other’s work.
+  <code>WRITE_ACCOUNT_SEED</code> allows a single signer to maintain multiple
+  accounts if necessary.
+
+<p>The address of the account holding the instruction data is saved in
+  the <code>write_account</code> variable.  But before it can be passed to the
+  target smart contract, the smart contract needs to be altered to support such
+  calling convention.
+
+
+<h2>The target smart contract</h2>
+
+<p>The Solana runtime has no built-in mechanism for passing instruction data
+  from an account.  Smart contract needs to explicitly support such calling
+  method.  One approach is to always read data from an account.  This may be
+  appropriate if the smart contract usually deals with overlong payloads.
+  A more flexible approach is to read instruction from the account if
+  instruction data in the transaction is empty.  This can be done by defining
+  a custom entry point:
+
+<pre>
+/// Solana smart contract entry point.
+///
+/// If the instruction data is empty, reads length-prefixed data
+/// from the last account and treats it as the instruction data.
+///
+/// # Safety
+///
+/// Must be called with pointer to properly serialised
+/// instruction such as done by the Solana runtime.  See
+/// [`solana_program::entrypoint::deserialize`].
+#[no_mangle]
+pub unsafe extern "C" fn entrypoint(input: *mut u8) -&gt; u64 {
+    // SAFETY: Guaranteed by the caller.
+    let (prog_id, mut accounts, mut instruction_data) = unsafe {
+        solana_program::entrypoint::deserialize(input)
+    };
+
+    // If instruction data is empty, the actual instruction data
+    // comes from the last account passed in the call.
+    if instruction_data.is_empty() {
+        match get_ix_data(&amp;mut accounts) {
+            Ok(data) =&gt; instruction_data = data,
+            Err(err) =&gt; return err.into(),
+        }
+    }
+
+    // Process the instruction.
+    process_instruction(
+        prog_id,
+        &amp;accounts,
+        instruction_data,
+    ).map_or_else(
+        |error| error.into(),
+        |()| solana_program::entrypoint::SUCCESS
+    )
+}
+
+/// Interprets data in the last account as instruction data.
+fn get_ix_data&lt;'a&gt;(
+    accounts: &amp;mut Vec&lt;AccountInfo&lt;'a&gt;&gt;,
+) -&gt; Result&lt;&amp;'a [u8], ProgramError&gt; {
+    let account = accounts.pop()
+        .ok_or(ProgramError::NotEnoughAccountKeys)?;
+    let data = alloc::rc::Rc::try_unwrap(account.data)
+        .ok().unwrap().into_inner();
+    if data.len() &lt; 4 {
+        return Err(ProgramError::InvalidInstructionData);
+    }
+    let (len, data) = data.split_at(4);
+        .ok_or(ProgramError::InvalidInstructionData)?;
+    let len = u32::from_le_bytes(len.try_into().unwrap());
+    data.get(..(len as usize))
+        .ok_or(ProgramError::InvalidInstructionData)
+}
+
+solana_program::custom_heap_default!();
+solana_program::custom_panic_default!();
+</pre>
+
+<p>The <code>solana-write-account</code> crate packages all of that code.
+  Rather than copying the above, a smart contract wanting to accept instruction
+  data from an account can add the necessary dependency (this time with
+  the <code>lib</code> Cargo feature enabled):
+
+<pre>
+[dependencies.solana-write-account]
+git = "https://github.com/mina86/solana-write-account"
+features = ["lib"]
+</pre>
+
+<p>and use <code>entrypoint</code> macro defined there (in place
+of <code>solana_program::entrypoint</code> macro):
+
+<pre>
+solana_write_account::entrypoint!(process_instruction);
+</pre>
+
+
+<h2>Anchor framework</h2>
+
+<p>This gets slightly more complicated for anyone
+  using <a href="https://www.anchor-lang.com/">the Anchor framework</a>.  The
+  framework provides abstractions which are hard to break through when
+  necessary.  Any Anchor program has to use
+  the <code>anchor_lang::program</code> macro which, among other things, defines
+  the <code>entrypoint</code> function.  This leads to conflicts when a smart
+  contract wants to define its own entry point.
+
+<p>Unfortunately, there’s no reliable way to tell Anchor not to introduce that
+  function.  To add <code>write-account</code> support to the Solana IBC bridge
+  I had
+  to <a href="https://github.com/mina86/anchor/tree/custom-entrypoint">fork
+  Anchor</a> and extend it with the
+  following <a href="https://github.com/coral-xyz/anchor/commit/788c61c2d72aad374457d7619d8fe37d6ac2c0e9">change</a>
+  which introduces support for a new <code>custom-entrypoint</code> Cargo
+  feature:
+
+<pre>
+diff --git a/lang/syn/src/codegen/program/entry.rs b/lang/syn/src/codegen/program/entry.rs
+index 4b04da23..093b1813 100644
+--- a/lang/syn/src/codegen/program/entry.rs
++++ b/lang/syn/src/codegen/program/entry.rs
+@@ -9,7 +9,7 @@ pub fn generate(program: &amp;Program) -&gt; proc_macro2::TokenStream {
+         Err(anchor_lang::error::ErrorCode::InstructionMissing.into())
+     });
+     quote! {
+-        #[cfg(not(feature = "no-entrypoint"))]
++        #[cfg(not(any(feature = "no-entrypoint", feature = "custom-entrypoint")))]
+         anchor_lang::solana_program::entrypoint!(entry);
+         /// The Anchor codegen exposes a programming model where a user defines
+         /// a set of methods inside of a `#[program]` module in a way similar
+</pre>
+
+<p>The feature needs to be enabled in the <code>Cargo.toml</code> of the Anchor
+  program which wants to take advantage of it:
+
+<pre>
+[features]
+default = ["custom-entrypoint"]
+custom-entrypoint = []
+</pre>
+
+
+<h2>Conclusion</h2>
+
+<p>To achieve a sub-second finality Solana had to introduce significant
+  constraints on the protocol and smart contract runtime environment.  However,
+  with enough ingenuity at least some of those can be worked around.
+
+<p>This article introduced a way to overcome the 1232-byte transaction size
+  limit through the use of a <code>write-account</code> helper program and
+  library functions which are available
+  in <a href="https://github.com/mina86/solana-write-account"><code>solana-write-account</code>
+  repository</a>.
+
+<p>The solution is general enough that any Solana program, including those using
+  Anchor framework, can use it.
