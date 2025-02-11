@@ -1,0 +1,321 @@
+<!-- subject: Solana signature count limit -->
+<!-- date: 2025-02-16 01:27:23 -->
+<!-- tags: solana -->
+<!-- categories: Articles, Techblog -->
+
+<p>Implementing Solana <a href="https://ibcprotocol.dev/">IBC</a> bridge, I had
+  to deal with various constraints of the Solana protocol.  Connecting Solana
+  to <a href="/2024/beware-composable-foundation/">Composable
+  Foundation</a>’s <a href="https://picasso.network/">Picasso network</a>,
+  I needed to develop an
+  on-chain <a href="https://ethereum.org/en/developers/docs/nodes-and-clients/light-clients/">light
+  client</a> capable of validating Tendermint blocks.  This meant being able to
+  validate 50 signatures in a single transaction.
+
+<p>Turns out that’s not possible on Solana and it’s not exactly because of the
+  execution time limit.  The real culprit is the transaction size limit which
+  I’ve <a href="/2025/solana-tx-size-limits/">discussed previously</a>.  This
+  article describes how signature verification is done on Solana, the limit on
+  the number of signatures that can be verified in a single transaction and how
+  that limit can be worked around.
+
+<!-- FULL -->
+
+<p>Like before, this article assumes familiarity with Solana and doesn’t serve
+  as a step-by-step guide for Solana development.
+  Nonetheless, <a href="https://github.com/mina86/solana-sigverify/tree/master/examples">examples
+  from the <code>solana-sigverify</code> repository</a> can be used as
+  a starting point when using the signature verification mechanism described
+  below.
+
+
+<h2>Cryptographic functions on Solana</h2>
+
+<p>Solana programs can perform any computation a regular computer can do.  It is
+  possible to implement cryptographic functions as part of a smart contract and
+  have them executed on the blockchain.  However, that’s a quick way to run into
+  issues.
+
+<p>Calculating a 256-bit SHA2 digest of a 100-byte buffer takes 14
+  thousand <a href="https://solana.com/docs/terminology#compute-units">compute
+  units (CU)</a>.  Meanwhile, Solana programs
+  have <a href="https://solana.com/docs/core/fees#compute-unit-limit">a hard
+  limit of 1.4 million CU</a>.  In other words, hashing 100 bytes takes up 1% of
+  the absolute maximum computation that a smart contract can perform in a single
+  transaction.  Situation is even worse with more advanced cryptographic
+  functions: a signature verification blows through the compute limit.
+
+<p>Thankfully, Solana offers native methods for popular cryptographic
+  primitives.  In particular, a <code>sol_sha256</code> system call (accessible
+  through <a href="https://docs.rs/solana-program/1.18.26/solana_program/hash/fn.hashv.html"><code>solana_program::hash::hashv</code>
+  function</a>) computes 256-bit SHA2 hash with cost of only 267 CU to hash
+  a 100-byte buffer.  One might expect a similar <code>sol_ed25519_verify</code>
+  system call, however signature verification is done in much more convoluted
+  way on Solana.
+
+
+<h3>Signature verification</h3>
+
+<p id=b1>Solana includes a handful
+  of <a href="https://docs.anza.xyz/runtime/programs">native programs</a>.
+  Among those are programs, such as Ed25519 program, which perform signature
+  verification.  To check a signature, caller creates a transaction including
+  two instructions: one calling the native signature verification program and
+  another calling a smart contract.  If a signature is invalid, the whole
+  transaction fails an the smart contract is not
+  called.<a href="#f1"><sup>1</sup></a>
+
+<p>For example,
+  consider <a href="https://explorer.solana.com/tx/56QjWeDDDX4Re2sXs24r7eA2oWFN7wFCJHpTmy5uFHPKgcFhwi6mBnXyKzL3bAqSHoE9fmwJmFGJemswkEHybFC5">transaction
+  56Qj&shy;WeDD&shy;DX4R&shy;e2sX…</a> which has three instructions: The first
+  adjust compute unit limit, the second invokes the Ed25519 program and the
+  final one calls a program which can check that signature has been verified.
+  An annotated instruction data of the Ed25519 program invocation is shown
+  below:
+
+  <style>.tab th,.tab td{padding:0 .5em;vertical-align:top}.tab tt{color:var(--i);font-size:0.875em}</style>
+  <table class=tab>
+    <thead><tr><th>Offset<th>Bytes<th>Notes
+    <tbody>
+      <tr><th          >0x00<td><tt>01 00 80 00 ff ff c0 00 ff ff 10 00 70 00 ff ff</tt><td>Request header
+    <tbody>
+      <tr><th rowspan=7>0x10<td><tt>6f 08 02 11 e5 61 6a 00 00 00 00 00 22 48 0a 20</tt><td rowspan=7>Signed message (0x70 bytes)
+      <tr>                  <td><tt>a0 c2 78 ea ac 5e ba ce cf f5 6b 0a 33 2b 12 60</tt>
+      <tr>                  <td><tt>78 8a e9 2c 3e d9 17 14 c0 fe c3 71 ca 79 57 a7</tt>
+      <tr>                  <td><tt>12 24 08 01 12 20 61 43 1a 05 af 4d 46 64 6f 71</tt>
+      <tr>                  <td><tt>0b 59 f7 c3 c1 6f ca c6 10 d2 05 63 77 97 d0 4d</tt>
+      <tr>                  <td><tt>ad 15 ed 32 ee b7 2a 0c 08 82 f9 fd b6 06 10 b2</tt>
+      <tr>                  <td><tt>b7 a5 95 01 32 0a 63 65 6e 74 61 75 72 69 2d 31</tt>
+    <tbody>
+      <tr><th rowspan=4>0x80<td><tt>1a fd b3 c7 85 6c 16 82 2a 59 f6 3e d8 d3 fd 7a</tt><td rowspan=4>Signature
+      <tr>                  <td><tt>7b ab bd 8b 77 c1 0a 90 2c 38 8c 06 69 88 62 cd</tt>
+      <tr>                  <td><tt>22 b2 4f 7e b5 cf 13 7c 97 00 d2 4d e3 da 08 1d</tt>
+      <tr>                  <td><tt>f6 ad 3f 05 33 6e 35 47 15 5d 59 b8 fe e9 e6 07</tt>
+    <tbody>
+      <tr><th rowspan=2>0xc0<td><tt>c2 aa 20 50 7f 78 d5 49 f6 85 50 9d d0 8b 64 89</tt><td rowspan=2>Public key
+      <tr>                  <td><tt>80 60 5a d2 ad 3e 90 b3 e8 0b 5d 24 b2 14 22 7b</tt>
+  </table>
+
+
+
+<h3>Signature count limit</h3>
+
+<p id=b2>Since public key, signature and signed message are stored in the
+  instruction data, number of signatures that can be verified is subject
+  to <a href="//solana.com/docs/core/transactions">the 1232-byte transaction
+  size limit</a>.  Accounting for overhead leaves less than 1100 bytes for the
+  instruction data.  To specify a signature for verification, a 14-byte header,
+  32-byte public key, 64-byte signature and the message are needed.  Even
+  assuming an empty message, that’s 110 bytes per signature which means at most
+  ten signatures in a single transaction.<a href="#f2"><sup>2</sup></a>
+
+<p>For Solana IBC I needed to verify Tendermint block signatures.  Tendermint
+  validators timestamp their signatures and as a result each signature is for
+  a different message of about 112 bytes.  That gives a maximum of ⌊1100 / (14 +
+  32 + 64 + 112)⌋ = 4 signatures per transaction.  Meanwhile, as mentioned at
+  the start, I needed to verify about 50 of them.
+
+
+<h2>The <code>sigverify</code> program</h2>
+
+<p id=b3>To address this limitation, signatures can be verified in batches with
+  results aggregated into a <dfn>signatures account</dfn> that can be inspected
+  later on.<a href="#f3"><sup>3</sup></a> This scheme needs i) a smart contract
+  capable of doing the aggregation and ii) an interface for other smart
+  contracts to interpret the aggregated data.
+
+<p>The first point is addressed
+  by <a href="https://github.com/mina86/solana-sigverify">the <code>sigverify</code>
+  program</a>.  Using regular Solana way of signature verification, it observes
+  what signatures have been checked in the transaction.  It then aggregates all
+  that information into <a href="https://solana.com/docs/core/pda">a Program
+  Derived Address (PDA) account</a> it owns.  As the owner, only
+  the <code>sigverify</code> program can modify the account thus making sure
+  that aggregated information stored in it is correct.
+
+<p>Even though the <code>sigverify</code> owns the account, it internally
+  assigns it to the signer such that users cannot interfere with each other’s
+  signatures account.
+
+
+<h2>RPC Client</h2>
+
+<p>A convenient way to call the <code>sigverify</code> program is to use the
+  client library functions packaged alongside it.  To use them, first add a new
+  dependency to the RPC client (making sure <code>client</code> feature is
+  enabled):
+
+<pre>
+[dependencies.solana-sigverify]
+git = "https://github.com/mina86/solana-sigverify"
+features = ["client"]
+</pre>
+
+<p>The crate has a <code>UpdateIter</code> iterator which generates instruction
+  pairs that need to be executed to aggregate the signatures into the signatures
+  account.  The account can be reused but in that case each batch of signatures
+  needs to use a different <tt>epoch</tt>.  If account is freed each time, epoch
+  can be set to <tt>None</tt>.  Note that all the instruction pairs returned
+  by <code>UpdateIter</code> can be executed in parallel transactions.
+
+<pre>
+// <i>Generate list of signatures to verify.</i>
+let entries: Vec&lt;Entry&gt; = signatures.iter()
+    .map(|sig| Entry {
+        pubkey: &amp;sig.pubkey,
+        signature: &amp;sig.signature,
+        message: &amp;sig.message,
+    })
+    .collect();
+
+// <i>When signatures account is reused, each use needs</i>
+// <i>a different epoch value.  Otherwise it can be </i>None<i>.</i>
+let epoch = std::time::SystemTime::now()
+    .duration_since(std::time::UNIX_EPOCH)
+    .unwrap()
+    .as_nanos() as u64;
+let epoch = Some(epoch);
+
+// <i>Generate all necessary instructions and send them to</i>
+// <i>Solana.  </i>UpdateIter<i> splits signatures into groups as</i>
+// <i>necessary to call </i>sigverify<i>.</i>
+let (iter, signatures_account, signatures_bump) =
+    solana_sigverify::instruction::UpdateIter::new(
+        &amp;solana_sigverify::algo::Ed25519::ID,
+        SIGVERIFY_PROGRAM_ID,
+        signer.pubkey(),
+        SIGNATURES_ACCOUNT_SEED,
+        epoch,
+        &amp;entries,
+    )?;
+// <i>To speed things up, all of those instruction pairs can</i>
+// <i>be executed in parallel.</i>
+for insts in iter {
+    let blockhash = client.get_latest_blockhash()?;
+    let message = Message::new_with_blockhash(
+        &amp;insts,
+        Some(&amp;signer.pubkey()),
+        &amp;blockhash,
+    );
+    send_and_confirm_message(
+        client, signer, blockhash, message)?;
+}
+
+// <i>Invoke the target smart contract. </i>signatures_account<i> is</i>
+// <i>the account with aggregated signatures.  It will need to</i>
+// <i>be passed to the smart contract.</i>
+todo!("Invoke the target smart contract");
+
+// <i>Optionally free the account.  Depending on usage, the</i>
+// <i>account can be reused (to save minor amount of gas fees)</i>
+// <i>with a new epoch as described.</i>
+let instruction = solana_sigverify::instruction::free(
+    SIGVERIFY_PROGRAM_ID,
+    signer.pubkey(),
+    Some(signatures_account),
+    SIGNATURES_ACCOUNT_SEED,
+    signatures_bump,
+)?;
+send_and_confirm_instruction(client, signer, instruction)?;
+</pre>
+
+<p>The signatures are aggregated into an account whose address is stored
+  in <code>signatures_account</code>.  The <code>SIGNATURES_ACCOUNT_SEED</code>
+  allows a single signer to maintain multiple accounts if necessary.
+
+
+<h2>The target smart contract</h2>
+
+<p>The target smart contract needs to be altered to support reading the
+  aggregated signatures.  Code which helps with that is available in
+  the <code>solana-sigverify</code> crate as well.  First, add a new dependency
+  to the program (making sure <code>lib</code> feature is enabled)):
+
+<pre>
+[dependencies.solana-sigverify]
+git = "https://github.com/mina86/solana-sigverify"
+features = ["lib"]
+</pre>
+
+<p>The crate has a <code>Verifier</code> family of types which can interface
+  with the Solana’s native signature verification programs (like the Ed25519
+  program) and the aggregated signatures.  This flexibility allows the smart
+  contracts using this type to nearly transparently support normal Solana
+  signature verification method or the signature aggregation
+  through <code>sigverify</code> program.
+
+<pre>
+/// <i>Address of the sigverify program.  This must be set</i>
+/// <i>correctly or the signature verification won’t work.</i>
+const SIGVERIFY_PROGRAM_ID: Pubkey =
+    solana_program::pubkey!("/* <i>…</i> */");
+
+let mut verifier =
+    solana_sigverify::Ed25519Verifier::default();
+
+// <i>To check signatures from a call to a native signature</i>
+// <i>verification program, the verifier must be initialised</i>
+// <i>with Instructions sysvar.  The the native program call</i>
+// <i>must immediately preceding the current instruction.</i>
+let instructions_sysvar = /* <i>…</i> */;
+verifier.set_ix_sysvar(instructions_sysvar)?;
+
+// <i>To check signatures aggregated in a signatures account,</i>
+// <i>the verifier must be initialised with the account.  For</i>
+// <i>security, expected sigverify program ID must be specified</i>
+// <i>as well.  verifier rejects signatures accounts not owned</i>
+// <i>by the sigverify program.</i>
+let signatures_account = /* <i>…</i> */;
+verifier.set_sigverify_account(
+    account, &amp;SIGVERIFY_PROGRAM_ID)?;
+
+// <i>To verify a signature, call </i>verify<i> method.</i>
+if !verifier.verify(message, pubkey, signature)? {
+    panic!("Signature verification failed");
+}
+</pre>
+
+
+<h2>Conclusion</h2>
+
+<p>It’s perhaps counter intuitive that the transaction size limit constraints
+  how many signatures can be verified in a single Solana transaction, but
+  because of the design of the native signature verification programs, it is
+  indeed the case.  Thankfully, with some engineering the restriction can be
+  worked around.
+
+<p>This article introduces a method of aggregating signatures across multiple
+  transactions with the help of a <code>sigverify</code> program and library
+  functions available
+  in <a href="https://github.com/mina86/solana-sigverify"><code>solana-sigverify</code>
+  repository</a>.  The library code supports regular Solana signature
+  verification method as well as the aggregated signatures providing flexibility
+  to the smart contract.
+
+<p>Lastly, the repository also provides <code>solana-native-sigverify</code>
+  crate which offers APIs for interacting with the Solana native signature
+  verification programs.
+
+
+<p id=f1><a href="#b1">1</a> The native signature verification programs cannot
+  be called through <a href="https://solana.com/docs/core/cpi">Cross Program
+  Invocation (CPI)</a> making the whole mechanism a bit convoluted.  The smart
+  contract must inspect the transaction to make sure that the signature
+  verification has happened which by itself is non-trivial.  Thankfully,
+  <a href="https://github.com/mina86/solana-sigverify/">the <code>solana-native-sigverify</code>
+  crate</a> includes helper function for interacting with native signature
+  verification programs such as Ed25519 program or Secp255k1 program.
+
+<p id=f2><a href="#b2">2</a> With specially crafted messages it is possible to
+  go past that limit.  If the same public key is used, 13 signatures can fit in
+  single transaction (⌊(1100 - 32) / (14 + 64)⌋ = 13).  However, that’s an
+  unrealistic scenario especially considering that any useful transaction needs
+  to include another instruction.
+
+<p id=f3><a href="#b3">3</a> Note that ‘aggregate’ here doesn’t mean
+  zero-knowledge aggregation.  Rather, all the verified signatures are stored in
+  the signatures account so another programs can see whether some particular
+  signature has been aggregated.  More specifically, as an optimisation,
+  a <code>sha256(algorithm || pubkey || signature || message)</code> hashes are
+  stored.  This is sufficient to check whether particular known signature was
+  verified.
