@@ -5,11 +5,10 @@
 
 <p>Solana transactions
   are <a href="https://solana.com/docs/core/transactions">limited to 1232
-  bytes</a>.  While adequate for simple programs, the size limit was too
-  restrictive when I was implementing
+  bytes</a> which was too restrictive when I was implementing
   Solana <a href="https://ibcprotocol.dev/">IBC</a> bridge while working
   at <a href="/2024/beware-composable-foundation/">Composable Foundation</a>.
-  I needed the bridge smart contract to be able to ingest
+  The smart contract had to be able to ingest
   signed <a href="https://tendermint.com/">Tendermint</a> block headers which
   were a few kilobytes in size.
 
@@ -122,7 +121,6 @@ let (chunks, write_account, write_account_bump) =
         WRITE_ACCOUNT_SEED,
         data,
     )?;
-// <i><strong>Note</strong>: All of those instructions can be executed in parallel.</i>
 for inst in chunks {
     send_and_confirm_instruction(client, signer, inst)?;
 }
@@ -155,6 +153,21 @@ send_and_confirm_instruction(client, signer, inst)?;
   target smart contract, the smart contract needs to be altered to support such
   calling convention.
 
+<h3>Note on parallel execution</h3>
+
+<p>With some care, the instructions returned by <code>WriteIter</code> can be
+  executed in parallel thus reducing amount of time spent calling the target
+  smart contract.  One complication is that the account may need to be resized
+  when chunks are written into it.  Since account can be increased by only
+  10 KiB in a single instruction, this becomes an issue if trying to write
+  a chunk which is over 10 KiB past the end of the account.
+
+<p>One way to avoid this problem, is to group the instructions and executed them
+  ten at a time.  Once first batch executes, the next can be send to the
+  blockchain.  Furthermore, if the account is being reused, it may already be
+  sufficiently large.  And of course, this is not an issue with the data doesn’t
+  exceed 10 KiB.
+
 
 <h2>The target smart contract</h2>
 
@@ -167,25 +180,25 @@ send_and_confirm_instruction(client, signer, inst)?;
   a custom entry point:
 
 <pre>
-/// Solana smart contract entry point.
+/// <i>Solana smart contract entry point.</i>
 ///
-/// If the instruction data is empty, reads length-prefixed data
-/// from the last account and treats it as the instruction data.
+/// <i>If the instruction data is empty, reads length-prefixed data</i>
+/// <i>from the last account and treats it as the instruction data.</i>
 ///
-/// # Safety
+/// <i># Safety</i>
 ///
-/// Must be called with pointer to properly serialised
-/// instruction such as done by the Solana runtime.  See
-/// [`solana_program::entrypoint::deserialize`].
+/// <i>Must be called with pointer to properly serialised</i>
+/// <i>instruction such as done by the Solana runtime.  See</i>
+/// <i>[`solana_program::entrypoint::deserialize`].</i>
 #[no_mangle]
 pub unsafe extern "C" fn entrypoint(input: *mut u8) -&gt; u64 {
-    // SAFETY: Guaranteed by the caller.
+    // <i>SAFETY: Guaranteed by the caller.</i>
     let (prog_id, mut accounts, mut instruction_data) = unsafe {
         solana_program::entrypoint::deserialize(input)
     };
 
-    // If instruction data is empty, the actual instruction data
-    // comes from the last account passed in the call.
+    // <i>If instruction data is empty, the actual instruction data</i>
+    // <i>comes from the last account passed in the call.</i>
     if instruction_data.is_empty() {
         match get_ix_data(&amp;mut accounts) {
             Ok(data) =&gt; instruction_data = data,
@@ -193,7 +206,7 @@ pub unsafe extern "C" fn entrypoint(input: *mut u8) -&gt; u64 {
         }
     }
 
-    // Process the instruction.
+    // <i>Process the instruction.</i>
     process_instruction(
         prog_id,
         &amp;accounts,
@@ -204,7 +217,7 @@ pub unsafe extern "C" fn entrypoint(input: *mut u8) -&gt; u64 {
     )
 }
 
-/// Interprets data in the last account as instruction data.
+/// <i>Interprets data in the last account as instruction data.</i>
 fn get_ix_data&lt;'a&gt;(
     accounts: &amp;mut Vec&lt;AccountInfo&lt;'a&gt;&gt;,
 ) -&gt; Result&lt;&amp;'a [u8], ProgramError&gt; {
@@ -296,11 +309,13 @@ custom-entrypoint = []
   constraints on the protocol and smart contract runtime environment.  However,
   with enough ingenuity at least some of those can be worked around.
 
-<p>This article introduced a way to overcome the 1232-byte transaction size
+<p>This article introduces a way to overcome the 1232-byte transaction size
   limit through the use of a <code>write-account</code> helper program and
-  library functions which are available
+  library functions available
   in <a href="https://github.com/mina86/solana-write-account"><code>solana-write-account</code>
-  repository</a>.
+  repository</a>.  The solution is general enough that any Solana program,
+  including those using Anchor framework, can use it.
 
-<p>The solution is general enough that any Solana program, including those using
-  Anchor framework, can use it.
+<p>PS. Interestingly, the Solana size limit also affects how many signatures can
+  be verified in a single transaction.  I discuss that problem and its solution
+  in <a href="/2025/solana-signatures-count-limit/">another article</a>.
