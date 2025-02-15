@@ -450,7 +450,18 @@
 		}
 		citationDialog.innerHTML =
 			`<table><thead><tr><th colspan="2">${isPL ? 'Cytuj' : 'Cite'}</th></tr></thead><tfoot><tr><td colspan="2"><form method=dialog><button>${isPL ? 'Zamknij' : 'Close'}</button></form></td></tfoot><tbody></tbody></table>`;
-		createCitationTable(link, citationDialog.firstChild.lastChild);
+		el = citationDialog.firstChild.lastChild;
+
+		/* First, look for `template.cite` element since it has baked
+		   citation (presumably different and more appropriate than what
+		   we would generate).  */
+		a = link.parentElement.parentElement.querySelector('template.cite');
+		if (a) {
+			el.appendChild(a.content.cloneNode(true));
+		} else {
+			createCitationTable(link, el);
+		}
+
 		citationDialog.showModal();
 		return false;
 	};
@@ -499,16 +510,16 @@
 		addRow('ACM',
 		       `Michał Nazarewicz. ${pub.year}. `,
 		       title,
-		       `. (${pub.dom} ${pub.monthName} ${pub.year}). Retrieved ${acc.monthDayYear} from ${url}`);
+		       `. (${pub.monthName} ${pub.year}). Retrieved ${acc.monthDayYear} from ${url}`);
 
 		addRow('APA',
-		       `Nazarewicz, M. (${pub.year}, ${pub.monthDay}). `,
+		       `Nazarewicz, M. (${pub.year}, ${pub.monthName}). `,
 		       title_italic,
 		       `. Retrieved ${acc.monthDayYear}, from ${url}`);
 
 		addRow('IEEE',
 		       'M. Nazarewicz, “', title,
-		       `,” ${pub.monDayYear}. [Online]. Available: ${url}. [Accessed: ${acc.monDayYear}].`);
+		       `,” ${pub.monYear}. [Online]. Available: ${url}. [Accessed: ${acc.monDayYear}].`);
 	};
 	var months = 'January February March April May June July August September October November December'.split(' ');
 	var shortMonths = 'Jan. Feb. Mar. Apr. May Jun. Jul. Aug. Sept. Oct. Nov. Dec.'.split(' ');
@@ -520,8 +531,8 @@
 			'toString': _ => date.toISOString().substring(0, 10),
 		};
 		a.monthName = months[a.month];
-		a.monthDay = `${a.monthName} ${a.dom}`;
-		a.monthDayYear = `${a.monthDay}, ${a.year}`;
+		a.monthDayYear = `${a.monthName} ${a.dom}, ${a.year}`;
+		a.monYear = `${shortMonths[a.month]} ${a.year}`;
 		a.monDayYear = `${shortMonths[a.month]} ${a.dom}, ${a.year}`;
 		return a;
 	};

@@ -113,15 +113,35 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
         self._src_dir = kw.pop('src_dir', None)
         self.__self = [kw.pop('self_url', None)]
         self.__strip_back_ids = kw.pop('strip_back_ids', False)
+        self.__strip_template = kw.pop('strip_template', False)
+        self.__stripping_template = False
         super().__init__(*args, **kw)
 
+    def reset(self):
+        del self.__self[1:]
+        self.__stripping_template = False
+        super().reset()
+
     def handle_starttag(self, tag: str, attrs: _Attributes) -> None:
+        if self.__stripping_template:
+            return
+        if self.__strip_template and tag == 'template':
+            self.__stripping_template = True
+            return
         self._transform_attrs(tag, attrs)
         super().handle_starttag(tag, attrs)
 
     def handle_startendtag(self, tag: str, attrs: _Attributes) -> None:
+        if self.__stripping_template:
+            return
         self._transform_attrs(tag, attrs)
         super().handle_startendtag(tag, attrs)
+
+    def handle_endtag(self, tag):
+        if self.__stripping_template:
+            self.__stripping_template = tag != 'template'
+            return
+        super().handle_endtag(tag)
 
     def _transform_attrs(self, tag: str, attrs: _Attributes) -> None:
         i = 0
@@ -175,11 +195,16 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
                 value = s + value[5:]
         return value
 
+    def handle_decl(self, decl):
+        if not self.__stripping_template:
+            super().handle_decl(decl)
+
     def handle_pi(self, data):
         tokens = data.rstrip().split(None, 1) or ('')
-        ok = False
         if tokens[0] == 'self':
             ok = self.__handle_pi_self(*tokens[1:])
+        else:
+            ok = tokens[0] == 'xml-stylesheet'
         assert ok, f'<?{data}>'
 
     def __handle_pi_self(self, arg=''):
@@ -192,11 +217,16 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
             return True
         return False
 
+    def unknown_decl(self, data):
+        if not self.__stripping_template:
+            super().unknown_decl(data)
+
     def handle_data(self, data):
-        if self._tag_stack and self._tag_stack[0][0] == 'style':
-            self._data_buffer.append(self._minify_css(data))
-            return
-        super().handle_data(data)
+        if not self.__stripping_template:
+            if self._tag_stack and self._tag_stack[0][0] == 'style':
+                self._data_buffer.append(self._minify_css(data))
+                return
+            super().handle_data(data)
 
 
 def _html_tag_re(tag, **kw):
