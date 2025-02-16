@@ -27,6 +27,13 @@ RewriteRule ^(?:apple-)?touch-icon-[0-9]+x([0-9]+)(?:-precomposed)?\.png$ \
 RewriteRule ^(?:apple-)?touch-icon.png(?:-precomposed)?$ \
             /d/192.png          [END,R=temp]
 
+# Fix for ai-should-be-copyrightable.  Not all aggregators handled
+# Unicode URLs correctly and ended up with invalid URLs.  Adding
+# redirects to fix those.  This can eventually be dropped once the
+# post is old enough that it doesn’t show up on aggregator sites.
+RewriteRule ^d/Th$                                 D/thoxiPpo.jpg [END,R=permanent]
+RewriteRule ^d/A_Recent_Entrance_to_Paradise\.jpg$ D/8rxSqoFB.jpg [END,R=permanent]
+
 # no-you-dont-need-to-escape-that Easter egg
 RewriteCond %{QUERY_STRING}       book=Ecc&sect=1&para=2
 RewriteRule ^$                    https://r33b.net/  [END,R=temp]
