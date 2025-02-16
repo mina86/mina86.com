@@ -69,6 +69,7 @@ AddType text/javascript .js
 ExpiresActive On
 ExpiresDefault "access plus 1 hour"
 ExpiresByType image/* "access plus 1 month"
+ExpiresByType application/atom+xml "access plus 1 day"
 
 Header set Strict-Transport-Security "max-age=31556925" \
        "expr=%{req_novary:X-Forwarded-Proto}=='https'"
