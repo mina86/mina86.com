@@ -57,28 +57,25 @@
 
 <p><a href=/d/omnia-uart.jpg><img src=/d/omnia-uart.jpg alt="" class=fl></a>The
   get things rolling, access to the router’s serial console needs to be
-  established.  Any USB to UART connector — such
-  as <a href="https://www.ftdichip.com/Products/Cables/RPi.htm">TTL-232R-RPI</a>
-  or
-  something <a href="https://www.aliexpress.com/item/Black-PL2303HX-USB-turn-TTL-RS232-upgrade-module-USB-to-serial-download-cable-wire-brush-in/32691572599.html">PL2303-based</a> — should
-  work.  If pinout of the converter isn’t documented, it’s usually enough to
-  open it and look at the labels printed on its
-  PCB.  <a href="https://doc.turris.cz/doc/_media/omnia-pinout.png">On Omnia’s
-  side</a>, UART header is located between LEDs and brightness button.  Starting
-  from the side close to the LEDs, the pins are ground, RX, TX and usually
-  unused +3.3V.
+  established.  Any USB to UART connector — such as TTL-232R-RPI or something
+  PL2303-based — should work.  If pinout of the converter isn’t documented, it’s
+  usually enough to open it and look at the labels printed on its
+  PCB.  <a href="https://docs.turris.cz/hw/omnia/omnia/">On Omnia’s side</a>,
+  UART header (i.e. the serial console header) is located between LEDs and
+  brightness button.  Starting from the side close to the LEDs, the pins are
+  ground, RX, TX and usually unused +3.3V.
 
-<p>Once the <a href="https://doc.turris.cz/doc/en/troubleshooting/serial_link#turris_omnia">connection
-  to the serial console is established</a>, configuring the router to boot from
-  an external drive is as easy as grabbing
+<p>Once the <a href="https://docs.turris.cz/hw/serial/">connection to the serial
+  console is established</a>, configuring the router to boot from an external
+  drive is as easy as grabbing
   Omnia’s <a href="https://repo.turris.cz/omnia/medkit/omnia-medkit-latest.tar.gz">medkit</a>
   and following
-  <a href="https://doc.turris.cz/doc/en/howto/omnia_booting_from_external_storage">official
-  instructions</a>.  One thing to consider is that <code>/dev/sda1</code> name
-  is unstable so rather than <code>root=/dev/sda1</code> kernel argument
-  advocated by the official method it’s better to use partition UUID.  For MBR
-  partition tables, it is composed of disk identifier and partition number which
-  can both be obtained from the output of <code>fdisk -l</code>.
+  <a href="https://docs.turris.cz/hw/omnia/ssd-boot/">official instructions</a>.
+  One thing to consider is that <code>/dev/sda1</code> name is unstable so
+  rather than <code>root=/dev/sda1</code> kernel argument advocated by the
+  official method it’s better to use partition UUID.  For MBR partition tables,
+  it is composed of disk identifier and partition number which can both be
+  obtained from the output of <code>fdisk -l</code>.
 
 <pre>
 # fdisk -l /dev/sda
@@ -104,9 +101,10 @@ Device     Boot Start       End   Sectors  Size Id Type
 
 <p>To improve isolation between components, it’s a good idea to take advantage
   of Linux Containers (LXC).  On Omnia, LXC utilities are installed in
-  the <a href="https://192.168.1.1/foris/config/main/updater/">Updater
-  section</a> of Foris interface.  The installation procedure will differ on
-  other systems and their documentation should be consulted.
+  the <a href="https://192.168.1.1/foris/config/main/updater/"
+  rel=nofollow>Updater section</a> of Foris interface.  The installation
+  procedure will differ on other systems and their documentation should be
+  consulted.
 
 
 <h2>Web server</h2>
