@@ -37,7 +37,7 @@
   issues.
 
 <p>Calculating a 256-bit SHA2 digest of a 100-byte buffer takes 14
-  thousand <a href="https://solana.com/docs/terminology#compute-units">compute
+  thousand <a href="https://solana.com/docs/references/terminology#compute-units">compute
   units (CU)</a>.  Meanwhile, Solana programs
   have <a href="https://solana.com/docs/core/fees#compute-unit-limit">a hard
   limit of 1.4 million CU</a>.  In other words, hashing 100 bytes takes up 1% of
@@ -102,12 +102,13 @@
 
 <p id=b2>Since public key, signature and signed message are stored in the
   instruction data, number of signatures that can be verified is subject
-  to <a href="//solana.com/docs/core/transactions">the 1232-byte transaction
-  size limit</a>.  Accounting for overhead leaves less than 1100 bytes for the
-  instruction data.  To specify a signature for verification, a 14-byte header,
-  32-byte public key, 64-byte signature and the message are needed.  Even
-  assuming an empty message, that’s 110 bytes per signature which means at most
-  ten signatures in a single transaction.<a href="#f2"><sup>2</sup></a>
+  to <a href="https://solana.com/docs/core/transactions">the 1232-byte
+  transaction size limit</a>.  Accounting for overhead leaves less than 1100
+  bytes for the instruction data.  To specify a signature for verification,
+  a 14-byte header, 32-byte public key, 64-byte signature and the message are
+  needed.  Even assuming an empty message, that’s 110 bytes per signature which
+  means at most ten signatures in a single
+  transaction.<a href="#f2"><sup>2</sup></a>
 
 <p>For Solana IBC I needed to verify Tendermint block signatures.  Tendermint
   validators timestamp their signatures and as a result each signature is for

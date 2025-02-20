@@ -7,7 +7,7 @@
 
 <p>There are several aspects of Rust that I’m not particularly fond of but the
   one that takes the cake
-  is <a href="//doc.rust-lang.org/core/io/struct.BorrowedBuf.html"><code>core::io::BorrowedBuf</code></a>
+  is <a href="https://doc.rust-lang.org/core/io/struct.BorrowedBuf.html"><code>core::io::BorrowedBuf</code></a>
   which I despise with passion.  It’s a nightly feature which puts in question
   my extreme emotions about it.  On the other hand it means there’s time to stop
   it from getting stabilised and figure out something better.
@@ -121,7 +121,7 @@ fn almost_good_copy(
   benefits of <code>BorrowedBuf</code>.
 
 <p>Similarly, functions which take output slice as an argument — such
-  as <a href="//docs.rs/rand/0.8.5/rand/trait.RngCore.html"><code>rand</code>’s
+  as <a href="https://docs.rs/rand/0.8.5/rand/trait.RngCore.html"><code>rand</code>’s
     <code>RngCore::fill_bytes</code></a> — could benefit from being able to
   write to uninitialised memory.  However, to offer that benefit, they need to
   be changed to support <code>BorrowedBuf</code>.  A motivated programmer can
@@ -148,7 +148,7 @@ fn almost_good_copy(
 
 <p>In addition to <code>RngCore::fill_bytes</code>, the <code>rand</code>
   crate
-  offers <a href="//docs.rs/rand/latest/rand/trait.Rng.html#method.fill">a <code>Rng::fill</code>
+  offers <a href="https://docs.rs/rand/latest/rand/trait.Rng.html#method.fill">a <code>Rng::fill</code>
   method</a> which fills a generic slice of integers with random data.  It could
   easily work with <code>BorrowedBuf</code> except that the struct works
   on <code>u8</code> slices only.  As a result, a crate which deals with
@@ -170,13 +170,13 @@ fn almost_good_copy(
   function eliminates unnecessary initialisation.  It declares an uninitialised
   region, wraps it in <code>BorrowedBuf</code> and reads data into it.  Even
   inspection of the assembly
-  output <a href="//rust.godbolt.org/z/dvaPqz4co">shows lack of
+  output <a href="https://rust.godbolt.org/z/dvaPqz4co">shows lack of
   the <code>memset</code> call</a>.
 
 <p>Alas, while <code>almost_good_copy</code> avoids memory initialisation when
   reading data from a <code>File</code>, it wastes time zeroing the buffer when,
   for example, decompressing data with help
-  of <a href="//crates.io/crates/flate2"><code>flate2</code> crate</a> (which
+  of <a href="https://crates.io/crates/flate2"><code>flate2</code> crate</a> (which
   does not offer custom <code>read_buf</code> method) effectively becoming
   a <code>slow_copy</code>.
 
@@ -287,7 +287,7 @@ fn copy(
 </pre>
 
 <p>Unsafe blocks are required to account for invalid bit patterns.  With a trait
-  like <a href="//docs.rs/bytemuck/latest/bytemuck/trait.AnyBitPattern.html"><code>bytemuck::AnyBitPattern</code></a>,
+  like <a href="https://docs.rs/bytemuck/latest/bytemuck/trait.AnyBitPattern.html"><code>bytemuck::AnyBitPattern</code></a>,
   a safe versions could exist.  Either of those alternatives would require no
   new methods on the <code>Read</code> trait and would work without any
   modifications on methods such as <code>rand</code>’s <code>fill_bytes</code>.
