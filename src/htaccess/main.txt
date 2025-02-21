@@ -27,6 +27,9 @@ RewriteRule ^(?:apple-)?touch-icon-[0-9]+x([0-9]+)(?:-precomposed)?\.png$ \
 RewriteRule ^(?:apple-)?touch-icon.png(?:-precomposed)?$ \
             /d/192.png          [END,R=temp]
 
+# /cma used to be a page.  Provide a redirect.
+RewriteRule ^cma(/.*)$ 2016/cma-resources$1 [END,R=permanent]
+
 # Fix for ai-should-be-copyrightable.  Not all aggregators handled
 # Unicode URLs correctly and ended up with invalid URLs.  Adding
 # redirects to fix those.  This can eventually be dropped once the

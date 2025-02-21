@@ -388,6 +388,8 @@ class Site(object):
 
     def _read_entries(self, dirname, factory):
         entries = []
+        if not os.path.exists(dirname):
+            return entries
         for filename in os.listdir(dirname):
             pl = parse_filename(filename)
             if not pl:
@@ -585,7 +587,7 @@ class Writer(object):
 def generate(writer, site):
     sitemap = Sitemap()
 
-    redirs = collections.defaultdict(set)
+    sitemap.add('https://mina86.com/cma/')
 
     for lang in SUPPORTED_LANGUAGES:
         Post.PREFERRED_LANGUAGE = lang

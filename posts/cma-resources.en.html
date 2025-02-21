@@ -1,0 +1,180 @@
+<!-- subject: Contiguous Memory Allocator resources -->
+<!-- date: 2016-03-31 00:37:04 -->
+<!-- tags: cma, contiguous memory allocator, linux -->
+<!-- categories: Articles, Techblog, WEiTI -->
+
+<template class=cite>
+<tr><th>BibTeX<td><pre>
+@misc{cma24,
+  author    = {Nazarewicz, Michał and Szyprowski, Marek},
+  title     = {{Continuous Memory Allocator}, version 24},
+  year      = 2012,
+  month     = apr,
+  day       = 03,
+  url       = {https://marc.info/?l=linux-mm&amp;m=133346232109122},
+  messageid = {1333462221-3987-1-git-send-email-m.szyprowski@samsung.com}
+}
+@inproceedings{nazarewicz2012lce,
+  title     = {{Contiguous Memory Allocator}: {Allocating} Big Chunks of Physically Contiguous Memory},
+  author    = {Nazarewicz, Michał},
+  booktitle = {LinuxCon Europe},
+  year      = 2012,
+  month     = nov,
+  day       = 06,
+  address   = {Barcelona, Spain},
+  url       = {https://mina86.com/2012/cma-on-lce-elce-2012/}
+}
+@article{nazarewicz212lwn,
+  author    = {Nazarewicz, Michał},
+  title     = {A Deep Dive into {CMA}},
+  journal   = {Linux Weekly News},
+  year      = 2012,
+  month     = mar,
+  day       = 13,
+  url       = {https://lwn.net/Articles/486301/}
+}
+@misc{nazarewicz2012deep,
+  title     = {Deep Dive into {Contiguous Memory Allocator}},
+  author    = {Nazarewicz, Michał},
+  year      = 2012,
+  month     = jun,
+  day       = 10,
+  url       = {https://mina86.com/2012/deep-dive-into-contiguous-memory-allocator-part-i/},
+}
+@mastersthesis{nazarewicz2013bsc,
+  title     = {Alokacja ciągłych fizycznie obszarów pamięci w systemie {Linux}},
+  author    = {Nazarewicz, Michał},
+  year      = 2013,
+  school    = {WEiTI/ISE, PW},
+  address   = {Warsaw},
+  type      = {Bachelor’s thesis},
+  urn       = {urn:pw-repo:WUT2a4eca3283974485823865112329121d},
+  url       = {https:/mina86.com/2013/cma-po-polsku/}
+}
+@article{corbet447405,
+  author    = {Corbet, Jonathan},
+  title     = {A Reworked {Contiguous Memory Allocator}},
+  year      = 2011,
+  month     = jun,
+  day       = 12,
+  journal   = {Linux Weekly News},
+  publisher = {Eklektix},
+  url       = {https://lwn.net/Articles/447405/}
+}
+@article{corbet450286,
+  author    = {Corbet, Jonathan},
+  title     = {{CMA} and {ARM}},
+  year      = 2011,
+  month     = jun,
+  day       = 05,
+  journal   = {Linux Weekly News},
+  publisher = {Eklektix},
+  url       = {https://lwn.net/Articles/450286/}
+}
+@article{corbet368869,
+  author    = {Corbet, Jonathan},
+  title     = {Memory Compaction},
+  year      = 2010,
+  month     = jan,
+  day       = 06,
+  journal   = {Linux Weekly News},
+  publisher = {Eklektix},
+  url       = {https://lwn.net/Articles/368869/}
+}
+@article{corbet340080,
+  author    = {Corbet, Jonathan},
+  title     = {Transcendent memory},
+  year      = 2009,
+  month     = jul,
+  day       = 08,
+  journal   = {Linux Weekly News},
+  publisher = {Eklektix},
+  url       = {https://lwn.net/Articles/340080/}
+}
+@article{corbet468896,
+  author    = {Corbet, Jonathan},
+  title     = {{POSIX\_FADV_VOLATILE}},
+  year      = 2011,
+  month     = nov,
+  day       = 22,
+  journal   = {Linux Weekly News},
+  publisher = {Eklektix},
+  url       = {https://lwn.net/Articles/468896/}
+}
+@misc{song,
+  author    = {Song, Barry},
+  title     = {A Simple Kernel Module as a Helper to Test {CMA}, v. 4},
+  year      = 2012,
+  month     = mar,
+  day       = 07,
+  url       = {https://marc.info/?l=linux-kernel&amp;m=133112038122899},
+  messageid = {1331120259-30780-1-git-send-email-Barry.Song@csr.com}
+}
+@misc{kim,
+  author    = {Kim, Minchan},
+  title     = {Discard clean pages during contiguous allocation instead of migration},
+  year      = 2012,
+  month     = sep,
+  day       = 11,
+  url       = {https://marc.info/?l=linux-kernel&amp;m=134732408014915},
+  messageid = {1347324112-14134-1-git-send-email-minchan@kernel.org}
+}
+@misc{abbott,
+  author    = {Abbott, Laura},
+  title     = {Revoke {LRU} when trying to drop buffers},
+  year      = 2012,
+  month     = sep,
+  day       = 11,
+  url       = {https://marc.info/?l=linux-kernel&amp;m=134738454404157},
+  messageid = {1347384529-5862-1-git-send-email-lauraa@codeaurora.org}
+}</pre>
+</template>
+
+<p>Below is a list of materials about Contiguous Memory Allocator (CMA) and
+  topics relating to it which may be of interest.
+
+<style>
+.t dt {font-size:0.75rem}
+.t dt a {font-size:1rem}
+.t dd + dt {margin-top:1rem}
+</style>
+<dl>
+  <dt>Michał Nazarewicz and Marek Szyprowski. 2012. <a href="https://marc.info/?l=linux-mm&amp;m=133346232109122"><i>Continuous Memory Allocator, version 24</i></a>.
+  <dd>The final patchset that was merged in Linux 3.5.
+
+    <dt>Michał Nazarewicz. 2013. <a href="/2013/cma-po-polsku/"><i>Alokacja ciągłych fizycznie obszarów pamięci w systemie Linux</i></a>. Bachelor’s thesis. <abbr>WEiTI/ISE</abbr>, PW, Warsaw.
+  <dd>🇵🇱 Diploma thesis in Polish on the Continuous Memory Allocator.
+
+  <dt>Michał Nazarewicz. 2012. <a href="https://lwn.net/Articles/486301/">A Deep Dive into CMA</a>. <i>Linux Weekly News</i> (March 2012).
+  <dd>A description of the way to integrate CMA with an architecture as well as short summary of how exactly CMA works.
+
+  <dt>Michał Nazarewicz. 2012. <a href="https://mina86.com/2012/deep-dive-into-contiguous-memory-allocator-part-i/"><i>Deep Dive into Contiguous Memory Allocator</i></a>.
+  <dd>A description of how to use and integrate CMA with an architecture.  It is a first part of an extended version of the above LWN article and as such it includes much more details.
+
+  <dt>Michał Nazarewicz. 2012. <a href="https://mina86.com/2012/cma-on-lce-elce-2012/">Contiguous Memory Allocator: Allocating Big Chunks of Physically Contiguous Memory</a>. <i>LinuxCon Europe</i>, Barcelona, Spain.
+  <dd>The presentation from the LinuxCon Europe (LCE) 2012 about CMA.
+
+  <dt>Barry Song. 2012. <a href="https://marc.info/?l=linux-kernel&amp;m=133112038122899"><i>A Simple Kernel Module as a Helper to Test CMA, vrsien 4</i></a>.
+  <dd>A short and simple driver that can be used to test CMA as well as see how it is used.
+
+  <dt>Jonathan Corbet. 2011. <a href="https://lwn.net/Articles/447405/">A Reworked Contiguous Memory Allocator</a>. <i>Linux Weekly News</i> (June 2011).
+  <dd>An overwiev of the Contiguous Memory Allocator.
+
+  <dt>Jonathan Corbet. 2011. <a href="https://lwn.net/Articles/450286/">CMA and ARM</a>. <i>Linux Weekly News</i> (June 2011).
+  <dd>An overview of the linear mapping problems CMA had on ARM platforms, and why the early fixups are required.
+
+  <dt>Laura Abbott. 2012. <a href="https://marc.info/?l=linux-kernel&amp;m=134738454404157"><i>Revoke LRU when trying to drop buffers</i></a>.
+  <dd>Patch which tries to improve CMA’s performance by removing buffer from LRU prior to migration.  The thread also mentiones problem with ext4 not supporting migration of journal pages.
+
+  <dt>Jonathan Corbet. 2010. <a href="https://lwn.net/Articles/368869/">Memory Compaction</a>. <i>Linux Weekly News</i> (January 2010).
+  <dd>An overview of Mel Gorman’s compaction patches.  Compaction code is used by CMA for scanning for and migrating non-free pages.
+
+  <dt>Jonathan Corbet. 2009. <a href="https://lwn.net/Articles/340080/">Transcendent memory</a>. <i>Linux Weekly News</i> (July 2009).
+  <dd>Overwiev of an idea behind and implementation of the transcendent memory.  Such memory can be marked ‘ephemeral’ which means that kernel can discard it if it wishes to.
+
+  <dt>Jonathan Corbet. 2011. <a href="https://lwn.net/Articles/468896/"><code>POSIX_FADV_VOLATILE</code></a>. <i>Linux Weekly News</i> (November 2011).
+  <dd>An overwiev of John Stultz’s <code>POSIX_FADV_VOLATILE</code> implementation which is one of the things that CMA work with nicely.
+
+  <dt>Minchan Kim. 2012. <a href="https://marc.info/?l=linux-kernel&amp;m=134732408014915"><i>Discard clean pages during contiguous allocation instead of migration</i></a>.
+  <dd>Patch changing CMA so that clean pages are discarded instead of migrating which improves CMA’s performance.
+</dl>
