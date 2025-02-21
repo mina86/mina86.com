@@ -111,26 +111,17 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
     def __init__(self, *args: typing.Any, **kw: typing.Any):
         self._static_mappings = kw.pop('static_mappings', None)
         self._src_dir = kw.pop('src_dir', None)
-        self._self = [[1, kw.pop('self_url', None)]]
+        self.__self = [kw.pop('self_url', None)]
         self.__strip_back_ids = kw.pop('strip_back_ids', False)
         super().__init__(*args, **kw)
 
     def handle_starttag(self, tag: str, attrs: _Attributes) -> None:
         self._transform_attrs(tag, attrs)
-        self._self[-1][0] += 1
         super().handle_starttag(tag, attrs)
 
     def handle_startendtag(self, tag: str, attrs: _Attributes) -> None:
         self._transform_attrs(tag, attrs)
-        if not self._self[-1][0]:
-            self._self.pop()
         super().handle_startendtag(tag, attrs)
-
-    def handle_endtag(self, tag):
-        self._self[-1][0] -= 1
-        if not self._self[-1][0]:
-            self._self.pop()
-        super().handle_endtag(tag)
 
     def _transform_attrs(self, tag: str, attrs: _Attributes) -> None:
         i = 0
@@ -148,9 +139,6 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
         if (tag in ('path', 'text', 'use', 'rect', 'circle') and
             attr in ('x', 'cx', 'y', 'cy') and
             value == '0'):
-            return False
-        if attr == 'self':
-            self._self.append([0, value])
             return False
         if (self.__strip_back_ids and
             attr == 'id' and re.search('^b[0-9]+$', value)):
@@ -182,10 +170,27 @@ class HTMLMinParser(htmlmin.parser.HTMLMinParser):
             if value.startswith('//mina86.com/'):
                 value = value[12:]
             if value.startswith('/self'):
-                s = self._self[-1][1]
+                s = self.__self[-1]
                 assert s is not None
                 value = s + value[5:]
         return value
+
+    def handle_pi(self, data):
+        tokens = data.rstrip().split(None, 1) or ('')
+        ok = False
+        if tokens[0] == 'self':
+            ok = self.__handle_pi_self(*tokens[1:])
+        assert ok, f'<?{data}>'
+
+    def __handle_pi_self(self, arg=''):
+        if arg.strip() == 'pop':
+            self.__self.pop()
+            return True
+        args = arg.split(None, 1)
+        if args[0] == 'push':
+            self.__self.append('' if len(args) == 1 else args[1])
+            return True
+        return False
 
     def handle_data(self, data):
         if self._tag_stack and self._tag_stack[0][0] == 'style':
