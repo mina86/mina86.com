@@ -11,6 +11,7 @@
 
 
   <xsl:template match="/cv">
+    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="https://mina86.com/" />
