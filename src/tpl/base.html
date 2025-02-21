@@ -42,7 +42,7 @@
 
 {%- macro post(entry, post_page) -%}
 {%- set full = post_page or not entry.body.has_excerpt -%}
-  <article self="{% if not post_page %}{{ entry.href }}{% endif %}">
+  <article><?self push {% if not post_page %}{{ entry.href }}{% endif %}>
     <h1><a lang="{{ entry.lang }}" href="{{ entry.href }}"
            data-date="{{ (entry.updated or entry.date).__str__()[:10] }}"
            {{ attr('data-title', entry.bib_title) }}
@@ -78,7 +78,7 @@
         </ul>
       {%- endif %}
     </aside>
-  </article>
+  <?self pop></article>
 {%- endmacro -%}
 
 <!DOCTYPE html>
