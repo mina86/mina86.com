@@ -615,7 +615,7 @@ def generate(writer, site):
             by_year[post.date.year].append(post)
 
         archives = []
-        years = sorted(by_year, reverse=True)
+        years = sorted(by_year)
         for i in range(len(years)):
             year = years[i]
             archives.append({
