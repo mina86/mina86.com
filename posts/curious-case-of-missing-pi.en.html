@@ -5,8 +5,8 @@
 
 <p>π is one of those constants which pops up when least expected.  At the same
   time it’s sometimes missing when most needed.  For example, consider the
-  following application calculating area of a disk (not to be confused with area
-  of a circle which is zero):
+  following application calculating area of a disk (not to be confused with area
+  of a circle which is zero):
 
 <pre>
 #include &lt;math.h>
@@ -21,9 +21,9 @@ int main(int argc, char **argv) {
 }
 </pre>
 
-<p>It uses features introduced in the 1999 edition of the C standard (often
+<p>It uses features introduced in the 1999 edition of the C standard (often
   referred to as C99) so it might be good to inform the compiler of that fact
-  with a <code>-std=c99</code> flag.  Unfortunately, doing so leads to an error:
+  with a <code>-std=c99</code> flag.  Unfortunately, doing so leads to an error:
 
 <pre>
 $ gcc -std=c99 -o area area.c
@@ -45,23 +45,23 @@ area.c:8:18: error: ‘M_PI’ undeclared (first use in this function)
 <h2>The problem</h2>
 
 <p id=b1>First of all, it needs to be observed that the aforecited specification
-  is <em>not</em> the C standard.  Instead, it’s POSIX and it
+  is <em>not</em> the C standard.  Instead, it’s POSIX and it
   marks <code>M_PI</code> with an [XSI] tag.  This means that <code>M_PI</code>
   ‘is part of the X/Open Systems Interfaces option’ and ‘is an extension to the
   ISO C standard.’
   Indeed, <a href="https://open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf">The
   C99 standard</a><sup><a href=#f1>1</a></sup> doesn’t define this constant.
 
-<p>Trying to support multiple standards, gcc and glibc behave differently
+<p>Trying to support multiple standards, GCC and glibc behave differently
   depending on arguments.  With <code>-std=c99</code> switch the compiler
-  conforms to C standard; without the switch, it includes all the POSIX
+  conforms to C standard; without the switch, it includes all the POSIX
   extensions.
 
 <p>A naïve approach would be to make life easier and unconditionally provide the
   constant.  Alas, the <code>M_PI</code> identifier is neither defined nor
-  reserved by the C standard.  In other words, programmer can freely use it and
-  a conforming compiler cannot complain.  For example, the following is
-  a well-formed C program and C compiler has no choice but to accept it:
+  reserved by the C standard.  In other words, programmer can freely use it and
+  a conforming compiler cannot complain.  For example, the following is
+  a well-formed C program and C compiler has no choice but to accept it:
 
 <pre>
 #include &lt;math.h>
@@ -83,9 +83,9 @@ int main(int argc, char **argv) {
 
 <h2>The solution</h2>
 
-<p>The developer who needs π constant has a few ways to solve the problem.  For
+<p>The developer who needs π constant has a few ways to solve the problem.  For
   maximum portability it has to be defined in the program itself.  To make
-  things work even when building on a Unix-like system, an <code>ifdef</code>
+  things work even when building on a Unix-like system, an <code>ifdef</code>
   guard can be used.  For example:
 
 <pre>
@@ -103,13 +103,13 @@ int main(int argc, char **argv) {
 
 <h3>Feature test macros</h3>
 
-<p>glibc provides one more approach.  The C standard has a notion of reserved
+<p>glibc provides one more approach.  The C standard has a notion of reserved
   identifiers which cannot be freely used by programmers.  They are used for
   future language development and to allow implementations to provide their own
   extensions to the language.
 
 <p>For example, when C99 added boolean type to the language, it did it by
-  defining a <code>_Bool</code> type.  A <code>bool</code>, <code>true</code>
+  defining a <code>_Bool</code> type.  A <code>bool</code>, <code>true</code>
   and <code>false</code> symbols became available only through
   a <code>stdbool.h</code> file.  Such approach means that C89 code continues to
   work when built with C99 compiler even if it
@@ -117,10 +117,10 @@ int main(int argc, char **argv) {
   its own way.
 
 <p>Similarly, glibc introduced <a href="https://lwn.net/Articles/590381">feature
-  test macros</a>.  They all start with an underscore followed by a capital
-  letter.  Identifiers in this form are reserved by the C standard thus using
-  them in a program invokes undefined behaviour.  Technically speaking, the
-  following is not a well-formed C program:
+  test macros</a>.  They all start with an underscore followed by a capital
+  letter.  Identifiers in this form are reserved by the C standard thus using
+  them in a program invokes undefined behaviour.  Technically speaking, the
+  following is not a well-formed C program:
 
 <pre>
 #define _XOPEN_SOURCE
@@ -145,10 +145,10 @@ int main(int argc, char **argv) {
   same way.  Microsoft uses the same technique though different macros. To get
   access to <code>M_PI</code> in particular, a <code>_USE_MATH_DEFINES</code>
   symbol needs to be defined.  Newlib will define symbols conflicting with
-  C standard unless code is compiled in strict mode
+  C standard unless code is compiled in strict mode
   (e.g. with <code>-std=c99</code> flag).  Lastly, Bionic and Diet Libc define
   the constant unconditionally which strictly speaking means that they don’t
-  conform to the C standard.
+  conform to the C standard.
 
 
 <aside class=f role=doc-endnotes>
