@@ -63,7 +63,7 @@
   two instructions: one calling the native signature verification program and
   another calling a smart contract.  If a signature is invalid, the whole
   transaction fails an the smart contract is not
-  called.<a href="#f1"><sup>1</sup></a>
+  called.<sup><a href=#f1>1</a></sup>
 
 <p>For example,
   consider <a href="https://explorer.solana.com/tx/56QjWeDDDX4Re2sXs24r7eA2oWFN7wFCJHpTmy5uFHPKgcFhwi6mBnXyKzL3bAqSHoE9fmwJmFGJemswkEHybFC5">transaction
@@ -108,7 +108,7 @@
   a 14-byte header, 32-byte public key, 64-byte signature and the message are
   needed.  Even assuming an empty message, that’s 110 bytes per signature which
   means at most ten signatures in a single
-  transaction.<a href="#f2"><sup>2</sup></a>
+  transaction.<sup><a href=#f2>2</a></sup>
 
 <p>For Solana IBC I needed to verify Tendermint block signatures.  Tendermint
   validators timestamp their signatures and as a result each signature is for
@@ -121,7 +121,7 @@
 
 <p id=b3>To address this limitation, signatures can be verified in batches with
   results aggregated into a <dfn>signatures account</dfn> that can be inspected
-  later on.<a href="#f3"><sup>3</sup></a> This scheme needs i) a smart contract
+  later on.<sup><a href=#f3>3</a></sup> This scheme needs i) a smart contract
   capable of doing the aggregation and ii) an interface for other smart
   contracts to interpret the aggregated data.
 
@@ -298,7 +298,7 @@ if !verifier.verify(message, pubkey, signature)? {
   verification programs.
 
 
-<p id=f1><a href="#b1">1</a> The native signature verification programs cannot
+<p id=f1><a href=#b1>1</a> The native signature verification programs cannot
   be called through <a href="https://solana.com/docs/core/cpi">Cross Program
   Invocation (CPI)</a> making the whole mechanism a bit convoluted.  The smart
   contract must inspect the transaction to make sure that the signature
@@ -307,13 +307,13 @@ if !verifier.verify(message, pubkey, signature)? {
   crate</a> includes helper function for interacting with native signature
   verification programs such as Ed25519 program or Secp255k1 program.
 
-<p id=f2><a href="#b2">2</a> With specially crafted messages it is possible to
+<p id=f2><a href=#b2>2</a> With specially crafted messages it is possible to
   go past that limit.  If the same public key is used, 13 signatures can fit in
   single transaction (⌊(1100 - 32) / (14 + 64)⌋ = 13).  However, that’s an
   unrealistic scenario especially considering that any useful transaction needs
   to include another instruction.
 
-<p id=f3><a href="#b3">3</a> Note that ‘aggregate’ here doesn’t mean
+<p id=f3><a href=#b3>3</a> Note that ‘aggregate’ here doesn’t mean
   zero-knowledge aggregation.  Rather, all the verified signatures are stored in
   the signatures account so another programs can see whether some particular
   signature has been aggregated.  More specifically, as an optimisation,

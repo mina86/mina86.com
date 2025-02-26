@@ -73,7 +73,7 @@
 <p id=b1>An obvious improvement is sorting the list.  With the words ordered,
   a binary search makes it possible to narrow down in logarithmic time the
   search space to a subset of words which match pattern’s prefix.  This changes
-  the complexity to \(\mathcal O(p\log n + ns)\)<a href="#f1"><sup>1</sup></a>.
+  the complexity to \(\mathcal O(p\log n + ns)\)<sup><a href=#f1>1</a></sup>.
 
 <p>Another approach is to have two sorted lists, one called <code>forward</code>
   containing the given words and another called <code>backward</code> containing
@@ -173,7 +173,7 @@
   complexity.
 
 <p id=b2>Overall, the lookup ends up having \(\mathcal O(p+(k-p)n)\) run time.
-  Interestingly, it does not depend on the suffix<a href="#f2"><sup>2</sup></a>.  On the
+  Interestingly, it does not depend on the suffix<sup><a href=#f2>2</a></sup>.  On the
   other hand, the longer the prefix the faster the algorithm will run.  On one
   extreme, if the glob is a literal string (and thus prefix length equal
   word length), we end up with a linear lookup.  In those cases, trie should be
@@ -326,7 +326,7 @@ M547,241h8m0,10h-8
 <p>In other words, it’s nearly never a linked-list and rarely a tree.
 
 
-<p id=f1><a href="#b1">1</a> If we further assume uniform distribution of words
+<p id=f1><a href=#b1>1</a> If we further assume uniform distribution of words
   the linear search matching suffixes doesn’t need to go through all \(n\) keys.
   Rather it needs to test only \(O\left({n \over \exp(p)}\right)\) strings which
   is noticeably smaller.  This makes the complexity equal \(O\left(p\log n + {ns
@@ -335,5 +335,5 @@ M547,241h8m0,10h-8
   derive the formula for the worst-case scenario in which all words need to be
   checked.
 
-<p id=f2><a href="#b2">2</a> Of course this is only in worst case scenario.  In
+<p id=f2><a href=#b2>2</a> Of course this is only in worst case scenario.  In
   practice, on average case, presence of a suffix will speed the algorithm up.

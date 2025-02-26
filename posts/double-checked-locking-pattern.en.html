@@ -14,10 +14,10 @@
 
 <p>Witam wszystkich,
 
-<p>chciałbym odnieść się do poruszonego przeze mnie problemu
+<p id=b1>chciałbym odnieść się do poruszonego przeze mnie problemu
   poprawności efektywnego wzorca singletonu dla programów
   wielowątkowych zwanego również <i lang="en">double-checked
-  locking pattern</i><sup><a href="#f1" id="fl1">1</a></sup>.  W tym
+  locking pattern.</i><sup><a href=#f1>1</a></sup>  W tym
   celu, na początku przywołam trochę teorii.
 
 <p>Standard C++ definiuje pojęcie <i lang="en">sequence point</i>,
@@ -35,26 +35,25 @@ int bar = 42;
 foo = bar++;
 /* 2 */</pre>
 
-<p>w którym standard definiuje, iż w pierwszym. punkcie
+<p id=b2>w którym standard definiuje, iż w pierwszym. punkcie
   zmienne <var>foo</var> i <var>bar</var> mają wartości odpowiednio
   <code>0x42</code> i <code>42</code>, a w drugim — <code>42</code>
   i <code>43</code>, ale nie określa ich wartości przejściowych.
   Kompilator może powyższy kod zaimplementować najpierw przypisując
   zmiennej <var>foo</var> wartość zmiennej <var>bar</var>, a potem
-  dopiero inkrementując tą drugą<sup><a href="#f2"
-  id="fl2">2</a></sup>:
+  dopiero inkrementując tą drugą:<sup><a href=#f2>2</a></sup>
 
 <pre>
 foo = bar;
 ++bar;</pre>
 
-<p>Sugerowałoby to, iż miałem rację twierdząc, iż
+<p id=b3>Sugerowałoby to, iż miałem rację twierdząc, iż
   instrukcja <code>instance = new Foo();</code> może spowodować
   uruchomienie konstruktora dopiero po przypisaniu adresu
   przydzielonej pamięci do zmiennej.  Muszę się jednak przyznać, iż
   standardu C++ nie studiowałem tak dogłębnie jak standardu C i nie
   wiem, czy przez przypadek operator new nie wprowadza kolejnego
-  punktu sekwencyjnego<sup><a href="#f3" id="fl3">3</a></sup>.
+  punktu sekwencyjnego.<sup><a href=#f3>3</a></sup>
   Gdyby tak było, to kod ten należałoby traktować jak:
 
 <pre>
@@ -62,11 +61,10 @@ Foo *new_foo() { return new Foo(); }
 /* … */
 instance = new_Foo();</pre>
 
-<p>w którym problem nie powinien<sup><a href="#f4"
-  id="fl4">4</a></sup> już występować, gdyż wszystkie efekty uboczne
-  funkcji muszą zostać wykonane zanim zwróci ona swoją wartość, a więc
-  konstruktor musi być wywołany zanim funkcja zwróci adres
-  przydzielonej pamięci.
+<p id=b4>w którym problem nie powinien<sup><a href=#f4>4</a></sup> już
+  występować, gdyż wszystkie efekty uboczne funkcji muszą zostać wykonane zanim
+  zwróci ona swoją wartość, a więc konstruktor musi być wywołany zanim funkcja
+  zwróci adres przydzielonej pamięci.
 
 <p>Po tych wszystkich przemyśleniach postanowiłem sprawdzić jak to
   wygląda w praktyce i faktycznie, kompilacja kodu:
@@ -104,7 +102,7 @@ int main(void) {
   wynika, iż Java oraz C# mają co do tego ździebko odmienne
   zdanie.
 
-<p>Skoro już się tyle rozpisałem to należy też poświęcić trochę uwagi
+<p id=b5>Skoro już się tyle rozpisałem to należy też poświęcić trochę uwagi
   poruszonemu (przez kogoś z tyłu sali) problemowi, gdy instrukcja
   przypisania jest nieatomowa.  Zostawiam to na sam koniec po części
   dlatego, że kończy to całą dyskusję, a jeśli chodzi o różne dziwne,
@@ -112,27 +110,24 @@ int main(void) {
   bardzo prostym przykładem: 16-bitowy procesor Intel 8086 (do 80286
   włącznie), w którym dalekie wskaźniki są 32-bitowe, a procesor
   potrafi wykonywać atomowe operacje jedynie na 16-bitowych porcjach
-  danych<sup><a href="#f5" id="fl5">5</a></sup>.  Jeżeli ktoś mi
+  danych.<sup><a href=#f5>5</a></sup>  Jeżeli ktoś mi
   zarzuci, iż to jakieś przedpotopowe procesory, to z chęcią podam
   drugi przykład: zapis do 32-bitowej zmiennej leżącej na granicy
-  linii cache’u<sup><a href="#f6" id="fl6">6</a></sup> powoduje
+  linii cache’u<sup><a href=#f6>6</a></sup> powoduje
   w procesorach i386 dwa zapisy przy równoczesnym braku blokowania
-  magistrali<sup><a href="#f7" id="fl7">7</a></sup>.
+  magistrali.<sup><a href=#f7>7</a></sup>
 
-<p>Poza tym artykuł na stronie IBM uświadomił mi<sup><a href="#f8"
-  id="fl8">8</a></sup>, iż w grę wchodzi jeszcze kolejność
-  wykonywania operacji przez procesor, która wcale nie musi być
-  tożsama z kolejnością instrukcji w kodzie maszynowym.  Procesor może
-  stwierdzić, iż lepiej będzie najpierw zapisać wskaźnik, a dopiero
-  potem wykonać jakieś przypisanie z konstruktora, nawet jeżeli
-  napotkał na te instrukcje w odwrotnej kolejności.  W przypadku
-  maszyn jednoprocesorowych nie stanowi to problemu, ale w przypadku
-  maszyn wieloprocesorowych (wielordzeniowych) już tak.
+<p id=b8>Poza tym artykuł na stronie IBM uświadomił mi,<a href=#f8><sup>8</sup></a> iż
+  w grę wchodzi jeszcze kolejność wykonywania operacji przez procesor, która
+  wcale nie musi być tożsama z kolejnością instrukcji w kodzie maszynowym.
+  Procesor może stwierdzić, iż lepiej będzie najpierw zapisać wskaźnik,
+  a dopiero potem wykonać jakieś przypisanie z konstruktora, nawet jeżeli
+  napotkał na te instrukcje w odwrotnej kolejności.  W przypadku maszyn
+  jednoprocesorowych nie stanowi to problemu, ale w przypadku maszyn
+  wieloprocesorowych (wielordzeniowych) już tak.
 
 
-<h2>Przypisy</h2>
-<p><sup><a href="#fl1" id="f1">1</a></sup> Dla osób nieobecnych na
-wykładzie, chodzi o:
+<p id=f1><a href=#b1>1</a> Dla osób nieobecnych na wykładzie, chodzi o:
 
 <pre>
 class Foo {
@@ -150,12 +145,10 @@ class Foo {
 
 <p>Twierdzę, iż wzorzec ten jest niepoprawny.
 
-<p><sup><a href="#fl2" id="f2">2</a></sup> Szczerze mówiąc tak
-  właśnie bym się spodziewał, że ta instrukcja zostanie
-  zaimplementowana, gdyż alternatywą wobec tego jest tworzenie
-  niepotrzebnych zmiennych tymczasowych (np. niepotrzebne zużywanie
-  rejestru).  Aby sprawdzić swoją intuicję postanowiłem zrobić pewien
-  test:
+<p id=f2><a href=#b2>2</a> Szczerze mówiąc tak właśnie bym się spodziewał, że ta
+  instrukcja zostanie zaimplementowana, gdyż alternatywą wobec tego jest
+  tworzenie niepotrzebnych zmiennych tymczasowych (np. niepotrzebne zużywanie
+  rejestru).  Aby sprawdzić swoją intuicję postanowiłem zrobić pewien test:
 
 <pre>
 [mina86@tuptus ~/code]$ cat foo.c
@@ -205,32 +198,28 @@ main:
         .ident  "GCC: (GNU) 4.1.2"
         .section        .note.GNU-stack,"",@progbits</pre>
 
-<p>Wyróżnione przeze mnie linie wskazują, iż kompilator zachowuje się
-  tak jak przewidziałem.
+<p>Wyróżnione przeze mnie linie wskazują, iż kompilator zachowuje się tak jak
+  przewidziałem.
 
-<p><sup><a href="#fl3" id="f3">3</a></sup> Wydaje się, iż
-  w przypadku przeciążania tego operatora sequence point faktycznie
-  jest dodawany, z racji faktu, iż jego użycie jest wówczas
-  zamaskowanym wywołaniem funkcji, a wywołania funkcji dodają sequence
-  point.
+<p id=f3><a href=#b3>3</a> Wydaje się, iż w przypadku przeciążania tego
+  operatora sequence point faktycznie jest dodawany, z racji faktu, iż jego
+  użycie jest wówczas zamaskowanym wywołaniem funkcji, a wywołania funkcji
+  dodają sequence point.
 
-<p><sup><a href="#fl4" id="f4">4</a></sup> Nadal jakiś kompilator
-  mógłby próbować to optymalizować, ale wówczas nie byłby to
-  kompilator zgodny ze standardem C++.
+<p id=f4><a href=#b4>4</a> Nadal jakiś kompilator mógłby próbować to
+  optymalizować, ale wówczas nie byłby to kompilator zgodny ze standardem C++.
 
-<p><sup><a href="#fl5" id="f5">5</a></sup> Takie samo zachowanie
-  występuje rzecz jasna na nowszych generacjach tego procesora
-  działających w trybie real.
+<p id=f5><a href=#b5>5</a> Takie samo zachowanie występuje rzecz jasna na
+  nowszych generacjach tego procesora działających w trybie real.
 
-<p><sup><a href="#fl6" id="f6">6</a></sup> Chyba wystarczy, żeby nie
-  była wyrównana do jakiejś mniejszej jednostki.
+<p id=f6><a href=#b5>6</a> Chyba wystarczy, żeby nie była wyrównana do jakiejś
+  mniejszej jednostki.
 
-<p><sup><a href="#fl7" id="f7">7</a></sup> Przynajmniej nie
-  znalazłem wzmianki o tym, aby instrukcja mov blokowała magistralę
-  w intelowskim Software Developer’s Manual.
+<p id=f7><a href=#b5>7</a> Przynajmniej nie znalazłem wzmianki o tym, aby
+  instrukcja mov blokowała magistralę w intelowskim Software Developer’s Manual.
 
-<p><sup><a href="#fl8" id="f8">8</a></sup> Link do artykułu, na
-  który się powoływałem, gdzieś mi niestety zaginął.
+<p id=f8><a href=#b8>8</a> Link do artykułu, na który się powoływałem, gdzieś mi
+  niestety zaginął.
 
 <!-- COMMENT -->
 <!-- date: 2008-04-30 08:04:42 -->

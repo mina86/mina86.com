@@ -137,7 +137,7 @@ fn almost_good_copy(
   an <code>&amp;mut [MaybeUninit&lt;u8&gt;]</code> argument?  The issue with the
   latter is that there’s no safe way to convert <code>&amp;mut [T]</code>
   into <code>&amp;mut
-  [MaybeUninit&lt;T&gt;]</code>.<a href="#f1"><sup>1</sup></a> As such, users
+  [MaybeUninit&lt;T&gt;]</code>.<sup><a href=#f1>1</a></sup> As such, users
   who so far happily used such functions with regular initialised buffers would
   need convoluted incantation to make their previously straightforward code to
   compile. Meanwhile, creating <code>BorrowedBuf</code> is somewhat convenient
@@ -262,7 +262,7 @@ fn copy(
 <h2>What people want</h2>
 
 <p id=b2>Having looked at issues with <code>BorrowedBuf</code>, let’s consider
-  what people actually want.<a href="#f2"><sup>2</sup></a> The easiest mental
+  what people actually want.<sup><a href=#f2>2</a></sup> The easiest mental
   model is that uninitialised memory stores arbitrary data, unknown unless
   accessed.  To achieve such semantics, the uninitialised memory would need to
   be <dfn>frozen</dfn>.  A frozen region becomes safe to read and can be
@@ -298,9 +298,9 @@ fn copy(
 <p id=b3>Reading uninitialised memory is hardly an issue when analysing things
   on hardware level.  So long as a memory address is mapped with proper
   permissions, accessing data from it will always produce some value.  There’s
-  no undefined behaviour there.<a href="#f3"><sup>3</sup></a> In fact, in
+  no undefined behaviour there.<sup><a href=#f3>3</a></sup> In fact, in
   typical Linux environment all newly allocated anonymous pages are
-  zero-initialised.<a href="#f4"><sup>4</sup></a>
+  zero-initialised.<sup><a href=#f4>4</a></sup>
 
 <figure class=fr style="--w:14em">
 <pre style="font-size:0.875em">
@@ -419,7 +419,7 @@ tautology_ok:
   <p>Yet we should not pass up our opportunities in that critical 3%.  A good
     programmer will not be lulled into complacency by such reasoning, he will be
     wise to look carefully at the critical code; but only after that code has
-    been identified.<a href="#f5"><sup>5</sup></a>
+    been identified.<sup><a href=#f5>5</a></sup>
 </blockquote>
 
 <p>For the remaining 3%, the options now are somewhat bleak and depend on the
@@ -432,7 +432,7 @@ tautology_ok:
   uninitialised memory, maybe someone will figure out some alternative fast and
   ergonomic approach.
 
-<p id=f1><a href="#b1">1</a> The reference conversion itself is safe since all
+<p id=f1><a href=#b1>1</a> The reference conversion itself is safe since all
   possible values of type <code>T</code> are valid values of
   type <code>MaybeUninit&lt;T&gt;</code> and both those types have the same
   layout.  However, the latter allows writing arbitrary data into the object
@@ -441,27 +441,27 @@ tautology_ok:
   demonstration</a>).  With interior mutability, even converting shared
   references may lead to issues.
 
-<p id=f2><a href="#b2">2</a> I am aware that I presumptuously speak for
+<p id=f2><a href=#b2>2</a> I am aware that I presumptuously speak for
   everyone.  However, I do believe that alternatives presented here, if they
   existed, would be favoured by everyone and that includes contributors to
   the <code>BorrowedBuf</code> struct.  As I discuss later, the type is the way
   it is not because that’s what anyone finds appealing but due to other
   constraints.
 
-<p id=f3><a href="#b3">3</a> Semantics that reading uninitialised memory has
+<p id=f3><a href=#b3>3</a> Semantics that reading uninitialised memory has
   arbitrary but consistent value can be useful in practice.  Briggs and Torczon
   describe in <a href="https://doi.org/10.1145/176454.176484">An efficient
   representation for sparse sets</a> an algorithm which is built on such
   semantics.
 
-<p id=f4><a href="#b3">4</a> The atypical environment is µClinux which runs on
+<p id=f4><a href=#b3>4</a> The atypical environment is µClinux which runs on
   platforms without memory management unit
   (MMU).  <a href="https://www.kernel.org/doc/Documentation/admin-guide/mm/nommu-mmap.rst">It
   supports <code>MAP_UNINITIALIZED</code> option</a> which skips zeroing of the
   memory region.  However, even with that flag, allocated pages maintain
   consistent state.
 
-<p id=f5><a href="#b5">5</a> Donald E. Knuth. 1974.
+<p id=f5><a href=#b5>5</a> Donald E. Knuth. 1974.
   Structured Programming with <code>go to</code> Statements.
   <i>ACM Computing Surveys.</i> Vol. 6, Issue 4 (Dec. 1974), 261–301.
   <a href="https://doi.org/10.1145/356635.356640" class=nl>doi:10.1145/356635.356640</a>.
