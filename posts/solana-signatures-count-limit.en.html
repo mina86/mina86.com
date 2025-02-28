@@ -300,27 +300,27 @@ if !verifier.verify(message, pubkey, signature)? {
 
 <aside class=f role=doc-endnotes>
 
-<p id=f1><a href=#b1>1</a> The native signature verification programs cannot
+<p id=f1><span>1</span> The native signature verification programs cannot
   be called through <a href="https://solana.com/docs/core/cpi">Cross Program
   Invocation (CPI)</a> making the whole mechanism a bit convoluted.  The smart
   contract must inspect the transaction to make sure that the signature
   verification has happened which by itself is non-trivial.  Thankfully,
   <a href="https://github.com/mina86/solana-sigverify/">the <code>solana-native-sigverify</code>
   crate</a> includes helper function for interacting with native signature
-  verification programs such as Ed25519 program or Secp255k1 program.
+  verification programs such as Ed25519 program or Secp255k1 program. <a href=#b1 role=doc-backlink>↩</a>
 
-<p id=f2><a href=#b2>2</a> With specially crafted messages it is possible to
+<p id=f2><span>2</span> With specially crafted messages it is possible to
   go past that limit.  If the same public key is used, 13 signatures can fit in
   single transaction (⌊(1100 - 32) / (14 + 64)⌋ = 13).  However, that’s an
   unrealistic scenario especially considering that any useful transaction needs
-  to include another instruction.
+  to include another instruction. <a href=#b2 role=doc-backlink>↩</a>
 
-<p id=f3><a href=#b3>3</a> Note that ‘aggregate’ here doesn’t mean
+<p id=f3><span>3</span> Note that ‘aggregate’ here doesn’t mean
   zero-knowledge aggregation.  Rather, all the verified signatures are stored in
   the signatures account so another programs can see whether some particular
   signature has been aggregated.  More specifically, as an optimisation,
   a <code>sha256(algorithm || pubkey || signature || message)</code> hashes are
   stored.  This is sufficient to check whether particular known signature was
-  verified.
+  verified. <a href=#b3 role=doc-backlink>↩</a>
 
 </aside>

@@ -517,6 +517,12 @@ article {
 	font-size: @small;
 	margin-top: (round(2em / @small, 2));
 	background: linear-gradient(to right, @border-colour 80%, @bg-colour) no-repeat 0 0/60% 1px;
+	& p[id^="f"] > span:first-child {
+		color: @fg-low-colour;
+	}
+	a[role=doc-backlink] {
+		.no-print()
+	}
 }
 
 /* Meta */

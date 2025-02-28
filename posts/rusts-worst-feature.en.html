@@ -435,38 +435,38 @@ tautology_ok:
 
 <aside class=f role=doc-endnotes>
 
-<p id=f1><a href=#b1>1</a> The reference conversion itself is safe since all
+<p id=f1><span>1</span> The reference conversion itself is safe since all
   possible values of type <code>T</code> are valid values of
   type <code>MaybeUninit&lt;T&gt;</code> and both those types have the same
   layout.  However, the latter allows writing arbitrary data into the object
   which may result in invalid representation of <code>T</code>
   (see <a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2021&amp;gist=72ca09295e9b98dfdd85a3af573aa0b9">playground
   demonstration</a>).  With interior mutability, even converting shared
-  references may lead to issues.
+  references may lead to issues. <a href=#b1 role=doc-backlink>↩</a>
 
-<p id=f2><a href=#b2>2</a> I am aware that I presumptuously speak for
+<p id=f2><span>2</span> I am aware that I presumptuously speak for
   everyone.  However, I do believe that alternatives presented here, if they
   existed, would be favoured by everyone and that includes contributors to
   the <code>BorrowedBuf</code> struct.  As I discuss later, the type is the way
   it is not because that’s what anyone finds appealing but due to other
-  constraints.
+  constraints. <a href=#b2 role=doc-backlink>↩</a>
 
-<p id=f3><a href=#b3>3</a> Semantics that reading uninitialised memory has
+<p id=f3><span>3</span> Semantics that reading uninitialised memory has
   arbitrary but consistent value can be useful in practice.  Briggs and Torczon
   describe in <a href="https://doi.org/10.1145/176454.176484">An efficient
   representation for sparse sets</a> an algorithm which is built on such
-  semantics.
+  semantics. <a href=#b3 role=doc-backlink>↩</a>
 
-<p id=f4><a href=#b3>4</a> The atypical environment is µClinux which runs on
+<p id=f4><span>4</span> The atypical environment is µClinux which runs on
   platforms without memory management unit
   (MMU).  <a href="https://www.kernel.org/doc/Documentation/admin-guide/mm/nommu-mmap.rst">It
   supports <code>MAP_UNINITIALIZED</code> option</a> which skips zeroing of the
   memory region.  However, even with that flag, allocated pages maintain
-  consistent state.
+  consistent state. <a href=#b3 role=doc-backlink>↩</a>
 
-<p id=f5><a href=#b5>5</a> Donald E. Knuth. 1974.
+<p id=f5><span>5</span> Donald E. Knuth. 1974.
   Structured Programming with <code>go to</code> Statements.
   <i>ACM Computing Surveys.</i> Vol. 6, Issue 4 (Dec. 1974), 261–301.
-  <a href="https://doi.org/10.1145/356635.356640" class=nl>doi:10.1145/356635.356640</a>.
+  <a href="https://doi.org/10.1145/356635.356640" class=nl>doi:10.1145/356635.356640</a>. <a href=#b5 role=doc-backlink>↩</a>
 
 </aside>
