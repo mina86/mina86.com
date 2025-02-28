@@ -6,7 +6,8 @@
 @header-link-li-cls:   .b; /* LIs in the header excluding site name and cog */
 @header-cog-li-cls:    .c; /* LI in the header with the cog settings link */
 @header-site-li-cls:   .d; /* LI in the header with the H1 with site name */
-/* e, f */
+@article-meta-cls:     .e; /* ASIDE inside of ARTICLE with its metadata */
+@footnotes-cls:        .f; /* ASIDE with footnotes */
 @code-dd-ul-cls:       .g;
 /* h */
 @linked-in-link-cls:   .i;
@@ -496,17 +497,7 @@ article {
 		content: '.';
 	}
 	ul, ol, dl, p {
-		font-size: 1em;
-		margin: 1em 0;
-	}
-	p[id^=f] {
-		font-size: @small;
-		margin-top: (round(2em / @small, 2));
-		background: linear-gradient(to right, @border-colour 70%, @bg-colour) no-repeat 0 0/40% 1px;
-	}
-	p[id^=f] + p[id^=f] {
-		margin-top: 1em;
-		background: none;
+		margin: 0.75em 0;
 	}
 	li {
 		margin-left: 2em;
@@ -521,8 +512,15 @@ article {
 	}
 }
 
+/* Footnotes */
+@{footnotes-cls} {
+	font-size: @small;
+	margin-top: (round(2em / @small, 2));
+	background: linear-gradient(to right, @border-colour 80%, @bg-colour) no-repeat 0 0/60% 1px;
+}
+
 /* Meta */
-aside {
+@{article-meta-cls} {
 	clear: both;
 	overflow: auto;
 	break-inside: avoid;

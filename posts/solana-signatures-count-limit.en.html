@@ -298,6 +298,8 @@ if !verifier.verify(message, pubkey, signature)? {
   verification programs.
 
 
+<aside class=f role=doc-endnotes>
+
 <p id=f1><a href=#b1>1</a> The native signature verification programs cannot
   be called through <a href="https://solana.com/docs/core/cpi">Cross Program
   Invocation (CPI)</a> making the whole mechanism a bit convoluted.  The smart
@@ -320,3 +322,5 @@ if !verifier.verify(message, pubkey, signature)? {
   a <code>sha256(algorithm || pubkey || signature || message)</code> hashes are
   stored.  This is sufficient to check whether particular known signature was
   verified.
+
+</aside>
