@@ -245,7 +245,7 @@ h1 a:visited, h1 a:hover, h1 a:focus {
 			font-size: @small;
 			vertical-align: top;
 			display: inline-block;
-			opacity: .5;
+			color: @fg-low-colour;
 		}
 	}
 }
@@ -772,17 +772,12 @@ figcaption {
 @{categories-dd-ul-cls} {
 	display: table;
 	margin: 0 auto;
-	li {
-		display: table-row;
-	}
-	a, small {
-		display: table-cell;
-	}
+	li { display: table-row; }
+	li > * { display: table-cell; }
+	a { padding: 0 1em; }
 	small {
 		text-align: right;
 		font-size: @tiny;
-		padding: 0 (round(1.5em / @tiny, 2))
-			 0 (round(3em / @tiny, 2));
 	}
 }
 @{atom-cls} {
@@ -794,22 +789,18 @@ figcaption {
 	font-weight: 400;
 	margin: 0 auto;
 	width: max-content;
-	li {
-		margin-left: 2em;
-	}
+	list-style: inside;
 	li::marker {
-		content: '± ';
+		content: '± ';
+	}
+	li:hover::marker {
+		color: #f03c2e;
 	}
 	li:last-child {
 		text-align: center;
 	}
 	li:last-child::marker {
-		content: '';
-	}
-
-	a {
-		display: inline-block;
-		width: 100%;
+		content: none;
 	}
 }
 
